@@ -57,12 +57,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Bottom Bar */}
-            <div className={styles.bottomBar}>
-                <p className={styles.copyright}>
-                    &copy; {new Date().getFullYear()} Cát Bracelet. Crafted with love and mindfulness.
-                </p>
-            </div>
+        
         </footer>
     );
 };

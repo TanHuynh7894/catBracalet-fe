@@ -108,17 +108,3 @@ h4,
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #fbf9f8;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #8c1515;
-  border-radius: 4px;
-}

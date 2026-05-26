@@ -5,6 +5,7 @@ import styles from './Home.module.css';
 
 // === Local Assets ===
 import heroImg from '../assets/Image - Cat/hình ảnh Sp/SP-TIKTOK-mix-250917.jpg';
+import heroImg1 from '../assets/Image - Cat/hình ảnh Sp/charm Evil eye LỖI/charm evil eye LỖi (4).jpg';
 import prod1 from '../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14AAN-2CH7-R20.jpg';
 import prod2 from '../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14EDN-2CH7-R20.jpg';
 import prod3 from '../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14EEN-2CH7-R20.jpg';
@@ -41,7 +42,7 @@ const Home = () => {
                     </div>
                     <div className={styles.heroImageWrapper}>
                         <div className="absolute w-[110%] h-[110%] bg-white/5 rounded-full blur-3xl" />
-                        <img alt="Vòng tay Cát" className={`${styles.heroMainImage} reveal`} src={heroImg} />
+                        <img alt="Vòng tay Cát" className={`${styles.heroMainImage} reveal`} src={heroImg1} />
                     </div>
                 </div>
             </section>

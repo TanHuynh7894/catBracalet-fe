@@ -1,0 +1,141 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-8;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply font-headline text-2xl text-gray-800;
+}
+
+.filterGroup {
+    @apply flex items-center gap-4;
+}
+
+.select {
+    @apply bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none font-body;
+}
+
+.primaryBtn {
+    @apply bg-[#680006] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#4d0004] transition-colors;
+}
+
+/* Stats Cards */
+.statsGrid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-6;
+}
+
+.statCard {
+    @apply bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow;
+}
+
+.statHeader {
+    @apply flex justify-between items-start mb-4;
+}
+
+.statIcon {
+    @apply w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-600;
+}
+
+.trend {
+    @apply flex items-center gap-1 text-xs font-medium px-2 py-1 rounded;
+}
+
+.plus {
+    @apply bg-green-50 text-green-600;
+}
+
+.minus {
+    @apply bg-red-50 text-red-600;
+}
+
+.statLabel {
+    @apply text-sm text-gray-400 mb-1 font-body;
+}
+
+.statValue {
+    @apply text-xl font-bold text-gray-800;
+}
+
+/* Main Content Blocks */
+.mainGrid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-8;
+}
+
+.contentBox {
+    @apply md:col-span-8 bg-white rounded-xl border border-gray-100 shadow-sm p-6;
+}
+
+.statusBox {
+    @apply md:col-span-4 bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col gap-6;
+}
+
+.boxHeader {
+    @apply flex justify-between items-center mb-6;
+}
+
+.boxTitle {
+    @apply font-headline text-lg text-gray-800;
+}
+
+.textBtn {
+    @apply text-sm text-[#680006] hover:underline font-medium;
+}
+
+/* Table Styles */
+.tableWrapper {
+    @apply overflow-x-auto;
+}
+
+.table {
+    @apply w-full text-left text-sm;
+}
+
+.table thead tr {
+    @apply border-b border-gray-100;
+}
+
+.table th {
+    @apply py-4 text-gray-400 font-medium;
+}
+
+.table td {
+    @apply py-4 border-b border-gray-50;
+}
+
+.badge {
+    @apply px-2 py-1 rounded text-[10px] font-bold uppercase;
+}
+
+.badgeSuccess {
+    @apply bg-green-100 text-green-700;
+}
+
+.badgePending {
+    @apply bg-orange-100 text-orange-700;
+}
+
+/* Status Items */
+.statusGrid {
+    @apply flex flex-col gap-4;
+}
+
+.statusItem {
+    @apply flex items-center gap-4 p-4 rounded-lg bg-gray-50 border border-gray-100;
+}
+
+.statusLabel {
+    @apply text-xs text-gray-400 font-body;
+}
+
+.statusValue {
+    @apply text-lg font-bold text-gray-800;
+}
+
+.inventoryAlert {
+    @apply mt-auto pt-6 border-t border-gray-100;
+}

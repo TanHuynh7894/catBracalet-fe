@@ -1,0 +1,71 @@
+@reference "../index.css";
+
+.sidebar {
+    @apply fixed left-0 top-0 h-screen w-64 bg-[#0f172a] text-white overflow-y-auto z-50 flex flex-col;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logoContainer {
+    @apply p-6 flex items-center gap-3 mb-4 border-b border-white/5;
+}
+
+.logoCircle {
+    @apply w-8 h-8 rounded-lg bg-[#680006] flex items-center justify-center font-headline font-bold text-lg;
+}
+
+.logoText {
+    @apply font-headline text-lg font-medium tracking-tight;
+}
+
+.nav {
+    @apply flex-1 p-3 flex flex-col gap-1;
+}
+
+.menuWrapper {
+    @apply mb-1;
+}
+
+.menuHeader {
+    @apply w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-all duration-200 text-sm;
+}
+
+.active {
+    @apply bg-white/10 text-white font-medium;
+}
+
+.icon {
+    @apply shrink-0 text-white/50;
+}
+
+.title {
+    @apply flex-1 text-left;
+}
+
+.chevron {
+    @apply text-white/30;
+}
+
+.subMenu {
+    @apply mt-1 ml-9 flex flex-col gap-1;
+}
+
+.subItem {
+    @apply px-3 py-2 rounded-lg text-xs text-white/50 hover:text-white hover:bg-white/5 transition-all duration-200;
+}
+
+.subActive {
+    @apply text-white bg-white/5 font-medium;
+}
+
+/* Footer Section */
+.footerNav {
+    @apply p-3 border-t border-white/5 flex flex-col gap-1 mt-auto;
+}
+
+.footerItem {
+    @apply w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200 text-sm;
+}
+
+.logoutBtn {
+    @apply text-red-400 hover:text-red-300 hover:bg-red-500/10;
+}
