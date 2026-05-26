@@ -1,0 +1,321 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="vi" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cát Bracelet | Vẻ Đẹp Thủ Công Từ Tâm</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-container": "#8c1515",
+            "tertiary-fixed-dim": "#c9c6c1",
+            "surface-dim": "#dbd9d9",
+            "outline-variant": "#e0bfbb",
+            "on-surface": "#1b1c1c",
+            "on-secondary-container": "#745c00",
+            "secondary-fixed": "#ffe088",
+            "tertiary": "#30302c",
+            "primary-fixed-dim": "#ffb4ab",
+            "background": "#fbf9f8",
+            "primary-fixed": "#ffdad6",
+            "surface-container-highest": "#e4e2e2",
+            "secondary-container": "#fed65b",
+            "on-surface-variant": "#59413e",
+            "surface-container-high": "#eae8e7",
+            "on-tertiary-container": "#b6b4af",
+            "on-tertiary-fixed": "#1c1c18",
+            "surface-variant": "#e4e2e2",
+            "on-secondary-fixed-variant": "#574500",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#241a00",
+            "secondary": "#735c00",
+            "primary": "#680006",
+            "on-primary-container": "#ff998e",
+            "tertiary-container": "#474642",
+            "surface-tint": "#ae2f2a",
+            "on-secondary": "#ffffff",
+            "inverse-surface": "#303030",
+            "tertiary-fixed": "#e5e2dc",
+            "on-primary": "#ffffff",
+            "outline": "#8d706d",
+            "surface-container-low": "#f5f3f3",
+            "surface": "#fbf9f8",
+            "on-tertiary-fixed-variant": "#474743",
+            "inverse-primary": "#ffb4ab",
+            "on-error": "#ffffff",
+            "on-primary-fixed-variant": "#8d1515",
+            "on-background": "#1b1c1c",
+            "secondary-fixed-dim": "#e9c349",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#efeded",
+            "error-container": "#ffdad6",
+            "error": "#ba1a1a",
+            "surface-bright": "#fbf9f8",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#410002",
+            "inverse-on-surface": "#f2f0f0"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "margin-mobile": "20px",
+            "gutter": "24px",
+            "margin-desktop": "80px",
+            "unit": "8px",
+            "container-max": "1200px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Bodoni Moda"],
+            "body-lg": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "headline-md": ["Bodoni Moda"],
+            "headline-lg": ["Bodoni Moda"],
+            "body-md": ["Manrope"],
+            "headline-display": ["Bodoni Moda"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["28px", {"lineHeight": "1.3", "fontWeight": "500"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "label-sm": ["12px", {"lineHeight": "1.4", "letterSpacing": "0.1em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+            "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}],
+            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "headline-display": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }
+.reveal {
+    opacity: 0;
+    transform: translatey(40px);
+    transition: all 1.2s cubic-bezier(0.21, 1.02, 0.73, 1);
+    will-change: transform, opacity
+    }
+.reveal.active {
+    opacity: 1;
+    transform: translatey(0)
+    }
+.texture-grain {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD7aQd9JvIdqtIQn0a2YLOERAR5UUZoOCLMLOkZkL-Ejwd8OR9G1vO-s-_T8CxvsJlVOQNj_CVh3U56ySiGkLhi160_jJTlRbAB6lhJ-w-lKvlarn5VALOc3BoGJVZMz9-smVJ6Vcwd0oLHkc1TQYzyyZ-pRSpMoP9bOBzAc3G1EBen7pnhuroe10jiALB4IRvOWv4isL0XQ5w9xzPirA5RTOl6ifFCCM_D3IJ0gft5zi-pkP-Z-NQuPYpnIx9hQjIo7TQPeTAQr-YL)
+    }
+.glass-effect {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px)
+    }
+.fade-in-up {
+    opacity: 0;
+    transform: translatey(30px);
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)
+    }
+.fade-in-up.active {
+    opacity: 1;
+    transform: translatey(0)
+    }
+.text-balance {
+    text-wrap: balance
+    }
+</style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden texture-grain">
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md transition-all duration-500 py-6 border-b border-outline-variant/10" id="main-header"><div class="flex justify-between items-center max-w-[1200px] mx-auto px-margin-desktop h-20"><div class="font-headline-md text-headline-md font-medium tracking-tight text-primary uppercase"><span style="letter-spacing: -0.6px; text-transform: none;" class="">Cát Bracelet</span></div><nav class="hidden md:flex items-center space-x-10"><a class="font-body-md text-body-md uppercase text-primary border-b border-primary/30 pb-1 tracking-[0.15em]" href="#">Trang chủ</a><a class="font-body-md text-body-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300 tracking-[0.15em]" href="#">Bộ sưu tập</a><a class="font-body-md text-body-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300 tracking-[0.15em]" href="#">Câu chuyện</a><a class="font-body-md text-body-md uppercase text-on-surface-variant hover:text-primary transition-colors duration-300 tracking-[0.15em]" href="#">Về chúng tôi</a></nav><div class="flex items-center space-x-6"><button class="text-primary hover:opacity-80 transition-opacity"><span class="material-symbols-outlined">search</span></button><button class="text-primary hover:opacity-80 transition-opacity"><span class="material-symbols-outlined">person</span></button><button class="text-primary hover:opacity-80 transition-opacity"><span class="material-symbols-outlined">shopping_bag</span></button></div></div></header>
+<main>
+<!-- Hero Section: Refined Contrast -->
+<section class="relative min-h-[90vh] flex items-center bg-primary overflow-hidden">
+<div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/silk.png')]"></div>
+<div class="relative z-10 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-20">
+<div class="fade-in-up active text-white">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.4em] text-secondary-fixed mb-6 block">Khai Mở Trí Tuệ</span>
+<h1 class="font-headline-display text-4xl md:text-headline-display leading-tight mb-8 italic">Ánh Sáng Từ<br>Đôi Tay Nghệ Nhân</h1>
+<p class="font-body-lg text-body-lg text-white/80 mb-12 max-w-md text-balance">
+          Mỗi chiếc vòng là một hành trình của sự tỉnh thức. Được chế tác thủ công với ý niệm cao đẹp, Cát Bracelet là vật phẩm kết nối tâm hồn.
+        </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-white text-primary px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-secondary-fixed transition-all duration-500 shadow-xl font-bold">
+            Mua Ngay
+          </button>
+<button class="border border-white/40 text-white px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/10 transition-all duration-300">
+            Xem Lookbook
+          </button>
+</div>
+</div>
+<div class="relative flex justify-center items-center">
+<div class="absolute w-[120%] h-[120%] bg-white/5 rounded-full blur-3xl"></div>
+<img alt="Vòng tay Trí tuệ" class="relative z-10 w-full max-w-lg h-auto object-contain reveal active drop-shadow-2xl" id="hero-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4cJv4Pz3D99NbpViW7lE5GoY7fnPyf-tMWsi2x_kpQJhr8NuCzVVOLJCE8D1laUqxjNr-Ikk4Wck2YKGZLBjysAavQ5Cd0bsQiW7ugo-kdn4u5HshOk4_8K7s_lLTbM7srLNTzj7sXn7gKDy3EhbOdeF-DhrrGBwL7eVVqDQIjScn8Nd60hwCiK7WEoRZwFZXlAe_CvJ2vjX3E4qeYcZRYFl53xXzgQm-Q_vwnC5EfbjWa552UwK30kfZD9rzGJnsGHgz1phM6ztI">
+</div>
+</div>
+</section>
+<!-- Featured Collections: High Clarity -->
+<section class="py-24 bg-surface">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-16 fade-in-up active">
+<h2 class="font-headline-display text-headline-lg md:text-headline-display text-primary mb-4">Tinh Hoa Chế Tác</h2>
+<p class="font-body-lg text-on-surface-variant italic max-w-2xl mx-auto">Sự cân bằng hoàn hảo giữa đá tự nhiên và tâm ý người thợ.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Product 1 -->
+<div class="group fade-in-up active">
+<div class="relative aspect-video overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 mb-6">
+<img alt="Sợi Chỉ Hạnh Phúc" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDn5hZiNjSxSylNcyZzFa4GnKiyLHTFIv5fqj4lMXsGkH3irrEwdMjYUO3UsW_Q0NZ5RkDHpK9lYCc7mnWrfkqTJ_VCR5jQAwpKFQ_iKdKPf8vXRdxYQ1TgjjTayslVoeqzMnPYOAjqSrVhpjM2-CXSWOAaVLEPhn7Nnf6-3fBeU0LiqmVvMSEEle1GnkEOaW0I81mv9IQIOQdrdfSjH-nH4yH-PQhz1IUXH4s8wgkqYLZArfE5ljAACQI4x1_QRzqFzMSGQzl-K3X">
+<div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 text-[10px] uppercase tracking-widest">Mới</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-primary mb-1">Sợi Chỉ Hạnh Phúc</h3>
+<p class="font-body-md text-on-surface-variant italic">Ngọc Bích &amp; Thạch Anh trắng</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-primary">850.000đ</span>
+<button class="block mt-2 font-label-sm text-secondary uppercase tracking-widest text-[10px] border-b border-secondary/20 hover:border-secondary transition-all">Thêm vào giỏ</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group fade-in-up active" style="transition-delay: 150ms;">
+<div class="relative aspect-video overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 mb-6">
+<img alt="Dòng Chảy Trí Tuệ" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4cJv4Pz3D99NbpViW7lE5GoY7fnPyf-tMWsi2x_kpQJhr8NuCzVVOLJCE8D1laUqxjNr-Ikk4Wck2YKGZLBjysAavQ5Cd0bsQiW7ugo-kdn4u5HshOk4_8K7s_lLTbM7srLNTzj7sXn7gKDy3EhbOdeF-DhrrGBwL7eVVqDQIjScn8Nd60hwCiK7WEoRZwFZXlAe_CvJ2vjX3E4qeYcZRYFl53xXzgQm-Q_vwnC5EfbjWa552UwK30kfZD9rzGJnsGHgz1phM6ztI">
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-primary mb-1">Dòng Chảy Trí Tuệ</h3>
+<p class="font-body-md text-on-surface-variant italic">Aquamarine &amp; Pha lê</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-primary">920.000đ</span>
+<button class="block mt-2 font-label-sm text-secondary uppercase tracking-widest text-[10px] border-b border-secondary/20 hover:border-secondary transition-all">Thêm vào giỏ</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 text-center">
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-primary border-b-2 border-primary/20 pb-2 hover:border-primary transition-all duration-300" href="#">Khám Phá Toàn Bộ Bộ Sưu Tập</a>
+</div>
+</div>
+</section>
+<!-- Brand Philosophy: Clear Card Structure -->
+<section class="py-24 bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="relative fade-in-up active">
+<img alt="Nghệ nhân đang làm việc" class="w-full aspect-[4/5] object-cover shadow-2xl rounded-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoWM01fF3bXTavpTNMP233eOxAZ01VJtx8no3XIXkgzCZnogPOSAzGCgcpUdco-kmMXIjT0HAWdoaMRyDYJTWoG5Tt9H2s0ibIjvtlciPV0fjsb3ushhhwG64Sxcw0D784U3R0uNZ1cQtxCXoLuLg42ZWpY_kG0XG-pMMwB0-_gk0lJxBUFQLeICong6Nl9rNA3xJaGWS2qaPWsjqYhnVYZ2JLsdTbx_9QVOH2069Sv1MA2vFF1Q20PktmKxS3kentFbDj-tAc_oVZ">
+<div class="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 -z-10"></div>
+</div>
+<div class="space-y-12 fade-in-up active" style="transition-delay: 200ms;">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-[0.3em] text-secondary mb-4 block">Câu Chuyện Thương Hiệu</span>
+<h2 class="font-headline-display text-headline-lg text-primary mb-6">Chế Tác Bằng Cả Trái Tim</h2>
+<p class="font-body-lg text-on-surface-variant leading-relaxed">Tại Cát, chúng tôi không chỉ tạo ra trang sức. Chúng tôi tạo ra những vật phẩm mang theo lời chúc bình an và năng lượng tích cực cho người sở hữu thông qua từng nút thắt tay tỉ mỉ.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+<div class="bg-white p-8 border-l-4 border-primary shadow-sm">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h4 class="font-label-sm uppercase tracking-widest text-primary mb-2">Đá Thuần Khiết</h4>
+<p class="font-body-md text-on-surface-variant">Tuyển chọn từ tự nhiên, giữ trọn năng lượng nguyên bản.</p>
+</div>
+<div class="bg-white p-8 border-l-4 border-primary shadow-sm">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="fingerprint">fingerprint</span>
+<h4 class="font-label-sm uppercase tracking-widest text-primary mb-2">Độc Bản</h4>
+<p class="font-body-md text-on-surface-variant">Mỗi sản phẩm là một duyên nợ, không có cái thứ hai.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Unboxing Ritual: Focus on Detail -->
+<section class="py-24 bg-white">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 fade-in-up active">
+<span class="font-label-sm text-label-sm uppercase tracking-[0.3em] text-secondary mb-4 block">Trải Nghiệm Độc Quyền</span>
+<h2 class="font-headline-display text-headline-lg text-primary mb-8">Nghi Thức Mở Hộp</h2>
+<p class="font-body-lg text-on-surface-variant mb-8 leading-relaxed">
+            Hơn cả một món quà, đó là khởi đầu của một hành trình tỉnh thức. Mỗi đơn hàng đi kèm với bộ hướng dẫn thanh tẩy đá, túi quà tặng sang trọng và thông điệp ý nghĩa từ nghệ nhân.
+          </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+Túi vải cao cấp &amp; thiệp cảm ơn
+</li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+Bộ hướng dẫn thanh tẩy năng lượng
+</li>
+<li class="flex items-center gap-3 text-body-md text-on-surface">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+Hộp đựng thủ công bảo vệ môi trường
+</li>
+</ul>
+<button class="bg-primary text-white px-10 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-primary-container transition-all">Khám phá chi tiết</button>
+</div>
+<div class="order-1 lg:order-2 fade-in-up active" style="transition-delay: 200ms;">
+<div class="relative p-6 border border-primary/5 bg-surface-container-low">
+<img alt="Trải nghiệm mở hộp" class="w-full h-auto shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgZOR7WbFD_daAjcO6EbZ3pgZ6UwepMgRFcn5Atft5Z5y_ULtR-z_2nTBPPXiXOpMkwX1v0yULU6zjGmBN84E5E6h-WIXal85rG9pcAnA1ygD-xx0RZr0QVnTtSzOy9mi5YnhjchRjAdJyI6PvvB2RHlmh_RxSzt_AGLNjIQ-FRTlsF73ZtveBkaHpBVwoTP12y3btoKJ_04M3Vda6GVjxDzER2ETmixG3JRX-ZA6AX4Wz1C_cgT_isXqemQCdxcnpvZrgBucUcmHH">
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Artisan Note: Dramatic Footer Accent -->
+<section class="py-20 bg-primary text-white relative overflow-hidden">
+<div class="max-w-3xl mx-auto px-margin-mobile text-center relative z-10 fade-in-up active">
+<span class="material-symbols-outlined text-secondary-fixed mb-6 block text-4xl" data-icon="spa">spa</span>
+<h3 class="font-headline-display text-3xl italic mb-6">Triết Lý Về Sợi Chỉ Đỏ</h3>
+<p class="font-body-lg text-white/90 leading-relaxed italic">
+        "Sợi chỉ đỏ tượng trưng cho sợi dây vô hình kết nối chúng ta với định mệnh. Nó mạnh mẽ nhưng linh hoạt, bền bỉ nhưng mềm mại — như chính tinh thần con người vượt qua những dòng chảy của cuộc đời."
+      </p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-20 bg-surface-container-lowest border-t border-outline-variant/30"><div class="max-w-[1200px] mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-start gap-gutter"><div class="max-w-xs"><div class="font-headline-md text-headline-md text-primary mb-6 uppercase">Cát Bracelet</div><p class="font-body-md text-body-md text-on-surface-variant mb-6">Trang sức thủ công cho lối sống tỉnh thức và ý niệm cao đẹp.</p><div class="flex gap-4"><a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">social_leaderboard</span></a><a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">photo_camera</span></a></div></div><div class="grid grid-cols-2 md:grid-cols-3 gap-12"><div class="flex flex-col gap-4"><h4 class="font-body-md font-medium text-primary uppercase tracking-widest">Khám phá</h4><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Bộ sưu tập</a><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Câu chuyện</a><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Nghệ nhân</a></div><div class="flex flex-col gap-4"><h4 class="font-body-md font-medium text-primary uppercase tracking-widest">Hỗ trợ</h4><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Vận chuyển</a><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Chính sách bảo mật</a><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Điều khoản dịch vụ</a></div><div class="flex flex-col gap-4"><h4 class="font-body-md font-medium text-primary uppercase tracking-widest">Liên hệ</h4><a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors duration-300">Câu hỏi thường gặp</a></div></div></div><div class="max-w-[1200px] mx-auto px-margin-desktop mt-16 pt-8 border-t border-outline-variant/30"><p class="font-body-md text-body-md text-on-surface-variant text-center md:text-left">© 2024 Cát Bracelet. Chế tác thủ công với tâm tình.</p></div></footer>
+<script>
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.fade-in-up, .reveal').forEach(el => observer.observe(el));
+
+  // Header Scroll Effect
+  const header = document.getElementById('main-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      header.classList.add('glass-effect', 'bg-white/90', 'py-4', 'shadow-md');
+      header.classList.remove('bg-transparent', 'py-6');
+    } else {
+      header.classList.remove('glass-effect', 'bg-white/90', 'py-4', 'shadow-md');
+      header.classList.add('bg-transparent', 'py-6');
+    }
+  });
+</script>
+
+
+
+
+
+
+</body></html>
