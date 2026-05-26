@@ -1,53 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { Search, User, ShoppingBag } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
+import styles from './Header.module.css';
+
+// === Local Assets ===
+import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 80);
+            setIsScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location]);
+
+    const isTransparentPage = location.pathname === '/' || location.pathname === '/about' || location.pathname === '/story';
+
     return (
         <header
-            id="main-header"
-            className={`fixed top-0 w-full z-50 transition-all duration-500 py-4 border-b ${isScrolled
-                ? 'glass-effect bg-white/95 py-2 shadow-sm border-outline-variant/10'
-                : 'bg-transparent border-transparent'
-                }`}
+            className={`${styles.header} ${isScrolled || !isTransparentPage ? styles.headerGlass : styles.headerTransparent}`}
         >
-            <div className="flex justify-between items-center max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop h-14">
-                <div className={`font-headline text-2xl md:text-2xl font-medium tracking-tight uppercase transition-colors duration-300 ${isScrolled ? 'text-primary' : 'text-white'}`}>
-                    <span style={{ letterSpacing: '1px', textTransform: 'none' }}>Cát Bracelet</span>
-                </div>
+            <div className={styles.container}>
+                {/* Logo */}
+                <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
+                    <img src={logoImg} alt="Cat Bracelet" className="h-10 w-auto group-hover:scale-105 transition-transform" />
+                    <span className={`${styles.logo} ${isScrolled || !isTransparentPage ? 'text-[#680006]' : 'text-white'}`}>
+                        Cát Bracelet
+                    </span>
+                </Link>
 
-                <nav className="hidden md:flex items-center space-x-8">
-                    <a className={`font-body text-[11px] uppercase pb-1 tracking-[0.15em] transition-colors duration-300 border-b ${isScrolled ? 'text-primary border-primary' : 'text-white border-white'
-                        }`} href="#">Trang chủ</a>
-                    <a className={`font-body text-[11px] uppercase tracking-[0.15em] transition-colors duration-300 ${isScrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/70 hover:text-white'
-                        }`} href="#">Bộ sưu tập</a>
-                    <a className={`font-body text-[11px] uppercase tracking-[0.15em] transition-colors duration-300 ${isScrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/70 hover:text-white'
-                        }`} href="#">Câu chuyện</a>
-                    <a className={`font-body text-[11px] uppercase tracking-[0.15em] transition-colors duration-300 ${isScrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/70 hover:text-white'
-                        }`} href="#">Về chúng tôi</a>
+                {/* Desktop Nav */}
+                <nav className={styles.nav}>
+                    {[
+                        { name: 'Trang chủ', path: '/' },
+                        { name: 'Bộ sưu tập', path: '/collections' },
+                        { name: 'Câu chuyện', path: '/story' },
+                        { name: 'Về chúng tôi', path: '/about' },
+                    ].map((link) => (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            className={`${styles.navLink} ${location.pathname === link.path
+                                    ? (isScrolled || !isTransparentPage ? 'border-[#680006] text-[#680006]' : 'border-white text-white')
+                                    : (isScrolled || !isTransparentPage ? 'border-transparent text-[#59413e] hover:text-[#680006]' : 'border-transparent text-white/80 hover:text-white')
+                                }`}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
                 </nav>
 
-                <div className="flex items-center space-x-5">
-                    <button className={`transition-all duration-300 hover:opacity-70 ${isScrolled ? 'text-primary' : 'text-white'}`}>
-                        <Search size={20} strokeWidth={1.5} />
+                {/* Icons */}
+                <div className={styles.iconGroup}>
+                    <button className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
+                        <Search size={20} />
                     </button>
-                    <button className={`transition-all duration-300 hover:opacity-70 ${isScrolled ? 'text-primary' : 'text-white'}`}>
-                        <User size={20} strokeWidth={1.5} />
+                    <button className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
+                        <User size={20} />
                     </button>
-                    <button className={`transition-all duration-300 hover:opacity-70 ${isScrolled ? 'text-primary' : 'text-white'} relative`}>
-                        <ShoppingBag size={20} strokeWidth={1.5} />
+                    <button className={`${styles.iconButton} relative ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
+                        <ShoppingBag size={20} />
+                        <span className="absolute -top-1 -right-1 bg-[#680006] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button
+                        className="md:hidden text-[#59413e]"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} className={isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'} />}
                     </button>
                 </div>
             </div>
+
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-outline-variant/10 py-8 px-margin-mobile flex flex-col gap-6 animate-in slide-in-from-top duration-300">
+                    <Link to="/" className="text-sm uppercase tracking-widest font-bold">Trang chủ</Link>
+                    <Link to="/collections" className="text-sm uppercase tracking-widest font-bold">Bộ sưu tập</Link>
+                    <Link to="/story" className="text-sm uppercase tracking-widest font-bold">Câu chuyện</Link>
+                    <Link to="/about" className="text-sm uppercase tracking-widest font-bold">Về chúng tôi</Link>
+                </div>
+            )}
         </header>
     );
 };

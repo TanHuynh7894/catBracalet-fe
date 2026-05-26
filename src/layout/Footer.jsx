@@ -1,48 +1,66 @@
 import React from 'react';
-import { Share2, Instagram, Facebook } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import styles from './Footer.module.css';
+
+// === Local Assets ===
+import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Footer = () => {
     return (
-        <footer className="w-full py-20 bg-surface-container-lowest border-t border-outline-variant/30 font-body">
-            <div className="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-start gap-gutter">
-                <div className="max-w-xs">
-                    <div className="font-headline text-2xl text-primary mb-6 uppercase">Cát Bracelet</div>
-                    <p className="font-body text-sm text-on-surface-variant mb-6">
-                        Trang sức thủ công cho lối sống tỉnh thức và ý niệm cao đẹp.
+        <footer className={styles.footer}>
+            <div className={styles.container}>
+                {/* Brand Section */}
+                <div className={styles.brandInfo}>
+                    <div className="flex items-center gap-3 mb-6">
+                        <img src={logoImg} alt="Cat Bracelet" className="h-10 w-auto" />
+                        <span className={styles.logo}>Cát Bracelet</span>
+                    </div>
+                    <p className={styles.description}>
+                        Chế tác những món trang sức mang ý niệm bình an và tĩnh tại từ những viên đá tự nhiên thô mộc.
                     </p>
-                    <div className="flex gap-4">
-                        <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">
-                            <Share2 size={20} strokeWidth={1.5} />
-                        </a>
-                        <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">
-                            <Instagram size={20} strokeWidth={1.5} />
-                        </a>
+                    <div className={styles.socialGroup}>
+                        <a href="#" className={styles.socialLink}><Facebook size={20} /></a>
+                        <a href="#" className={styles.socialLink}><Instagram size={20} /></a>
+                        <a href="#" className={styles.socialLink}><Twitter size={20} /></a>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-12">
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-body font-medium text-primary uppercase tracking-widest text-sm">Khám phá</h4>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Bộ sưu tập</a>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Câu chuyện</a>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Nghệ nhân</a>
+                {/* Links Section */}
+                <div className={styles.linkGrid}>
+                    <div className={styles.linkCol}>
+                        <h4 className={styles.linkTitle}>Khám phá</h4>
+                        <a href="/collections" className={styles.link}>Bộ sưu tập</a>
+                        <a href="/story" className={styles.link}>Câu chuyện</a>
+                        <a href="/about" className={styles.link}>Về chúng tôi</a>
                     </div>
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-body font-medium text-primary uppercase tracking-widest text-sm">Hỗ trợ</h4>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Vận chuyển</a>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Chính sách bảo mật</a>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Điều khoản dịch vụ</a>
+                    <div className={styles.linkCol}>
+                        <h4 className={styles.linkTitle}>Hỗ trợ</h4>
+                        <a href="#" className={styles.link}>Chính sách bảo hành</a>
+                        <a href="#" className={styles.link}>Vận chuyển & Đổi trả</a>
+                        <a href="#" className={styles.link}>Thanh tẩy đá quý</a>
                     </div>
-                    <div className="flex flex-col gap-4">
-                        <h4 className="font-body font-medium text-primary uppercase tracking-widest text-sm">Liên hệ</h4>
-                        <a href="#" className="text-sm text-on-surface-variant hover:text-primary transition-colors duration-300">Câu hỏi thường gặp</a>
+                    <div className={styles.linkCol}>
+                        <h4 className={styles.linkTitle}>Liên hệ</h4>
+                        <div className="flex items-start gap-3 mt-1">
+                            <MapPin size={16} className="text-[#680006] mt-1 shrink-0" />
+                            <span className="text-xs text-[#59413e]">456 Đường Đá Quý, Quận 1, TP. HCM</span>
+                        </div>
+                        <div className="flex items-center gap-3 mt-1">
+                            <Phone size={16} className="text-[#680006] shrink-0" />
+                            <span className="text-xs text-[#59413e]">0908 123 456</span>
+                        </div>
+                        <div className="flex items-center gap-3 mt-1">
+                            <Mail size={16} className="text-[#680006] shrink-0" />
+                            <span className="text-xs text-[#59413e]">hello@catbracelet.com</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop mt-16 pt-8 border-t border-outline-variant/30">
-                <p className="text-sm text-on-surface-variant text-center md:text-left italic">
-                    © 2024 Cát Bracelet. Chế tác thủ công với tâm tình.
+            {/* Bottom Bar */}
+            <div className={styles.bottomBar}>
+                <p className={styles.copyright}>
+                    &copy; {new Date().getFullYear()} Cát Bracelet. Crafted with love and mindfulness.
                 </p>
             </div>
         </footer>

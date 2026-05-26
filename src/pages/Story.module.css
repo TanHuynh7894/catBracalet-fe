@@ -1,0 +1,103 @@
+@reference "../index.css";
+
+.hero {
+    @apply relative w-full h-[80vh] flex items-center justify-center overflow-hidden pt-20;
+}
+
+.heroImage {
+    @apply absolute inset-0 z-0 w-full h-full object-cover brightness-90;
+}
+
+.heroContent {
+    @apply relative z-10 text-center max-w-2xl px-5;
+}
+
+.heroTitle {
+    @apply font-headline text-5xl md:text-7xl text-white mb-6;
+}
+
+.heroSubtitle {
+    @apply font-body text-lg text-white/90 leading-relaxed italic;
+}
+
+.main {
+    @apply max-w-container-max mx-auto px-margin-desktop py-[100px];
+}
+
+/* Philosophy */
+.philosophySection {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-12 mb-[120px];
+}
+
+.tag {
+    @apply font-body text-[11px] font-bold text-[#735c00] uppercase tracking-[0.2em] mb-4 block;
+}
+
+.sectionTitle {
+    @apply font-headline text-4xl md:text-5xl text-[#680006] mb-8 leading-tight;
+}
+
+.bulletList {
+    @apply space-y-4;
+}
+
+.bulletItem {
+    @apply font-body text-base text-[#1b1c1c] flex items-center;
+}
+
+.bulletIcon {
+    @apply w-1 h-1 bg-[#735c00] rotate-45 mr-3 mb-0.5;
+}
+
+/* Packaging */
+.packagingSection {
+    @apply mb-[120px];
+}
+
+.packagingGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-[60px] items-center;
+}
+
+.packagingBox {
+    @apply p-8 bg-[#f5f3f3] rounded-sm relative overflow-hidden;
+}
+
+.checkIcon {
+    @apply text-[#680006] fill-current;
+}
+
+/* Ritual */
+.ritualSection {
+    @apply bg-white p-12 md:p-20 rounded-sm relative overflow-hidden border border-[#e0bfbb]/30 mb-[120px] shadow-sm;
+}
+
+.ritualGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-12 text-left mt-10;
+}
+
+.ritualCard {
+    @apply p-8 bg-[#fbf9f8] rounded-sm border border-[#e0bfbb]/10 shadow-sm;
+}
+
+/* Moodboard */
+.moodboard {
+    display: grid;
+    @apply grid-cols-2 md:grid-cols-4 gap-4;
+    height: 600px;
+}
+
+.moodItemBig {
+    @apply col-span-2 row-span-2 rounded-sm overflow-hidden;
+}
+
+.moodItemSmall {
+    @apply rounded-sm overflow-hidden;
+}
+
+.moodItemWide {
+    @apply col-span-2 rounded-sm overflow-hidden h-[300px];
+}
+
+.moodImage {
+    @apply w-full h-full object-cover transition-transform duration-1000;
+}

@@ -1,0 +1,53 @@
+@reference "../index.css";
+
+.footer {
+    @apply w-full py-20 bg-[#ffffff] border-t border-[#e0bfbb]/30 font-body;
+}
+
+.container {
+    @apply max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-start gap-gutter;
+}
+
+.brandInfo {
+    @apply max-w-xs;
+}
+
+.logo {
+    @apply font-headline text-2xl text-[#680006] mb-6 uppercase;
+}
+
+.description {
+    @apply font-body text-sm text-[#59413e] mb-6;
+}
+
+.socialGroup {
+    @apply flex gap-4;
+}
+
+.socialLink {
+    @apply text-[#59413e] hover:text-[#680006] transition-colors;
+}
+
+.linkGrid {
+    @apply grid grid-cols-2 md:grid-cols-3 gap-12;
+}
+
+.linkCol {
+    @apply flex flex-col gap-4;
+}
+
+.linkTitle {
+    @apply font-body font-medium text-[#680006] uppercase tracking-widest text-sm;
+}
+
+.link {
+    @apply text-sm text-[#59413e] hover:text-[#680006] transition-colors duration-300;
+}
+
+.bottomBar {
+    @apply max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop mt-16 pt-8 border-t border-[#e0bfbb]/30;
+}
+
+.copyright {
+    @apply text-sm text-[#59413e] text-center md:text-left italic;
+}
