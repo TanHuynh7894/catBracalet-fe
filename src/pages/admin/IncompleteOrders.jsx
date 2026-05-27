@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Download as DownloadIcon, Plus, ChevronDown } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './IncompleteOrders.module.css';
 
 const IncompleteOrders = () => {
     return (
@@ -86,8 +86,8 @@ const IncompleteOrders = () => {
                                     <td className="font-bold">{row.total}</td>
                                     <td>
                                         <div className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border ${row.payment === 'Đã thanh toán' ? 'bg-green-50 text-green-700 border-green-100' :
-                                                row.payment === 'Chưa thanh toán' ? 'bg-orange-50 text-orange-700 border-orange-100' :
-                                                    'bg-orange-50 text-orange-700 border-orange-100'
+                                            row.payment === 'Chưa thanh toán' ? 'bg-orange-50 text-orange-700 border-orange-100' :
+                                                'bg-orange-50 text-orange-700 border-orange-100'
                                             }`}>
                                             <div className={`w-1.5 h-1.5 rounded-full mr-2 ${row.payment === 'Đã thanh toán' ? 'bg-green-500' : 'bg-orange-500'}`} />
                                             {row.payment}
@@ -95,7 +95,7 @@ const IncompleteOrders = () => {
                                     </td>
                                     <td>
                                         <div className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border ${row.processing === 'Đang giao' ? 'bg-blue-50 text-blue-700 border-blue-100' :
-                                                'bg-gray-50 text-gray-600 border-gray-100'
+                                            'bg-gray-50 text-gray-600 border-gray-100'
                                             }`}>
                                             <div className={`w-1.5 h-1.5 rounded-full mr-2 ${row.processing === 'Đang giao' ? 'bg-blue-500' : 'bg-gray-400'}`} />
                                             {row.processing}

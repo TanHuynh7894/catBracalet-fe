@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Plus, ChevronDown, Monitor } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './ProductCategories.module.css';
 
 const ProductCategories = () => {
     const categories = [

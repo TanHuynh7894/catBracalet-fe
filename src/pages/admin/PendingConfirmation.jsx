@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Download, Plus, ChevronDown, Monitor } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './PendingConfirmation.module.css';
 
 const PendingConfirmation = () => {
     return (

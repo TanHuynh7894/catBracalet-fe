@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Download, Plus, ChevronDown, Settings, ChevronRight } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './ShippingWaybills.module.css';
 
 const ShippingWaybills = () => {
     return (

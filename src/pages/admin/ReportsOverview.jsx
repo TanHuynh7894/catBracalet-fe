@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronDown, AlertTriangle, X, TrendingUp, ChevronRight, Maximize2, Plus } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import styles from './Dashboard.module.css';
+import styles from './ReportsOverview.module.css';
 
 const revenueData = [
     { date: '27/04', current: 200000, previous: 100000 },

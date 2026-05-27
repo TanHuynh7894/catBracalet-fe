@@ -12,7 +12,7 @@ import {
     Search
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from './Dashboard.module.css';
+import styles from './ProductDetail.module.css';
 
 const AdminProductDetail = () => {
     const { id } = useParams();

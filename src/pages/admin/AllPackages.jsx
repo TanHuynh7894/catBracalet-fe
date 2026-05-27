@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Download, Calendar, ChevronDown, Monitor } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './AllPackages.module.css';
 
 const AllPackages = () => {
     const summaryStats = [

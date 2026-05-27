@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter, Download, Calendar, ChevronDown, RefreshCcw } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './Returns.module.css';
 
 const Returns = () => {
     const summaryStats = [

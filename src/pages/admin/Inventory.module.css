@@ -1,0 +1,83 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-6;
+}
+
+.header {
+    @apply flex justify-between items-start;
+}
+
+.title {
+    @apply font-headline text-3xl text-gray-800;
+}
+
+.titleSubtitle {
+    @apply text-sm text-gray-400 mt-1 font-medium;
+}
+
+.filterGroup {
+    @apply flex items-center gap-3;
+}
+
+.primaryBtn {
+    @apply bg-[#680006] text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-[#4d0004] transition-all shadow-sm;
+}
+
+/* Inventory Specifics */
+.summaryGrid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-4 mb-2;
+}
+
+.summaryCard {
+    @apply bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4;
+}
+
+.cardIcon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center;
+}
+
+.cardLabel {
+    @apply text-xs text-gray-400 font-bold uppercase tracking-wider mb-1;
+}
+
+.cardValue {
+    @apply text-2xl font-extrabold text-gray-800;
+}
+
+.inventoryTableContainer {
+    @apply bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm;
+}
+
+.toolbar {
+    @apply p-4 border-b border-gray-100 flex flex-wrap items-center gap-4;
+}
+
+.searchWrapper {
+    @apply flex-1 min-w-[300px] relative;
+}
+
+.searchInput {
+    @apply w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#680006] focus:ring-1 focus:ring-[#680006] outline-none;
+}
+
+.searchIcon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+/* Prices styling */
+.priceCost {
+    @apply font-bold text-gray-700;
+}
+
+.priceSale {
+    @apply font-bold text-[#680006];
+}
+
+.locationBadge {
+    @apply px-2.5 py-1 bg-gray-100 text-gray-600 rounded-md text-[11px] font-bold border border-gray-200;
+}
+
+.pagination {
+    @apply p-4 border-t border-gray-100 flex justify-between items-center bg-gray-50;
+}

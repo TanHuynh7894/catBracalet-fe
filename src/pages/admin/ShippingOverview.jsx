@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, ChevronDown, Plus, Info } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './ShippingOverview.module.css';
 
 const ShippingOverview = () => {
     const shippingStats = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Filter, Download, Upload, Plus, ChevronDown, MoreHorizontal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Dashboard.module.css';
+import styles from './ProductList.module.css';
 
 const ProductList = () => {
     const navigate = useNavigate();

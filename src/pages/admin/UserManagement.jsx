@@ -5,7 +5,7 @@ import {
     Shield, ShieldCheck, ShieldAlert, UserCheck, UserX, Mail, Phone,
     Calendar, MapPin, X, Check, AlertTriangle
 } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './UserManagement.module.css';
 
 const UserManagement = () => {
     const [activeTab, setActiveTab] = useState('all');
@@ -151,17 +151,8 @@ const UserManagement = () => {
         if (!showModal || !selectedUser) return null;
         const u = selectedUser;
         return (
-            <div style={{
-                position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                zIndex: 1000, animation: 'fadeIn 0.2s ease'
-            }} onClick={() => setShowModal(false)}>
-                <div style={{
-                    background: '#fff', borderRadius: 16, width: 560, maxHeight: '90vh',
-                    overflow: 'auto', boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
-                    animation: 'slideUp 0.3s ease'
-                }} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
+                <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
                     {/* Modal Header */}
                     <div style={{
                         padding: '24px 28px', borderBottom: '1px solid #f3f4f6',
@@ -313,10 +304,6 @@ const UserManagement = () => {
 
     return (
         <div className={styles.dashboard}>
-            <style>{`
-                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-                @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
 
             {/* Header */}
             <div className={styles.header}>
@@ -343,29 +330,18 @@ const UserManagement = () => {
             </div>
 
             {/* Stats Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className={styles.statsGrid}>
                 {stats.map((stat, idx) => (
-                    <div key={idx} style={{
-                        background: '#fff', padding: '20px 24px', borderRadius: 12,
-                        border: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: 16,
-                        transition: 'box-shadow 0.2s', cursor: 'default'
-                    }}
-                        onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06)'}
-                        onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
-                    >
-                        <div style={{
-                            width: 48, height: 48, borderRadius: 12, background: stat.bg,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            color: stat.color, flexShrink: 0
-                        }}>
+                    <div key={idx} className={styles.statCard}>
+                        <div className={styles.statIcon} style={{ background: stat.bg, color: stat.color }}>
                             {idx === 0 && <UserCheck size={22} />}
                             {idx === 1 && <Check size={22} />}
                             {idx === 2 && <ShieldCheck size={22} />}
                             {idx === 3 && <UserX size={22} />}
                         </div>
-                        <div>
-                            <div style={{ fontSize: 12, color: '#9ca3af', fontWeight: 600, marginBottom: 4 }}>{stat.label}</div>
-                            <div style={{ fontSize: 24, fontWeight: 800, color: '#1f2937' }}>{stat.value}</div>
+                        <div className={styles.statInfo}>
+                            <div className={styles.statLabel}>{stat.label}</div>
+                            <div className={styles.statValue}>{stat.value}</div>
                         </div>
                     </div>
                 ))}
@@ -374,39 +350,27 @@ const UserManagement = () => {
             {/* Main Table */}
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
                 {/* Tabs */}
-                <div style={{ display: 'flex', borderBottom: '1px solid #f3f4f6', padding: '0 16px' }}>
+                <div className={styles.tabsContainer}>
                     {tabs.map(tab => (
                         <button key={tab.id}
                             onClick={() => { setActiveTab(tab.id); setSelectedUsers([]); }}
-                            style={{
-                                padding: '16px 24px', fontSize: 12, fontWeight: 700,
-                                textTransform: 'uppercase', border: 'none', background: 'transparent',
-                                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
-                                borderBottom: activeTab === tab.id ? '2px solid #0088ff' : '2px solid transparent',
-                                color: activeTab === tab.id ? '#0088ff' : '#9ca3af',
-                                transition: 'color 0.2s'
-                            }}>
+                            className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}>
                             {tab.label}
-                            <span style={{
-                                background: activeTab === tab.id ? '#eff6ff' : '#f3f4f6',
-                                color: activeTab === tab.id ? '#0088ff' : '#9ca3af',
-                                padding: '2px 8px', borderRadius: 10, fontSize: 10, fontWeight: 700
-                            }}>{tab.count}</span>
+                            <span className={`${styles.tabCount} ${activeTab === tab.id ? styles.tabCountActive : styles.tabCountInactive}`}>
+                                {tab.count}
+                            </span>
                         </button>
                     ))}
                 </div>
 
                 {/* Search & Filters */}
-                <div style={{ padding: 12, borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                        flex: 1, display: 'flex', alignItems: 'center',
-                        border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 16px', gap: 10
-                    }}>
+                <div className={styles.toolbar}>
+                    <div className={styles.searchBox}>
                         <Search size={16} style={{ color: '#9ca3af' }} />
                         <input
                             type="text" placeholder="Tìm kiếm theo tên, email, số điện thoại, mã người dùng..."
                             value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                            style={{ border: 'none', outline: 'none', fontSize: 14, width: '100%', background: 'transparent' }}
+                            className={styles.searchInput}
                         />
                         {searchTerm && (
                             <button onClick={() => setSearchTerm('')} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#9ca3af', padding: 0 }}>
@@ -414,29 +378,14 @@ const UserManagement = () => {
                             </button>
                         )}
                     </div>
-                    <button style={{
-                        padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14,
-                        display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563',
-                        background: '#fff', cursor: 'pointer'
-                    }}>Vai trò <ChevronDown size={14} /></button>
-                    <button style={{
-                        padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14,
-                        display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563',
-                        background: '#fff', cursor: 'pointer'
-                    }}>Ngày tạo <ChevronDown size={14} /></button>
-                    <button style={{
-                        padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14,
-                        display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563',
-                        background: '#fff', cursor: 'pointer'
-                    }}><Filter size={14} /> Bộ lọc khác</button>
+                    <button className={styles.filterBtn}>Vai trò <ChevronDown size={14} /></button>
+                    <button className={styles.filterBtn}>Ngày tạo <ChevronDown size={14} /></button>
+                    <button className={styles.filterBtn}><Filter size={14} /> Bộ lọc khác</button>
                 </div>
 
                 {/* Bulk Actions */}
                 {selectedUsers.length > 0 && (
-                    <div style={{
-                        padding: '10px 20px', background: '#eff6ff', borderBottom: '1px solid #dbeafe',
-                        display: 'flex', alignItems: 'center', gap: 16, fontSize: 13
-                    }}>
+                    <div className={styles.bulkActions}>
                         <span style={{ fontWeight: 700, color: '#1d4ed8' }}>
                             Đã chọn {selectedUsers.length} người dùng
                         </span>

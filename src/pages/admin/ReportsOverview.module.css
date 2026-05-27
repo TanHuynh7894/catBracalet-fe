@@ -1,0 +1,49 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-6 p-2;
+}
+
+.header {
+    @apply flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100;
+}
+
+.title {
+    @apply font-headline text-3xl text-gray-800;
+}
+
+.statsGrid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-6;
+}
+
+.statCard {
+    @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4 transition-all;
+}
+
+.statCard:hover {
+    @apply shadow-md -translate-y-1;
+}
+
+.statIcon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center;
+}
+
+.statLabel {
+    @apply text-sm text-gray-500 font-medium;
+}
+
+.statValue {
+    @apply text-2xl font-bold text-gray-800;
+}
+
+.chartGrid {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+}
+
+.chartContainer {
+    @apply bg-white p-8 rounded-2xl shadow-sm border border-gray-100 min-h-[400px];
+}
+
+.chartTitle {
+    @apply text-lg font-bold text-gray-800 mb-8 flex items-center gap-3;
+}

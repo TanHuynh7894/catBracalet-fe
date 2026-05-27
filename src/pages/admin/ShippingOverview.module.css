@@ -1,0 +1,33 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-8;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply font-headline text-2xl text-gray-800;
+}
+
+.filterGroup {
+    @apply flex items-center gap-4;
+}
+
+.primaryBtn {
+    @apply bg-[#680006] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#4d0004] transition-colors;
+}
+
+.statsGrid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-4;
+}
+
+.mainGrid {
+    @apply grid grid-cols-1 lg:grid-cols-3 gap-6;
+}
+
+.contentBox {
+    @apply bg-white p-6 rounded-xl border border-gray-100 flex flex-col gap-4;
+}

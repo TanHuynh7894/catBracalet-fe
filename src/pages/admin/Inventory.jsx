@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Download, Upload, Filter, ChevronDown, ListFilter, Plus } from 'lucide-react';
-import styles from './Dashboard.module.css';
+import styles from './Inventory.module.css';
 
 const StockInventory = () => {
     const stockData = [
@@ -14,7 +14,7 @@ const StockInventory = () => {
     return (
         <div className={styles.dashboard}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Quản lý kho: <span style={{ color: '#6b7280', fontWeight: 500 }}>Cửa hàng chính</span></h1>
+                <h1 className={styles.title}>Quản lý kho: <span className={styles.titleSubtitle}>Cửa hàng chính</span></h1>
                 <div className={styles.filterGroup}>
                     <button className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded text-xs font-bold text-gray-600 hover:bg-gray-50">
                         <ListFilter size={14} /> Danh sách lô - HSD
@@ -28,7 +28,7 @@ const StockInventory = () => {
                 </div>
             </div>
 
-            <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
+            <div className={styles.inventoryTableContainer}>
                 {/* Tabs */}
                 <div style={{ display: 'flex', borderBottom: '1px solid #f3f4f6', padding: '0 16px' }}>
                     {['Tất cả', 'Còn hàng', 'Hết hàng'].map((tab, idx) => (
@@ -49,14 +49,14 @@ const StockInventory = () => {
                 </div>
 
                 {/* Search & Filters */}
-                <div style={{ padding: 12, borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 16px', gap: 10 }}>
-                        <Search size={16} style={{ color: '#9ca3af' }} />
-                        <input type="text" placeholder="Tìm kiếm theo mã SKU, tên sản phẩm, barcode" style={{ border: 'none', outline: 'none', fontSize: 14, width: '100%', background: 'transparent' }} />
+                <div className={styles.toolbar}>
+                    <div className={styles.searchWrapper}>
+                        <Search size={16} className={styles.searchIcon} />
+                        <input type="text" placeholder="Tìm kiếm theo mã SKU, tên sản phẩm, barcode" className={styles.searchInput} />
                     </div>
-                    <button style={{ padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563', background: '#fff', cursor: 'pointer' }}>Ngày tạo <ChevronDown size={14} /></button>
-                    <button style={{ padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563', background: '#fff', cursor: 'pointer' }}>Tồn kho <ChevronDown size={14} /></button>
-                    <button style={{ padding: '8px 16px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 14, display: 'flex', alignItems: 'center', gap: 8, color: '#4b5563', background: '#fff', cursor: 'pointer' }}><Filter size={14} /> Bộ lọc khác</button>
+                    <button className={styles.filterBtn}>Ngày tạo <ChevronDown size={14} /></button>
+                    <button className={styles.filterBtn}>Tồn kho <ChevronDown size={14} /></button>
+                    <button className={styles.filterBtn}><Filter size={14} /> Bộ lọc khác</button>
                 </div>
 
                 {/* Table - overflow-x: scroll to always show horizontal scrollbar */}

@@ -1,0 +1,146 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-8;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply font-headline text-2xl text-gray-800;
+}
+
+.filterGroup {
+    @apply flex items-center gap-4;
+}
+
+.primaryBtn {
+    @apply bg-[#680006] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#4d0004] transition-colors;
+}
+
+/* User Management Specifics */
+.statsGrid {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-4;
+}
+
+.statCard {
+    @apply bg-white p-6 rounded-xl border border-gray-100 flex items-center gap-4 transition-shadow cursor-default;
+}
+
+.statCard:hover {
+    @apply shadow-md;
+}
+
+.statIcon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0;
+}
+
+.statInfo {
+    @apply flex flex-col;
+}
+
+.statLabel {
+    @apply text-xs text-gray-400 font-bold mb-1;
+}
+
+.statValue {
+    @apply text-2xl font-extrabold text-gray-800;
+}
+
+/* Tabs */
+.tabsContainer {
+    @apply flex border-b border-gray-100 px-4;
+}
+
+.tab {
+    @apply px-6 py-4 text-xs font-bold uppercase border-b-2 border-transparent text-gray-400 transition-colors flex items-center gap-2;
+}
+
+.tabActive {
+    @apply border-[#0088ff] text-[#0088ff];
+}
+
+.tabCount {
+    @apply px-2 py-0.5 rounded-full text-[10px] font-bold;
+}
+
+.tabCountActive {
+    @apply bg-[#eff6ff] text-[#0088ff];
+}
+
+.tabCountInactive {
+    @apply bg-gray-100 text-gray-400;
+}
+
+/* Search and Filters */
+.toolbar {
+    @apply p-3 border-b border-gray-100 flex items-center gap-3 bg-white;
+}
+
+.searchBox {
+    @apply flex-1 flex items-center border border-gray-200 rounded-lg px-4 py-2 gap-3 focus-within:border-[#0088ff] transition-all;
+}
+
+.searchInput {
+    @apply bg-transparent outline-none text-sm w-full font-body;
+}
+
+.filterBtn {
+    @apply px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm flex items-center gap-2 text-gray-600 hover:bg-gray-50;
+}
+
+/* Bulk Actions */
+.bulkActions {
+    @apply px-5 py-2.5 bg-[#eff6ff] border-b border-[#dbeafe] flex items-center gap-4 text-sm;
+}
+
+/* Modal */
+.modalOverlay {
+    @apply fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[1000];
+    animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+    @apply bg-white rounded-2xl w-[560px] max-h-[90vh] overflow-auto shadow-2xl;
+    animation: slideUp 0.3s ease;
+}
+
+.modalHeader {
+    @apply px-7 py-6 border-b border-gray-100 flex justify-between items-center;
+}
+
+.modalBody {
+    @apply p-7;
+}
+
+.profileSummary {
+    @apply flex items-center gap-4 p-5 bg-gray-50 rounded-xl mb-6;
+}
+
+.avatarContainer {
+    @apply w-16 h-16 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl flex-shrink-0 shadow-lg;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
