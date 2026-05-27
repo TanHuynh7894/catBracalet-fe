@@ -11,15 +11,21 @@
   --color-tertiary: #30302c;
   --color-background: #fbf9f8;
   --color-surface: #fbf9f8;
+  --color-surface-container-high: #eae8e7;
   --color-surface-container-low: #f5f3f3;
   --color-surface-container-lowest: #ffffff;
+  --color-surface-variant: #e4e2e2;
   --color-on-background: #1b1c1c;
   --color-on-surface: #1b1c1c;
   --color-on-surface-variant: #59413e;
+  --color-on-primary: #ffffff;
   --color-on-primary-fixed: #410002;
+  --color-on-error: #ffffff;
+  --color-outline: #8d706d;
   --color-outline-variant: #e0bfbb;
   --color-primary-fixed: #ffdad6;
   --color-secondary-fixed-dim: #e9c349;
+  --color-error: #ba1a1a;
 
   --font-headline: "Bodoni Moda", serif;
   --font-body: "Manrope", sans-serif;

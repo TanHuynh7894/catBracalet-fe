@@ -1,0 +1,41 @@
+@reference "../../index.css";
+
+.dashboard {
+    @apply flex flex-col gap-8;
+}
+
+.header {
+    @apply flex justify-between items-center;
+}
+
+.title {
+    @apply font-headline text-2xl text-gray-800;
+}
+
+.filterGroup {
+    @apply flex items-center gap-4;
+}
+
+.primaryBtn {
+    @apply bg-[#680006] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#4d0004] transition-colors;
+}
+
+.tableWrapper {
+    @apply overflow-x-auto;
+}
+
+.table {
+    @apply w-full text-left text-sm;
+}
+
+.table thead tr {
+    @apply border-b border-gray-100;
+}
+
+.table th {
+    @apply py-4 text-gray-400 font-medium;
+}
+
+.table td {
+    @apply py-4 border-b border-gray-50;
+}

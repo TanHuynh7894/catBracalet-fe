@@ -24,6 +24,8 @@ import Inventory from './pages/admin/Inventory';
 import ReceivingOrders from './pages/admin/ReceivingOrders';
 import ReportsOverview from './pages/admin/ReportsOverview';
 import UserManagement from './pages/admin/UserManagement';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import './index.css';
 
 const LayoutWrapper = ({ children }) => {
@@ -48,6 +50,8 @@ function App() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/story" element={<Story />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />

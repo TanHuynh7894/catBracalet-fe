@@ -51,8 +51,8 @@ const Header = () => {
                             key={link.path}
                             to={link.path}
                             className={`${styles.navLink} ${location.pathname === link.path
-                                    ? (isScrolled || !isTransparentPage ? 'border-[#680006] text-[#680006]' : 'border-white text-white')
-                                    : (isScrolled || !isTransparentPage ? 'border-transparent text-[#59413e] hover:text-[#680006]' : 'border-transparent text-white/80 hover:text-white')
+                                ? (isScrolled || !isTransparentPage ? 'border-[#680006] text-[#680006]' : 'border-white text-white')
+                                : (isScrolled || !isTransparentPage ? 'border-transparent text-[#59413e] hover:text-[#680006]' : 'border-transparent text-white/80 hover:text-white')
                                 }`}
                         >
                             {link.name}
@@ -65,9 +65,9 @@ const Header = () => {
                     <button className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
                         <Search size={20} />
                     </button>
-                    <button className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
+                    <Link to="/login" className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
                         <User size={20} />
-                    </button>
+                    </Link>
                     <button className={`${styles.iconButton} relative ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
                         <ShoppingBag size={20} />
                         <span className="absolute -top-1 -right-1 bg-[#680006] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
