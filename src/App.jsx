@@ -26,6 +26,7 @@ import ReportsOverview from './pages/admin/ReportsOverview';
 import UserManagement from './pages/admin/UserManagement';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import SuccessfulPayment from './pages/SuccessfulPayment';
 import './index.css';
 
 const LayoutWrapper = ({ children }) => {
@@ -52,6 +53,7 @@ function App() {
           <Route path="/story" element={<Story />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/successfulpayment" element={<SuccessfulPayment />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />
