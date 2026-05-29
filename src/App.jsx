@@ -32,9 +32,14 @@ import './index.css';
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+  const isLanding = location.pathname === '/';
 
   if (isAdmin) {
     return <AdminLayout>{children}</AdminLayout>;
+  }
+
+  if (isLanding) {
+    return <>{children}</>;
   }
 
   return <MainLayout>{children}</MainLayout>;

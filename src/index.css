@@ -1,15 +1,18 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 @theme {
   --color-primary-container: #8c1515;
   --color-primary: #680006;
+  /* Deep Red / Wine Red */
   --color-secondary: #735c00;
+  /* Champagne Gold */
   --color-secondary-fixed: #ffe088;
   --color-secondary-container: #fed65b;
   --color-tertiary: #30302c;
   --color-background: #fbf9f8;
+  /* Soft Ivory/Cream */
   --color-surface: #fbf9f8;
   --color-surface-container-high: #eae8e7;
   --color-surface-container-low: #f5f3f3;
@@ -27,6 +30,13 @@
   --color-secondary-fixed-dim: #e9c349;
   --color-error: #ba1a1a;
 
+  /* Luxury Accents */
+  --color-wine: #680006;
+  --color-burgundy: #4a0004;
+  --color-champagne: #d4af37;
+  --color-ivory: #fdfbf7;
+  --color-cream: #f9f6f0;
+
   --font-headline: "Bodoni Moda", serif;
   --font-body: "Manrope", sans-serif;
 
@@ -34,9 +44,10 @@
   --spacing-margin-desktop: 80px;
   --spacing-container-max: 1200px;
   --spacing-gutter: 24px;
-}
 
-/* Fonts moved to top */
+  --shadow-premium: 0 20px 50px rgba(104, 0, 6, 0.05);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
 
 @layer base {
   body {
@@ -44,6 +55,17 @@
     color: var(--color-on-background);
     font-family: 'Manrope', sans-serif;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif {
+    font-family: 'Noto Serif', serif;
+    font-weight: 500;
+    letter-spacing: normal;
   }
 
   ::selection {
@@ -52,65 +74,73 @@
   }
 }
 
-h1,
-h2,
-h3,
-h4,
-.font-headline {
-  font-family: 'Bodoni Moda', serif;
+@layer utilities {
+  .text-wine {
+    color: var(--color-wine);
+  }
+
+  .bg-wine {
+    background-color: var(--color-wine);
+  }
+
+  .border-champagne {
+    border-color: var(--color-champagne);
+  }
+
+  .bg-cream {
+    background-color: var(--color-cream);
+  }
+
+  .bg-ivory {
+    background-color: var(--color-ivory);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-dark {
+    background: rgba(104, 0, 6, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(104, 0, 6, 0.1);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .luxury-shadow {
+    box-shadow: var(--shadow-premium);
+  }
+
+  .soft-shadow {
+    box-shadow: var(--shadow-soft);
+  }
 }
 
-.material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.glass-effect {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
 }
 
-/* ─── Scroll animations ─── */
-/* Default: visible. JS adds .animate class to enable animation. */
-.fade-in-up {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 10px;
 }
 
-/* When JS inits, .will-animate class is added to hidden elements */
-.fade-in-up.will-animate {
-  opacity: 0;
-  transform: translateY(24px);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline);
 }
 
-.fade-in-up.will-animate.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.reveal {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal.will-animate {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-.reveal.will-animate.active {
-  opacity: 1;
-  transform: translateY(0);
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
 }
