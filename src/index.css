@@ -140,7 +140,4 @@
   background: var(--color-outline);
 }
 
-/* Smooth Scroll */
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth Scroll - Managed by Lenis library */

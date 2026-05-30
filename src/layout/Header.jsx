@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
-import styles from './Header.module.css';
-
-// === Local Assets ===
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const isHomePage = location.pathname === '/';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,77 +19,121 @@ const Header = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close menu when route changes
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, [location]);
+    const navLinks = [
+        { name: 'TRANG CHỦ', href: '/', type: 'route' },
+        { name: 'BỘ SƯU TẬP', href: '#collection', type: 'anchor' },
+        { name: 'CÁT LÀ GÌ?', href: '#about', type: 'anchor' },
+        { name: 'NĂNG LƯỢNG', href: '#how-it-works', type: 'anchor' },
+        { name: 'CÂU CHUYỆN', href: '#story', type: 'anchor' },
+        { name: 'ĐÁ PHONG THỦY', href: '#', type: 'anchor' },
+        { name: 'ĐÁ TỰ NHIÊN', href: '#', type: 'anchor' },
+    ];
 
-    const isTransparentPage = location.pathname === '/' || location.pathname === '/about' || location.pathname === '/story';
+    // Handle anchor links: if on home page, scroll to section; if on other page, navigate home first
+    const handleAnchorClick = (e, href) => {
+        if (href === '#') return;
+        e.preventDefault();
+        if (isHomePage) {
+            const el = document.querySelector(href);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            navigate('/');
+            setTimeout(() => {
+                const el = document.querySelector(href);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+        setIsMobileMenuOpen(false);
+    };
 
     return (
         <header
-            className={`${styles.header} ${isScrolled || !isTransparentPage ? styles.headerGlass : styles.headerTransparent}`}
+            className={`fixed top-0 left-0 w-full z-[999] transition-all duration-500 ${isScrolled ? 'py-3 bg-white/95 backdrop-blur-md shadow-sm' : 'py-6 bg-transparent'
+                }`}
         >
-            <div className={styles.container}>
-                {/* Logo */}
-                <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-                    <img src={logoImg} alt="Cat Bracelet" className="h-10 w-auto group-hover:scale-105 transition-transform" />
-                    <span className={`${styles.logo} ${isScrolled || !isTransparentPage ? 'text-[#680006]' : 'text-white'}`}>
-                        Cát Bracelet
-                    </span>
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between">
+                {/* Logo — React Router Link về trang chủ */}
+                <Link to="/" className="flex items-center gap-3 shrink-0">
+                    <img src={logoImg} alt="Cát" className="h-10 md:h-12 w-auto object-contain" />
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className={styles.nav}>
-                    {[
-                        { name: 'Trang chủ', path: '/' },
-                        { name: 'Bộ sưu tập', path: '/collections' },
-                        { name: 'Câu chuyện', path: '/story' },
-                        { name: 'Về chúng tôi', path: '/about' },
-                    ].map((link) => (
-                        <Link
-                            key={link.path}
-                            to={link.path}
-                            className={`${styles.navLink} ${location.pathname === link.path
-                                ? (isScrolled || !isTransparentPage ? 'border-[#680006] text-[#680006]' : 'border-white text-white')
-                                : (isScrolled || !isTransparentPage ? 'border-transparent text-[#59413e] hover:text-[#680006]' : 'border-transparent text-white/80 hover:text-white')
-                                }`}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
+                {/* Nav Center */}
+                <nav className="hidden xl:flex items-center gap-8">
+                    {navLinks.map((link) =>
+                        link.type === 'route' ? (
+                            <Link
+                                key={link.name}
+                                to={link.href}
+                                className="text-[11px] font-bold tracking-widest text-wine/60 hover:text-wine transition-colors"
+                            >
+                                {link.name}
+                            </Link>
+                        ) : (
+                            <a
+                                key={link.name}
+                                href={link.href}
+                                onClick={(e) => handleAnchorClick(e, link.href)}
+                                className="text-[11px] font-bold tracking-widest text-wine/60 hover:text-wine transition-colors cursor-pointer"
+                            >
+                                {link.name}
+                            </a>
+                        )
+                    )}
                 </nav>
 
-                {/* Icons */}
-                <div className={styles.iconGroup}>
-                    <button className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
-                        <Search size={20} />
-                    </button>
-                    <Link to="/login" className={`${styles.iconButton} ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
-                        <User size={20} />
-                    </Link>
-                    <button className={`${styles.iconButton} relative ${isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'}`}>
-                        <ShoppingBag size={20} />
-                        <span className="absolute -top-1 -right-1 bg-[#680006] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center">0</span>
-                    </button>
+                {/* Button Right */}
+                <div className="flex items-center gap-4">
+                    <a
+                        href="#consultation"
+                        onClick={(e) => handleAnchorClick(e, '#consultation')}
+                        className="hidden lg:flex items-center gap-3 bg-wine text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all"
+                    >
+                        Tư vấn chọn vòng
+                        <ChevronDown size={14} />
+                    </a>
+
                     <button
-                        className="md:hidden text-[#59413e]"
+                        className="xl:hidden text-wine"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
-                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} className={isScrolled || !isTransparentPage ? 'text-[#59413e]' : 'text-white'} />}
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
             </div>
 
             {/* Mobile Menu */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-outline-variant/10 py-8 px-margin-mobile flex flex-col gap-6 animate-in slide-in-from-top duration-300">
-                    <Link to="/" className="text-sm uppercase tracking-widest font-bold">Trang chủ</Link>
-                    <Link to="/collections" className="text-sm uppercase tracking-widest font-bold">Bộ sưu tập</Link>
-                    <Link to="/story" className="text-sm uppercase tracking-widest font-bold">Câu chuyện</Link>
-                    <Link to="/about" className="text-sm uppercase tracking-widest font-bold">Về chúng tôi</Link>
-                </div>
-            )}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="absolute top-full left-0 w-full bg-white shadow-2xl border-t border-wine/5 py-10 px-6 flex flex-col gap-6 xl:hidden"
+                    >
+                        {navLinks.map((link) =>
+                            link.type === 'route' ? (
+                                <Link
+                                    key={link.name}
+                                    to={link.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-sm font-bold tracking-widest text-wine border-b border-wine/5 pb-4"
+                                >
+                                    {link.name}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={(e) => { handleAnchorClick(e, link.href); }}
+                                    className="text-sm font-bold tracking-widest text-wine border-b border-wine/5 pb-4"
+                                >
+                                    {link.name}
+                                </a>
+                            )
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </header>
     );
 };

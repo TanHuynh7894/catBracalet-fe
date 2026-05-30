@@ -17,7 +17,7 @@ const Reveal = ({
             style={{ position: 'relative', width }}
             initial={{ opacity: 0, y, x }}
             whileInView={{ opacity: 1, y: 0, x: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{
                 duration,
                 delay,

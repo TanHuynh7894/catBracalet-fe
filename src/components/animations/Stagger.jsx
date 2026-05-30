@@ -7,7 +7,7 @@ export const StaggerContainer = ({ children, delayChildren = 0, staggerChildren 
             className={className}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: false, amount: 0.1 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={{
                 hidden: { opacity: 0 },
                 show: {
