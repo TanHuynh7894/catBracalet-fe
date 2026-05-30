@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Collections.module.css';
+import Reveal from '../components/animations/Reveal';
+import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
+import { motion } from 'framer-motion';
 
 // === Local Assets ===
 import prod1 from '../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14AAN-2CH7-R20.jpg';
@@ -38,11 +41,17 @@ const Collections = () => {
         <main className={styles.main}>
             {/* Header */}
             <header className={styles.heroHeader}>
-                <span className={`${styles.label} reveal`}>Tất cả sản phẩm</span>
-                <h1 className={`${styles.title} reveal`}>Bộ sưu tập Đá quý</h1>
-                <p className={`${styles.subtitle} reveal`}>
-                    Tuyển chọn những viên đá mang năng lượng chữa lành và bình an từ thiên nhiên.
-                </p>
+                <Reveal delay={0.1}>
+                    <span className={styles.label}>Tất cả sản phẩm</span>
+                </Reveal>
+                <Reveal delay={0.2} y={30}>
+                    <h1 className={styles.title}>Bộ sưu tập Đá quý</h1>
+                </Reveal>
+                <Reveal delay={0.3} y={20}>
+                    <p className={styles.subtitle}>
+                        Tuyển chọn những viên đá mang năng lượng chữa lành và bình an từ thiên nhiên.
+                    </p>
+                </Reveal>
             </header>
 
             {/* Filter Section */}
@@ -76,35 +85,41 @@ const Collections = () => {
                 </div>
             </section>
 
-            {/* Product Grid */}
-            <div className={styles.productGrid}>
+            <StaggerContainer className={styles.productGrid}>
                 {products.map((product) => (
-                    <Link to={`/product/${product.id}`} key={product.id} className={`${styles.card} group reveal block`}>
-                        <article>
-                            <div className={styles.imageWrapper}>
-                                <img alt={product.name} className={styles.image} src={product.img} />
-                                <div className="absolute inset-0 bg-[#680006]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </div>
-                            <div className={styles.cardDetails}>
-                                <h3 className="font-headline text-2xl mb-2 text-[#680006] group-hover:translate-x-2 transition-transform duration-500">{product.name}</h3>
-                                <p className="font-body text-lg text-[#680006] font-bold">{product.price}</p>
-                                <div className="mt-6 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                                    <span className="text-[10px] uppercase tracking-widest font-bold border-b border-[#680006]">Xem chi tiết</span>
-                                    <button
-                                        className="bg-[#680006] text-white px-4 py-2 text-[10px] uppercase font-bold hover:bg-[#4d0004]"
-                                        onClick={(e) => {
-                                            e.preventDefault(); // Prevent Link navigation
-                                            // Add to cart logic
-                                        }}
-                                    >
-                                        Thêm vào giỏ
-                                    </button>
+                    <StaggerItem key={product.id}>
+                        <Link to={`/product/${product.id}`} className={`${styles.card} group block`}>
+                            <article>
+                                <div className={styles.imageWrapper}>
+                                    <motion.img
+                                        alt={product.name}
+                                        className={styles.image}
+                                        src={product.img}
+                                        whileHover={{ scale: 1.05 }}
+                                        transition={{ duration: 0.8 }}
+                                    />
+                                    <div className="absolute inset-0 bg-[#680006]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                            </div>
-                        </article>
-                    </Link>
+                                <div className={styles.cardDetails}>
+                                    <h3 className="font-headline text-2xl mb-2 text-[#680006] transition-transform duration-500 group-hover:translate-x-2">{product.name}</h3>
+                                    <p className="font-body text-lg text-[#680006] font-bold">{product.price}</p>
+                                    <div className="mt-6 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                        <span className="text-[10px] uppercase tracking-widest font-bold border-b border-[#680006]">Xem chi tiết</span>
+                                        <button
+                                            className="bg-[#680006] text-white px-4 py-2 text-[10px] uppercase font-bold hover:bg-[#4d0004]"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            Thêm vào giỏ
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                        </Link>
+                    </StaggerItem>
                 ))}
-            </div>
+            </StaggerContainer>
 
             {/* Decoration Quote */}
             <section className={`${styles.quoteSection} reveal mt-32`}>

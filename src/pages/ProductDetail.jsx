@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { Star, ShieldCheck, HelpCircle, ShoppingCart, Heart } from 'lucide-react';
 import styles from './ProductDetail.module.css';
+import { motion } from 'framer-motion';
+import Reveal from '../components/animations/Reveal';
 
 // === Local Assets ===
 import mainImg from '../assets/Image - Cat/hình ảnh Sp/2 tròn 6 - 1 tròn 10 - 2 bi4/D3-2KC6-1KD10-2CH4-R20.jpg';
@@ -27,21 +29,34 @@ const ProductDetail = () => {
             <main className={styles.container}>
                 {/* Left: Image side */}
                 <div className={styles.imageSide}>
-                    <div className={`${styles.imageWrapper} reveal`}>
-                        <img
+                    <Reveal y={20} className={styles.imageWrapper}>
+                        <motion.img
                             className={styles.image}
                             src={mainImg}
                             alt="Main Product"
+                            initial={{ scale: 1.1 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 1.5 }}
                         />
-                    </div>
+                    </Reveal>
                     <div className="grid grid-cols-2 gap-4">
-                        <img className="w-full aspect-square object-cover reveal transition-all hover:brightness-90 cursor-pointer" src={detail1} alt="Detail" />
-                        <img className="w-full aspect-square object-cover reveal transition-all hover:brightness-90 cursor-pointer" src={detail2} alt="Detail" />
+                        <motion.img
+                            whileHover={{ scale: 0.98 }}
+                            className="w-full aspect-square object-cover transition-all hover:brightness-90 cursor-pointer"
+                            src={detail1}
+                            alt="Detail"
+                        />
+                        <motion.img
+                            whileHover={{ scale: 0.98 }}
+                            className="w-full aspect-square object-cover transition-all hover:brightness-90 cursor-pointer"
+                            src={detail2}
+                            alt="Detail"
+                        />
                     </div>
                 </div>
 
                 {/* Right: Content side */}
-                <div className={`${styles.contentSide} reveal`}>
+                <Reveal x={20} className={styles.contentSide}>
                     <nav className="flex gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-[#59413e] mb-6">
                         <span>Bộ sưu tập</span>
                         <span className="text-[#e0bfbb]">/</span>
@@ -98,12 +113,12 @@ const ProductDetail = () => {
                             <span className="text-[10px] uppercase font-bold tracking-widest text-[#1b1c1c]">Bảo hành trọn đời</span>
                         </div>
                     </div>
-                </div>
+                </Reveal>
             </main>
 
             {/* Ritual Section */}
             <section className={styles.ritualSection}>
-                <div className="max-w-[1200px] mx-auto">
+                <div className="max-w-container-max mx-auto">
                     <div className="text-center mb-16 reveal">
                         <span className="font-body text-[11px] uppercase tracking-[0.4em] text-[#735c00] mb-4 block">Nghi thức thiêng liêng</span>
                         <h2 className="font-headline text-4xl md:text-5xl text-[#680006] italic">Cách thanh tẩy và bảo toàn năng lượng</h2>

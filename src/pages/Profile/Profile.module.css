@@ -1,0 +1,33 @@
+.profileSection {
+    background-image: linear-gradient(135deg, #f5f3f3 0%, #fff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.profileSection::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDNY2T1vNqkjg5eihkHukLzcq-l9Su9JgqnMMIWis_CJwNnND2dthEpwY0vArd0cLAhGz2g77PgrJhK4aJSlnyAvWnZJdF5dknOKBKgmKeh5w5e_JmJqKFHN-SSxURAE3e_r9RjcAkeO2rx3sARz7lNQrLEYFvMVz1TGjfDe42QZ1HbtW-ixOiKSL7Bqc6EUKNFB5dlBKEQQ4yXg6K8M5IDKJ2OIy8QryW95ejhwYuFmCPXx2bmYuhmY1gy5vhV_s9tbFDXRuZn8-BX);
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}

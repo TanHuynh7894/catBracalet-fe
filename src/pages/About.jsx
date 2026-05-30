@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { ShieldCheck, Droplets, Truck, Diamond, HandMetal, Heart } from 'lucide-react';
 import styles from './About.module.css';
+import Reveal from '../components/animations/Reveal';
+import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
+import Parallax from '../components/animations/Parallax';
+import { motion } from 'framer-motion';
 
 // === Local Assets ===
 import visionImg from '../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14KFN-2CH7-R20.jpg';
@@ -37,13 +41,13 @@ const About = () => {
                 </div>
 
                 <div className={styles.heroContent}>
-                    <div className="max-w-2xl reveal">
+                    <Reveal className="max-w-2xl" y={30} delay={0.2}>
                         <span className={styles.heroSubtitle}>Kể từ 2018</span>
                         <h1 className={styles.heroTitle}>Về Cát Bracelet - <br /><i className="font-light">Câu chuyện của sự tĩnh tại</i></h1>
                         <p className={styles.heroDescription}>
                             Nơi những viên đá tự nhiên thô mộc được đánh thức vẻ đẹp bởi đôi bàn tay nghệ nhân tỉ mỉ, tạo nên món trang sức mang năng lượng chữa lành.
                         </p>
-                    </div>
+                    </Reveal>
                 </div>
             </section>
 
@@ -51,7 +55,7 @@ const About = () => {
             <section className={styles.visionSection}>
                 <div className={styles.container}>
                     <div className={styles.grid2Col}>
-                        <div className="reveal">
+                        <Reveal className="reveal" x={-30}>
                             <h2 className={styles.sectionTitle}>Triết lý của chúng tôi</h2>
                             <div className="space-y-6">
                                 <p className={styles.quote}>
@@ -64,22 +68,29 @@ const About = () => {
                                     Chúng tôi không theo đuổi những xu hướng nhất thời, mà tập trung vào việc tạo ra những sản phẩm có giá trị bền vững, đồng hành cùng chủ nhân trong hành trình tìm về sự bình an nội tại.
                                 </p>
                             </div>
-                        </div>
-                        <div className="reveal">
+                        </Reveal>
+                        <Reveal className="reveal" x={30}>
                             <div className="relative">
-                                <div className="aspect-[4/5] bg-surface-container-low overflow-hidden">
-                                    <img
-                                        className="w-full h-full object-cover"
-                                        src={artisan1}
-                                        alt="Stones and Bracelet"
-                                    />
-                                </div>
-                                <div className="absolute -bottom-8 -left-8 bg-[#680006] p-8 hidden md:block">
+                                <Parallax offset={20}>
+                                    <div className="aspect-[4/5] bg-surface-container-low overflow-hidden">
+                                        <img
+                                            className="w-full h-full object-cover"
+                                            src={artisan1}
+                                            alt="Stones and Bracelet"
+                                        />
+                                    </div>
+                                </Parallax>
+                                <motion.div
+                                    className="absolute -bottom-8 -left-8 bg-[#680006] p-8 hidden md:block"
+                                    whileInView={{ x: 20, opacity: 1 }}
+                                    initial={{ x: 0, opacity: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                >
                                     <div className="text-white font-headline text-2xl">Sự Tĩnh Tại</div>
                                     <div className="text-white/80 font-body text-sm mt-2">Bắt nguồn từ trái tim</div>
-                                </div>
+                                </motion.div>
                             </div>
-                        </div>
+                        </Reveal>
                     </div>
                 </div>
             </section>

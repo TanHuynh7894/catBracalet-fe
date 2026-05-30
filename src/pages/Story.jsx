@@ -132,7 +132,7 @@ const Story = () => {
                     <div className="absolute top-0 right-0 p-10 opacity-5">
                         <Sparkles size={120} className="text-[#680006]" />
                     </div>
-                    <div className="max-w-3xl mx-auto text-center reveal">
+                    <div className="max-w-container-max mx-auto text-center reveal">
                         <span className={styles.tag}>Nghi thức thiêng liêng</span>
                         <h2 className="font-headline text-4xl text-[#680006] mb-10 italic">Cách thanh tẩy và bảo toàn năng lượng</h2>
                         <div className={styles.ritualGrid}>
