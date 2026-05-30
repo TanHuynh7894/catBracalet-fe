@@ -1,5 +1,6 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Sparkles, Fingerprint, CheckCircle, Flower2 } from 'lucide-react';
 import styles from './Home.module.css';
