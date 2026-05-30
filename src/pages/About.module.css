@@ -17,7 +17,7 @@
 }
 
 .heroContent {
-    @apply relative z-10 max-w-[1200px] mx-auto px-margin-desktop w-full;
+    @apply relative z-10 max-w-container-max mx-auto px-margin-desktop w-full;
 }
 
 .heroSubtitle {
@@ -38,7 +38,7 @@
 }
 
 .container {
-    @apply max-w-[1200px] mx-auto px-margin-desktop;
+    @apply max-w-container-max mx-auto px-margin-desktop;
 }
 
 .grid2Col {

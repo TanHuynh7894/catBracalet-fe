@@ -64,9 +64,9 @@ export default {
             spacing: {
                 "margin-mobile": "20px",
                 "gutter": "24px",
-                "margin-desktop": "80px",
+                "margin-desktop": "40px",
                 "unit": "8px",
-                "container-max": "1200px"
+                "container-max": "1440px"
             },
             fontFamily: {
                 "headline": ["Bodoni Moda", "serif"],

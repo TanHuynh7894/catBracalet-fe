@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Sparkles, Fingerprint, CheckCircle, Flower2 } from 'lucide-react';
+import styles from './Home.module.css';
+import Reveal from '../components/animations/Reveal';
+import TextReveal from '../components/animations/TextReveal';
+import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
+import Parallax from '../components/animations/Parallax';
+import { motion } from 'framer-motion';
 
 // Components
 import LandingNavbar from '../components/Landing/LandingNavbar';

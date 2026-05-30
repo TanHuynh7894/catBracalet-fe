@@ -27,6 +27,11 @@ import UserManagement from './pages/admin/UserManagement';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import SuccessfulPayment from './pages/SuccessfulPayment';
+import Profile from './pages/Profile/Profile';
+import OrderHistory from './pages/OrderHistory/OrderHistory';
+import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
+import Wishlist from './pages/Wishlist/Wishlist';
+import OrderDetail from './pages/OrderDetail/OrderDetail';
 import './index.css';
 
 const LayoutWrapper = ({ children }) => {
@@ -59,6 +64,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/successfulpayment" element={<SuccessfulPayment />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/order-history" element={<OrderHistory />} />
+          <Route path="/shipping-addresses" element={<ShippingAddresses />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/order-detail/:id" element={<OrderDetail />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />
