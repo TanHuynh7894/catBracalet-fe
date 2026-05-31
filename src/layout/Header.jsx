@@ -23,7 +23,7 @@ const Header = () => {
         { name: 'Trang chủ', href: '/', type: 'route' },
         { name: 'Bộ sưu tập', href: '/collection', type: 'route' },
         { name: 'Thiết kế riêng', href: '#custom-mix', type: 'anchor' },
-        { name: 'Câu chuyện', href: '#story', type: 'anchor' },
+        { name: 'Câu chuyện', href: '/story', type: 'route' },
     ];
 
     const handleAnchorClick = (e, href) => {
@@ -101,7 +101,10 @@ const Header = () => {
                 {/* ── RIGHT: ACTIONS ─────────────────────────────────────── */}
                 <div className="flex items-center gap-6 md:gap-8">
                     {/* User Profile Icon */}
-                    <button className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors">
+                    <button
+                        onClick={() => navigate('/profile')}
+                        className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors"
+                    >
                         <User size={22} strokeWidth={1.5} />
                     </button>
 
@@ -159,7 +162,13 @@ const Header = () => {
                                     {link.name}
                                 </a>
                             ))}
-                            <button className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2">
+                            <button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    navigate('/profile');
+                                }}
+                                className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2"
+                            >
                                 <User size={18} /> Tài khoản
                             </button>
                         </div>

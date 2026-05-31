@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
 import AdminLayout from './layout/AdminLayout';
+import AccountLayout from './layout/AccountLayout';
 import Home from './pages/Home';
 
 import Dashboard from './pages/admin/Dashboard';
@@ -30,6 +31,7 @@ import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
 import Wishlist from './pages/Wishlist/Wishlist';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
 import CollectionPage from './pages/Collection/CollectionPage';
+import StoryPage from './pages/StoryPage/StoryPage';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
@@ -55,12 +57,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/successfulpayment" element={<SuccessfulPayment />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/order-history" element={<OrderHistory />} />
-          <Route path="/shipping-addresses" element={<ShippingAddresses />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/order-detail/:id" element={<OrderDetail />} />
+
+          {/* Account Sub-Routes Sharing a Layout */}
+          <Route element={<AccountLayout />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/shipping-addresses" element={<ShippingAddresses />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/order-detail/:id" element={<OrderDetail />} />
+          </Route>
+
           <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/story" element={<StoryPage />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />

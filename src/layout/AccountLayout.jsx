@@ -1,8 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { User, ReceiptText, MapPin, Heart, LogOut, Edit2, ShieldCheck } from 'lucide-react';
-import Header from './Header';
-import Footer from './Footer';
 import styles from './AccountLayout.module.css';
 import Reveal from '../components/animations/Reveal';
 import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
@@ -18,12 +16,12 @@ const AccountLayout = ({ children, activeTab }) => {
 
     return (
         <div className="flex flex-col min-h-screen bg-background">
-            <Header />
 
-            <main className="pt-32 pb-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+
+            <main className="pt-16 pb-20 max-w-[1400px] mx-auto px-4 md:px-10 w-full">
                 {/* User Header Section */}
-                <Reveal className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16 items-start">
-                    <header className="flex flex-col md:flex-row items-center md:items-end gap-8 mb-0">
+                <Reveal className="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-12 items-stretch">
+                    <header className="lg:col-span-4 flex flex-col md:flex-row lg:flex-col xl:flex-row items-center md:items-end lg:items-start xl:items-end gap-6 mb-0">
                         <div className="relative group">
                             <motion.div
                                 className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl ring-4 ring-surface-container transition-transform duration-500"
@@ -47,7 +45,7 @@ const AccountLayout = ({ children, activeTab }) => {
                         </div>
                     </header>
 
-                    <section className="relative bg-primary overflow-hidden rounded-lg p-6 md:p-8 text-white h-full flex flex-col justify-center">
+                    <section className="lg:col-span-8 relative bg-primary overflow-hidden rounded-lg p-6 md:p-8 text-white h-full flex flex-col justify-center">
                         <div className="relative z-10 w-full space-y-6">
                             <div className="flex justify-between items-center">
                                 <h3 className="font-headline text-headline-md">Cát Rewards</h3>
@@ -130,14 +128,11 @@ const AccountLayout = ({ children, activeTab }) => {
                         </StaggerContainer>
                     </aside>
 
-                    {/* Main Content Area */}
                     <section className="lg:col-span-9">
-                        {children}
+                        <Outlet />
                     </section>
                 </div>
             </main>
-
-            <Footer />
         </div>
     );
 };

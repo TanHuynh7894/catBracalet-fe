@@ -1,6 +1,5 @@
 import React from 'react';
 import { Info } from 'lucide-react';
-import AccountLayout from '../../layout/AccountLayout';
 import styles from './Profile.module.css';
 
 const Profile = () => {
@@ -11,7 +10,7 @@ const Profile = () => {
     };
 
     return (
-        <AccountLayout>
+        <>
             <section className={`${styles.profileSection} bg-white p-8 md:p-12 shadow-soft rounded-lg animate-fade-in`}>
                 <div className="flex justify-between items-center mb-10">
                     <h2 className="font-headline text-headline-md text-on-surface">Thông tin cá nhân</h2>
@@ -63,7 +62,7 @@ const Profile = () => {
                 </form>
             </section>
 
-            {/* Recent Orders Summary as seen in the HTML */}
+            {/* Recent Orders Summary */}
             <section className="mt-16 space-y-8 animate-fade-in">
                 <div className="flex justify-between items-end">
                     <h2 className="font-headline text-headline-md text-on-surface">Đơn hàng gần đây</h2>
@@ -104,7 +103,7 @@ const Profile = () => {
                     </table>
                 </div>
             </section>
-        </AccountLayout>
+        </>
     );
 };
 

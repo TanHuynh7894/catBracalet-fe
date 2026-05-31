@@ -1,0 +1,853 @@
+/* ============================================================
+   StoryPage.module.css
+   Cát Bracelet – Story Page
+   Tones: #7A1E1E | #FAF7F2 | #4B3A32 | #D8B27D | #E8DED2
+   Fonts: Playfair Display (heading) + Inter (body)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── TOKENS ───────────────────────────────────────────────── */
+.page {
+    --primary: #7A1E1E;
+    --primary-dark: #5A1414;
+    --gold: #D8B27D;
+    --bg: #FAF7F2;
+    --text: #4B3A32;
+    --text-muted: #9E8070;
+    --border: #E8DED2;
+
+    background-color: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+/* ── SHARED CONTAINER ─────────────────────────────────────── */
+.container {
+    max-width: 1600px;
+    width: 95%;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+/* ── SHARED SECTION LABELS ────────────────────────────────── */
+.sectionNumber {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.sectionNumberLight {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(216, 178, 125, 0.8);
+    margin-bottom: 8px;
+}
+
+.sectionTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 12px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+
+.sectionTitleCenter {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 40px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-align: center;
+}
+
+.sectionSubtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--primary);
+    margin: 0 0 20px;
+}
+
+.sectionDesc {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin: 0 0 14px;
+}
+
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+/* ============================================================
+   S2: HERO STORY
+   ============================================================ */
+.heroSection {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    max-height: 750px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.heroBgContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.heroFullImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(250, 247, 242, 0.8) 0%, rgba(250, 247, 242, 0.4) 50%, transparent 100%);
+    z-index: 2;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 3;
+    max-width: 540px;
+}
+
+.heroTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 6vw, 72px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    margin: 0 0 24px;
+}
+
+.heroTitleAccent {
+    display: block;
+    color: var(--primary);
+    font-style: italic;
+    font-weight: 500;
+}
+
+.heroDesc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.8;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* ============================================================
+   S3: ORIGIN – CÁT RA ĐỜI NHƯ THẾ NÀO
+   ============================================================ */
+.originSection {
+    padding: 100px 0;
+    background-color: var(--bg);
+}
+
+.originGrid {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: 120px;
+    align-items: center;
+}
+
+.originImgWrap {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1.25;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    justify-self: end;
+}
+
+.originImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right 25% center;
+    /* Shifting to capture the person who is likely on the right */
+    display: block;
+}
+
+.originContent {
+    display: flex;
+    flex-direction: column;
+    padding-right: 60px;
+    max-width: 580px;
+}
+
+/* ============================================================
+   S4: RED BANNER – Ý NGHĨA TÊN GỌI
+   ============================================================ */
+.redBannerSection {
+    padding: 48px 0;
+    background-color: var(--bg);
+}
+
+.redBanner {
+    position: relative;
+    background: linear-gradient(135deg, #7A1E1E 0%, #5A1414 60%, #3d0d0d 100%);
+    border-radius: 24px;
+    padding: 56px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.floralLeft {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    font-size: 48px;
+    color: rgba(216, 178, 125, 0.25);
+    line-height: 1;
+    pointer-events: none;
+}
+
+.floralRight {
+    position: absolute;
+    bottom: 20px;
+    right: 32px;
+    font-size: 80px;
+    color: rgba(216, 178, 125, 0.15);
+    line-height: 1;
+    pointer-events: none;
+}
+
+.redBannerLeft {
+    display: flex;
+    flex-direction: column;
+}
+
+.redBannerLabel {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 14px;
+}
+
+.redBannerTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.15;
+}
+
+.redBannerTitle em {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.redBannerRight {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.redBannerQuote {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--gold);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.redBannerDesc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.80);
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* ============================================================
+   S5: BELIEFS – ĐIỀU CÁT TIN TƯỞNG
+   ============================================================ */
+.beliefSection {
+    padding: 80px 0;
+    background-color: var(--bg);
+}
+
+.beliefGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 8px;
+}
+
+.beliefCard {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    cursor: default;
+}
+
+.beliefCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 24px 56px rgba(122, 30, 30, 0.12);
+}
+
+.beliefImgWrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.beliefImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+}
+
+.beliefCard:hover .beliefImg {
+    transform: scale(1.06);
+}
+
+.beliefIconWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(216, 178, 125, 0.12);
+    color: var(--gold);
+    margin: 20px auto 12px;
+}
+
+.beliefCardTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+}
+
+.beliefCardDesc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0;
+    padding: 0 20px 28px;
+}
+
+/* ============================================================
+   S6: TRUTH – KHÔNG BÁN PHÉP MÀU
+   ============================================================ */
+.truthSection {
+    padding: 80px 0;
+    background: linear-gradient(180deg, var(--bg) 0%, #f2ebe2 100%);
+}
+
+.truthGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.truthContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.truthTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 10px;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+}
+
+.truthSubtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--primary);
+    margin: 0 0 20px;
+}
+
+.checkList {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.checkIcon {
+    color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.truthImgWrap {
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    box-shadow: 0 30px 70px rgba(122, 30, 30, 0.12);
+}
+
+.truthImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.truthImgWrap:hover .truthImg {
+    transform: scale(1.04);
+}
+
+/* ============================================================
+   S7: VALUES – GIÁ TRỊ CỐT LÕI
+   ============================================================ */
+.valuesSection {
+    padding: 80px 0;
+    background-color: var(--bg);
+}
+
+.valuesGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 8px;
+}
+
+.valueCard {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 36px 24px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.valueCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 48px rgba(122, 30, 30, 0.10);
+}
+
+.valueIconWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(216, 178, 125, 0.12);
+    color: var(--gold);
+    margin: 0 auto 16px;
+}
+
+.valueCardTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 10px;
+}
+
+.valueCardDesc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ============================================================
+   S8: CTA RED BANNER
+   ============================================================ */
+.ctaSection {
+    padding: 48px 0 80px;
+    background-color: var(--bg);
+}
+
+.ctaBanner {
+    position: relative;
+    background: linear-gradient(135deg, #7A1E1E 0%, #5A1414 55%, #3d0d0d 100%);
+    border-radius: 24px;
+    padding: 60px 64px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.ctaFloral {
+    position: absolute;
+    bottom: 16px;
+    left: 24px;
+    font-size: 100px;
+    color: rgba(216, 178, 125, 0.12);
+    line-height: 1;
+    pointer-events: none;
+}
+
+.ctaLeft {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.ctaTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.2vw, 40px);
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
+}
+
+.ctaDesc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.8;
+    margin: 0;
+    max-width: 560px;
+}
+
+.ctaBtns {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 1;
+    min-width: 220px;
+}
+
+.ctaBtnPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold);
+    color: #3d0d0d;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.ctaBtnPrimary:hover {
+    background: #c9a264;
+    transform: scale(1.03);
+}
+
+.ctaBtnOutline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    text-decoration: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+}
+
+.ctaBtnOutline:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.03);
+}
+
+/* ============================================================
+   RESPONSIVE – TABLET (768px – 1023px)
+   ============================================================ */
+@media (max-width: 1023px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    /* Hero */
+    .heroSection {
+        height: 60vh;
+        min-height: 450px;
+    }
+
+    .heroOverlay {
+        background: linear-gradient(to bottom, rgba(250, 247, 242, 0.7) 0%, rgba(250, 247, 242, 0.4) 100%);
+    }
+
+    .heroContent {
+        max-width: 100%;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .heroTitle {
+        font-size: 48px;
+    }
+
+    /* Origin */
+    .originGrid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .originImgWrap {
+        aspect-ratio: 16 / 9;
+        max-height: 400px;
+    }
+
+    /* Red banner */
+    .redBanner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 40px 36px;
+    }
+
+    /* Beliefs */
+    .beliefGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* Truth */
+    .truthGrid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .truthImgWrap {
+        aspect-ratio: 16 / 9;
+    }
+
+    /* Values */
+    .valuesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* CTA */
+    .ctaBanner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 44px 36px;
+    }
+
+    .ctaBtns {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE – MOBILE (0px – 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    /* Hero */
+    .heroSection {
+        height: 50vh;
+        min-height: 400px;
+    }
+
+    .heroTitle {
+        font-size: 36px;
+    }
+
+    .heroDesc {
+        font-size: 14px;
+    }
+
+    /* Sections spacing */
+    .originSection,
+    .beliefSection,
+    .truthSection,
+    .valuesSection {
+        padding: 56px 0;
+    }
+
+    /* Origin */
+    .originGrid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .originImgWrap {
+        aspect-ratio: 4 / 3;
+        max-height: 280px;
+    }
+
+    .sectionTitle {
+        font-size: 22px;
+    }
+
+    .sectionTitleCenter {
+        font-size: 22px;
+        margin-bottom: 28px;
+    }
+
+    /* Red banner */
+    .redBannerSection {
+        padding: 32px 0;
+    }
+
+    .redBanner {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 32px 24px;
+        border-radius: 16px;
+    }
+
+    .redBannerTitle {
+        font-size: 30px;
+    }
+
+    .floralLeft {
+        font-size: 32px;
+    }
+
+    .floralRight {
+        font-size: 56px;
+    }
+
+    /* Beliefs */
+    .beliefGrid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    /* Truth */
+    .truthGrid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .truthTitle {
+        font-size: 20px;
+    }
+
+    .truthImgWrap {
+        aspect-ratio: 4 / 3;
+        border-radius: 16px;
+    }
+
+    /* Values */
+    .valuesGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .valueCard {
+        padding: 24px 16px;
+    }
+
+    /* CTA */
+    .ctaSection {
+        padding: 32px 0 56px;
+    }
+
+    .ctaBanner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 36px 24px;
+        border-radius: 16px;
+    }
+
+    .ctaTitle {
+        font-size: 26px;
+    }
+
+    .ctaBtns {
+        flex-direction: column;
+        min-width: unset;
+    }
+
+    .ctaBtnPrimary,
+    .ctaBtnOutline {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE – LAPTOP (1024px – 1439px)
+   ============================================================ */
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .heroTitle {
+        font-size: 52px;
+    }
+
+    .redBanner {
+        padding: 48px 52px;
+    }
+
+    .ctaBanner {
+        padding: 52px 52px;
+    }
+}
