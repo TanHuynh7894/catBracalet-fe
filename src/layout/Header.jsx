@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, User, ShoppingBag } from 'lucide-react';
 import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Header = () => {
@@ -20,16 +20,12 @@ const Header = () => {
     }, []);
 
     const navLinks = [
-        { name: 'TRANG CHỦ', href: '/', type: 'route' },
-        { name: 'BỘ SƯU TẬP', href: '#collection', type: 'anchor' },
-        { name: 'CÁT LÀ GÌ?', href: '#about', type: 'anchor' },
-        { name: 'NĂNG LƯỢNG', href: '#how-it-works', type: 'anchor' },
-        { name: 'CÂU CHUYỆN', href: '#story', type: 'anchor' },
-        { name: 'ĐÁ PHONG THỦY', href: '#', type: 'anchor' },
-        { name: 'ĐÁ TỰ NHIÊN', href: '#', type: 'anchor' },
+        { name: 'Trang chủ', href: '/', type: 'route' },
+        { name: 'Bộ sưu tập', href: '/collection', type: 'route' },
+        { name: 'Thiết kế riêng', href: '#custom-mix', type: 'anchor' },
+        { name: 'Câu chuyện', href: '#story', type: 'anchor' },
     ];
 
-    // Handle anchor links: if on home page, scroll to section; if on other page, navigate home first
     const handleAnchorClick = (e, href) => {
         if (href === '#') return;
         e.preventDefault();
@@ -46,57 +42,92 @@ const Header = () => {
         setIsMobileMenuOpen(false);
     };
 
+    const isActive = (href, type) => {
+        if (type === 'route') return location.pathname === href;
+        if (type === 'anchor' && isHomePage) return location.hash === href;
+        return false;
+    };
+
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-[999] transition-all duration-500 ${isScrolled ? 'py-3 bg-white/95 backdrop-blur-md shadow-sm' : 'py-6 bg-transparent'
+            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-3 shadow-md' : 'py-5'
                 }`}
         >
-            <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between">
-                {/* Logo — React Router Link về trang chủ */}
-                <Link to="/" className="flex items-center gap-3 shrink-0">
+            <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex items-center justify-between">
+                {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
+                <Link to="/" className="flex items-center shrink-0">
                     <img src={logoImg} alt="Cát" className="h-10 md:h-12 w-auto object-contain" />
                 </Link>
 
-                {/* Nav Center */}
-                <nav className="hidden xl:flex items-center gap-8">
-                    {navLinks.map((link) =>
-                        link.type === 'route' ? (
+                {/* ── CENTER: NAV MENU ───────────────────────────────────── */}
+                <nav className="hidden xl:flex items-center gap-12">
+                    {navLinks.map((link) => {
+                        const active = isActive(link.href, link.type);
+                        return link.type === 'route' ? (
                             <Link
                                 key={link.name}
                                 to={link.href}
-                                className="text-[11px] font-bold tracking-widest text-wine/60 hover:text-wine transition-colors"
+                                className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
+                                    ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'}`}
                             >
                                 {link.name}
+                                {active && (
+                                    <motion.div
+                                        layoutId="underline"
+                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#7A1E1E]"
+                                    />
+                                )}
                             </Link>
                         ) : (
                             <a
                                 key={link.name}
                                 href={link.href}
                                 onClick={(e) => handleAnchorClick(e, link.href)}
-                                className="text-[11px] font-bold tracking-widest text-wine/60 hover:text-wine transition-colors cursor-pointer"
+                                className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
+                                    ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'} cursor-pointer`}
                             >
                                 {link.name}
+                                {active && (
+                                    <motion.div
+                                        layoutId="underline"
+                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#7A1E1E]"
+                                    />
+                                )}
                             </a>
-                        )
-                    )}
+                        );
+                    })}
                 </nav>
 
-                {/* Button Right */}
-                <div className="flex items-center gap-4">
+                {/* ── RIGHT: ACTIONS ─────────────────────────────────────── */}
+                <div className="flex items-center gap-6 md:gap-8">
+                    {/* User Profile Icon */}
+                    <button className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors">
+                        <User size={22} strokeWidth={1.5} />
+                    </button>
+
+                    {/* Cart Icon */}
+                    <button className="relative text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors">
+                        <ShoppingBag size={22} strokeWidth={1.5} />
+                        <span className="absolute -top-1 -right-1 bg-[#7A1E1E] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                            0
+                        </span>
+                    </button>
+
+                    {/* Consultation Button */}
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
-                        className="hidden lg:flex items-center gap-3 bg-wine text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all"
+                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-7 py-3 rounded-full text-[11px] font-bold uppercase tracking-wider hover:bg-[#5A1414] transition-all transform hover:scale-105"
                     >
-                        Tư vấn chọn vòng
-                        <ChevronDown size={14} />
+                        Tư vấn miễn phí
                     </a>
 
+                    {/* Mobile Toggle */}
                     <button
-                        className="xl:hidden text-wine"
+                        className="xl:hidden text-[#4B3A32]"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     >
-                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
                     </button>
                 </div>
             </div>
@@ -105,32 +136,33 @@ const Header = () => {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="absolute top-full left-0 w-full bg-white shadow-2xl border-t border-wine/5 py-10 px-6 flex flex-col gap-6 xl:hidden"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="absolute top-full left-0 w-full bg-[#FAF5EF] shadow-xl overflow-hidden border-t border-[#4B3A32]/5 xl:hidden"
                     >
-                        {navLinks.map((link) =>
-                            link.type === 'route' ? (
-                                <Link
-                                    key={link.name}
-                                    to={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-sm font-bold tracking-widest text-wine border-b border-wine/5 pb-4"
-                                >
-                                    {link.name}
-                                </Link>
-                            ) : (
+                        <div className="py-8 px-6 flex flex-col gap-5">
+                            {navLinks.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    onClick={(e) => { handleAnchorClick(e, link.href); }}
-                                    className="text-sm font-bold tracking-widest text-wine border-b border-wine/5 pb-4"
+                                    onClick={(e) => {
+                                        if (link.type === 'route') {
+                                            setIsMobileMenuOpen(false);
+                                            navigate(link.href);
+                                        } else {
+                                            handleAnchorClick(e, link.href);
+                                        }
+                                    }}
+                                    className="text-sm font-semibold text-[#4B3A32] hover:text-[#7A1E1E] transition-colors"
                                 >
                                     {link.name}
                                 </a>
-                            )
-                        )}
+                            ))}
+                            <button className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2">
+                                <User size={18} /> Tài khoản
+                            </button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -139,3 +171,4 @@ const Header = () => {
 };
 
 export default Header;
+

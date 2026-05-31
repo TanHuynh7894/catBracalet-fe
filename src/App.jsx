@@ -29,6 +29,8 @@ import OrderHistory from './pages/OrderHistory/OrderHistory';
 import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
 import Wishlist from './pages/Wishlist/Wishlist';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
+import CollectionPage from './pages/Collection/CollectionPage';
+import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
 const LayoutWrapper = ({ children }) => {
@@ -45,6 +47,7 @@ const LayoutWrapper = ({ children }) => {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <LayoutWrapper>
         <Routes>
           {/* Public Routes */}
@@ -57,6 +60,7 @@ function App() {
           <Route path="/shipping-addresses" element={<ShippingAddresses />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/order-detail/:id" element={<OrderDetail />} />
+          <Route path="/collection" element={<CollectionPage />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />
