@@ -12,7 +12,7 @@ const MainLayout = ({ children }) => {
         // Global luxury loading delay for first entry
         const timer = setTimeout(() => {
             setIsLoading(false);
-        }, 2000);
+        }, 600);
         return () => clearTimeout(timer);
     }, []);
 

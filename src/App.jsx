@@ -1,43 +1,51 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
 import AdminLayout from './layout/AdminLayout';
 import AccountLayout from './layout/AccountLayout';
 import Home from './pages/Home';
-
-import Dashboard from './pages/admin/Dashboard';
-import Orders from './pages/admin/Orders';
-import Returns from './pages/admin/Returns';
-import IncompleteOrders from './pages/admin/IncompleteOrders';
-import PendingConfirmation from './pages/admin/PendingConfirmation';
-import PackingPack from './pages/admin/PackingPack';
-import AllPackages from './pages/admin/AllPackages';
-import ShippingOverview from './pages/admin/ShippingOverview';
-import ShippingWaybills from './pages/admin/ShippingWaybills';
-import ProductList from './pages/admin/ProductList';
-import AdminProductDetail from './pages/admin/ProductDetail';
-import ProductCategories from './pages/admin/ProductCategories';
-import PriceList from './pages/admin/PriceList';
-import Inventory from './pages/admin/Inventory';
-import ReceivingOrders from './pages/admin/ReceivingOrders';
-import ReportsOverview from './pages/admin/ReportsOverview';
-import UserManagement from './pages/admin/UserManagement';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import SuccessfulPayment from './pages/SuccessfulPayment';
-import Profile from './pages/Profile/Profile';
-import OrderHistory from './pages/OrderHistory/OrderHistory';
-import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
-import Wishlist from './pages/Wishlist/Wishlist';
-import OrderDetail from './pages/OrderDetail/OrderDetail';
-import CollectionPage from './pages/Collection/CollectionPage';
-import CustomBraceletPage from './pages/CustomBracelet/CustomBraceletPage';
-import StoryPage from './pages/StoryPage/StoryPage';
-import ProductDetail from './pages/ProductDetail/ProductDetail';
-import CartPage from './pages/Cart/CartPage';
-import CheckoutPage from './pages/Checkout/CheckoutPage';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
+
+// Lazy loading components
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const Orders = lazy(() => import('./pages/admin/Orders'));
+const Returns = lazy(() => import('./pages/admin/Returns'));
+const IncompleteOrders = lazy(() => import('./pages/admin/IncompleteOrders'));
+const PendingConfirmation = lazy(() => import('./pages/admin/PendingConfirmation'));
+const PackingPack = lazy(() => import('./pages/admin/PackingPack'));
+const AllPackages = lazy(() => import('./pages/admin/AllPackages'));
+const ShippingOverview = lazy(() => import('./pages/admin/ShippingOverview'));
+const ShippingWaybills = lazy(() => import('./pages/admin/ShippingWaybills'));
+const ProductList = lazy(() => import('./pages/admin/ProductList'));
+const AdminProductDetail = lazy(() => import('./pages/admin/ProductDetail'));
+const ProductCategories = lazy(() => import('./pages/admin/ProductCategories'));
+const PriceList = lazy(() => import('./pages/admin/PriceList'));
+const Inventory = lazy(() => import('./pages/admin/Inventory'));
+const ReceivingOrders = lazy(() => import('./pages/admin/ReceivingOrders'));
+const ReportsOverview = lazy(() => import('./pages/admin/ReportsOverview'));
+const UserManagement = lazy(() => import('./pages/admin/UserManagement'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const SuccessfulPayment = lazy(() => import('./pages/SuccessfulPayment'));
+const Profile = lazy(() => import('./pages/Profile/Profile'));
+const OrderHistory = lazy(() => import('./pages/OrderHistory/OrderHistory'));
+const ShippingAddresses = lazy(() => import('./pages/ShippingAddresses/ShippingAddresses'));
+const Wishlist = lazy(() => import('./pages/Wishlist/Wishlist'));
+const OrderDetail = lazy(() => import('./pages/OrderDetail/OrderDetail'));
+const CollectionPage = lazy(() => import('./pages/Collection/CollectionPage'));
+const CustomBraceletPage = lazy(() => import('./pages/CustomBracelet/CustomBraceletPage'));
+const StoryPage = lazy(() => import('./pages/StoryPage/StoryPage'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
+const CartPage = lazy(() => import('./pages/Cart/CartPage'));
+const CheckoutPage = lazy(() => import('./pages/Checkout/CheckoutPage'));
+
+// A simple loading placeholder for Suspense
+const PageLoading = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="w-8 h-8 border-4 border-wine border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
@@ -55,56 +63,58 @@ function App() {
     <Router>
       <ScrollToTop />
       <LayoutWrapper>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/successfulpayment" element={<SuccessfulPayment />} />
+        <Suspense fallback={<PageLoading />}>
+          <Routes>
+            {/* ... routes ... */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/successfulpayment" element={<SuccessfulPayment />} />
 
-          {/* Account Sub-Routes Sharing a Layout */}
-          <Route element={<AccountLayout />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/shipping-addresses" element={<ShippingAddresses />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/order-history" element={<OrderHistory />} />
-            <Route path="/order-detail/:id" element={<OrderDetail />} />
-          </Route>
+            {/* Account Sub-Routes Sharing a Layout */}
+            <Route element={<AccountLayout />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/shipping-addresses" element={<ShippingAddresses />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/order-history" element={<OrderHistory />} />
+              <Route path="/order-detail/:id" element={<OrderDetail />} />
+            </Route>
 
-          <Route path="/collection" element={<CollectionPage />} />
-          <Route path="/custom" element={<CustomBraceletPage />} />
-          <Route path="/story" element={<StoryPage />} />
-          <Route path="/product-detail" element={<ProductDetail />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/collection" element={<CollectionPage />} />
+            <Route path="/custom" element={<CustomBraceletPage />} />
+            <Route path="/story" element={<StoryPage />} />
+            <Route path="/product-detail" element={<ProductDetail />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<Dashboard />} />
-          <Route path="/admin/orders" element={<Orders />} />
-          <Route path="/admin/orders/returns" element={<Returns />} />
-          <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
+            {/* Admin Routes */}
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/orders/returns" element={<Returns />} />
+            <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
 
-          {/* Order Processing Routes */}
-          <Route path="/admin/processing/pending" element={<PendingConfirmation />} />
-          <Route path="/admin/processing/handling" element={<PendingConfirmation />} />
-          <Route path="/admin/processing/packing" element={<PackingPack />} />
-          <Route path="/admin/processing/all" element={<AllPackages />} />
+            {/* Order Processing Routes */}
+            <Route path="/admin/processing/pending" element={<PendingConfirmation />} />
+            <Route path="/admin/processing/handling" element={<PendingConfirmation />} />
+            <Route path="/admin/processing/packing" element={<PackingPack />} />
+            <Route path="/admin/processing/all" element={<AllPackages />} />
 
-          {/* Shipping Routes */}
-          <Route path="/admin/shipping/overview" element={<ShippingOverview />} />
-          <Route path="/admin/shipping/waybills" element={<ShippingWaybills />} />
+            {/* Shipping Routes */}
+            <Route path="/admin/shipping/overview" element={<ShippingOverview />} />
+            <Route path="/admin/shipping/waybills" element={<ShippingWaybills />} />
 
-          {/* Product Routes */}
-          <Route path="/admin/products" element={<ProductList />} />
-          <Route path="/admin/products/:id" element={<AdminProductDetail />} />
-          <Route path="/admin/products/categories" element={<ProductCategories />} />
-          <Route path="/admin/products/prices" element={<PriceList />} />
+            {/* Product Routes */}
+            <Route path="/admin/products" element={<ProductList />} />
+            <Route path="/admin/products/:id" element={<AdminProductDetail />} />
+            <Route path="/admin/products/categories" element={<ProductCategories />} />
+            <Route path="/admin/products/prices" element={<PriceList />} />
 
-          <Route path="/admin/inventory/stock" element={<Inventory />} />
-          <Route path="/admin/inventory/receiving" element={<ReceivingOrders />} />
-          <Route path="/admin/reports" element={<ReportsOverview />} />
-          <Route path="/admin/users" element={<UserManagement />} />
-        </Routes>
+            <Route path="/admin/inventory/stock" element={<Inventory />} />
+            <Route path="/admin/inventory/receiving" element={<ReceivingOrders />} />
+            <Route path="/admin/reports" element={<ReportsOverview />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+          </Routes>
+        </Suspense>
       </LayoutWrapper>
     </Router>
   );
