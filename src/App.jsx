@@ -31,6 +31,7 @@ import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
 import Wishlist from './pages/Wishlist/Wishlist';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
 import CollectionPage from './pages/Collection/CollectionPage';
+import CustomBraceletPage from './pages/CustomBracelet/CustomBraceletPage';
 import StoryPage from './pages/StoryPage/StoryPage';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import ScrollToTop from './components/utils/ScrollToTop';
@@ -69,6 +70,7 @@ function App() {
           </Route>
 
           <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/custom" element={<CustomBraceletPage />} />
           <Route path="/story" element={<StoryPage />} />
           <Route path="/product-detail" element={<ProductDetail />} />
 
