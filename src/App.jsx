@@ -32,6 +32,7 @@ import Wishlist from './pages/Wishlist/Wishlist';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
 import CollectionPage from './pages/Collection/CollectionPage';
 import StoryPage from './pages/StoryPage/StoryPage';
+import ProductDetail from './pages/ProductDetail/ProductDetail';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
@@ -69,6 +70,7 @@ function App() {
 
           <Route path="/collection" element={<CollectionPage />} />
           <Route path="/story" element={<StoryPage />} />
+          <Route path="/product-detail" element={<ProductDetail />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />

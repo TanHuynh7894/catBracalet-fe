@@ -50,10 +50,10 @@ const Header = () => {
 
     return (
         <header
-            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-3 shadow-md' : 'py-5'
+            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-1 shadow-md' : 'py-2'
                 }`}
         >
-            <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex items-center justify-between">
+            <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between">
                 {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
                 <Link to="/" className="flex items-center shrink-0">
                     <img src={logoImg} alt="Cát" className="h-10 md:h-12 w-auto object-contain" />
