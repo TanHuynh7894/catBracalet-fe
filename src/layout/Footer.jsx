@@ -4,8 +4,8 @@ import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Footer = () => {
     return (
-        <footer className="bg-ivory pt-32 pb-12 border-t border-wine/5">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        <footer className="bg-ivory pt-10 pb-10 border-t border-wine/5">
+            <div className="max-w-[1400px] mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
                     {/* Brand Meta */}
                     <div className="lg:col-span-1">

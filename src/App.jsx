@@ -31,7 +31,11 @@ import ShippingAddresses from './pages/ShippingAddresses/ShippingAddresses';
 import Wishlist from './pages/Wishlist/Wishlist';
 import OrderDetail from './pages/OrderDetail/OrderDetail';
 import CollectionPage from './pages/Collection/CollectionPage';
+import CustomBraceletPage from './pages/CustomBracelet/CustomBraceletPage';
 import StoryPage from './pages/StoryPage/StoryPage';
+import ProductDetail from './pages/ProductDetail/ProductDetail';
+import CartPage from './pages/Cart/CartPage';
+import CheckoutPage from './pages/Checkout/CheckoutPage';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
@@ -68,7 +72,11 @@ function App() {
           </Route>
 
           <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/custom" element={<CustomBraceletPage />} />
           <Route path="/story" element={<StoryPage />} />
+          <Route path="/product-detail" element={<ProductDetail />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<Dashboard />} />

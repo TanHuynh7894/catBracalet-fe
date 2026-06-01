@@ -1,14 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
     Heart, ShoppingCart, ChevronDown, ChevronLeft, ChevronRight,
     Eye, SlidersHorizontal, X, Gem, Leaf, Sparkles, ShieldCheck,
-    Phone, Mail, MapPin, Facebook, Instagram, Youtube
 } from 'lucide-react';
 import styles from './CollectionPage.module.css';
 
 // ─── Import Logo ────────────────────────────────────────────────────────────
-import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
 
 // ─── Import Product Images ────────────────────────────────────────────────────
@@ -517,12 +516,14 @@ const CollectionPage = () => {
                                     transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
                                 >
                                     <div className={styles.cardImageWrapper}>
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                            className={styles.cardImage}
-                                            loading="lazy"
-                                        />
+                                        <Link to="/product-detail">
+                                            <img
+                                                src={product.image}
+                                                alt={product.name}
+                                                className={styles.cardImage}
+                                                loading="lazy"
+                                            />
+                                        </Link>
                                         <button
                                             className={`${styles.wishlistBtn} ${wishlist.includes(product.id) ? styles.wishlistBtnActive : ''}`}
                                             onClick={() => handleWishlistToggle(product.id)}
@@ -533,7 +534,9 @@ const CollectionPage = () => {
                                     </div>
 
                                     <div className={styles.cardBody}>
-                                        <h3 className={styles.cardName}>{product.name}</h3>
+                                        <Link to="/product-detail" className={styles.cardLink}>
+                                            <h3 className={styles.cardName}>{product.name}</h3>
+                                        </Link>
                                         <p className={styles.cardStone}>{product.stoneType}</p>
                                         <ul className={styles.cardBenefits}>
                                             {product.benefits.map((b, bi) => (
@@ -542,10 +545,10 @@ const CollectionPage = () => {
                                         </ul>
                                         <p className={styles.cardPrice}>{formatPrice(product.price)}</p>
                                         <div className={styles.cardActions}>
-                                            <button className={styles.btnDetail}>
+                                            <Link to="/product-detail" className={styles.btnDetail}>
                                                 <Eye size={14} />
                                                 Xem chi tiết
-                                            </button>
+                                            </Link>
                                             <button className={styles.btnCart}>
                                                 <ShoppingCart size={14} />
                                                 Thêm vào giỏ

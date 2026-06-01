@@ -1,0 +1,893 @@
+/* ═══════════════════════════════════════════════════════════════════
+   CheckoutPage.module.css
+   Luxury Jewelry Brand — Cát Bracelet
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────────────── */
+:root {
+    --primary: #7A1E1E;
+    --primary-dark: #5A1414;
+    --gold: #D8B27D;
+    --gold-light: #f0dfc2;
+    --background: #FAF5EF;
+    --card: #FFFFFF;
+    --text: #4B3A32;
+    --text-muted: #8c7b72;
+    --border: #E8DED2;
+    --shadow: 0 4px 24px rgba(75, 58, 50, 0.08);
+    --shadow-md: 0 8px 32px rgba(75, 58, 50, 0.12);
+}
+
+/* ── Page Wrapper ──────────────────────────────────────────────── */
+.pageWrapper {
+    min-height: 100vh;
+    background: var(--background);
+    padding: 36px 0 80px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+}
+
+.container {
+    max-width: 1600px;
+    width: 95%;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/* ── Promo Bar ─────────────────────────────────────────────────── */
+.promoBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fdf7ee;
+    border: 1px solid var(--gold-light);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.promoBar:hover {
+    border-color: var(--gold);
+    background: #fef9f2;
+}
+
+.promoLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.promoIcon {
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+.promoChevron {
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+}
+
+.promoChevronOpen {
+    color: var(--text-muted);
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+
+.promoInputRow {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.promoInput {
+    flex: 1;
+    height: 44px;
+    padding: 0 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.promoInput:focus {
+    border-color: var(--gold);
+}
+
+.promoBtn {
+    height: 44px;
+    padding: 0 24px;
+    background: linear-gradient(135deg, var(--gold) 0%, #c5974d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: filter 0.2s;
+}
+
+.promoBtn:hover {
+    filter: brightness(1.08);
+}
+
+/* ── Main Grid ─────────────────────────────────────────────────── */
+.mainGrid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ── Left Column ───────────────────────────────────────────────── */
+.leftCol {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ── Section Card ──────────────────────────────────────────────── */
+.section {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 30px 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.sectionTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    margin: 0 0 12px;
+}
+
+.sectionDivider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.sectionDivider::before,
+.sectionDivider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+}
+
+.sectionOrn {
+    font-size: 14px;
+    color: var(--gold);
+}
+
+/* ── Form Grid ─────────────────────────────────────────────────── */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.spanFull {
+    grid-column: 1 / -1;
+}
+
+.tripleGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+/* ── Form Fields ───────────────────────────────────────────────── */
+.formField {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+}
+
+.required {
+    color: var(--primary);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 13px;
+    color: var(--text-muted);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.inputIconTop {
+    top: 13px;
+    align-self: flex-start;
+}
+
+.input,
+.select,
+.textarea {
+    width: 100%;
+    padding: 0 14px 0 38px;
+    height: 46px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #fdf9f5;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.textarea {
+    height: auto;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: #c0b0a6;
+    font-size: 13.5px;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(216, 178, 125, 0.15);
+    background: #fff;
+}
+
+/* ── Gift Section ──────────────────────────────────────────────── */
+.giftSectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.giftTitleIcon {
+    color: var(--gold);
+}
+
+.giftLayout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.giftLeft {
+    flex: 1;
+}
+
+.giftCheckLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.giftCheck {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.giftCheckText {
+    font-size: 15px;
+    color: var(--text);
+}
+
+.giftDesc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: 0;
+    padding-left: 28px;
+}
+
+.giftImages {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.giftImg {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    transition: transform 0.3s ease;
+}
+
+.giftImg:hover {
+    transform: scale(1.03);
+}
+
+/* ── Gift Message ──────────────────────────────────────────────── */
+.giftMessageRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.giftMessageLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.giftMessageLabel {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.giftTextareaWrapper {
+    position: relative;
+}
+
+.giftTextarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #fdf9f5;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.giftTextarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(216, 178, 125, 0.15);
+}
+
+.giftTextarea::placeholder {
+    color: #c0b0a6;
+}
+
+.charCount {
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* ── Preview Card ──────────────────────────────────────────────── */
+.giftPreviewCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.giftPreviewLabel {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.previewCard {
+    background: linear-gradient(135deg, #fdf7ee 0%, #fff8f0 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.previewCard::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(216, 178, 125, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.previewCardInner {
+    text-align: center;
+    width: 100%;
+}
+
+.previewBrand {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+    letter-spacing: 0.05em;
+}
+
+.previewBrandSub {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin: 0 0 10px;
+}
+
+.previewDivider {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 8px auto 10px;
+}
+
+.previewMsg {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.6;
+    margin: 0 0 10px;
+}
+
+.previewFloral {
+    font-size: 18px;
+    color: var(--gold);
+    opacity: 0.7;
+}
+
+/* ── Right Column ──────────────────────────────────────────────── */
+.rightCol {
+    position: sticky;
+    top: 24px;
+}
+
+.stickySummary {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Summary Card ──────────────────────────────────────────────── */
+.summaryCard {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+
+.summaryTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    margin: 0 0 10px;
+}
+
+.summaryDivider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.summaryDivider::before,
+.summaryDivider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+}
+
+.summaryOrn {
+    font-size: 13px;
+    color: var(--gold);
+}
+
+/* ── Product List ──────────────────────────────────────────────── */
+.productList {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.productItem {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 13px;
+    align-items: start;
+}
+
+.productImgWrapper {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+.productImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.productQtyBadge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+.productInfo {
+    flex: 1;
+}
+
+.productName {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 5px;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+}
+
+.productMeta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0 0 2px;
+}
+
+.productMetaRow {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.metaSep {
+    opacity: 0.4;
+}
+
+.productPrice {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+/* ── Totals Section ────────────────────────────────────────────── */
+.totalsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1.5px solid var(--border);
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    color: var(--text-muted);
+}
+
+.discountVal {
+    color: #b05c00;
+    font-weight: 500;
+}
+
+.grandTotalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 22px;
+}
+
+.grandTotalLabel {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text);
+}
+
+.grandTotalVal {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.02em;
+}
+
+/* ── Payment Section ───────────────────────────────────────────── */
+.paymentSection {
+    margin-bottom: 20px;
+}
+
+.paymentTitle {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin: 0 0 12px;
+}
+
+.paymentGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.paymentCard {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #fdf9f5;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    position: relative;
+}
+
+.paymentCard:hover {
+    border-color: #c5b0a0;
+    background: #fff;
+}
+
+.paymentCardActive {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(122, 30, 30, 0.08);
+}
+
+.paymentLogo {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.paymentLabel {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.paymentRadio {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.paymentRadioActive {
+    border-color: var(--primary);
+    background: var(--primary);
+    box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* ── Place Order Button ────────────────────────────────────────── */
+.btnPlaceOrder {
+    width: 100%;
+    height: 54px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(122, 30, 30, 0.3);
+    transition: box-shadow 0.2s, filter 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btnPlaceOrder:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 12px 32px rgba(122, 30, 30, 0.4);
+}
+
+/* ── Trust Grid ────────────────────────────────────────────────── */
+.trustGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.trustItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.trustIcon {
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 1100px)
+═══════════════════════════════════════ */
+@media (max-width: 1100px) {
+    .mainGrid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .rightCol {
+        position: static;
+    }
+
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 680px)
+═══════════════════════════════════════ */
+@media (max-width: 680px) {
+    .pageWrapper {
+        padding: 24px 0 60px;
+    }
+
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .section {
+        padding: 22px 18px;
+        border-radius: 16px;
+    }
+
+    .sectionTitle {
+        font-size: 17px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .tripleGrid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .giftLayout {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .giftImages {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .giftImg {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+        height: 70px;
+    }
+
+    .giftMessageRow {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .summaryCard {
+        padding: 18px;
+    }
+
+    .paymentGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .grandTotalVal {
+        font-size: 20px;
+    }
+
+    .trustGrid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .promoBar {
+        padding: 12px 15px;
+    }
+
+    .promoLeft {
+        font-size: 13px;
+    }
+}
