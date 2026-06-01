@@ -50,8 +50,7 @@ const Header = () => {
 
     return (
         <header
-            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-1 shadow-md' : 'py-2'
-                }`}
+            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-1 shadow-md' : 'py-2'}`}
         >
             <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between">
                 {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
@@ -68,7 +67,7 @@ const Header = () => {
                                 key={link.name}
                                 to={link.href}
                                 className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
-                                    ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'}`}
+                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'}`}
                             >
                                 {link.name}
                                 {active && (
@@ -84,7 +83,7 @@ const Header = () => {
                                 href={link.href}
                                 onClick={(e) => handleAnchorClick(e, link.href)}
                                 className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
-                                    ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'} cursor-pointer`}
+                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'} cursor-pointer`}
                             >
                                 {link.name}
                                 {active && (
@@ -108,11 +107,15 @@ const Header = () => {
                         <User size={22} strokeWidth={1.5} />
                     </button>
 
-                    {/* Cart Icon */}
-                    <button className="relative text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors">
+                    {/* Cart Icon — Navigates to Cart Page */}
+                    <button
+                        className="relative text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors"
+                        onClick={() => navigate('/cart')}
+                        aria-label="Đi đến giỏ hàng"
+                    >
                         <ShoppingBag size={22} strokeWidth={1.5} />
                         <span className="absolute -top-1 -right-1 bg-[#7A1E1E] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                            0
+                            3
                         </span>
                     </button>
 
@@ -171,6 +174,15 @@ const Header = () => {
                             >
                                 <User size={18} /> Tài khoản
                             </button>
+                            <button
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    navigate('/cart');
+                                }}
+                                className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2"
+                            >
+                                <ShoppingBag size={18} /> Giỏ hàng
+                            </button>
                         </div>
                     </motion.div>
                 )}
@@ -180,4 +192,3 @@ const Header = () => {
 };
 
 export default Header;
-
