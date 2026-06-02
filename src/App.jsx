@@ -27,6 +27,7 @@ const ReportsOverview = lazy(() => import('./pages/admin/ReportsOverview'));
 const UserManagement = lazy(() => import('./pages/admin/UserManagement'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const SuccessfulPayment = lazy(() => import('./pages/SuccessfulPayment'));
 const Profile = lazy(() => import('./pages/Profile/Profile'));
 const OrderHistory = lazy(() => import('./pages/OrderHistory/OrderHistory'));
@@ -69,6 +70,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/successfulpayment" element={<SuccessfulPayment />} />
 
             {/* Account Sub-Routes Sharing a Layout */}

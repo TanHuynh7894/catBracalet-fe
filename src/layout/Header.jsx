@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, User, ShoppingBag } from 'lucide-react';
+import { Menu, X, User, ShoppingBag, LogOut, Settings, ListOrdered } from 'lucide-react';
+import { logout } from '../services/authService';
 import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [user, setUser] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
     const isHomePage = location.pathname === '/';
+
+    useEffect(() => {
+        const checkUser = () => {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                setUser(JSON.parse(userData));
+            } else {
+                setUser(null);
+            }
+        };
+
+        checkUser();
+        // Check user on storage change (for cross-tab or within tab updates)
+        window.addEventListener('storage', checkUser);
+        return () => window.removeEventListener('storage', checkUser);
+    }, [location]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -40,6 +59,13 @@ const Header = () => {
             }, 500);
         }
         setIsMobileMenuOpen(false);
+    };
+
+    const handleLogout = async () => {
+        await logout();
+        setUser(null);
+        setIsUserMenuOpen(false);
+        navigate('/login');
     };
 
     const isActive = (href, type) => {
@@ -99,13 +125,44 @@ const Header = () => {
 
                 {/* ── RIGHT: ACTIONS ─────────────────────────────────────── */}
                 <div className="flex items-center gap-6 md:gap-8">
-                    {/* User Profile Icon */}
-                    <button
-                        onClick={() => navigate('/profile')}
-                        className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors"
+                    {/* User Profile Dropdown */}
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setIsUserMenuOpen(true)}
+                        onMouseLeave={() => setIsUserMenuOpen(false)}
                     >
-                        <User size={22} strokeWidth={1.5} />
-                    </button>
+                        <button
+                            onClick={() => user ? navigate('/profile') : navigate('/login')}
+                            className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors py-2 flex items-center gap-1"
+                        >
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt="avatar" className="w-6 h-6 rounded-full object-cover border border-[#7A1E1E]/20" />
+                            ) : (
+                                <User size={22} strokeWidth={1.5} />
+                            )}
+                            {user && <span className="hidden lg:block text-[11px] font-semibold tracking-wide uppercase">{user.fullName.split(' ').pop()}</span>}
+                        </button>
+
+                        <AnimatePresence>
+                            {isUserMenuOpen && user && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    className="absolute right-0 top-full mt-1 w-40 bg-white shadow-2xl rounded-xl border border-[#4B3A32]/5 overflow-hidden"
+                                >
+                                    <div className="p-1">
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center gap-3 px-4 py-3 text-[12px] text-red-600 hover:bg-red-50 transition-all font-medium"
+                                        >
+                                            <LogOut size={16} /> Đăng xuất
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
 
                     {/* Cart Icon — Navigates to Cart Page */}
                     <button
@@ -172,8 +229,16 @@ const Header = () => {
                                 }}
                                 className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2"
                             >
-                                <User size={18} /> Tài khoản
+                                <User size={18} /> {user ? 'Hồ sơ của tôi' : 'Đăng nhập'}
                             </button>
+                            {user && (
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex items-center gap-2 text-sm font-semibold text-red-600 mt-2"
+                                >
+                                    <LogOut size={18} /> Đăng xuất
+                                </button>
+                            )}
                             <button
                                 onClick={() => {
                                     setIsMobileMenuOpen(false);
@@ -192,3 +257,4 @@ const Header = () => {
 };
 
 export default Header;
+

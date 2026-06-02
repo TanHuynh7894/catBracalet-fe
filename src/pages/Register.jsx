@@ -1,12 +1,109 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { register, verifyOtp } from '../services/authService';
 import styles from './Register.module.css';
 
 const Register = () => {
     const navigate = useNavigate();
 
+    // States
+    const [step, setStep] = useState(1); // 1: Register, 2: OTP, 3: Success
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
+    // Form States
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        password: ''
+    });
+
+    const [otp, setOtp] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        if (error) setError('');
+    };
+
+    const handleRegister = async (e) => {
+        if (e) e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        try {
+            const data = await register({
+                fullName: formData.fullName,
+                email: formData.email,
+                password: formData.password,
+                phone: formData.phone
+            });
+
+            console.log('Register success:', data.message);
+            setSuccessMessage(data.message);
+            setStep(2); // Auto switch to OTP UI
+        } catch (err) {
+            console.error('Register error:', err);
+            setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleVerifyOtp = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        try {
+            const data = await verifyOtp({
+                email: formData.email,
+                otp: otp
+            });
+
+            console.log('OTP success:', data.message);
+            setStep(3); // Success step
+        } catch (err) {
+            console.error('OTP error:', err);
+            setError(err.message || 'Mã OTP không chính xác hoặc đã hết hạn.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={styles.authContainer}>
+            <AnimatePresence mode="wait">
+                {step === 3 ? (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-primary/10 backdrop-blur-md"
+                    >
+                        <div className="bg-white rounded-3xl p-10 max-w-sm w-full text-center shadow-2xl border border-primary/10">
+                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+                                <span className="material-symbols-outlined text-4xl">check_circle</span>
+                            </div>
+                            <h2 className="font-headline text-3xl text-primary mb-4">Thành công!</h2>
+                            <p className="font-body text-sm text-on-surface-variant mb-8 leading-relaxed">
+                                Tài khoản của bạn đã được kích hoạt thành công. Hãy bắt đầu hành trình cùng Cát Bracelet ngay.
+                            </p>
+                            <button
+                                onClick={() => navigate('/login')}
+                                className="w-full bg-primary text-on-primary py-4 rounded-xl font-body text-xs uppercase tracking-widest hover:bg-primary-container transition-all shadow-lg"
+                            >
+                                Đăng nhập ngay
+                            </button>
+                        </div>
+                    </motion.div>
+                ) : null}
+            </AnimatePresence>
+
             <div className={styles.authTable}>
                 {/* Visual Brand Side */}
                 <div className={styles.visualSide}>
@@ -28,92 +125,154 @@ const Register = () => {
                 {/* Form Side */}
                 <div className={styles.formSide}>
                     <div className={styles.fadeIn}>
-                        <div className="mb-10 text-center md:text-left">
-                            <h1 className="font-headline text-4xl text-primary mb-2">Tạo tài khoản</h1>
-                            <p className="font-body text-sm text-on-surface-variant">Bắt đầu hành trình tìm kiếm sự cân bằng và vẻ đẹp tự nhiên cùng Cát.</p>
-                        </div>
-
-                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>Họ tên</label>
-                                <input
-                                    className={styles.input}
-                                    placeholder="Nguyễn Văn A"
-                                    type="text"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Email</label>
-                                    <input
-                                        className={styles.input}
-                                        placeholder="example@cat.vn"
-                                        type="email"
-                                    />
+                        {step === 1 ? (
+                            <>
+                                <div className="mb-10 text-center md:text-left">
+                                    <h1 className="font-headline text-4xl text-primary mb-2">Tạo tài khoản</h1>
+                                    <p className="font-body text-sm text-on-surface-variant">Bắt đầu hành trình tìm kiếm sự cân bằng và vẻ đẹp tự nhiên cùng Cát.</p>
                                 </div>
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Số điện thoại</label>
-                                    <input
-                                        className={styles.input}
-                                        placeholder="0901 234 567"
-                                        type="tel"
-                                    />
+
+                                {error && (
+                                    <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm font-body animate-shake">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <form className="space-y-6" onSubmit={handleRegister}>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Họ tên</label>
+                                        <input
+                                            className={styles.input}
+                                            name="fullName"
+                                            placeholder="Nguyễn Văn A"
+                                            type="text"
+                                            required
+                                            value={formData.fullName}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Email</label>
+                                            <input
+                                                className={styles.input}
+                                                name="email"
+                                                placeholder="example@cat.vn"
+                                                type="email"
+                                                required
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Số điện thoại</label>
+                                            <input
+                                                className={styles.input}
+                                                name="phone"
+                                                placeholder="0901 234 567"
+                                                type="tel"
+                                                required
+                                                value={formData.phone}
+                                                onChange={handleChange}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Mật khẩu</label>
+                                        <input
+                                            className={styles.input}
+                                            name="password"
+                                            placeholder="••••••••"
+                                            type="password"
+                                            required
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
+                                    <div className="pt-4">
+                                        <button
+                                            className={`${styles.submitBtn} ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                            type="submit"
+                                            disabled={loading}
+                                        >
+                                            {loading ? 'Đang xử lý...' : 'Đăng ký'}
+                                            {!loading && <span className="material-symbols-outlined text-[20px] ml-2">arrow_forward</span>}
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-8 text-center">
+                                        <p className="font-body text-sm text-on-surface-variant">
+                                            Đã có tài khoản?
+                                            <button
+                                                type="button"
+                                                onClick={() => navigate('/login')}
+                                                className="text-primary font-semibold hover:underline decoration-1 underline-offset-4 ml-1"
+                                            >
+                                                Đăng nhập
+                                            </button>
+                                        </p>
+                                    </div>
+                                </form>
+                            </>
+                        ) : step === 2 ? (
+                            <div className="text-center md:text-left">
+                                <div className="mb-10">
+                                    <h1 className="font-headline text-4xl text-primary mb-2">Xác thực OTP</h1>
+                                    <p className="font-body text-sm text-on-surface-variant leading-relaxed">
+                                        Hệ thống đã gửi mã xác thực gồm 6 chữ số đến email: <br />
+                                        <span className="font-semibold text-primary">{formData.email}</span>
+                                    </p>
                                 </div>
-                            </div>
 
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>Mật khẩu</label>
-                                <input
-                                    className={styles.input}
-                                    placeholder="••••••••"
-                                    type="password"
-                                />
-                            </div>
+                                {error && (
+                                    <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm font-body">
+                                        {error}
+                                    </div>
+                                )}
 
-                            <div className={styles.inputGroup}>
-                                <label className={styles.label}>Xác nhận mật khẩu</label>
-                                <input
-                                    className={styles.input}
-                                    placeholder="••••••••"
-                                    type="password"
-                                />
-                            </div>
+                                <form className="space-y-8" onSubmit={handleVerifyOtp}>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Mã xác thực (OTP)</label>
+                                        <input
+                                            className={styles.input + " text-center text-2xl tracking-[0.5em]"}
+                                            placeholder="••••••"
+                                            type="text"
+                                            maxLength="6"
+                                            required
+                                            value={otp}
+                                            onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                                        />
+                                    </div>
 
-                            <div className="pt-4">
-                                <button className={styles.submitBtn} type="submit">
-                                    Đăng ký
-                                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                                </button>
-                            </div>
-
-                            <div className="mt-8 flex flex-col gap-4 text-center">
-                                <p className="font-body text-sm text-on-surface-variant">
-                                    Đã có tài khoản?
                                     <button
-                                        onClick={() => navigate('/login')}
-                                        className="text-primary font-semibold hover:underline decoration-1 underline-offset-4 ml-1"
+                                        className={`${styles.submitBtn} ${loading ? 'opacity-70' : ''}`}
+                                        type="submit"
+                                        disabled={loading}
                                     >
-                                        Đăng nhập
+                                        {loading ? 'Đang xác thực...' : 'Xác thực ngay'}
+                                        {!loading && <span className="material-symbols-outlined text-[20px] ml-2">task_alt</span>}
                                     </button>
-                                </p>
 
-                                <div className="relative flex items-center py-4">
-                                    <div className="flex-grow border-t border-outline-variant/50"></div>
-                                    <span className="flex-shrink mx-4 font-body text-[10px] text-on-surface-variant/50 uppercase tracking-widest">hoặc</span>
-                                    <div className="flex-grow border-t border-outline-variant/50"></div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button className={styles.socialBtn}>
-                                        <span className="material-symbols-outlined text-[20px]">google</span> Google
-                                    </button>
-                                    <button className={styles.socialBtn}>
-                                        <span className="material-symbols-outlined text-[20px]">facebook</span> Facebook
-                                    </button>
-                                </div>
+                                    <div className="flex flex-col gap-4 mt-6">
+                                        <p className="font-body text-xs text-on-surface-variant/70">
+                                            Không nhận được mã?
+                                            <button type="button" onClick={() => handleRegister()} className="text-primary ml-1 font-semibold hover:underline">Gửi lại</button>
+                                        </p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setStep(1)}
+                                            className="font-body text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center md:justify-start gap-1"
+                                        >
+                                            <span className="material-symbols-outlined text-sm">arrow_back</span>
+                                            Quay lại chỉnh sửa email
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        ) : null}
                     </div>
                 </div>
             </div>
