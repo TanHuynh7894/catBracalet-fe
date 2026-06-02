@@ -33,6 +33,7 @@ const Profile = lazy(() => import('./pages/Profile/Profile'));
 const OrderHistory = lazy(() => import('./pages/OrderHistory/OrderHistory'));
 const ShippingAddresses = lazy(() => import('./pages/ShippingAddresses/ShippingAddresses'));
 const Wishlist = lazy(() => import('./pages/Wishlist/Wishlist'));
+const ChangePassword = lazy(() => import('./pages/ChangePassword/ChangePassword'));
 const OrderDetail = lazy(() => import('./pages/OrderDetail/OrderDetail'));
 const CollectionPage = lazy(() => import('./pages/Collection/CollectionPage'));
 const CustomBraceletPage = lazy(() => import('./pages/CustomBracelet/CustomBraceletPage'));
@@ -76,6 +77,7 @@ function App() {
             {/* Account Sub-Routes Sharing a Layout */}
             <Route element={<AccountLayout />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/change-password" element={<ChangePassword />} />
               <Route path="/shipping-addresses" element={<ShippingAddresses />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/order-history" element={<OrderHistory />} />

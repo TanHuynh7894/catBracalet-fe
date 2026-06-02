@@ -1,109 +1,273 @@
-import React from 'react';
-import { Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Info, User, Phone, Mail, Calendar, CreditCard, CheckCircle2, AlertCircle, ShieldCheck, Lock } from 'lucide-react';
+import { getProfile, updateProfile as apiUpdateProfile, changePassword as apiChangePassword } from '../../services/authService';
 import styles from './Profile.module.css';
 
 const Profile = () => {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // In a real app, this would handle form submission
-        alert('Thông tin đã được cập nhật!');
+    const navigate = useNavigate();
+    const [profile, setProfile] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [updating, setUpdating] = useState(false);
+    const [changingPwd, setChangingPwd] = useState(false);
+    const [error, setError] = useState(null);
+    const [pwdError, setPwdError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [pwdSuccess, setPwdSuccess] = useState('');
+
+    // Form states
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        avatar: ''
+    });
+
+    // Password states
+    const [pwdData, setPwdData] = useState({
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const userDataStr = localStorage.getItem('user');
+                if (!userDataStr) {
+                    navigate('/login');
+                    return;
+                }
+
+                const userData = JSON.parse(userDataStr);
+                if (userData && userData.id) {
+                    const data = await getProfile(userData.id);
+                    setProfile(data);
+                    setFormData({
+                        fullName: data.fullName || '',
+                        email: data.email || '',
+                        phone: data.phone || '',
+                        avatar: data.avatar || ''
+                    });
+                } else {
+                    navigate('/login');
+                }
+            } catch (err) {
+                console.error('Error fetching profile:', err);
+                setError('Không thể tải thông tin hồ sơ.');
+                if (err?.status === 401) navigate('/login');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [navigate]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
+    const handlePwdChange = (e) => {
+        const { name, value } = e.target;
+        setPwdData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setUpdating(true);
+        setError(null);
+        setSuccessMessage('');
+
+        try {
+            const userDataStr = localStorage.getItem('user');
+            if (!userDataStr) throw new Error('Phiên đăng nhập hết hạn.');
+
+            const userData = JSON.parse(userDataStr);
+
+            // Clean up data before sending: if avatar is empty string, send null
+            const dataToSubmit = {
+                ...formData,
+                avatar: formData.avatar && formData.avatar.trim() !== '' ? formData.avatar : null
+            };
+
+            const updatedProfile = await apiUpdateProfile(userData.id, dataToSubmit);
+
+            setProfile(updatedProfile);
+
+            // Update local storage to keep info in sync
+            const currentUser = JSON.parse(userDataStr);
+            localStorage.setItem('user', JSON.stringify({
+                ...currentUser,
+                fullName: updatedProfile.fullName,
+                avatar: updatedProfile.avatar
+            }));
+
+            setSuccessMessage('Cập nhật hồ sơ thành công!');
+
+            // Auto close message after 5s
+            setTimeout(() => setSuccessMessage(''), 5000);
+        } catch (err) {
+            console.error('Update error:', err);
+            const msg = err?.message || (typeof err === 'string' ? err : 'Có lỗi xảy ra khi cập nhật hồ sơ.');
+            setError(msg);
+        } finally {
+            setUpdating(false);
+        }
+    };
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+
+        if (pwdData.newPassword !== pwdData.confirmPassword) {
+            setPwdError('Mật khẩu mới và mật khẩu nhập lại không khớp.');
+            return;
+        }
+
+        setChangingPwd(true);
+        setPwdError(null);
+        setPwdSuccess('');
+
+        try {
+            const userDataStr = localStorage.getItem('user');
+            const userData = JSON.parse(userDataStr);
+
+            const response = await apiChangePassword(userData.id, {
+                oldPassword: pwdData.oldPassword,
+                newPassword: pwdData.newPassword
+            });
+
+            setPwdSuccess(response.message || 'Đổi mật khẩu thành công');
+            setPwdData({ oldPassword: '', newPassword: '', confirmPassword: '' });
+            setTimeout(() => setPwdSuccess(''), 5000);
+        } catch (err) {
+            console.error('Change password error:', err);
+            const msg = err?.message || (typeof err === 'string' ? err : 'Đổi mật khẩu thất bại. Vui lòng kiểm tra lại.');
+            setPwdError(msg);
+        } finally {
+            setChangingPwd(false);
+        }
+    };
+
+    if (loading) return (
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-4 text-outline font-body text-sm animate-pulse">Đang đồng bộ dữ liệu từ hệ thống...</p>
+        </div>
+    );
+
     return (
-        <>
-            <section className={`${styles.profileSection} bg-white p-8 md:p-12 shadow-soft rounded-lg animate-fade-in`}>
-                <div className="flex justify-between items-center mb-10">
-                    <h2 className="font-headline text-headline-md text-on-surface">Thông tin cá nhân</h2>
-                    <Info className="text-outline" size={24} />
-                </div>
+        <div className="max-w-[1200px] mx-auto space-y-12 pb-20">
+            {profile && (
+                <>
+                    <div className="space-y-12">
+                        {/* Profile Info Form */}
+                        <section className="bg-white p-10 rounded-[32px] shadow-sm border border-outline-variant/20 animate-fade-in">
+                            <div className="flex items-center gap-4 mb-10 pb-6 border-b border-outline-variant/20">
+                                <div className="bg-primary/10 p-3 rounded-2xl text-primary">
+                                    <CreditCard size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="font-bold text-xl text-on-surface">Hồ sơ cá nhân</h2>
+                                    <p className="text-outline text-xs mt-0.5">Thông tin này được sử dụng cho việc đặt hàng và ưu đãi</p>
+                                </div>
+                            </div>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                    <div className="relative">
-                        <label className="font-body text-label-sm text-outline absolute -top-5 left-0">Họ và Tên</label>
-                        <input
-                            className="w-full bg-transparent border-b border-outline-variant py-2 focus:border-primary focus:outline-none transition-colors font-body text-body-md"
-                            type="text"
-                            defaultValue="Nguyễn Văn A"
-                        />
-                    </div>
-                    <div className="relative">
-                        <label className="font-body text-label-sm text-outline absolute -top-5 left-0">Email</label>
-                        <input
-                            className="w-full bg-transparent border-b border-outline-variant py-2 focus:border-primary focus:outline-none transition-colors font-body text-body-md"
-                            type="email"
-                            defaultValue="vana.nguyen@email.com"
-                        />
-                    </div>
-                    <div className="relative">
-                        <label className="font-body text-label-sm text-outline absolute -top-5 left-0">Số điện thoại</label>
-                        <input
-                            className="w-full bg-transparent border-b border-outline-variant py-2 focus:border-primary focus:outline-none transition-colors font-body text-body-md"
-                            type="tel"
-                            defaultValue="090 123 4567"
-                        />
-                    </div>
-                    <div className="relative">
-                        <label className="font-body text-label-sm text-outline absolute -top-5 left-0">Ngày sinh</label>
-                        <input
-                            className="w-full bg-transparent border-b border-outline-variant py-2 focus:border-primary focus:outline-none transition-colors font-body text-body-md"
-                            type="date"
-                            defaultValue="1995-01-01"
-                        />
-                    </div>
+                            {successMessage && (
+                                <div className="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-700 px-6 py-4 rounded-2xl flex items-center gap-3">
+                                    <CheckCircle2 size={20} className="text-emerald-500" />
+                                    <p className="text-sm font-bold">{successMessage}</p>
+                                </div>
+                            )}
 
-                    <div className="md:col-span-2 pt-6">
-                        <button
-                            className="bg-primary text-white px-10 py-4 font-body text-label-sm tracking-widest hover:bg-[#8c1515] transition-all duration-300 transform active:scale-95 shadow-md uppercase font-semibold"
-                            type="submit"
-                        >
-                            LƯU THAY ĐỔI
-                        </button>
+                            {error && (
+                                <div className="mb-8 bg-red-50 border border-red-100 text-red-700 px-6 py-4 rounded-2xl flex items-center gap-3">
+                                    <AlertCircle size={20} className="text-red-500" />
+                                    <p className="text-sm font-bold">{error}</p>
+                                </div>
+                            )}
+
+                            <form onSubmit={handleUpdate} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                                <div className="group">
+                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                        <User size={14} /> Họ và Tên quý khách
+                                    </label>
+                                    <input
+                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface placeholder:text-outline/40"
+                                        type="text"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="group">
+                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                        <Mail size={14} /> Địa chỉ Email
+                                    </label>
+                                    <input
+                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="group">
+                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                        <Phone size={14} /> Số điện thoại liên hệ
+                                    </label>
+                                    <input
+                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="group">
+                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                        <Calendar size={14} /> Ảnh đại diện (URL)
+                                    </label>
+                                    <input
+                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
+                                        type="text"
+                                        name="avatar"
+                                        value={formData.avatar}
+                                        onChange={handleChange}
+                                        placeholder="https://example.com/avatar.jpg"
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2 pt-10 flex justify-end">
+                                    <button
+                                        className={`bg-primary text-white px-12 py-5 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all duration-300 transform active:scale-95 uppercase flex items-center gap-3 ${updating ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#8c1515] hover:shadow-2xl hover:shadow-primary/30'}`}
+                                        type="submit"
+                                        disabled={updating}
+                                    >
+                                        {updating ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                Đang lưu...
+                                            </>
+                                        ) : 'Lưu thay đổi hồ sơ'}
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
                     </div>
-                </form>
-            </section>
-
-            {/* Recent Orders Summary */}
-            <section className="mt-16 space-y-8 animate-fade-in">
-                <div className="flex justify-between items-end">
-                    <h2 className="font-headline text-headline-md text-on-surface">Đơn hàng gần đây</h2>
-                    <a className="font-body text-label-sm text-primary underline font-semibold" href="/order-history">Xem tất cả</a>
-                </div>
-
-                <div className="overflow-x-auto custom-scrollbar">
-                    <table className="w-full text-left border-separate border-spacing-y-4">
-                        <thead>
-                            <tr className="text-outline font-body text-label-sm uppercase tracking-tighter">
-                                <th className="pb-4 px-4 text-[10px]">Mã đơn hàng</th>
-                                <th className="pb-4 px-4 text-[10px]">Ngày đặt</th>
-                                <th className="pb-4 px-4 text-[10px]">Trạng thái</th>
-                                <th className="pb-4 px-4 text-right text-[10px]">Tổng cộng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {[
-                                { id: '#CAT-2024-001', date: '12/03/2024', status: 'Đang giao', price: '1,250,000₫', type: 'delivery' },
-                                { id: '#CAT-2023-089', date: '25/12/2023', status: 'Hoàn thành', price: '890,000₫', type: 'completed' },
-                                { id: '#CAT-2023-045', date: '15/10/2023', status: 'Hoàn thành', price: '2,100,000₫', type: 'completed' }
-                            ].map((order, idx) => (
-                                <tr key={idx} className="bg-white shadow-sm hover:shadow-md transition-shadow group">
-                                    <td className="py-6 px-4 font-body text-body-md font-semibold text-primary">{order.id}</td>
-                                    <td className="py-6 px-4 text-on-surface-variant font-body text-body-md">{order.date}</td>
-                                    <td className="py-6 px-4">
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${order.type === 'delivery' ? 'bg-secondary-container/30 text-secondary' : 'bg-green-100 text-green-700'
-                                            }`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full mr-2 ${order.type === 'delivery' ? 'bg-secondary' : 'bg-green-700'
-                                                }`}></span>
-                                            {order.status}
-                                        </span>
-                                    </td>
-                                    <td className="py-6 px-4 text-right font-headline text-headline-md text-on-surface">{order.price}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </>
+                </>
+            )}
+        </div>
     );
 };
 
