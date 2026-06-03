@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Lock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { changePassword as apiChangePassword } from '../../services/authService';
+import { changePassword as apiChangePassword } from '../../services/userService';
 
 const ChangePassword = () => {
     const [changingPwd, setChangingPwd] = useState(false);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Info, User, Phone, Mail, Calendar, CreditCard, CheckCircle2, AlertCircle, ShieldCheck, Lock } from 'lucide-react';
-import { getProfile, updateProfile as apiUpdateProfile, changePassword as apiChangePassword } from '../../services/authService';
+import { getProfile, updateProfile as apiUpdateProfile } from '../../services/userService';
 import styles from './Profile.module.css';
 
 const Profile = () => {
@@ -9,11 +9,8 @@ const Profile = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
-    const [changingPwd, setChangingPwd] = useState(false);
     const [error, setError] = useState(null);
-    const [pwdError, setPwdError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
-    const [pwdSuccess, setPwdSuccess] = useState('');
 
     // Form states
     const [formData, setFormData] = useState({
@@ -23,12 +20,6 @@ const Profile = () => {
         avatar: ''
     });
 
-    // Password states
-    const [pwdData, setPwdData] = useState({
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-    });
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -72,13 +63,6 @@ const Profile = () => {
         }));
     };
 
-    const handlePwdChange = (e) => {
-        const { name, value } = e.target;
-        setPwdData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -123,38 +107,6 @@ const Profile = () => {
         }
     };
 
-    const handleChangePassword = async (e) => {
-        e.preventDefault();
-
-        if (pwdData.newPassword !== pwdData.confirmPassword) {
-            setPwdError('Mật khẩu mới và mật khẩu nhập lại không khớp.');
-            return;
-        }
-
-        setChangingPwd(true);
-        setPwdError(null);
-        setPwdSuccess('');
-
-        try {
-            const userDataStr = localStorage.getItem('user');
-            const userData = JSON.parse(userDataStr);
-
-            const response = await apiChangePassword(userData.id, {
-                oldPassword: pwdData.oldPassword,
-                newPassword: pwdData.newPassword
-            });
-
-            setPwdSuccess(response.message || 'Đổi mật khẩu thành công');
-            setPwdData({ oldPassword: '', newPassword: '', confirmPassword: '' });
-            setTimeout(() => setPwdSuccess(''), 5000);
-        } catch (err) {
-            console.error('Change password error:', err);
-            const msg = err?.message || (typeof err === 'string' ? err : 'Đổi mật khẩu thất bại. Vui lòng kiểm tra lại.');
-            setPwdError(msg);
-        } finally {
-            setChangingPwd(false);
-        }
-    };
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">

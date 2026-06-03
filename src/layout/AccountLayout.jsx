@@ -5,7 +5,8 @@ import styles from './AccountLayout.module.css';
 import Reveal from '../components/animations/Reveal';
 import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
 import { motion } from 'framer-motion';
-import { getProfile, logout as authLogout } from '../services/authService';
+import { logout as authLogout } from '../services/authService';
+import { getProfile } from '../services/userService';
 
 const AccountLayout = ({ activeTab }) => {
     const navigate = useNavigate();

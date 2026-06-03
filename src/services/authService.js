@@ -51,19 +51,7 @@ export const refreshToken = async (token) => {
 };
 
 /**
- * Get Profile API
- */
-export const getProfile = async (id) => {
-    try {
-        const response = await api.get(`/user/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data || error.message;
-    }
-};
-
-/**
- * Request Password Reset API
+ * Request Password Reset API (Forgot Password)
  */
 export const requestPasswordReset = async (email) => {
     try {
@@ -101,29 +89,5 @@ export const logout = async () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
-    }
-};
-
-/**
- * Update Profile API
- */
-export const updateProfile = async (id, userData) => {
-    try {
-        const response = await api.patch(`/user/profile/${id}`, userData);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data || error.message;
-    }
-};
-
-/**
- * Change Password API
- */
-export const changePassword = async (id, passwordData) => {
-    try {
-        const response = await api.post(`/user/change-password/${id}`, passwordData);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data || error.message;
     }
 };
