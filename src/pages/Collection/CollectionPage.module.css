@@ -455,6 +455,57 @@
     background: rgba(122, 30, 30, 0.03);
 }
 
+/* ── SEARCH BAR ──────────────────────────────────────────────── */
+.searchBarWrapper {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.searchInner {
+    position: relative;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 14px 48px 14px 20px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--p-border);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--p-text);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--p-primary);
+    box-shadow: 0 0 0 4px rgba(122, 30, 30, 0.05);
+}
+
+.searchClear {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--p-text-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.searchClear:hover {
+    color: var(--p-primary);
+    background: rgba(122, 30, 30, 0.05);
+}
+
 /* ── PRODUCT AREA ─────────────────────────────────────────────── */
 .productArea {
     display: flex;
@@ -573,6 +624,40 @@
     color: var(--p-primary);
     font-weight: 600;
     background: rgba(122, 30, 30, 0.04);
+}
+
+/* ── NO RESULTS ──────────────────────────────────────────────── */
+.noResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px dashed var(--p-border);
+    border-radius: 20px;
+    grid-column: 1 / -1;
+}
+
+.noResultsIcon {
+    color: var(--p-primary);
+    opacity: 0.2;
+    margin-bottom: 20px;
+}
+
+.noResults h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--p-text);
+    margin-bottom: 12px;
+}
+
+.noResults p {
+    font-size: 14px;
+    color: var(--p-text-muted);
+    margin-bottom: 24px;
+    max-width: 400px;
 }
 
 /* ── PRODUCT GRID ─────────────────────────────────────────────── */

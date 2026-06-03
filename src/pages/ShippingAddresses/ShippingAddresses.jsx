@@ -1,88 +1,373 @@
-import React from 'react';
-import { Phone, Edit2, Trash2, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { Phone, Edit2, Trash2, MapPin, X, Plus, Check } from 'lucide-react';
+import { getAddressesByUserId, createAddress, updateAddress, deleteAddress, setDefaultAddress } from '../../services/addressService';
 import styles from './ShippingAddresses.module.css';
 
 const ShippingAddresses = () => {
+    const [addresses, setAddresses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingAddress, setEditingAddress] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+
+    // Form state
+    const [formData, setFormData] = useState({
+        receiverName: '',
+        phone: '',
+        province: '',
+        district: '',
+        ward: '',
+        detailAddress: '',
+        isDefault: false
+    });
+
+    useEffect(() => {
+        fetchAddresses();
+    }, []);
+
+    const fetchAddresses = async () => {
+        try {
+            setLoading(true);
+            const userDataStr = localStorage.getItem('user');
+            if (!userDataStr) return;
+            const userData = JSON.parse(userDataStr);
+            const data = await getAddressesByUserId(userData.id);
+            setAddresses(Array.isArray(data) ? data.filter(a => a.status === 'ACTIVE') : []);
+            setError(null);
+        } catch (err) {
+            console.error('Error fetching addresses:', err);
+            setError('Không thể tải danh sách địa chỉ. Vui lòng thử lại sau.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleOpenModal = (address = null) => {
+        if (address) {
+            setEditingAddress(address);
+            setFormData({
+                receiverName: address.receiverName,
+                phone: address.phone,
+                province: address.province,
+                district: address.district,
+                ward: address.ward,
+                detailAddress: address.detailAddress,
+                isDefault: address.isDefault
+            });
+        } else {
+            setEditingAddress(null);
+            setFormData({
+                receiverName: '',
+                phone: '',
+                province: '',
+                district: '',
+                ward: '',
+                detailAddress: '',
+                isDefault: false
+            });
+        }
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingAddress(null);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            const userDataStr = localStorage.getItem('user');
+            const userData = JSON.parse(userDataStr);
+
+            if (editingAddress) {
+                await updateAddress(userData.id, editingAddress.id, {
+                    ...formData,
+                    status: 'ACTIVE'
+                });
+            } else {
+                await createAddress(userData.id, {
+                    ...formData,
+                    status: 'ACTIVE'
+                });
+            }
+            await fetchAddresses();
+            handleCloseModal();
+        } catch (err) {
+            alert(err || 'Đã xảy ra lỗi khi lưu địa chỉ.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleDelete = async (addressId) => {
+        if (!window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) return;
+        try {
+            const userDataStr = localStorage.getItem('user');
+            const userData = JSON.parse(userDataStr);
+            await deleteAddress(userData.id, addressId);
+            await fetchAddresses();
+        } catch (err) {
+            alert(err || 'Không thể xóa địa chỉ.');
+        }
+    };
+
+    const handleSetDefault = async (addressId) => {
+        try {
+            const userDataStr = localStorage.getItem('user');
+            const userData = JSON.parse(userDataStr);
+            await setDefaultAddress(userData.id, addressId);
+            await fetchAddresses();
+        } catch (err) {
+            alert(err || 'Không thể đặt mặc định.');
+        }
+    };
+
+    const renderModal = () => {
+        if (!isModalOpen) return null;
+
+        return ReactDOM.createPortal(
+            <div className={styles.modalOverlay} onClick={handleCloseModal}>
+                <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                    <div className={styles.modalHeader}>
+                        <h2 className={styles.modalTitle}>
+                            {editingAddress ? 'Chỉnh sửa địa chỉ' : 'Thêm địa chỉ mới'}
+                        </h2>
+                        <button className={styles.closeButton} onClick={handleCloseModal}>
+                            <X size={24} />
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className={styles.formGrid}>
+                        <div className={styles.field}>
+                            <label className={styles.label}>Họ và tên</label>
+                            <input
+                                type="text"
+                                name="receiverName"
+                                value={formData.receiverName}
+                                onChange={handleInputChange}
+                                className={styles.input}
+                                placeholder="Vd: Nguyễn Văn A"
+                                required
+                            />
+                        </div>
+                        <div className={styles.field}>
+                            <label className={styles.label}>Số điện thoại</label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                className={styles.input}
+                                placeholder="0xxxxxxxxx"
+                                required
+                            />
+                        </div>
+                        <div className={styles.field}>
+                            <label className={styles.label}>Tỉnh / Thành phố</label>
+                            <select
+                                name="province"
+                                value={formData.province}
+                                onChange={handleInputChange}
+                                className={styles.select}
+                                required
+                            >
+                                <option value="">Chọn Tỉnh/TP</option>
+                                <option value="TP. Ho Chi Minh">TP. Hồ Chí Minh</option>
+                                <option value="Ha Noi">Hà Nội</option>
+                                <option value="Da Nang">Đà Nẵng</option>
+                            </select>
+                        </div>
+                        <div className={styles.field}>
+                            <label className={styles.label}>Quận / Huyện</label>
+                            <input
+                                type="text"
+                                name="district"
+                                value={formData.district}
+                                onChange={handleInputChange}
+                                className={styles.input}
+                                placeholder="Vd: Quận 1"
+                                required
+                            />
+                        </div>
+                        <div className={styles.field}>
+                            <label className={styles.label}>Phường / Xã</label>
+                            <input
+                                type="text"
+                                name="ward"
+                                value={formData.ward}
+                                onChange={handleInputChange}
+                                className={styles.input}
+                                placeholder="Vd: Phường 1"
+                                required
+                            />
+                        </div>
+                        <div className={`${styles.field} ${styles.fieldFull}`}>
+                            <label className={styles.label}>Địa chỉ chi tiết</label>
+                            <input
+                                type="text"
+                                name="detailAddress"
+                                value={formData.detailAddress}
+                                onChange={handleInputChange}
+                                className={styles.input}
+                                placeholder="Vd: 123 Đường ABC..."
+                                required
+                            />
+                        </div>
+                        <div className={styles.checkboxField}>
+                            <input
+                                type="checkbox"
+                                name="isDefault"
+                                id="isDefault"
+                                checked={formData.isDefault}
+                                onChange={handleInputChange}
+                                className={styles.checkbox}
+                            />
+                            <label htmlFor="isDefault" className="font-body text-body-md text-on-surface cursor-pointer">
+                                Đặt làm địa chỉ mặc định
+                            </label>
+                        </div>
+
+                        <div className={styles.formActions}>
+                            <button type="button" className={styles.cancelBtn} onClick={handleCloseModal}> Hủy </button>
+                            <button type="submit" className={styles.submitBtn} disabled={submitting}>
+                                {submitting ? 'Đang lưu...' : (editingAddress ? 'Cập nhật' : 'Thêm mới')}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>,
+            document.body
+        );
+    };
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
     return (
-        <section className="space-y-8 animate-fade-in">
+        <section className={`${styles['animate-fade-in']} space-y-8`}>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant pb-6">
                 <div>
-                    <h1 className="font-headline text-headline-lg text-on-surface">Địa chỉ giao hàng</h1>
+                    <h1 className="font-headline text-headline-lg text-on-surface uppercase tracking-widest text-shadow-sm">Địa chỉ giao hàng</h1>
                     <p className="text-on-surface-variant font-body text-body-md mt-2">Quản lý các điểm đến cho những món đồ trang sức thủ công của bạn.</p>
                 </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
-                {/* Primary Address Card */}
-                <div className="relative group p-8 border border-primary-container/20 rounded-xl shadow-soft transition-all duration-300 hover:border-primary bg-primary-container">
-                    <div className="absolute top-4 right-4 flex gap-2">
-                        <span className="bg-white text-primary px-3 py-1 rounded-full font-body text-[10px] uppercase tracking-tighter font-bold">Mặc định</span>
-                    </div>
-                    <div className="flex flex-col h-full justify-between">
-                        <div>
-                            <h3 className="font-headline text-white text-2xl mb-2">Lê Minh Tâm</h3>
-                            <p className="text-white/80 font-body text-body-md flex items-center gap-2 mb-4">
-                                <Phone size={18} />
-                                0908 123 456
-                            </p>
-                            <div className="space-y-1">
-                                <p className="text-white font-body text-body-md">123 Đường Lê Lợi, Phường Bến Thành</p>
-                                <p className="text-white font-body text-body-md">Quận 1, Thành phố Hồ Chí Minh</p>
-                                <p className="text-white font-body text-body-md">700000, Việt Nam</p>
-                            </div>
-                        </div>
-                        <div className="mt-8 flex gap-6">
-                            <button className="text-white font-body text-label-sm flex items-center gap-1 hover:underline underline-offset-4 tracking-widest font-bold">
-                                <Edit2 size={18} />
-                                CHỈNH SỬA
-                            </button>
-                            <button className="text-white/70 font-body text-label-sm flex items-center gap-1 hover:text-white transition-colors tracking-widest font-bold">
-                                <Trash2 size={18} />
-                                XÓA
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Secondary Address Card */}
-                <div className="relative group p-8 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-soft transition-all duration-300 hover:border-primary-container">
-                    <div className="flex flex-col h-full justify-between">
-                        <div>
-                            <h3 className="font-headline text-on-surface text-2xl mb-2">Trần Thị Lan Anh</h3>
-                            <p className="text-on-surface-variant font-body text-body-md flex items-center gap-2 mb-4">
-                                <Phone size={18} />
-                                0912 345 678
-                            </p>
-                            <div className="space-y-1">
-                                <p className="text-on-surface font-body text-body-md">456 Ngõ 12, Phố Huế</p>
-                                <p className="text-on-surface font-body text-body-md">Quận Hai Bà Trưng, Hà Nội</p>
-                                <p className="text-on-surface font-body text-body-md">100000, Việt Nam</p>
-                            </div>
-                        </div>
-                        <div className="mt-8 flex gap-6">
-                            <button className="text-primary font-body text-label-sm flex items-center gap-1 hover:underline underline-offset-4 tracking-widest font-bold">
-                                <Edit2 size={18} />
-                                CHỈNH SỬA
-                            </button>
-                            <button className="text-on-surface-variant font-body text-label-sm flex items-center gap-1 hover:text-error tracking-widest font-bold">
-                                <Trash2 size={18} />
-                                XÓA
-                            </button>
-                            <button className="ml-auto text-secondary font-body font-bold text-[10px] tracking-widest hover:underline uppercase">
-                                Đặt làm mặc định
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Add New Card */}
-                <button className="group p-8 border-2 border-dashed border-outline-variant/50 rounded-xl flex flex-col items-center justify-center gap-4 hover:border-primary hover:bg-surface-container-low transition-all duration-300 min-h-[300px]">
-                    <div className="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                        <MapPin size={32} />
-                    </div>
-                    <span className="font-headline text-headline-md text-on-surface-variant group-hover:text-primary">Thêm địa chỉ giao hàng</span>
+                <button
+                    onClick={() => handleOpenModal()}
+                    className="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-xl font-body font-bold text-label-sm uppercase tracking-widest transition-all hover:shadow-lg hover:scale-[1.02]"
+                >
+                    <Plus size={20} />
+                    Thêm địa chỉ mới
                 </button>
             </div>
+
+            {error && (
+                <div className="p-4 bg-error-container text-on-error-container rounded-xl font-body text-center">
+                    {error}
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {addresses.length > 0 ? (
+                    addresses.sort((a, b) => (b.isDefault ? 1 : -1)).map((address) => (
+                        <div
+                            key={address.id}
+                            className={`relative group p-8 border rounded-2xl shadow-sm transition-all duration-300 ${address.isDefault
+                                    ? 'bg-primary-container border-primary/20 hover:border-primary shadow-primary/10'
+                                    : 'bg-white border-outline-variant/30 hover:border-primary-container'
+                                }`}
+                        >
+                            {address.isDefault && (
+                                <div className="absolute top-4 right-4 flex gap-2">
+                                    <span className="bg-white text-primary px-4 py-1 rounded-full font-body text-[10px] uppercase tracking-widest font-bold shadow-sm flex items-center gap-1">
+                                        <Check size={12} />
+                                        Mặc định
+                                    </span>
+                                </div>
+                            )}
+                            <div className="flex flex-col h-full justify-between">
+                                <div>
+                                    <h3 className={`font-headline text-2xl mb-2 ${address.isDefault ? 'text-white' : 'text-on-surface'}`}>
+                                        {address.receiverName}
+                                    </h3>
+                                    <p className={`font-body text-body-md flex items-center gap-2 mb-4 ${address.isDefault ? 'text-white/80' : 'text-on-surface-variant'}`}>
+                                        <Phone size={18} />
+                                        {address.phone}
+                                    </p>
+                                    <div className="space-y-1">
+                                        <p className={`font-body text-body-md ${address.isDefault ? 'text-white' : 'text-on-surface'}`}>
+                                            {address.detailAddress}
+                                        </p>
+                                        <p className={`font-body text-body-md ${address.isDefault ? 'text-white/90' : 'text-on-surface-variant'}`}>
+                                            {address.ward}, {address.district}
+                                        </p>
+                                        <p className={`font-body text-body-md ${address.isDefault ? 'text-white/90' : 'text-on-surface-variant'}`}>
+                                            {address.province}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="mt-10 flex flex-wrap gap-4 items-center">
+                                    <button
+                                        onClick={() => handleOpenModal(address)}
+                                        className={`font-body text-[10px] flex items-center gap-1 uppercase tracking-widest font-bold px-3 py-2 rounded-lg transition-colors ${address.isDefault
+                                                ? 'text-white bg-white/10 hover:bg-white/20'
+                                                : 'text-primary bg-primary/5 hover:bg-primary/10'
+                                            }`}
+                                    >
+                                        <Edit2 size={14} />
+                                        Sửa
+                                    </button>
+                                    {!address.isDefault && (
+                                        <>
+                                            <button
+                                                onClick={() => handleDelete(address.id)}
+                                                className="font-body text-[10px] flex items-center gap-1 text-on-surface-variant hover:text-error uppercase tracking-widest font-bold px-3 py-2 rounded-lg hover:bg-error/5 transition-colors"
+                                            >
+                                                <Trash2 size={14} />
+                                                Xóa
+                                            </button>
+                                            <button
+                                                onClick={() => handleSetDefault(address.id)}
+                                                className="ml-auto text-secondary font-body font-bold text-[10px] tracking-widest hover:underline uppercase"
+                                            >
+                                                Đặt làm mặc định
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="lg:col-span-2 text-center py-20 bg-surface-container-lowest rounded-3xl border-2 border-dashed border-outline-variant/30">
+                        <MapPin size={48} className="mx-auto text-outline-variant mb-4" />
+                        <p className="font-headline text-headline-sm text-on-surface-variant">Bạn chưa có địa chỉ nào</p>
+                        <button
+                            onClick={() => handleOpenModal()}
+                            className="mt-6 text-primary font-body font-bold uppercase tracking-widest hover:underline"
+                        >
+                            Thêm địa chỉ đầu tiên của bạn
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {renderModal()}
         </section>
     );
 };

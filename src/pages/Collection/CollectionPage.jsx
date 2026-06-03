@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -6,164 +6,12 @@ import {
     Eye, SlidersHorizontal, X, Gem, Leaf, Sparkles, ShieldCheck,
 } from 'lucide-react';
 import styles from './CollectionPage.module.css';
+import { getProducts, filterProductVariants, searchProductsByName } from '../../services/productService';
+import { getProductCategories } from '../../services/categoryService';
+import { getProductMaterials } from '../../services/materialService';
 
 // ─── Import Logo ────────────────────────────────────────────────────────────
 import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
-
-// ─── Import Product Images ────────────────────────────────────────────────────
-// Evil Eye collection
-import evilEye1 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W1-4EEN-4KFN-2CH4-2CH7-R20.jpg';
-import evilEye2 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W2-4KCN-4KFN-2CH4-2CH7-R20.jpg';
-import evilEye3 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W4-4KDN-4KFN-2CH4-2CH7-R20.jpg';
-import evilEye4 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W5-4LPN-4KFN-2CH4-2CH7-R20.jpg';
-import evilEye5 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W6-4AAN-4KFN-2CH4-2CH7-R20.jpg';
-import evilEye6 from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/D2-W7-4AAN-4KFN-2CH4-2CH7-R20.jpg';
-
-// Round 10 - 16 collection
-import round1 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1AA10-16AAN-2CH7-R2.jpg';
-import round2 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1KC10-16KCN-2CH7-R2.jpg';
-import round3 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1KD10-16KDN-2CH7-R2.jpg';
-import round4 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1KG10-16KGN-2CH7-R2.jpg';
-
-// 13 nhuyễn
-import nhuyen1 from '../../assets/Image - Cat/hình ảnh Sp/13 nhuyễn - 9 bi3-251006/D2-13AAN-9CH3-R20.jpg';
-import nhuyen2 from '../../assets/Image - Cat/hình ảnh Sp/13 nhuyễn - 9 bi3-251006/D2-13KCN-9CH3-R20.jpg';
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-const products = [
-    {
-        id: 1,
-        name: 'Cát Bình An',
-        image: round1,
-        price: 890000,
-        stoneType: 'Thạch anh trắng',
-        benefits: ['Bảo vệ năng lượng', 'Xua đuổi tà khí', 'Mang lại bình yên'],
-        collection: 'Bình an',
-        color: 'white',
-        element: 'Kim',
-    },
-    {
-        id: 2,
-        name: 'Cát Tình Yêu',
-        image: evilEye1,
-        price: 890000,
-        stoneType: 'Thạch anh hồng',
-        benefits: ['Thu hút tình duyên', 'Tăng duyên phận', 'Phù hộ tình cảm'],
-        collection: 'Tình yêu',
-        color: 'red',
-        element: 'Hỏa',
-    },
-    {
-        id: 3,
-        name: 'Cát Tài Lộc',
-        image: round2,
-        price: 890000,
-        stoneType: 'Mắt hổ',
-        benefits: ['Thu hút tài lộc', 'Tăng vận may', 'Phù hộ kinh doanh'],
-        collection: 'Tài lộc',
-        color: 'yellow',
-        element: 'Thổ',
-    },
-    {
-        id: 4,
-        name: 'Cát Evil Eye',
-        image: evilEye2,
-        price: 890000,
-        stoneType: 'Thạch anh xanh',
-        benefits: ['Ngăn chặn tà khí', 'Bảo hộ toàn thân', 'Giữ bình yên cho gia chủ'],
-        collection: 'Evil Eye',
-        color: 'blue',
-        element: 'Thủy',
-    },
-    {
-        id: 5,
-        name: 'Cát Đá Tự Nhiên',
-        image: nhuyen1,
-        price: 890000,
-        stoneType: 'Đá tự nhiên',
-        benefits: ['Cân bằng năng lượng', 'Giảm stress', 'Tập trung tư duy'],
-        collection: 'Đá tự nhiên',
-        color: 'green',
-        element: 'Mộc',
-    },
-    {
-        id: 6,
-        name: 'Cát May Mắn',
-        image: evilEye3,
-        price: 890000,
-        stoneType: 'Mã não xanh',
-        benefits: ['Tăng vận may', 'Nhân duyên tốt lành', 'Hóa giải tiểu nhân'],
-        collection: 'Tài lộc',
-        color: 'green',
-        element: 'Mộc',
-    },
-    {
-        id: 7,
-        name: 'Cát Hắc Thạch',
-        image: evilEye4,
-        price: 890000,
-        stoneType: 'Hắc thạch',
-        benefits: ['Trấn áp âm khí', 'Bảo vệ toàn thân', 'Đề kháng tâm linh'],
-        collection: 'Bình an',
-        color: 'black',
-        element: 'Thủy',
-    },
-    {
-        id: 8,
-        name: 'Cát Mắt Hổ',
-        image: round3,
-        price: 890000,
-        stoneType: 'Mắt hổ vàng',
-        benefits: ['Tự tin mạnh mẽ', 'Thu hút tiền bạc', 'Phù hộ kinh doanh'],
-        collection: 'Tài lộc',
-        color: 'yellow',
-        element: 'Thổ',
-    },
-    {
-        id: 9,
-        name: 'Cát Thạch Anh Trắng',
-        image: nhuyen2,
-        price: 890000,
-        stoneType: 'Thạch anh trắng',
-        benefits: ['Thanh lọc không gian', 'Cân bằng cảm xúc', 'Chữa lành tâm hồn'],
-        collection: 'Đá tự nhiên',
-        color: 'white',
-        element: 'Kim',
-    },
-    {
-        id: 10,
-        name: 'Cát Thạch Thạch',
-        image: evilEye5,
-        price: 890000,
-        stoneType: 'Thạch anh tím',
-        benefits: ['Tăng trực giác', 'Sáng suốt quyết định', 'Giảm lo âu'],
-        collection: 'Bình an',
-        color: 'blue',
-        element: 'Thủy',
-    },
-    {
-        id: 11,
-        name: 'Cát Năng Lượng',
-        image: round4,
-        price: 890000,
-        stoneType: 'Thạch anh tím',
-        benefits: ['Tăng năng lượng sống', 'Khai sáng tinh thần', 'Phù hộ học hành'],
-        collection: 'Evil Eye',
-        color: 'blue',
-        element: 'Mộc',
-    },
-    {
-        id: 12,
-        name: 'Cát Đá Thô',
-        image: evilEye6,
-        price: 890000,
-        stoneType: 'Đá thô tự nhiên',
-        benefits: ['Năng lượng nguyên bản', 'Kết nối đất trời', 'Bảo vệ linh hồn'],
-        collection: 'Đá tự nhiên',
-        color: 'brown',
-        element: 'Thổ',
-    },
-];
 
 // ─── Color Picker Data ───────────────────────────────────────────────────────
 const colorOptions = [
@@ -191,7 +39,7 @@ const stats = [
     { value: '1 đổi 1', label: 'Bảo hành' },
 ];
 
-// ─── Fade-in animation variant ───────────────────────────────────────────────
+// ─── Animation variant ───────────────────────────────────────────────
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -201,9 +49,15 @@ const fadeUp = {
 
 // ─── Main Component ────────────────────────────────────────────────────────
 const CollectionPage = () => {
+    // API State
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [materials, setMaterials] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     // Filter state
-    const [selectedCollection, setSelectedCollection] = useState('');
-    const [selectedStones, setSelectedStones] = useState([]);
+    const [selectedCollection, setSelectedCollection] = useState(''); // Category ID
+    const [selectedStones, setSelectedStones] = useState([]); // Material IDs
     const [selectedPrice, setSelectedPrice] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedElements, setSelectedElements] = useState([]);
@@ -215,10 +69,31 @@ const CollectionPage = () => {
 
     const ITEMS_PER_PAGE = 9;
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true);
+                const [productData, catData, matData] = await Promise.all([
+                    getProducts(),
+                    getProductCategories(),
+                    getProductMaterials()
+                ]);
+                setProducts(productData || []);
+                setCategories(catData || []);
+                setMaterials(matData || []);
+            } catch (error) {
+                console.error("Error loading collection data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadData();
+    }, []);
+
     // Toggle stone checkbox
-    const handleStoneToggle = (stone) => {
+    const handleStoneToggle = (materialId) => {
         setSelectedStones(prev =>
-            prev.includes(stone) ? prev.filter(s => s !== stone) : [...prev, stone]
+            prev.includes(materialId) ? prev.filter(s => s !== materialId) : [...prev, materialId]
         );
     };
 
@@ -252,44 +127,96 @@ const CollectionPage = () => {
         setSelectedElements([]);
     };
 
-    // Filter + Sort
-    const filteredProducts = useMemo(() => {
-        let result = [...products];
+    const getFullImageUrl = (url) => {
+        if (!url) return heroBannerImg;
+        if (url.startsWith('http')) return url;
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    };
 
-        if (selectedCollection) {
-            result = result.filter(p => p.collection === selectedCollection);
-        }
-        if (selectedStones.length > 0) {
-            result = result.filter(p => selectedStones.some(s => p.stoneType.includes(s)));
-        }
-        if (selectedPrice === 'under80') {
-            result = result.filter(p => p.price < 80000);
-        } else if (selectedPrice === '80to120') {
-            result = result.filter(p => p.price >= 80000 && p.price <= 120000);
-        } else if (selectedPrice === '120to200') {
-            result = result.filter(p => p.price > 120000 && p.price <= 200000);
-        }
-        if (selectedColors.length > 0) {
-            result = result.filter(p => selectedColors.includes(p.color));
-        }
-        if (selectedElements.length > 0) {
-            result = result.filter(p => selectedElements.includes(p.element));
-        }
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [filteredResults, setFilteredResults] = useState([]);
 
-        if (sortBy === 'priceAsc') result.sort((a, b) => a.price - b.price);
-        else if (sortBy === 'priceDesc') result.sort((a, b) => b.price - a.price);
+    useEffect(() => {
+        const fetchFiltered = async () => {
+            // Nếu không có bộ lọc nào được chọn và không có từ khóa tìm kiếm
+            if (!searchKeyword && !selectedCollection && !selectedPrice && sortBy === 'newest') {
+                console.log("No filters applied, showing all products:", products);
+                setFilteredResults(products);
+                return;
+            }
 
-        return result;
-    }, [selectedCollection, selectedStones, selectedPrice, selectedColors, selectedElements, sortBy]);
+            setLoading(true);
+            try {
+                let data = [];
 
-    const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
-    const paginatedProducts = filteredProducts.slice(
+                // Nếu có từ khóa tìm kiếm, ưu tiên dùng API search-by-name
+                if (searchKeyword) {
+                    console.log(`Calling searchProductsByName for: "${searchKeyword}"`);
+                    data = await searchProductsByName(searchKeyword);
+                    console.log("Search API results:", data);
+
+                    // Nếu có thêm các bộ lọc khác (category, price), ta sẽ lọc tiếp trên kết quả search này
+                    let results = data;
+                    if (selectedCollection) {
+                        results = results.filter(p => p.categoryId === selectedCollection);
+                    }
+                    // Filter giá (vì API search-by-name có thể không hỗ trợ filter giá trên server)
+                    if (selectedPrice) {
+                        results = results.filter(p => {
+                            const price = Number(p.basePrice);
+                            if (selectedPrice === 'under80') return price < 80000;
+                            if (selectedPrice === '80to120') return price >= 80000 && price <= 120000;
+                            if (selectedPrice === '120to200') return price >= 120000 && price <= 200000;
+                            return true;
+                        });
+                    }
+                    setFilteredResults(results);
+                } else {
+                    // Nếu không có keyword nhưng có các bộ lọc khác, dùng API filter
+                    const params = {};
+                    if (selectedCollection) params.categoryId = selectedCollection;
+                    if (sortBy && sortBy !== 'newest') params.sortBy = sortBy;
+
+                    if (selectedPrice === 'under80') { params.maxPrice = 80000; }
+                    else if (selectedPrice === '80to120') { params.minPrice = 80000; params.maxPrice = 120000; }
+                    else if (selectedPrice === '120to200') { params.minPrice = 120000; params.maxPrice = 200000; }
+
+                    console.log("Calling filter API with params:", params);
+                    const variants = await filterProductVariants(params);
+
+                    const productsFromVariants = variants.map(v => {
+                        const firstMapping = v.productVariantMappings?.[0];
+                        if (!firstMapping?.product) return null;
+                        return {
+                            ...firstMapping.product,
+                            displayPrice: Number(firstMapping.product.basePrice) + Number(v.extraPrice || 0)
+                        };
+                    }).filter(Boolean);
+
+                    const uniqueProducts = Array.from(new Map(productsFromVariants.map(p => [p.id, p])).values());
+                    setFilteredResults(uniqueProducts);
+                }
+            } catch (error) {
+                console.error("Search/Filter Error:", error);
+                setFilteredResults(products);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const timer = setTimeout(fetchFiltered, 500); // Thêm lại debounce để tránh spam API
+        return () => clearTimeout(timer);
+    }, [searchKeyword, selectedCollection, selectedPrice, sortBy, products]);
+
+    const totalPages = Math.ceil(filteredResults.length / ITEMS_PER_PAGE);
+    const paginatedProducts = filteredResults.slice(
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
 
     const formatPrice = (price) =>
-        price.toLocaleString('vi-VN') + 'đ';
+        (Number(price) || 0).toLocaleString('vi-VN') + 'đ';
 
     const sortLabels = {
         newest: 'Mới nhất',
@@ -297,6 +224,17 @@ const CollectionPage = () => {
         priceAsc: 'Giá tăng dần',
         priceDesc: 'Giá giảm dần',
     };
+
+    const getCategoryName = (id) => categories.find(c => c.id === id)?.categoryName || 'Sản phẩm Cát';
+    const getMaterialName = (id) => materials.find(m => m.id === id)?.materialName || 'Đá tự nhiên';
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.pageWrapper}>
@@ -375,18 +313,18 @@ const CollectionPage = () => {
                         {/* Collection Filter */}
                         <div className={styles.filterGroup}>
                             <h3 className={styles.filterGroupTitle}>Tên BST</h3>
-                            {['Evil Eye', 'Đá tự nhiên', 'Bình an', 'Tình yêu', 'Tài lộc'].map(col => (
-                                <label key={col} className={styles.radioLabel}>
+                            {categories.map(col => (
+                                <label key={col.id} className={styles.radioLabel}>
                                     <input
                                         type="radio"
                                         name="collection"
-                                        value={col}
-                                        checked={selectedCollection === col}
-                                        onChange={() => setSelectedCollection(col)}
+                                        value={col.id}
+                                        checked={selectedCollection === col.id}
+                                        onChange={() => setSelectedCollection(col.id)}
                                         className={styles.radioInput}
                                     />
                                     <span className={styles.radioCustom}></span>
-                                    <span className={styles.radioText}>{col}</span>
+                                    <span className={styles.radioText}>{col.categoryName}</span>
                                 </label>
                             ))}
                         </div>
@@ -394,16 +332,16 @@ const CollectionPage = () => {
                         {/* Stone Type Filter */}
                         <div className={styles.filterGroup}>
                             <h3 className={styles.filterGroupTitle}>Loại đá</h3>
-                            {['Thạch anh', 'Mã não', 'Hắc thạch', 'Mắt hổ', 'Thạch thạch'].map(stone => (
-                                <label key={stone} className={styles.checkboxLabel}>
+                            {materials.map(stone => (
+                                <label key={stone.id} className={styles.checkboxLabel}>
                                     <input
                                         type="checkbox"
-                                        checked={selectedStones.includes(stone)}
-                                        onChange={() => handleStoneToggle(stone)}
+                                        checked={selectedStones.includes(stone.id)}
+                                        onChange={() => handleStoneToggle(stone.id)}
                                         className={styles.checkboxInput}
                                     />
                                     <span className={styles.checkboxCustom}></span>
-                                    <span className={styles.checkboxText}>{stone}</span>
+                                    <span className={styles.checkboxText}>{stone.materialName}</span>
                                 </label>
                             ))}
                         </div>
@@ -474,11 +412,32 @@ const CollectionPage = () => {
                     {/* ── PRODUCT AREA ─────────────────────────────── */}
                     <div className={styles.productArea}>
 
+                        {/* Search Bar */}
+                        <div className={styles.searchBarWrapper}>
+                            <div className={styles.searchInner}>
+                                <input
+                                    type="text"
+                                    className={styles.searchInput}
+                                    placeholder="Tìm kiếm sản phẩm..."
+                                    value={searchKeyword}
+                                    onChange={(e) => setSearchKeyword(e.target.value)}
+                                />
+                                {searchKeyword && (
+                                    <button
+                                        className={styles.searchClear}
+                                        onClick={() => setSearchKeyword('')}
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Product Header */}
                         <div className={styles.productHeader}>
                             <div className={styles.productHeaderLeft}>
                                 <h2 className={styles.productHeaderTitle}>Bộ sưu tập Cát</h2>
-                                <p className={styles.productHeaderCount}>{filteredProducts.length} sản phẩm</p>
+                                <p className={styles.productHeaderCount}>{filteredResults.length} sản phẩm</p>
                             </div>
                             <div className={styles.sortWrapper}>
                                 <button
@@ -505,59 +464,72 @@ const CollectionPage = () => {
                         </div>
 
                         {/* Product Grid */}
-                        <div className={styles.productGrid}>
-                            {paginatedProducts.map((product, i) => (
-                                <motion.div
-                                    key={product.id}
-                                    className={styles.productCard}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: false }}
-                                    transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-                                >
-                                    <div className={styles.cardImageWrapper}>
-                                        <Link to="/product-detail">
-                                            <img
-                                                src={product.image}
-                                                alt={product.name}
-                                                className={styles.cardImage}
-                                                loading="lazy"
-                                            />
-                                        </Link>
-                                        <button
-                                            className={`${styles.wishlistBtn} ${wishlist.includes(product.id) ? styles.wishlistBtnActive : ''}`}
-                                            onClick={() => handleWishlistToggle(product.id)}
-                                            aria-label="Yêu thích"
-                                        >
-                                            <Heart size={16} fill={wishlist.includes(product.id) ? '#7A1E1E' : 'none'} />
-                                        </button>
-                                    </div>
-
-                                    <div className={styles.cardBody}>
-                                        <Link to="/product-detail" className={styles.cardLink}>
-                                            <h3 className={styles.cardName}>{product.name}</h3>
-                                        </Link>
-                                        <p className={styles.cardStone}>{product.stoneType}</p>
-                                        <ul className={styles.cardBenefits}>
-                                            {product.benefits.map((b, bi) => (
-                                                <li key={bi} className={styles.cardBenefit}>• {b}</li>
-                                            ))}
-                                        </ul>
-                                        <p className={styles.cardPrice}>{formatPrice(product.price)}</p>
-                                        <div className={styles.cardActions}>
-                                            <Link to="/product-detail" className={styles.btnDetail}>
-                                                <Eye size={14} />
-                                                Xem chi tiết
+                        {paginatedProducts.length > 0 ? (
+                            <div className={styles.productGrid}>
+                                {paginatedProducts.map((product, i) => (
+                                    <motion.div
+                                        key={product.id}
+                                        className={styles.productCard}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: false }}
+                                        transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
+                                    >
+                                        <div className={styles.cardImageWrapper}>
+                                            <Link to={`/product-detail?id=${product.id}`}>
+                                                <img
+                                                    src={getFullImageUrl(product.thumbnail)}
+                                                    alt={product.productName}
+                                                    className={styles.cardImage}
+                                                    loading="lazy"
+                                                />
                                             </Link>
-                                            <button className={styles.btnCart}>
-                                                <ShoppingCart size={14} />
-                                                Thêm vào giỏ
+                                            <button
+                                                className={`${styles.wishlistBtn} ${wishlist.includes(product.id) ? styles.wishlistBtnActive : ''}`}
+                                                onClick={() => handleWishlistToggle(product.id)}
+                                                aria-label="Yêu thích"
+                                            >
+                                                <Heart size={16} fill={wishlist.includes(product.id) ? '#7A1E1E' : 'none'} />
                                             </button>
                                         </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+
+                                        <div className={styles.cardBody}>
+                                            <Link to={`/product-detail?id=${product.id}`} className={styles.cardLink}>
+                                                <h3 className={styles.cardName}>{product.productName}</h3>
+                                            </Link>
+                                            <p className={styles.cardStone}>{getMaterialName(product.materialId)}</p>
+                                            <div className={styles.cardInfo}>
+                                                <p className={styles.cardDesc}>
+                                                    {product.description?.substring(0, 60)}...
+                                                </p>
+                                            </div>
+                                            <p className={styles.cardPrice}>{formatPrice(product.displayPrice || product.basePrice)}</p>
+                                            <div className={styles.cardActions}>
+                                                <Link to={`/product-detail?id=${product.id}`} className={styles.btnDetail}>
+                                                    <Eye size={14} />
+                                                    Xem chi tiết
+                                                </Link>
+                                                <button className={styles.btnCart}>
+                                                    <ShoppingCart size={14} />
+                                                    Thêm vào giỏ
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className={styles.noResults}>
+                                <div className={styles.noResultsIcon}>
+                                    <Sparkles size={48} strokeWidth={1} />
+                                </div>
+                                <h3>Không tìm thấy sản phẩm nào</h3>
+                                <p>Hãy thử thay đổi từ khóa hoặc bộ lọc để tìm sản phẩm mong muốn.</p>
+                                <button className={styles.clearFilterBtn} onClick={handleClearFilters}>
+                                    Xóa tất cả bộ lọc
+                                </button>
+                            </div>
+                        )}
 
                         {/* Pagination */}
                         {totalPages > 1 && (

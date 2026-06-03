@@ -1,25 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
     ChevronLeft, ChevronRight, ZoomIn, Heart, Star,
     Truck, Hand, Gift, Shield, ChevronDown, ShoppingCart,
     Leaf, Zap, RefreshCcw, Package
 } from 'lucide-react';
 import styles from './ProductDetail.module.css';
-
-// ─── Image imports ───────────────────────────────────────────────────────────
-import img1 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14AAN-2CH7-R20.jpg';
-import img2 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14EDN-2CH7-R20.jpg';
-import img3 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14EEN-2CH7-R20.jpg';
-import img4 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14KCN-2CH7-R20.jpg';
-import img5 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14KDN-2CH7-R20.jpg';
-import img6 from '../../assets/Image - Cat/hình ảnh Sp/14 nhuyễn - 2 đĩa/D2-14KFN-2CH7-R20.jpg';
-
-import rel1 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1AA10-16AAN-2CH7-R2.jpg';
-import rel2 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1CA10-16KFN-2CH7-R2.jpg';
-import rel3 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1ED10-16EDN-2CH7-R2.jpg';
-import rel4 from '../../assets/Image - Cat/hình ảnh Sp/1 tròn 10 - 16 nhuyễn - 2 đĩa/D2-1EE10-16EEN-2CH7-R2.jpg';
+import { getProductById, getProducts, getProductVariantById, getAllProductVariants } from '../../services/productService';
+import { getProductCategories } from '../../services/categoryService';
+import { getProductMaterials } from '../../services/materialService';
 
 // ─── Animation preset ─────────────────────────────────────────────────────────
 const fadeUp = {
@@ -36,75 +26,138 @@ const fadeUpDelay = (d = 0) => ({
     transition: { duration: 0.8, delay: d },
 });
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
-const galleryImages = [img1, img2, img3, img4, img5, img6];
-
-const sizes = ['14cm', '15cm', '16cm', '17cm'];
-
-const uspItems = [
-    { icon: <Truck size={28} strokeWidth={1.5} />, title: 'Miễn phí giao hàng', desc: 'Đơn từ 500k' },
-    { icon: <Hand size={28} strokeWidth={1.5} />, title: 'Handmade thủ công', desc: 'Chế tác tỉ mỉ' },
-    { icon: <Gift size={28} strokeWidth={1.5} />, title: 'Hộp quà cao cấp', desc: 'Miễn phí kèm đơn' },
-    { icon: <Shield size={28} strokeWidth={1.5} />, title: 'Bảo hành trọn đời', desc: 'Dây đeo & lắp' },
-];
-
-const relatedProducts = [
-    { id: 1, img: rel1, name: 'Cát Tịnh Tâm – Vòng đá thạch anh tím', stone: 'Thạch anh tím', price: '600.000đ' },
-    { id: 2, img: rel2, name: 'Cát Thịnh Vượng – Vòng đá citrine vàng', stone: 'Citrine vàng', price: '720.000đ' },
-    { id: 3, img: rel3, name: 'Cát Bảo Hộ – Vòng đá obsidian đen', stone: 'Obsidian đen', price: '550.000đ' },
-    { id: 4, img: rel4, name: 'Cát Mây Mắn – Vòng đá aventurine xanh', stone: 'Aventurine xanh', price: '680.000đ' },
-];
-
-const accordionItems = [
-    {
-        id: 1,
-        title: 'Mô tả sản phẩm',
-        content: 'Cát An Nhiên là chiếc vòng tay được chế tác từ đá thạch anh hồng nguyên chất, được chọn lọc kỹ lưỡng từng viên đá. Với màu hồng nhẹ nhàng dịu dàng, chiếc vòng mang lại cảm giác bình yên và sự kết nối với tình yêu thương. Mỗi chiếc vòng đều là sản phẩm handmade độc nhất, được hoàn thiện bởi các nghệ nhân tay nghề cao.',
-    },
-    {
-        id: 2,
-        title: 'Chất liệu & loại đá',
-        content: 'Đá thạch anh hồng (Rose Quartz) tự nhiên 100% • Dây đàn hồi cao cấp chịu lực tốt • Charm bạc 925 xi vàng 14K • Không chứa chất độc hại, an toàn cho da nhạy cảm.',
-    },
-    {
-        id: 3,
-        title: 'Hướng dẫn chọn size',
-        content: 'Đo chu vi cổ tay của bạn bằng thước dây. Chiều của vòng nên lớn hơn chu vi cổ tay từ 1–2cm để tạo độ thoải mái. Ví dụ: cổ tay 14cm → chọn size 15cm hoặc 16cm. Nếu bạn muốn đeo sát tay hơn, chọn đúng size đo.',
-    },
-    {
-        id: 4,
-        title: 'Cách bảo quản',
-        content: 'Tránh tiếp xúc với hóa chất, nước hoa, kem dưỡng da. Tháo vòng trước khi tắm, bơi lội hoặc tập thể dục. Bảo quản trong hộp vải mềm tránh ánh nắng và độ ẩm. Lau nhẹ bằng khăn mềm sau khi đeo.',
-    },
-    {
-        id: 5,
-        title: 'Chính sách hậu mãi',
-        content: 'Bảo hành dây đeo trọn đời – hỗ trợ thay dây miễn phí khi bị đứt do lỗi sản xuất. Đổi trả trong 7 ngày nếu sản phẩm lỗi từ xưởng. Hỗ trợ thay charm, sửa kích thước với chi phí ưu đãi.',
-    },
-    {
-        id: 6,
-        title: 'Đánh giá khách hàng',
-        content: 'Hơn 128 đánh giá 5 sao từ khách hàng. "Vòng rất đẹp, đóng gói cẩn thận, giao hàng nhanh!" – Minh Anh. "Đá hồng màu đẹp tự nhiên, không pha màu, mình rất hài lòng." – Thu Hà. "Mua tặng bạn thân, hộp quà sang trọng lắm, bạn mình cưng lắm!" – Bảo My.',
-    },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ProductDetail() {
+    const [searchParams] = useSearchParams();
+    const productId = searchParams.get('id');
+
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState([]);
+    const [materials, setMaterials] = useState([]);
+
     const [activeImg, setActiveImg] = useState(0);
-    const [selectedSize, setSelectedSize] = useState('15cm');
+    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedColor, setSelectedColor] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('shipping');
-    const [openAccordion, setOpenAccordion] = useState(null);
     const [wishlisted, setWishlisted] = useState(false);
     const [wishlistRelated, setWishlistRelated] = useState({});
 
-    const prevImg = () => setActiveImg((p) => (p === 0 ? galleryImages.length - 1 : p - 1));
-    const nextImg = () => setActiveImg((p) => (p === galleryImages.length - 1 ? 0 : p + 1));
+    const [productVariants, setProductVariants] = useState([]);
+    const [availableSizes, setAvailableSizes] = useState([]);
+    const [availableColors, setAvailableColors] = useState([]);
 
-    const toggleAccordion = (id) => setOpenAccordion((prev) => (prev === id ? null : id));
+    const [variant, setVariant] = useState(null);
+    const [relatedProducts, setRelatedProducts] = useState([]);
 
-    const toggleWishlistRelated = (id) =>
-        setWishlistRelated((prev) => ({ ...prev, [id]: !prev[id] }));
+    useEffect(() => {
+        const loadDetail = async () => {
+            if (!productId) return;
+            try {
+                setLoading(true);
+                const [data, catData, matData, allProducts, allVariants] = await Promise.all([
+                    getProductById(productId),
+                    getProductCategories(),
+                    getProductMaterials(),
+                    getProducts(),
+                    getAllProductVariants()
+                ]);
+                setProduct(data);
+                setCategories(catData || []);
+                setMaterials(matData || []);
+
+                // Tìm tất cả các variant thuộc về product này
+                const variantsForProduct = allVariants?.filter(v =>
+                    v.productVariantMappings?.some(m => m.productId === productId)
+                ) || [];
+
+                setProductVariants(variantsForProduct);
+
+                // Lấy danh sách size và color duy nhất
+                const sizes = [...new Set(variantsForProduct.map(v => v.size))].filter(Boolean);
+                const colors = [...new Set(variantsForProduct.map(v => v.color))].filter(Boolean);
+
+                setAvailableSizes(sizes);
+                setAvailableColors(colors);
+
+                if (variantsForProduct.length > 0) {
+                    const firstV = variantsForProduct[0];
+                    setVariant(firstV);
+                    if (firstV.size) setSelectedSize(firstV.size);
+                    if (firstV.color) setSelectedColor(firstV.color);
+                } else if (data.productVariantMappings?.length > 0) {
+                    try {
+                        const vId = data.productVariantMappings[0].variantId;
+                        const vData = await getProductVariantById(vId);
+                        setVariant(vData);
+                        setProductVariants([vData]);
+                        if (vData.size) {
+                            setAvailableSizes([vData.size]);
+                            setSelectedSize(vData.size);
+                        }
+                        if (vData.color) {
+                            setAvailableColors([vData.color]);
+                            setSelectedColor(vData.color);
+                        }
+                    } catch (e) { }
+                }
+
+                const related = allProducts
+                    .filter(p => p.id !== productId)
+                    .slice(0, 4);
+                setRelatedProducts(related);
+            } catch (error) {
+                console.error("Error fetching product detail:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadDetail();
+    }, [productId]);
+
+    const getFullImageUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url;
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
+    };
+
+    const images = (variant?.productVariantMappings?.length > 0)
+        ? variant.productVariantMappings.flatMap(m =>
+            m.product?.productImages?.map(img => getFullImageUrl(img.imageUrl)) || []
+        )
+        : (product?.productImages?.length > 0)
+            ? product.productImages.map(img => getFullImageUrl(img.imageUrl))
+            : [getFullImageUrl(product?.thumbnail)].filter(Boolean);
+
+    // Bỏ qua các ảnh trùng lặp nếu có
+    const uniqueImages = [...new Set(images)];
+
+    const prevImg = () => setActiveImg((p) => (p === 0 ? uniqueImages.length - 1 : p - 1));
+    const nextImg = () => setActiveImg((p) => (p === uniqueImages.length - 1 ? 0 : p + 1));
+
+    const getCategoryName = (id) => categories.find(c => c.id === id)?.categoryName || 'Sản phẩm Cát';
+    const getMaterialName = (id) => materials.find(m => m.id === id)?.materialName || 'Đá tự nhiên';
+
+
+
+    const uspItems = [
+        { icon: <Truck size={28} strokeWidth={1.5} />, title: 'Miễn phí giao hàng', desc: 'Đơn từ 500k' },
+        { icon: <Hand size={28} strokeWidth={1.5} />, title: 'Handmade thủ công', desc: 'Chế tác tỉ mỉ' },
+        { icon: <Gift size={28} strokeWidth={1.5} />, title: 'Hộp quà cao cấp', desc: 'Miễn phí kèm đơn' },
+        { icon: <Shield size={28} strokeWidth={1.5} />, title: 'Bảo hành trọn đời', desc: 'Dây đeo & lắp' },
+    ];
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+            </div>
+        );
+    }
+
+    if (!product) return null;
 
     return (
         <div className={styles.page}>
@@ -115,11 +168,11 @@ export default function ProductDetail() {
                     <nav className={styles.breadcrumb}>
                         <Link to="/" className={styles.breadcrumbLink}>Trang chủ</Link>
                         <span className={styles.breadcrumbSep}>&gt;</span>
-                        <Link to="/collection" className={styles.breadcrumbLink}>Phụ kiện</Link>
+                        <Link to="/collection" className={styles.breadcrumbLink}>Bộ sưu tập</Link>
                         <span className={styles.breadcrumbSep}>&gt;</span>
-                        <Link to="/collection" className={styles.breadcrumbLink}>Vòng tay đá</Link>
+                        <Link to="/collection" className={styles.breadcrumbLink}>{getCategoryName(product.categoryId)}</Link>
                         <span className={styles.breadcrumbSep}>&gt;</span>
-                        <span className={styles.breadcrumbCurrent}>Cát An Nhiên – Vòng đá thạch anh hồng</span>
+                        <span className={styles.breadcrumbCurrent}>{product.productName}</span>
                     </nav>
                 </div>
             </motion.div>
@@ -133,23 +186,27 @@ export default function ProductDetail() {
                         <motion.div className={styles.gallery} {...fadeUp}>
                             <div className={styles.mainImgWrap}>
                                 <img
-                                    src={galleryImages[activeImg]}
-                                    alt="Vòng đá thạch anh hồng"
+                                    src={uniqueImages[activeImg] || product.thumbnail}
+                                    alt={product.productName}
                                     className={styles.mainImg}
                                 />
                                 <button className={styles.zoomBtn} aria-label="Zoom">
                                     <ZoomIn size={20} />
                                 </button>
-                                <button className={styles.prevBtn} onClick={prevImg} aria-label="Previous">
-                                    <ChevronLeft size={22} />
-                                </button>
-                                <button className={styles.nextBtn} onClick={nextImg} aria-label="Next">
-                                    <ChevronRight size={22} />
-                                </button>
+                                {uniqueImages.length > 1 && (
+                                    <>
+                                        <button className={styles.prevBtn} onClick={prevImg} aria-label="Previous">
+                                            <ChevronLeft size={22} />
+                                        </button>
+                                        <button className={styles.nextBtn} onClick={nextImg} aria-label="Next">
+                                            <ChevronRight size={22} />
+                                        </button>
+                                    </>
+                                )}
                             </div>
 
                             <div className={styles.thumbnails}>
-                                {galleryImages.map((img, i) => (
+                                {uniqueImages.map((img, i) => (
                                     <button
                                         key={i}
                                         className={`${styles.thumbnail} ${i === activeImg ? styles.thumbnailActive : ''}`}
@@ -166,7 +223,7 @@ export default function ProductDetail() {
                         <motion.div className={styles.productInfo} {...fadeUpDelay(0.15)}>
                             {/* Name */}
                             <h1 className={styles.productName}>
-                                Cát An Nhiên – Vòng đá thạch anh hồng
+                                {product.productName}
                             </h1>
 
                             {/* Rating */}
@@ -177,18 +234,18 @@ export default function ProductDetail() {
                                     ))}
                                 </div>
                                 <span className={styles.ratingScore}>4.9</span>
-                                <span className={styles.ratingCount}>(128 đánh giá)</span>
+                                <span className={styles.ratingCount}>(Đánh giá mới)</span>
                             </div>
 
                             {/* Price */}
-                            <p className={styles.price}>680.000<span>đ</span></p>
+                            <p className={styles.price}>
+                                {(Number(product.basePrice) + Number(variant?.extraPrice || 0)).toLocaleString('vi-VN')}
+                                <span>đ</span>
+                            </p>
 
                             {/* Description */}
                             <p className={styles.productDesc}>
-                                Thạch anh hồng – viên đá của tình yêu và sự bình thản. Mang đến
-                                năng lượng dịu dàng, giải phóng căng thẳng, lo âu và nuôi dưỡng
-                                mọi quan hệ xung quanh bạn. Đây là món quà ý nghĩa nhất để yêu
-                                thương chính mình.
+                                {product.description}
                             </p>
 
                             {/* Quick Info Card */}
@@ -197,24 +254,52 @@ export default function ProductDetail() {
                                     <span className={styles.quickInfoIcon}>💎</span>
                                     <div>
                                         <span className={styles.quickInfoLabel}>Loại đá</span>
-                                        <span className={styles.quickInfoValue}>Thạch anh hồng (Rose Quartz)</span>
+                                        <span className={styles.quickInfoValue}>{getMaterialName(product.materialId)}</span>
                                     </div>
                                 </div>
                                 <div className={styles.quickInfoDivider} />
                                 <div className={styles.quickInfoRow}>
-                                    <span className={styles.quickInfoIcon}>🌊</span>
+                                    <span className={styles.quickInfoIcon}>📦</span>
                                     <div>
-                                        <span className={styles.quickInfoLabel}>Mệnh hợp</span>
-                                        <span className={styles.quickInfoValue}>Hỏa, Thổ</span>
+                                        <span className={styles.quickInfoLabel}>SKU</span>
+                                        <span className={styles.quickInfoValue}>{variant?.sku || 'N/A'}</span>
                                     </div>
                                 </div>
                                 <div className={styles.quickInfoDivider} />
                                 <div className={styles.quickInfoRow}>
                                     <span className={styles.quickInfoIcon}>✨</span>
                                     <div>
-                                        <span className={styles.quickInfoLabel}>Ý nghĩa năng lượng</span>
-                                        <span className={styles.quickInfoValue}>Tình yêu • Bình an • Tự chữa lành</span>
+                                        <span className={styles.quickInfoLabel}>Tình trạng</span>
+                                        <span className={styles.quickInfoValue}>
+                                            {variant?.stockQuantity > 0 ? `Còn hàng (${variant.stockQuantity})` : 'Hết hàng'}
+                                        </span>
                                     </div>
+                                </div>
+                            </div>
+
+                            {/* Color Selector */}
+                            <div className={styles.selectorSection}>
+                                <p className={styles.selectorLabel}>Chọn màu sắc</p>
+                                <div className={styles.sizeButtons}>
+                                    {availableColors.length > 0 ? (
+                                        availableColors.map((c) => (
+                                            <button
+                                                key={c}
+                                                className={`${styles.sizeBtn} ${selectedColor === c ? styles.sizeBtnActive : ''}`}
+                                                onClick={() => {
+                                                    setSelectedColor(c);
+                                                    // Tìm variant có color này (nếu có combo size + color thì tìm chính xác hơn)
+                                                    const match = productVariants.find(v => v.color === c && (selectedSize ? v.size === selectedSize : true))
+                                                        || productVariants.find(v => v.color === c);
+                                                    if (match) setVariant(match);
+                                                }}
+                                            >
+                                                {c}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <span className={styles.noInfoText}>Đang cập nhật...</span>
+                                    )}
                                 </div>
                             </div>
 
@@ -222,15 +307,25 @@ export default function ProductDetail() {
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn size vòng</p>
                                 <div className={styles.sizeButtons}>
-                                    {sizes.map((s) => (
-                                        <button
-                                            key={s}
-                                            className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''}`}
-                                            onClick={() => setSelectedSize(s)}
-                                        >
-                                            {s}
-                                        </button>
-                                    ))}
+                                    {availableSizes.length > 0 ? (
+                                        availableSizes.map((s) => (
+                                            <button
+                                                key={s}
+                                                className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''}`}
+                                                onClick={() => {
+                                                    setSelectedSize(s);
+                                                    // Tìm variant có size này
+                                                    const match = productVariants.find(v => v.size === s && (selectedColor ? v.color === selectedColor : true))
+                                                        || productVariants.find(v => v.size === s);
+                                                    if (match) setVariant(match);
+                                                }}
+                                            >
+                                                {s}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <span className={styles.noInfoText}>Đang cập nhật...</span>
+                                    )}
                                 </div>
                             </div>
 
@@ -380,50 +475,6 @@ export default function ProductDetail() {
                 </div>
             </motion.section>
 
-            {/* ── ACCORDION SECTION ──────────────────────────────────────────── */}
-            <motion.section className={styles.accordionSection} {...fadeUp}>
-                <div className={styles.container}>
-                    <h2 className={styles.accordionSectionTitle}>CHI TIẾT SẢN PHẨM</h2>
-                    <div className={styles.accordionList}>
-                        {accordionItems.map((item, i) => (
-                            <motion.div
-                                key={item.id}
-                                className={styles.accordionItem}
-                                {...fadeUpDelay(i * 0.06)}
-                            >
-                                <button
-                                    className={styles.accordionHeader}
-                                    onClick={() => toggleAccordion(item.id)}
-                                >
-                                    <span className={styles.accordionNum}>{i + 1}</span>
-                                    <span className={styles.accordionTitle}>{item.title}</span>
-                                    <motion.span
-                                        className={styles.accordionChevron}
-                                        animate={{ rotate: openAccordion === item.id ? 180 : 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    >
-                                        <ChevronDown size={18} />
-                                    </motion.span>
-                                </button>
-                                <AnimatePresence initial={false}>
-                                    {openAccordion === item.id && (
-                                        <motion.div
-                                            className={styles.accordionBody}
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.35 }}
-                                        >
-                                            <p className={styles.accordionContent}>{item.content}</p>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </motion.section>
-
             {/* ── RELATED PRODUCTS ───────────────────────────────────────────── */}
             <motion.section className={styles.relatedSection} {...fadeUp}>
                 <div className={styles.container}>
@@ -434,25 +485,25 @@ export default function ProductDetail() {
                     <div className={styles.relatedGrid}>
                         {relatedProducts.map((p, i) => (
                             <motion.div key={p.id} className={styles.productCard} {...fadeUpDelay(i * 0.1)}>
-                                <Link to="/product-detail" className={styles.cardLinkFull}>
+                                <Link to={`/product-detail?id=${p.id}`} className={styles.cardLinkFull}>
                                     <div className={styles.cardImgWrap}>
-                                        <img src={p.img} alt={p.name} className={styles.cardImg} />
+                                        <img src={getFullImageUrl(p.thumbnail)} alt={p.productName} className={styles.cardImg} />
                                     </div>
                                 </Link>
                                 <button
                                     className={`${styles.cardWishlist} ${wishlistRelated[p.id] ? styles.cardWishlistActive : ''}`}
-                                    onClick={() => toggleWishlistRelated(p.id)}
+                                    onClick={() => setWishlistRelated(prev => ({ ...prev, [p.id]: !prev[p.id] }))}
                                     aria-label="Wishlist"
                                 >
                                     <Heart size={18} fill={wishlistRelated[p.id] ? '#7A1E1E' : 'none'} />
                                 </button>
                                 <div className={styles.cardBody}>
-                                    <p className={styles.cardStone}>{p.stone}</p>
-                                    <Link to="/product-detail" className={styles.cardNameLink}>
-                                        <h3 className={styles.cardName}>{p.name}</h3>
+                                    <p className={styles.cardStone}>{getMaterialName(p.materialId)}</p>
+                                    <Link to={`/product-detail?id=${p.id}`} className={styles.cardNameLink}>
+                                        <h3 className={styles.cardName}>{p.productName}</h3>
                                     </Link>
-                                    <p className={styles.cardPrice}>{p.price}</p>
-                                    <Link to="/product-detail" className={styles.cardBtn}>
+                                    <p className={styles.cardPrice}>{Number(p.basePrice).toLocaleString('vi-VN')}đ</p>
+                                    <Link to={`/product-detail?id=${p.id}`} className={styles.cardBtn}>
                                         Xem chi tiết
                                     </Link>
                                 </div>
@@ -483,6 +534,6 @@ export default function ProductDetail() {
                 </div>
             </motion.section>
 
-        </div>
+        </div >
     );
 }
