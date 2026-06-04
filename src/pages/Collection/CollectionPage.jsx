@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     Heart, ShoppingCart, ChevronDown, ChevronLeft, ChevronRight,
     Eye, SlidersHorizontal, X, Gem, Leaf, Sparkles, ShieldCheck,
@@ -9,9 +9,13 @@ import styles from './CollectionPage.module.css';
 import { getProducts, filterProductVariants, searchProductsByName } from '../../services/productService';
 import { getProductCategories } from '../../services/categoryService';
 import { getProductMaterials } from '../../services/materialService';
+import { addToCart } from '../../services/cartService';
+import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
 
 // ─── Import Logo ────────────────────────────────────────────────────────────
 import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
+import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
 // ─── Color Picker Data ───────────────────────────────────────────────────────
 const colorOptions = [
@@ -49,6 +53,9 @@ const fadeUp = {
 
 // ─── Main Component ────────────────────────────────────────────────────────
 const CollectionPage = () => {
+    const navigate = useNavigate();
+    const { refreshCart } = useCart();
+    const { showToast } = useToast();
     // API State
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -128,7 +135,7 @@ const CollectionPage = () => {
     };
 
     const getFullImageUrl = (url) => {
-        if (!url) return heroBannerImg;
+        if (!url) return fallbackProductImg;
         if (url.startsWith('http')) return url;
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
         return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
@@ -190,7 +197,8 @@ const CollectionPage = () => {
                         if (!firstMapping?.product) return null;
                         return {
                             ...firstMapping.product,
-                            displayPrice: Number(firstMapping.product.basePrice) + Number(v.extraPrice || 0)
+                            variantId: v.id,
+                            displayPrice: Number(firstMapping.product.basePrice)
                         };
                     }).filter(Boolean);
 
@@ -227,6 +235,30 @@ const CollectionPage = () => {
 
     const getCategoryName = (id) => categories.find(c => c.id === id)?.categoryName || 'Sản phẩm Cát';
     const getMaterialName = (id) => materials.find(m => m.id === id)?.materialName || 'Đá tự nhiên';
+
+    const handleAddToCart = async (product) => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            showToast('Vui lòng đăng nhập để thêm vào giỏ hàng', 'error');
+            navigate('/login');
+            return;
+        }
+
+        // Nếu sản phẩm có variantId (từ filter API)
+        if (product.variantId) {
+            try {
+                await addToCart(product.variantId, 1);
+                await refreshCart();
+                showToast('Đã thêm sản phẩm vào giỏ hàng!');
+            } catch (err) {
+                showToast(err || 'Có lỗi xảy ra', 'error');
+            }
+            return;
+        }
+
+        // Nếu không có variantId, điều hướng tới trang chi tiết để chọn
+        navigate(`/product-detail?id=${product.id}`);
+    };
 
     if (loading) {
         return (
@@ -509,7 +541,10 @@ const CollectionPage = () => {
                                                     <Eye size={14} />
                                                     Xem chi tiết
                                                 </Link>
-                                                <button className={styles.btnCart}>
+                                                <button
+                                                    className={styles.btnCart}
+                                                    onClick={() => handleAddToCart(product)}
+                                                >
                                                     <ShoppingCart size={14} />
                                                     Thêm vào giỏ
                                                 </button>

@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, User, ShoppingBag, LogOut, Settings, ListOrdered } from 'lucide-react';
 import { logout } from '../services/authService';
+import { useCart } from '../context/CartContext';
 import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 const Header = () => {
+    const { cartCount } = useCart();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -171,9 +173,11 @@ const Header = () => {
                         aria-label="Đi đến giỏ hàng"
                     >
                         <ShoppingBag size={22} strokeWidth={1.5} />
-                        <span className="absolute -top-1 -right-1 bg-[#7A1E1E] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                            3
-                        </span>
+                        {cartCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-[#7A1E1E] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                                {cartCount}
+                            </span>
+                        )}
                     </button>
 
                     {/* Consultation Button */}

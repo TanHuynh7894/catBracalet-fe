@@ -10,6 +10,10 @@ import styles from './ProductDetail.module.css';
 import { getProductById, getProducts, getProductVariantById, getAllProductVariants } from '../../services/productService';
 import { getProductCategories } from '../../services/categoryService';
 import { getProductMaterials } from '../../services/materialService';
+import { addToCart } from '../../services/cartService';
+import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
+import { useNavigate } from 'react-router-dom';
 
 // ─── Animation preset ─────────────────────────────────────────────────────────
 const fadeUp = {
@@ -28,7 +32,10 @@ const fadeUpDelay = (d = 0) => ({
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ProductDetail() {
+    const { refreshCart } = useCart();
+    const { showToast } = useToast();
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const productId = searchParams.get('id');
 
     const [product, setProduct] = useState(null);
@@ -50,6 +57,7 @@ export default function ProductDetail() {
 
     const [variant, setVariant] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
+    const [adding, setAdding] = useState(false);
 
     useEffect(() => {
         const loadDetail = async () => {
@@ -139,6 +147,58 @@ export default function ProductDetail() {
 
     const getCategoryName = (id) => categories.find(c => c.id === id)?.categoryName || 'Sản phẩm Cát';
     const getMaterialName = (id) => materials.find(m => m.id === id)?.materialName || 'Đá tự nhiên';
+
+    const handleAddToCart = async () => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            showToast('Vui lòng đăng nhập để thêm vào giỏ hàng', 'error');
+            navigate('/login');
+            return;
+        }
+
+        if (!variant) {
+            showToast('Vui lòng chọn phiên bản sản phẩm (Size/Màu sắc)', 'error');
+            return;
+        }
+
+        try {
+            setAdding(true);
+            await addToCart(variant.id, quantity);
+            await refreshCart();
+            showToast('Đã thêm sản phẩm vào giỏ hàng thành công!');
+        } catch (error) {
+            console.error("Add to cart error:", error);
+            showToast(typeof error === 'string' ? error : 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.', 'error');
+        } finally {
+            setAdding(false);
+        }
+    };
+
+    const handleBuyNow = async () => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            showToast('Vui lòng đăng nhập để mua hàng', 'error');
+            navigate('/login');
+            return;
+        }
+
+        if (!variant) {
+            showToast('Vui lòng chọn phiên bản sản phẩm (Size/Màu sắc)', 'error');
+            return;
+        }
+
+        try {
+            setAdding(true);
+            await addToCart(variant.id, quantity);
+            await refreshCart();
+            navigate('/cart');
+        } catch (error) {
+            console.error("Buy now error:", error);
+            showToast(typeof error === 'string' ? error : 'Có lỗi xảy ra. Vui lòng thử lại.', 'error');
+        } finally {
+            setAdding(false);
+        }
+    };
 
 
 
@@ -239,7 +299,7 @@ export default function ProductDetail() {
 
                             {/* Price */}
                             <p className={styles.price}>
-                                {(Number(variant?.extraPrice ?? product.basePrice)).toLocaleString('vi-VN')}
+                                {(Number(variant ? (variant.extraPrice ?? 0) : product.basePrice)).toLocaleString('vi-VN')}
                                 <span>đ</span>
                             </p>
 
@@ -255,14 +315,6 @@ export default function ProductDetail() {
                                     <div>
                                         <span className={styles.quickInfoLabel}>Loại đá</span>
                                         <span className={styles.quickInfoValue}>{getMaterialName(product.materialId)}</span>
-                                    </div>
-                                </div>
-                                <div className={styles.quickInfoDivider} />
-                                <div className={styles.quickInfoRow}>
-                                    <span className={styles.quickInfoIcon}>📦</span>
-                                    <div>
-                                        <span className={styles.quickInfoLabel}>SKU</span>
-                                        <span className={styles.quickInfoValue}>{variant?.sku || 'N/A'}</span>
                                     </div>
                                 </div>
                                 <div className={styles.quickInfoDivider} />
@@ -352,9 +404,13 @@ export default function ProductDetail() {
                             {/* Action Buttons */}
                             <div className={styles.actionButtons}>
                                 <div className={styles.actionRow}>
-                                    <button className={styles.btnAddCart}>
+                                    <button
+                                        className={styles.btnAddCart}
+                                        onClick={handleAddToCart}
+                                        disabled={adding || (variant && variant.stockQuantity <= 0)}
+                                    >
                                         <ShoppingCart size={18} />
-                                        Thêm vào giỏ hàng
+                                        {adding ? 'Đang thêm...' : 'Thêm vào giỏ hàng'}
                                     </button>
                                     <button
                                         className={`${styles.wishlistBtn} ${wishlisted ? styles.wishlistActive : ''}`}
@@ -364,7 +420,13 @@ export default function ProductDetail() {
                                         <Heart size={20} fill={wishlisted ? '#7A1E1E' : 'none'} />
                                     </button>
                                 </div>
-                                <button className={styles.btnBuyNow}>Mua ngay</button>
+                                <button
+                                    className={styles.btnBuyNow}
+                                    onClick={handleBuyNow}
+                                    disabled={adding || (variant && variant.stockQuantity <= 0)}
+                                >
+                                    {variant && variant.stockQuantity <= 0 ? 'Hết hàng' : 'Mua ngay'}
+                                </button>
                             </div>
                         </motion.div>
                     </div>

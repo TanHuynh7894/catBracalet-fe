@@ -1,52 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Minus, Plus, Trash2, Check, Lock, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Minus, Plus, Trash2, Check, Lock, ShoppingBag, ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.css';
+import { getCart, updateCartItem, removeCartItem, clearCart } from '../../services/cartService';
+import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
+import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
-// ─── Mock product data ────────────────────────────────────────────────────────
-const INITIAL_CART_ITEMS = [
-    {
-        id: 1,
-        name: 'CÁT AN NHIÊN',
-        stone: 'Thạch anh hồng',
-        charm: 'đồng xu Cát',
-        beadSize: '8mm',
-        wristSize: '15cm',
-        price: 680000,
-        image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&h=400&fit=crop&q=80',
-        quantity: 1,
-    },
-    {
-        id: 2,
-        name: 'CÁT BẢO HỘ',
-        stone: 'Obsidian đen',
-        charm: 'mặt thần',
-        beadSize: '10mm',
-        wristSize: '16cm',
-        price: 590000,
-        image: 'https://images.unsplash.com/photo-1615209853186-e4bd66602508?w=400&h=400&fit=crop&q=80',
-        quantity: 1,
-    },
-    {
-        id: 3,
-        name: 'CÁT THỊNH VƯỢNG',
-        stone: 'Citrine vàng',
-        charm: 'tỳ hưu',
-        beadSize: '8mm',
-        wristSize: '15cm',
-        price: 720000,
-        image: 'https://images.unsplash.com/photo-1573408301185-9519f94816b4?w=400&h=400&fit=crop&q=80',
-        quantity: 2,
-    },
-];
-
-const GIFT_ITEMS = [
-    { id: 'g1', name: 'Hộp nhung cao cấp', image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&h=400&fit=crop&q=80' },
-    { id: 'g2', name: 'Thiệp chúc mừng', image: 'https://images.unsplash.com/photo-1606293459339-2a10f3f0fe1e?w=400&h=400&fit=crop&q=80' },
-    { id: 'g3', name: 'Túi giấy thương hiệu', image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=400&fit=crop&q=80' },
-];
-
+// ─── Constants ────────────────────────────────────────────────────────────────
 const BENEFITS = [
     { id: 'b1', text: 'Đá tự nhiên tuyển chọn' },
     { id: 'b2', text: 'Bảo hành trọn đời' },
@@ -55,28 +17,167 @@ const BENEFITS = [
 ];
 
 const SHIPPING_FEE = 30000;
-const GIFT_FEE = 49000;
-const DISCOUNT_AMOUNT = 79000;
 
 const formatVND = (amount) => new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
 
+// ─── Component ────────────────────────────────────────────────────────────────
 const CartPage = () => {
     const navigate = useNavigate();
-    const [cartItems, setCartItems] = useState(INITIAL_CART_ITEMS);
-    const [isGiftBox, setIsGiftBox] = useState(false);
+    const { refreshCart } = useCart();
+    const { showToast, showConfirm } = useToast();
 
-    const handleIncrease = (id) => setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item));
-    const handleDecrease = (id) => setCartItems(prev => prev.map(item => item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item));
-    const handleRemove = (id) => setCartItems(prev => prev.filter(item => item.id !== id));
+    const [cartData, setCartData] = useState(null);   // full cart object from API
+    const [cartItems, setCartItems] = useState([]);   // items array
+    const [loading, setLoading] = useState(true);
+    const [updatingId, setUpdatingId] = useState(null); // cartItemId đang được update
+    const [error, setError] = useState('');
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const giftFee = isGiftBox ? GIFT_FEE : 0;
-    const total = subtotal + SHIPPING_FEE + giftFee - DISCOUNT_AMOUNT;
+    // ── Fetch cart ──────────────────────────────────────────────────────────
+    const fetchCart = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError('');
+            const data = await getCart();
+            setCartData(data);
+            setCartItems(data.items || []);
+            refreshCart(); // Sync global count
+        } catch (err) {
+            setError(typeof err === 'string' ? err : 'Không thể tải giỏ hàng. Vui lòng đăng nhập.');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchCart();
+    }, [fetchCart]);
+
+    // ── Update quantity ─────────────────────────────────────────────────────
+    const handleIncrease = async (item) => {
+        const newQty = item.quantity + 1;
+        setUpdatingId(item.cartItemId);
+        // Optimistic UI
+        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty, subTotal: i.unitPrice * newQty } : i));
+        try {
+            await updateCartItem(item.cartItemId, newQty);
+            refreshCart();
+        } catch {
+            // rollback on error
+            fetchCart();
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    const handleDecrease = async (item) => {
+        if (item.quantity <= 1) return;
+        const newQty = item.quantity - 1;
+        setUpdatingId(item.cartItemId);
+        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty, subTotal: i.unitPrice * newQty } : i));
+        try {
+            await updateCartItem(item.cartItemId, newQty);
+            refreshCart();
+        } catch {
+            fetchCart();
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    // ── Remove item ─────────────────────────────────────────────────────────
+    const handleRemove = async (cartItemId) => {
+        setUpdatingId(cartItemId);
+        setCartItems(prev => prev.filter(i => i.cartItemId !== cartItemId));
+        try {
+            await removeCartItem(cartItemId);
+            refreshCart();
+            showToast('Đã xóa sản phẩm khỏi giỏ hàng');
+        } catch {
+            fetchCart();
+        } finally {
+            setUpdatingId(null);
+        }
+    };
+
+    const handleClearCart = () => {
+        showConfirm(
+            'Bạn có chắc chắn muốn xóa toàn bộ sản phẩm trong giỏ hàng?',
+            async () => {
+                try {
+                    setLoading(true);
+                    await clearCart();
+                    setCartItems([]);
+                    refreshCart();
+                    showToast('Đã làm trống giỏ hàng');
+                } catch (error) {
+                    showToast('Không thể làm trống giỏ hàng', 'error');
+                } finally {
+                    setLoading(false);
+                }
+            }
+        );
+    };
+
+    // ── Derived totals ──────────────────────────────────────────────────────
+    const subtotal = cartItems.reduce((sum, item) => {
+        const price = Number(item.variantDetails?.extraPrice ?? item.unitPrice ?? 0);
+        return sum + (price * (item.quantity || 1));
+    }, 0);
+    const total = subtotal + SHIPPING_FEE;
+
+    // ── Product image helper ────────────────────────────────────────────────
+    const getProductImage = (item) => {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+
+        // Prioritize variant image, then first site image, then thumbnail
+        let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
+
+        if (!thumb && item?.product?.productImages?.length > 0) {
+            thumb = item.product.productImages[0].imageUrl;
+        }
+
+        if (!thumb) {
+            thumb = item?.product?.thumbnail;
+        }
+
+        if (!thumb) return fallbackProductImg;
+        if (thumb.startsWith('http')) return thumb;
+        return `${baseUrl}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
+    };
+
+    // ─── Render: Loading ────────────────────────────────────────────────────
+    if (loading) {
+        return (
+            <div className={styles.pageWrapper}>
+                <div className={styles.loadingState}>
+                    <Loader2 size={40} className={styles.spinnerIcon} />
+                    <p>Đang tải giỏ hàng...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // ─── Render: Error ──────────────────────────────────────────────────────
+    if (error) {
+        return (
+            <div className={styles.pageWrapper}>
+                <div className={styles.container}>
+                    <div className={styles.emptyCart}>
+                        <ShoppingBag size={64} strokeWidth={1} className={styles.emptyIcon} />
+                        <p className={styles.emptyText}>{error}</p>
+                        <button onClick={() => navigate('/login')} className={styles.btnShopNow}>
+                            ĐĂNG NHẬP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
-                {/* ── Header Section ────────────────────────────────────────── */}
+                {/* ── Header ───────────────────────────────────────────────── */}
                 <header className={styles.header}>
                     <button onClick={() => navigate(-1)} className={styles.backBtn}>
                         <ArrowLeft size={20} strokeWidth={1.5} />
@@ -87,83 +188,131 @@ const CartPage = () => {
                 </header>
 
                 <div className={styles.mainContent}>
-                    {/* ── LEFT COLUMN: ITEMS ────────────────────────────────────── */}
+                    {/* ── LEFT: ITEMS ──────────────────────────────────────── */}
                     <div className={styles.leftCol}>
                         <section className={styles.itemsSection}>
                             {cartItems.length === 0 ? (
-                                <div className={styles.emptyCart}>
-                                    <ShoppingBag size={64} strokeWidth={1} className={styles.emptyIcon} />
-                                    <p className={styles.emptyText}>Giỏ hàng của bạn đang trống</p>
-                                    <button onClick={() => navigate('/collection')} className={styles.btnShopNow}>
-                                        TIẾP TỤC MUA SẮM
-                                    </button>
+                                <div className={styles.emptyCartContainer}>
+                                    <div className={styles.emptyCartContent}>
+                                        <div className={styles.emptyCartIllustration}>
+                                            <ShoppingBag size={80} strokeWidth={0.5} className={styles.emptyIconLarge} />
+                                            <div className={styles.iconHole} />
+                                        </div>
+                                        <h2 className={styles.emptyTitleLarge}>Giỏ hàng của bạn đang trống</h2>
+                                        <p className={styles.emptyDescLarge}>
+                                            Có vẻ như bạn chưa chọn được món đồ ưng ý. <br />
+                                            Hãy khám phá những bộ sưu tập mới nhất của chúng tôi để tìm thấy phụ kiện hoàn hảo cho phong cách của bạn.
+                                        </p>
+                                        <button
+                                            onClick={() => navigate('/collection')}
+                                            className={styles.btnExploreNow}
+                                        >
+                                            KHÁM PHÁ NGAY
+                                        </button>
+                                    </div>
                                 </div>
                             ) : (
-                                cartItems.map((item, index) => (
-                                    <React.Fragment key={item.id}>
-                                        <motion.div
-                                            className={styles.cartItem}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                        >
-                                            <div className={styles.itemImageWrapper}>
-                                                <img src={item.image} alt={item.name} className={styles.itemImage} />
-                                            </div>
-                                            <div className={styles.itemInfo}>
-                                                <h2 className={styles.itemName}>{item.name}</h2>
-                                                <div className={styles.itemMeta}>
-                                                    <div className={styles.metaRow}><span className={styles.metaLabel}>Loại đá:</span> <span className={styles.metaValue}>{item.stone}</span></div>
-                                                    <div className={styles.metaRow}><span className={styles.metaLabel}>Charm:</span> <span className={styles.metaValue}>{item.charm}</span></div>
-                                                    <div className={styles.metaRow}><span className={styles.metaLabel}>Hạt:</span> <span className={styles.metaValue}>{item.beadSize}</span></div>
-                                                    <div className={styles.metaRow}><span className={styles.metaLabel}>Size tay:</span> <span className={styles.metaValue}>{item.wristSize}</span></div>
-                                                </div>
-                                            </div>
-                                            <div className={styles.itemActions}>
-                                                <span className={styles.itemPrice}>{formatVND(item.price)}</span>
-                                                <div className={styles.itemControls}>
-                                                    <div className={styles.quantitySelector}>
-                                                        <button className={styles.qtyBtn} onClick={() => handleDecrease(item.id)} disabled={item.quantity <= 1}><Minus size={14} /></button>
-                                                        <span className={styles.qtyValue}>{item.quantity}</span>
-                                                        <button className={styles.qtyBtn} onClick={() => handleIncrease(item.id)}><Plus size={14} /></button>
-                                                    </div>
-                                                    <button className={styles.removeBtn} onClick={() => handleRemove(item.id)}><Trash2 size={18} /></button>
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                        {index < cartItems.length - 1 && <div className={styles.itemDivider} />}
-                                    </React.Fragment>
-                                ))
-                            )}
-                        </section>
-
-                        {/* Gift Box Selection moved to side or integrated */}
-                        <section className={styles.giftSection}>
-                            <h3 className={styles.sectionTitle}>QUÀ TẶNG & ĐÓNG GÓI</h3>
-                            <label className={styles.giftCheckboxRow}>
-                                <input type="checkbox" className={styles.giftCheckbox} checked={isGiftBox} onChange={(e) => setIsGiftBox(e.target.checked)} />
-                                <span className={styles.giftCheckboxLabel}>Gói quà cao cấp (+{formatVND(GIFT_FEE)})</span>
-                            </label>
-                            <div className={styles.giftCards}>
-                                {GIFT_ITEMS.map((gift) => (
-                                    <div key={gift.id} className={styles.giftCard}>
-                                        <div className={styles.giftImageWrapper}><img src={gift.image} alt={gift.name} className={styles.giftImage} /></div>
-                                        <p className={gift.name}>{gift.name}</p>
+                                <>
+                                    <div className={styles.cartHeaderActions}>
+                                        <h2 className={styles.cartCountTitle}>Sản phẩm ({cartItems.length})</h2>
+                                        <button onClick={handleClearCart} className={styles.btnClearAll}>
+                                            <Trash2 size={16} />
+                                            Xóa tất cả
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
+                                    {cartItems.map((item, index) => (
+                                        <React.Fragment key={item.cartItemId}>
+                                            <motion.div
+                                                className={`${styles.cartItem} ${updatingId === item.cartItemId ? styles.cartItemUpdating : ''}`}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: index * 0.08 }}
+                                            >
+                                                {/* Image */}
+                                                <div className={styles.itemImageWrapper}>
+                                                    <img
+                                                        src={getProductImage(item)}
+                                                        alt={item.product?.productName || 'Sản phẩm'}
+                                                        className={styles.itemImage}
+                                                    />
+                                                </div>
+
+                                                {/* Info */}
+                                                <div className={styles.itemInfo}>
+                                                    <h2 className={styles.itemName}>
+                                                        {item.product?.productName || 'Sản phẩm'}
+                                                    </h2>
+                                                    <div className={styles.itemMeta}>
+                                                        {item.variantDetails?.color && (
+                                                            <div className={styles.metaRow}>
+                                                                <span className={styles.metaLabel}>Màu sắc:</span>
+                                                                <span className={styles.metaValue}>{item.variantDetails.color}</span>
+                                                            </div>
+                                                        )}
+                                                        {item.variantDetails?.size && (
+                                                            <div className={styles.metaRow}>
+                                                                <span className={styles.metaLabel}>Size:</span>
+                                                                <span className={styles.metaValue}>{item.variantDetails.size}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Actions */}
+                                                <div className={styles.itemActions}>
+                                                    <span className={styles.itemPrice}>{formatVND(item.variantDetails?.extraPrice ?? item.unitPrice)}</span>
+                                                    <div className={styles.itemControls}>
+                                                        <div className={styles.quantitySelector}>
+                                                            <button
+                                                                className={styles.qtyBtn}
+                                                                onClick={() => handleDecrease(item)}
+                                                                disabled={item.quantity <= 1 || updatingId === item.cartItemId}
+                                                            >
+                                                                <Minus size={14} />
+                                                            </button>
+                                                            <span className={styles.qtyValue}>
+                                                                {updatingId === item.cartItemId
+                                                                    ? <Loader2 size={14} className={styles.spinnerIcon} />
+                                                                    : item.quantity
+                                                                }
+                                                            </span>
+                                                            <button
+                                                                className={styles.qtyBtn}
+                                                                onClick={() => handleIncrease(item)}
+                                                                disabled={updatingId === item.cartItemId}
+                                                            >
+                                                                <Plus size={14} />
+                                                            </button>
+                                                        </div>
+                                                        <button
+                                                            className={styles.removeBtn}
+                                                            onClick={() => handleRemove(item.cartItemId)}
+                                                            disabled={updatingId === item.cartItemId}
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </div>
+                                                    {/* Subtotal */}
+                                                    <span className={styles.itemSubtotal}>
+                                                        {formatVND((item.variantDetails?.extraPrice ?? item.unitPrice ?? 0) * (item.quantity || 1))}
+                                                    </span>
+                                                </div>
+                                            </motion.div>
+                                            {index < cartItems.length - 1 && <div className={styles.itemDivider} />}
+                                        </React.Fragment>
+                                    ))}
+                                </>
+                            )}
                         </section>
                     </div>
 
-                    {/* ── RIGHT COLUMN: SUMMARY ─────────────────────────────────── */}
+                    {/* ── RIGHT: SUMMARY ───────────────────────────────────── */}
                     <div className={styles.rightCol}>
                         <div className={styles.stickySummary}>
                             <section className={styles.summaryCard}>
                                 <h3 className={styles.summaryTitle}>TỔNG ĐƠN HÀNG</h3>
-                                <div className={styles.summaryRow}><span>Tạm tính</span><span>{formatVND(subtotal)}</span></div>
+                                <div className={styles.summaryRow}><span>Tạm tính ({cartItems.length} loại sản phẩm)</span><span>{formatVND(subtotal)}</span></div>
                                 <div className={styles.summaryRow}><span>Phí vận chuyển</span><span>{formatVND(SHIPPING_FEE)}</span></div>
-                                <div className={styles.summaryRow}><span>Giảm giá</span><span className={styles.discount}>-{formatVND(DISCOUNT_AMOUNT)}</span></div>
-                                {isGiftBox && <div className={styles.summaryRow}><span>Phí gói quà</span><span>{formatVND(GIFT_FEE)}</span></div>}
                                 <div className={styles.summaryDivider} />
                                 <div className={styles.totalRow}>
                                     <span className={styles.totalLabel}>TỔNG CỘNG</span>
@@ -191,7 +340,13 @@ const CartPage = () => {
                             </section>
 
                             <div className={styles.actionButtons}>
-                                <motion.button className={styles.btnCheckout} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} onClick={() => navigate('/checkout')}>
+                                <motion.button
+                                    className={styles.btnCheckout}
+                                    whileHover={{ scale: 1.01 }}
+                                    whileTap={{ scale: 0.99 }}
+                                    onClick={() => navigate('/checkout')}
+                                    disabled={cartItems.length === 0}
+                                >
                                     <Lock size={16} /> THANH TOÁN NGAY
                                 </motion.button>
                                 <button onClick={() => navigate('/collection')} className={styles.btnContinue}>

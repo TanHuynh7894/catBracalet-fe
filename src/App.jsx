@@ -4,6 +4,8 @@ import MainLayout from './layout/MainLayout';
 import AdminLayout from './layout/AdminLayout';
 import AccountLayout from './layout/AccountLayout';
 import Home from './pages/Home';
+import { CartProvider } from './context/CartContext';
+import { ToastProvider } from './context/ToastContext';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
@@ -63,63 +65,67 @@ const LayoutWrapper = ({ children }) => {
 function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <LayoutWrapper>
-        <Suspense fallback={<PageLoading />}>
-          <Routes>
-            {/* ... routes ... */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/successfulpayment" element={<SuccessfulPayment />} />
+      <CartProvider>
+        <ToastProvider>
+          <ScrollToTop />
+          <LayoutWrapper>
+            <Suspense fallback={<PageLoading />}>
+              <Routes>
+                {/* ... routes ... */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/successfulpayment" element={<SuccessfulPayment />} />
 
-            {/* Account Sub-Routes Sharing a Layout */}
-            <Route element={<AccountLayout />}>
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/shipping-addresses" element={<ShippingAddresses />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/order-history" element={<OrderHistory />} />
-              <Route path="/order-detail/:id" element={<OrderDetail />} />
-            </Route>
+                {/* Account Sub-Routes Sharing a Layout */}
+                <Route element={<AccountLayout />}>
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/change-password" element={<ChangePassword />} />
+                  <Route path="/shipping-addresses" element={<ShippingAddresses />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/order-history" element={<OrderHistory />} />
+                  <Route path="/order-detail/:id" element={<OrderDetail />} />
+                </Route>
 
-            <Route path="/collection" element={<CollectionPage />} />
-            <Route path="/custom" element={<CustomBraceletPage />} />
-            <Route path="/story" element={<StoryPage />} />
-            <Route path="/product-detail" element={<ProductDetail />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/collection" element={<CollectionPage />} />
+                <Route path="/custom" element={<CustomBraceletPage />} />
+                <Route path="/story" element={<StoryPage />} />
+                <Route path="/product-detail" element={<ProductDetail />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<Dashboard />} />
-            <Route path="/admin/orders" element={<Orders />} />
-            <Route path="/admin/orders/returns" element={<Returns />} />
-            <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
+                {/* Admin Routes */}
+                <Route path="/admin" element={<Dashboard />} />
+                <Route path="/admin/orders" element={<Orders />} />
+                <Route path="/admin/orders/returns" element={<Returns />} />
+                <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
 
-            {/* Order Processing Routes */}
-            <Route path="/admin/processing/pending" element={<PendingConfirmation />} />
-            <Route path="/admin/processing/handling" element={<PendingConfirmation />} />
-            <Route path="/admin/processing/packing" element={<PackingPack />} />
-            <Route path="/admin/processing/all" element={<AllPackages />} />
+                {/* Order Processing Routes */}
+                <Route path="/admin/processing/pending" element={<PendingConfirmation />} />
+                <Route path="/admin/processing/handling" element={<PendingConfirmation />} />
+                <Route path="/admin/processing/packing" element={<PackingPack />} />
+                <Route path="/admin/processing/all" element={<AllPackages />} />
 
-            {/* Shipping Routes */}
-            <Route path="/admin/shipping/overview" element={<ShippingOverview />} />
-            <Route path="/admin/shipping/waybills" element={<ShippingWaybills />} />
+                {/* Shipping Routes */}
+                <Route path="/admin/shipping/overview" element={<ShippingOverview />} />
+                <Route path="/admin/shipping/waybills" element={<ShippingWaybills />} />
 
-            {/* Product Routes */}
-            <Route path="/admin/products" element={<ProductList />} />
-            <Route path="/admin/products/:id" element={<AdminProductDetail />} />
-            <Route path="/admin/products/categories" element={<ProductCategories />} />
-            <Route path="/admin/products/prices" element={<PriceList />} />
+                {/* Product Routes */}
+                <Route path="/admin/products" element={<ProductList />} />
+                <Route path="/admin/products/:id" element={<AdminProductDetail />} />
+                <Route path="/admin/products/categories" element={<ProductCategories />} />
+                <Route path="/admin/products/prices" element={<PriceList />} />
 
-            <Route path="/admin/inventory/stock" element={<Inventory />} />
-            <Route path="/admin/inventory/receiving" element={<ReceivingOrders />} />
-            <Route path="/admin/reports" element={<ReportsOverview />} />
-            <Route path="/admin/users" element={<UserManagement />} />
-          </Routes>
-        </Suspense>
-      </LayoutWrapper>
+                <Route path="/admin/inventory/stock" element={<Inventory />} />
+                <Route path="/admin/inventory/receiving" element={<ReceivingOrders />} />
+                <Route path="/admin/reports" element={<ReportsOverview />} />
+                <Route path="/admin/users" element={<UserManagement />} />
+              </Routes>
+            </Suspense>
+          </LayoutWrapper>
+        </ToastProvider>
+      </CartProvider>
     </Router>
   );
 }

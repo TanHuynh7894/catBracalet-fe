@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Phone, Edit2, Trash2, MapPin, X, Plus, Check } from 'lucide-react';
 import { getAddressesByUserId, createAddress, updateAddress, deleteAddress, setDefaultAddress } from '../../services/addressService';
+import { useToast } from '../../context/ToastContext';
 import styles from './ShippingAddresses.module.css';
 
 const ShippingAddresses = () => {
+    const { showToast, showConfirm } = useToast();
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -102,25 +104,31 @@ const ShippingAddresses = () => {
                     status: 'ACTIVE'
                 });
             }
+            showToast(editingAddress ? 'Cập nhật địa chỉ thành công' : 'Thêm địa chỉ mới thành công');
             await fetchAddresses();
             handleCloseModal();
         } catch (err) {
-            alert(err || 'Đã xảy ra lỗi khi lưu địa chỉ.');
+            showToast(err || 'Đã xảy ra lỗi khi lưu địa chỉ.', 'error');
         } finally {
             setSubmitting(false);
         }
     };
 
-    const handleDelete = async (addressId) => {
-        if (!window.confirm('Bạn có chắc chắn muốn xóa địa chỉ này?')) return;
-        try {
-            const userDataStr = localStorage.getItem('user');
-            const userData = JSON.parse(userDataStr);
-            await deleteAddress(userData.id, addressId);
-            await fetchAddresses();
-        } catch (err) {
-            alert(err || 'Không thể xóa địa chỉ.');
-        }
+    const handleDelete = (addressId) => {
+        showConfirm(
+            'Bạn có chắc chắn muốn xóa địa chỉ này?',
+            async () => {
+                try {
+                    const userDataStr = localStorage.getItem('user');
+                    const userData = JSON.parse(userDataStr);
+                    await deleteAddress(userData.id, addressId);
+                    await fetchAddresses();
+                    showToast('Đã xóa địa chỉ');
+                } catch (err) {
+                    showToast(err || 'Không thể xóa địa chỉ.', 'error');
+                }
+            }
+        );
     };
 
     const handleSetDefault = async (addressId) => {
@@ -129,8 +137,9 @@ const ShippingAddresses = () => {
             const userData = JSON.parse(userDataStr);
             await setDefaultAddress(userData.id, addressId);
             await fetchAddresses();
+            showToast('Đã thiết lập địa chỉ mặc định');
         } catch (err) {
-            alert(err || 'Không thể đặt mặc định.');
+            showToast(err || 'Không thể đặt mặc định.', 'error');
         }
     };
 
@@ -288,8 +297,8 @@ const ShippingAddresses = () => {
                         <div
                             key={address.id}
                             className={`relative group p-8 border rounded-2xl shadow-sm transition-all duration-300 ${address.isDefault
-                                    ? 'bg-primary-container border-primary/20 hover:border-primary shadow-primary/10'
-                                    : 'bg-white border-outline-variant/30 hover:border-primary-container'
+                                ? 'bg-primary-container border-primary/20 hover:border-primary shadow-primary/10'
+                                : 'bg-white border-outline-variant/30 hover:border-primary-container'
                                 }`}
                         >
                             {address.isDefault && (
@@ -325,8 +334,8 @@ const ShippingAddresses = () => {
                                     <button
                                         onClick={() => handleOpenModal(address)}
                                         className={`font-body text-[10px] flex items-center gap-1 uppercase tracking-widest font-bold px-3 py-2 rounded-lg transition-colors ${address.isDefault
-                                                ? 'text-white bg-white/10 hover:bg-white/20'
-                                                : 'text-primary bg-primary/5 hover:bg-primary/10'
+                                            ? 'text-white bg-white/10 hover:bg-white/20'
+                                            : 'text-primary bg-primary/5 hover:bg-primary/10'
                                             }`}
                                     >
                                         <Edit2 size={14} />
