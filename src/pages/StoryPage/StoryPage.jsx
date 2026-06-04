@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Diamond, Users, Zap, Leaf, Scale, Heart, TrendingUp } from 'lucide-react';
 import heroBg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
-import heroBg1 from '../../assets/Ảnh UI/ảnh chi tiết/home ne.png';
-import heroBg2 from '../../assets/Ảnh UI/ảnh chi tiết/canbang.png';  
+import heroBg1 from '../../assets/Ảnh UI/ảnh chi tiết/about..png';
+import heroBg2 from '../../assets/Ảnh UI/ảnh chi tiết/canbang.png';
 import styles from './StoryPage.module.css';
 
 /* ───── animation preset ───── */

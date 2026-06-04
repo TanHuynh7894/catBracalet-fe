@@ -239,7 +239,7 @@ export default function ProductDetail() {
 
                             {/* Price */}
                             <p className={styles.price}>
-                                {(Number(product.basePrice) + Number(variant?.extraPrice || 0)).toLocaleString('vi-VN')}
+                                {(Number(variant?.extraPrice ?? product.basePrice)).toLocaleString('vi-VN')}
                                 <span>đ</span>
                             </p>
 
