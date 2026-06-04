@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import MainLayout from './layout/MainLayout';
 import AdminLayout from './layout/AdminLayout';
 import AccountLayout from './layout/AccountLayout';
-import Home from './pages/Home';
+import Home from './pages/Home/index';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import ScrollToTop from './components/utils/ScrollToTop';

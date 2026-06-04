@@ -1,0 +1,147 @@
+.footer {
+    background: #faf8f6;
+    /* Ivory / Light Background as before */
+    color: #5d2b2b;
+    /* Dark wine text */
+    padding: 60px 0 40px;
+    border-top: 1px solid rgba(93, 43, 43, 0.05);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.topGrid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+/* Brand Section */
+.brandCol {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footerLogo {
+    height: 42px;
+    /* Balanced size */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.brandDesc {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(93, 43, 43, 0.6);
+    max-width: 280px;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 12px;
+}
+
+.socialIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(93, 43, 43, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5d2b2b;
+    transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+    background: #5d2b2b;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Link Columns */
+.navTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #5d2b2b;
+    letter-spacing: 0.05em;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.navLink {
+    text-decoration: none;
+    color: rgba(93, 43, 43, 0.6);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.navLink:hover {
+    color: #5d2b2b;
+}
+
+/* Bottom Bar */
+.bottomBar {
+    padding-top: 30px;
+    border-top: 1px solid rgba(93, 43, 43, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: rgba(93, 43, 43, 0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.legalLinks {
+    display: flex;
+    gap: 30px;
+}
+
+.legalLink {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s;
+}
+
+.legalLink:hover {
+    color: #5d2b2b;
+}
+
+@media (max-width: 1024px) {
+    .topGrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .topGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .bottomBar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
