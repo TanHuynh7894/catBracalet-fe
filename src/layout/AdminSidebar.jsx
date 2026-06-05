@@ -100,9 +100,12 @@ const AdminSidebar = () => {
         },
         {
             id: 'users',
-            title: 'Quản lý người dùng',
+            title: 'Tài khoản & Phân quyền',
             icon: <Users size={18} />,
-            path: '/admin/users'
+            subItems: [
+                { title: 'Quản lý người dùng', path: '/admin/users' },
+                { title: 'Quản lý vai trò', path: '/admin/roles' }
+            ]
         }
     ];
 

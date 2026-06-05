@@ -47,6 +47,27 @@ const Header = () => {
         { name: 'Câu chuyện', href: '/story', type: 'route' },
     ];
 
+    // Thêm link Admin nếu user có quyền Admin
+    const isAdmin = user && (
+        // 1. Kiểm tra role dạng chuỗi đơn
+        (typeof user.role === 'string' && user.role.toLowerCase() === 'admin') ||
+        // 2. Kiểm tra roles dạng mảng (chuỗi hoặc object)
+        (Array.isArray(user.roles) && user.roles.some(r => {
+            const roleStr = typeof r === 'string' ? r : (r.roleName || r.name || r.description || '');
+            return roleStr.toLowerCase().includes('admin');
+        })) ||
+        // 3. Kiểm tra role đơn lẻ dạng object
+        (user.role?.roleName?.toLowerCase() === 'admin') ||
+        (user.role?.description?.toLowerCase().includes('admin')) ||
+        // 4. Cờ isAdmin trực tiếp nếu có
+        user.isAdmin === true
+    );
+
+
+
+
+
+
     const handleAnchorClick = (e, href) => {
         if (href === '#') return;
         e.preventDefault();
@@ -154,6 +175,17 @@ const Header = () => {
                                     className="absolute right-0 top-full mt-1 w-40 bg-white shadow-2xl rounded-xl border border-[#4B3A32]/5 overflow-hidden"
                                 >
                                     <div className="p-1">
+                                        {isAdmin && (
+                                            <button
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                    navigate('/admin');
+                                                }}
+                                                className="w-full flex items-center gap-3 px-4 py-3 text-[12px] text-[#7A1E1E] hover:bg-[#7A1E1E]/5 transition-all font-medium border-b border-[#4B3A32]/5"
+                                            >
+                                                <ListOrdered size={16} /> Quản trị
+                                            </button>
+                                        )}
                                         <button
                                             onClick={handleLogout}
                                             className="w-full flex items-center gap-3 px-4 py-3 text-[12px] text-red-600 hover:bg-red-50 transition-all font-medium"
@@ -161,6 +193,7 @@ const Header = () => {
                                             <LogOut size={16} /> Đăng xuất
                                         </button>
                                     </div>
+
                                 </motion.div>
                             )}
                         </AnimatePresence>
