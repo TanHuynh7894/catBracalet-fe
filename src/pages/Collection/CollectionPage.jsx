@@ -600,34 +600,6 @@ const CollectionPage = () => {
                 </div>
             </section>
 
-            {/* ── BRAND STORY ─────────────────────────────────────────────── */}
-            <motion.section {...fadeUp} className={styles.brandStory}>
-                <div className={styles.brandStoryInner}>
-                    <div className={styles.brandStoryText}>
-                        <p className={styles.brandStoryEyebrow}>Câu chuyện thương hiệu</p>
-                        <h2 className={styles.brandStoryTitle}>Cát Bracelet — Năng lượng từ đất trời</h2>
-                        <p className={styles.brandStoryDesc}>
-                            Mỗi chiếc vòng Cát là một hành trình từ lòng đất đến bàn tay bạn. Chúng tôi chọn lọc những viên đá quý hiếm, được khai quang bằng phương pháp truyền thống, mang lại nguồn năng lượng thuần khiết nhất cho người đeo.
-                        </p>
-                    </div>
-                    <div className={styles.statsGrid}>
-                        {stats.map((stat, i) => (
-                            <motion.div
-                                key={i}
-                                className={styles.statCard}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: false }}
-                                transition={{ duration: 0.5, delay: i * 0.1 }}
-                            >
-                                <span className={styles.statValue}>{stat.value}</span>
-                                <span className={styles.statLabel}>{stat.label}</span>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </motion.section>
-
         </div>
     );
 };

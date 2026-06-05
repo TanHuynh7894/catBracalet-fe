@@ -63,3 +63,15 @@ export const deleteRoleSoft = async (roleId, status = 'INACTIVE') => {
         throw error.response?.data || error.message;
     }
 };
+
+/**
+ * Hard Delete Role (Permanently remove from DB)
+ */
+export const hardDeleteRole = async (roleId) => {
+    try {
+        const response = await api.delete(`/role/${roleId}/hard`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};

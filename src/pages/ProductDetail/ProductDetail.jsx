@@ -514,11 +514,10 @@ export default function ProductDetail() {
                                     <div>
                                         <h3 className={styles.tabContentTitle}>CHI TIẾT SẢN PHẨM</h3>
                                         <ul className={styles.tabList}>
-                                            <li>• <strong>Loại đá:</strong> Thạch anh hồng (Rose Quartz) tự nhiên 100%</li>
-                                            <li>• <strong>Kích thước hạt:</strong> 8mm</li>
-                                            <li>• <strong>Charm:</strong> Bạc 925 xi vàng 14K</li>
-                                            <li>• <strong>Dây:</strong> Đàn hồi cao cấp, chịu lực 50kg</li>
-                                            <li>• <strong>Màu sắc:</strong> Hồng nhạt tự nhiên, màu sắc có thể thay đổi nhẹ theo từng viên đá</li>
+                                            <li>• <strong>Dòng sản phẩm:</strong> {product.category?.categoryName || 'Vòng tay Cát'}</li>
+                                            <li>• <strong>Loại đá:</strong> {product.product_materials?.map(pm => pm.material?.materialName).filter(Boolean).join(', ') || 'Đá tự nhiên'}</li>
+                                            <li>• <strong>Màu sắc chủ đạo:</strong> {variant?.color || 'Đa sắc'}</li>
+                                            <li>• <strong>Kích thước:</strong> {variant?.size || 'Tiêu chuẩn'}</li>
                                         </ul>
                                     </div>
                                     <div>

@@ -352,14 +352,27 @@ const UserManagement = () => {
 
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
-                    <div className={styles.modalContent} style={{ width: 400, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                        <div className="mb-4 text-red-500 flex justify-center"><AlertTriangle size={48} /></div>
-                        <h3 className="text-lg font-bold mb-2">Vô hiệu hóa tài khoản?</h3>
-                        <p className="text-gray-500 text-sm mb-6">Tài khoản này sẽ không thể đăng nhập vào hệ thống cho đến khi được kích hoạt lại.</p>
-                        <div className="flex justify-center gap-3">
-                            <button onClick={() => setShowDeleteConfirm(false)} className={styles.secondaryBtn}>Hủy</button>
-                            <button onClick={handleDeleteUser} disabled={isProcessing} className={styles.dangerBtn}>
-                                {isProcessing ? <Loader2 className="animate-spin" /> : 'Xác nhận vô hiệu hóa'}
+                    <div className={styles.modalContent} style={{ width: 480, textAlign: 'center', padding: '56px 48px' }} onClick={e => e.stopPropagation()}>
+                        <div className="mb-6 p-5 rounded-2xl inline-flex bg-rose-50 text-rose-600 shadow-sm">
+                            <AlertTriangle size={36} strokeWidth={2.5} />
+                        </div>
+                        <h3 className="text-2xl font-black mb-5 text-gray-900 tracking-tight">Vô hiệu hóa tài khoản?</h3>
+                        <p className="text-gray-500 text-[15px] mb-12 leading-relaxed">
+                            Tài khoản <b>{selectedUser?.fullName}</b> sẽ <span className="text-rose-600 font-bold">không thể đăng nhập</span> vào hệ thống cho đến khi được quản trị viên kích hoạt lại.
+                        </p>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="flex-1 px-6 py-3.5 rounded-xl text-sm font-bold text-gray-400 hover:bg-gray-50 transition-all active:scale-95 border border-gray-100"
+                            >
+                                Hủy bỏ
+                            </button>
+                            <button
+                                onClick={handleDeleteUser}
+                                disabled={isProcessing}
+                                className="flex-1 px-6 py-3.5 rounded-xl text-[13px] tracking-wide font-black text-white bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-100 transition-all active:scale-95 flex items-center justify-center gap-2"
+                            >
+                                {isProcessing ? <Loader2 className="animate-spin" size={18} /> : 'XÁC NHẬN KHÓA'}
                             </button>
                         </div>
                     </div>

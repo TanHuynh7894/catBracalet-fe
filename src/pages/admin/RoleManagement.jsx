@@ -3,7 +3,7 @@ import {
     Search, Plus, Edit3, Trash2, Shield, ShieldCheck, UserCheck,
     Check, X, Loader2, AlertTriangle, Download
 } from 'lucide-react';
-import { getAllRoles, createRole, updateRole, deleteRoleSoft } from '../../services/roleService';
+import { getAllRoles, createRole, updateRole, deleteRoleSoft, hardDeleteRole } from '../../services/roleService';
 import { useToast } from '../../context/ToastContext';
 import styles from './RoleManagement.module.css';
 
@@ -17,6 +17,7 @@ const RoleManagement = () => {
     const [selectedRole, setSelectedRole] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleteType, setDeleteType] = useState('soft'); // 'soft' or 'hard'
 
     // Form state
     const [formData, setFormData] = useState({
@@ -91,8 +92,14 @@ const RoleManagement = () => {
     const handleDelete = async () => {
         setIsProcessing(true);
         try {
-            await deleteRoleSoft(selectedRole.id, 'BLOCKED');
-            showToast('Đã chuyển vai trò sang trạng thái bị khóa', 'success');
+            if (deleteType === 'soft') {
+                const newStatus = selectedRole.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+                await deleteRoleSoft(selectedRole.id, newStatus);
+                showToast(newStatus === 'ACTIVE' ? 'Đã khôi phục hoạt động cho vai trò' : 'Đã chuyển vai trò sang trạng thái không hoạt động', 'success');
+            } else {
+                await hardDeleteRole(selectedRole.id);
+                showToast('Đã xóa vĩnh viễn vai trò khỏi hệ thống', 'success');
+            }
             setShowDeleteConfirm(false);
             fetchRoles();
         } catch (error) {
@@ -119,12 +126,13 @@ const RoleManagement = () => {
                         HOẠT ĐỘNG
                     </span>
                 );
+            case 'INACTIVE':
             case 'BLOCKED':
             default:
                 return (
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-700 flex items-center gap-1.5 w-fit">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-neutral-100 text-neutral-500 flex items-center gap-1.5 w-fit">
                         <X size={10} />
-                        BỊ KHÓA
+                        KHÔNG HOẠT ĐỘNG
                     </span>
                 );
         }
@@ -205,10 +213,27 @@ const RoleManagement = () => {
                                                 >
                                                     <Edit3 size={16} />
                                                 </button>
+                                                {role.status === 'ACTIVE' ? (
+                                                    <button
+                                                        onClick={() => { setSelectedRole(role); setDeleteType('soft'); setShowDeleteConfirm(true); }}
+                                                        className="p-2 hover:bg-rose-50 text-rose-500 rounded-lg transition-colors"
+                                                        title="Khóa vai trò"
+                                                    >
+                                                        <X size={16} />
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => { setSelectedRole(role); setDeleteType('soft'); setShowDeleteConfirm(true); }}
+                                                        className="p-2 hover:bg-green-50 text-green-600 rounded-lg transition-colors"
+                                                        title="Khôi phục"
+                                                    >
+                                                        <Check size={16} />
+                                                    </button>
+                                                )}
                                                 <button
-                                                    onClick={() => { setSelectedRole(role); setShowDeleteConfirm(true); }}
-                                                    className="p-2 hover:bg-rose-50 text-rose-600 rounded-lg transition-colors"
-                                                    title="Vô hiệu hóa"
+                                                    onClick={() => { setSelectedRole(role); setDeleteType('hard'); setShowDeleteConfirm(true); }}
+                                                    className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
+                                                    title="Xóa vĩnh viễn"
                                                 >
                                                     <Trash2 size={16} />
                                                 </button>
@@ -258,7 +283,7 @@ const RoleManagement = () => {
                                     value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}
                                 >
                                     <option value="ACTIVE">Hoạt động</option>
-                                    <option value="BLOCKED">Bị khóa</option>
+                                    <option value="INACTIVE">Không hoạt động</option>
                                 </select>
                             </div>
                             <div className="pt-4">
@@ -274,14 +299,42 @@ const RoleManagement = () => {
             {/* Delete Confirm */}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
-                    <div className={styles.modalContent} style={{ width: 400, textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-                        <div className="mb-4 text-red-500 flex justify-center"><AlertTriangle size={48} /></div>
-                        <h3 className="text-lg font-bold mb-2">Khóa vai trò này?</h3>
-                        <p className="text-gray-500 text-sm mb-6">Bạn có chắc chắn muốn chuyển vai trò <b>{selectedRole?.name}</b> sang trạng thái <b>BỊ KHÓA</b>?</p>
-                        <div className="flex justify-center gap-3">
-                            <button onClick={() => setShowDeleteConfirm(false)} className={styles.secondaryBtn}>Hủy</button>
-                            <button onClick={handleDelete} disabled={isProcessing} className={styles.dangerBtn}>
-                                {isProcessing ? <Loader2 className="animate-spin" /> : 'Xác nhận'}
+                    <div className={styles.modalContent} style={{ width: 480, textAlign: 'center', padding: '56px 48px' }} onClick={e => e.stopPropagation()}>
+                        <div className={`mb-6 p-5 rounded-2xl inline-flex shadow-sm ${deleteType === 'hard' ? 'bg-red-50 text-red-600' :
+                            selectedRole?.status === 'ACTIVE' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'
+                            }`}>
+                            {deleteType === 'hard' ? <Trash2 size={36} strokeWidth={2.5} /> :
+                                selectedRole?.status === 'ACTIVE' ? <AlertTriangle size={36} strokeWidth={2.5} /> : <Check size={36} strokeWidth={2.5} />}
+                        </div>
+                        <h3 className="text-2xl font-black mb-5 text-gray-900 tracking-tight">
+                            {deleteType === 'hard' ? 'XÓA VĨNH VIỄN?' :
+                                selectedRole?.status === 'ACTIVE' ? 'Ngừng hoạt động?' : 'Khôi phục vai trò?'}
+                        </h3>
+                        <p className="text-gray-500 text-[15px] mb-12 leading-relaxed px-4">
+                            {deleteType === 'hard'
+                                ? <>Hành động này <span className="text-red-600 font-bold underline decoration-red-200 underline-offset-4">không thể hoàn tác</span>. Vai trò <b>{selectedRole?.name}</b> sẽ bị xóa sạch khỏi hệ thống.</>
+                                : selectedRole?.status === 'ACTIVE'
+                                    ? <>Bạn có chắc muốn chuyển vai trò <b>{selectedRole?.name}</b> sang trạng thái <span className="font-bold text-gray-700">KHÔNG HOẠT ĐỘNG</span>?</>
+                                    : <>Bạn có chắc chắn muốn <span className="text-emerald-600 font-extrabold uppercase tracking-tight">Khôi phục</span> hoạt động cho vai trò <b>{selectedRole?.name}</b>?</>
+                            }
+                        </p>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="flex-1 px-6 py-3.5 rounded-xl text-sm font-bold text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-all active:scale-95 border border-gray-100"
+                            >
+                                Hủy bỏ
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                disabled={isProcessing}
+                                className={`flex-1 px-6 py-3.5 rounded-xl text-[13px] tracking-wide font-black text-white transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg
+                                    ${deleteType === 'hard' ? 'bg-red-600 hover:bg-red-700 shadow-red-100' :
+                                        selectedRole?.status === 'ACTIVE' ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-100' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100'}`}
+                            >
+                                {isProcessing ? <Loader2 className="animate-spin" size={18} /> :
+                                    (deleteType === 'hard' ? 'XÓA NGAY' :
+                                        selectedRole?.status === 'ACTIVE' ? 'XÁC NHẬN KHÓA' : 'KHÔI PHỤC NGAY')}
                             </button>
                         </div>
                     </div>
