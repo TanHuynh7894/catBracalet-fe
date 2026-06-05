@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Info, User, Phone, Mail, Calendar, CreditCard, CheckCircle2, AlertCircle, ShieldCheck, Lock } from 'lucide-react';
+import { Info, User, Phone, Mail, Calendar, CreditCard, CheckCircle2, AlertCircle, ShieldCheck, Lock, Camera } from 'lucide-react';
 import { getProfile, updateProfile as apiUpdateProfile } from '../../services/userService';
 import styles from './Profile.module.css';
 
@@ -16,8 +16,7 @@ const Profile = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
-        phone: '',
-        avatar: ''
+        phone: ''
     });
 
 
@@ -37,8 +36,7 @@ const Profile = () => {
                     setFormData({
                         fullName: data.fullName || '',
                         email: data.email || '',
-                        phone: data.phone || '',
-                        avatar: data.avatar || ''
+                        phone: data.phone || ''
                     });
                 } else {
                     navigate('/login');
@@ -63,7 +61,6 @@ const Profile = () => {
         }));
     };
 
-
     const handleUpdate = async (e) => {
         e.preventDefault();
         setUpdating(true);
@@ -76,13 +73,12 @@ const Profile = () => {
 
             const userData = JSON.parse(userDataStr);
 
-            // Clean up data before sending: if avatar is empty string, send null
-            const dataToSubmit = {
-                ...formData,
-                avatar: formData.avatar && formData.avatar.trim() !== '' ? formData.avatar : null
-            };
+            const data = new FormData();
+            data.append('fullName', formData.fullName);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
 
-            const updatedProfile = await apiUpdateProfile(userData.id, dataToSubmit);
+            const updatedProfile = await apiUpdateProfile(userData.id, data);
 
             setProfile(updatedProfile);
 
@@ -93,6 +89,9 @@ const Profile = () => {
                 fullName: updatedProfile.fullName,
                 avatar: updatedProfile.avatar
             }));
+
+            // Dispatch storage event to notify Header/Layout
+            window.dispatchEvent(new Event('storage'));
 
             setSuccessMessage('Cập nhật hồ sơ thành công!');
 
@@ -184,19 +183,6 @@ const Profile = () => {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         required
-                                    />
-                                </div>
-                                <div className="group">
-                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
-                                        <Calendar size={14} /> Ảnh đại diện (URL)
-                                    </label>
-                                    <input
-                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
-                                        type="text"
-                                        name="avatar"
-                                        value={formData.avatar}
-                                        onChange={handleChange}
-                                        placeholder="https://example.com/avatar.jpg"
                                     />
                                 </div>
 

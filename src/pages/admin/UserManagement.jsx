@@ -3,12 +3,12 @@ import {
     Search, Filter, Download, Upload, Plus,
     ChevronDown, ChevronLeft, ChevronRight, Eye, Edit3, Trash2,
     Shield, ShieldCheck, ShieldAlert, UserCheck, UserX, Mail, Phone,
-    Calendar, MapPin, X, Check, AlertTriangle, Loader2
+    Calendar, MapPin, X, Check, AlertTriangle, Loader2, Camera, User
 } from 'lucide-react';
 import styles from './UserManagement.module.css';
 import {
     getAllUsers,
-    updateProfile,
+    updateUserAdmin,
     softDeleteUser,
     addRole,
     deleteRole
@@ -35,9 +35,10 @@ const UserManagement = () => {
         fullName: '',
         email: '',
         phone: '',
-        avatar: '',
         status: 'ACTIVE'
     });
+    const [avatarFile, setAvatarFile] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(null);
 
 
     const fetchUsers = async (isInitial = false) => {
@@ -89,16 +90,37 @@ const UserManagement = () => {
         e.preventDefault();
         setIsProcessing(true);
         try {
-            // Remove status from data as it's typically handled by a separate endpoint
-            const { status, ...updateData } = formData;
-            await updateProfile(selectedUser.id, updateData);
+            const data = new FormData();
+            data.append('fullName', formData.fullName);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
+
+            if (avatarFile) {
+                data.append('avatar', avatarFile);
+            }
+
+            await updateUserAdmin(selectedUser.id, data);
             showToast('Cập nhật thông tin thành công', 'success');
             setShowModal(false);
+            setAvatarFile(null);
+            setAvatarPreview(null);
             fetchUsers();
         } catch (error) {
             showToast(error.message || 'Cập nhật thất bại', 'error');
         } finally {
             setIsProcessing(false);
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAvatarFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAvatarPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -186,9 +208,10 @@ const UserManagement = () => {
                 fullName: user.fullName || '',
                 email: user.email || '',
                 phone: user.phone || '',
-                avatar: user.avatar || '',
                 status: user.status || 'ACTIVE'
             });
+            setAvatarPreview(user.avatar || null);
+            setAvatarFile(null);
         }
         setShowModal(true);
     };
@@ -316,6 +339,8 @@ const UserManagement = () => {
                 user={selectedUser}
                 mode={modalMode}
                 formData={formData}
+                avatarPreview={avatarPreview}
+                handleFileChange={handleFileChange}
                 isProcessing={isProcessing}
                 onClose={() => setShowModal(false)}
                 setFormData={setFormData}
@@ -347,7 +372,7 @@ const UserManagement = () => {
 // --- Sub components moved outside to prevent focus loss during re-renders ---
 
 const UserDetailModal = ({
-    show, user, mode, formData, isProcessing,
+    show, user, mode, formData, avatarPreview, handleFileChange, isProcessing,
     onClose, setFormData, handleUpdateUser, toggleRole, getStatusBadge, availableRoles
 }) => {
     if (!show || !user) return null;
@@ -456,6 +481,27 @@ const UserDetailModal = ({
                         </>
                     ) : (
                         <form onSubmit={handleUpdateUser} className="space-y-4">
+                            {/* Avatar Upload */}
+                            <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                <div className="relative group">
+                                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-200 flex items-center justify-center">
+                                        {avatarPreview ? (
+                                            <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <User size={32} className="text-gray-400" />
+                                        )}
+                                    </div>
+                                    <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-full">
+                                        <Camera size={16} />
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                    </label>
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-semibold text-gray-700">Ảnh đại diện</h4>
+                                    <p className="text-xs text-gray-400 mt-0.5">Nhấp vào ảnh để thay đổi (PNG, JPG, JPEG)</p>
+                                </div>
+                            </div>
+
                             <div>
                                 <label className={styles.formLabel}>Họ và Tên</label>
                                 <input
@@ -486,17 +532,6 @@ const UserDetailModal = ({
                                         onChange={e => setFormData({ ...formData, phone: e.target.value })}
                                     />
                                 </div>
-                            </div>
-                            <div>
-                                <label className={styles.formLabel}>Trạng thái</label>
-                                <select
-                                    className={styles.formInput}
-                                    value={formData.status}
-                                    onChange={e => setFormData({ ...formData, status: e.target.value })}
-                                >
-                                    <option value="ACTIVE">Hoạt động</option>
-                                    <option value="BLOCKED">Bị khóa</option>
-                                </select>
                             </div>
                             <div className="pt-4">
                                 <button

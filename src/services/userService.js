@@ -25,14 +25,27 @@ export const getProfile = async (id) => {
 };
 
 /**
- * Update Profile/User API
+ * Update Profile (User themselves)
  */
 export const updateProfile = async (id, userData) => {
     try {
-        // According to user provided info, update user also uses /user/{id} 
-        // while profile update might use /user/profile/{id}
-        // We'll provide both or consolidate based on user preference
-        const response = await api.patch(`/user/${id}`, userData);
+        const isFormData = userData instanceof FormData;
+        const config = isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+        const response = await api.patch(`/user/profile/${id}`, userData, config);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};
+
+/**
+ * Update User (Admin version)
+ */
+export const updateUserAdmin = async (id, userData) => {
+    try {
+        const isFormData = userData instanceof FormData;
+        const config = isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+        const response = await api.patch(`/user/${id}`, userData, config);
         return response.data;
     } catch (error) {
         throw error.response?.data || error.message;
