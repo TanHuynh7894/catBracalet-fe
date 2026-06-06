@@ -431,8 +431,29 @@
     font-size: 14px;
 }
 
-.discount {
+.discountRow {
     color: #b05c00;
+}
+
+.discountLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.removeVoucherTiny {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.discountValueText {
+    font-weight: 600;
 }
 
 .summaryDivider {
@@ -464,14 +485,39 @@
 .voucherSection {
     background: var(--card);
     border-radius: 20px;
-    padding: 20px;
+    padding: 24px;
+    box-shadow: 0 5px 15px rgba(75, 58, 50, 0.03);
+}
+
+.voucherHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
 .voucherTitle {
     font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
     color: var(--text-muted);
+}
+
+.viewAllVouchers {
+    background: none;
+    border: none;
+    color: var(--gold-dark);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.viewAllVouchers:hover {
+    color: var(--primary);
 }
 
 .voucherRow {
@@ -490,7 +536,7 @@
 }
 
 .voucherBtn {
-    padding: 0 15px;
+    padding: 0 20px;
     background: var(--gold);
     color: #fff;
     border: none;
@@ -498,6 +544,30 @@
     font-size: 11px;
     font-weight: 700;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.voucherBtn:hover:not(:disabled) {
+    background: var(--gold-dark);
+    transform: translateY(-1px);
+}
+
+.voucherBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.appliedBadge {
+    margin-top: 15px;
+    padding: 8px 12px;
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #166534;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* ─── Benefits ──────────────────────────────────────────────────── */
@@ -562,6 +632,230 @@
 .btnContinue:hover {
     border-color: var(--text-muted);
     color: var(--text);
+}
+
+/* ─── Modal Overlay ────────────────────────────────────────────── */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(43, 34, 29, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.voucherModal {
+    background: var(--card);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modalHeader {
+    padding: 25px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalTitleContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modalTitleIcon {
+    color: var(--primary);
+}
+
+.modalTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.closeBtn {
+    background: #fcf8f4;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.modalBody {
+    padding: 25px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modalSearch {
+    position: relative;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.modalSearchInput {
+    flex: 1;
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0 15px 0 45px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+    background: #fafaf9;
+}
+
+.modalSearchInput:focus {
+    border-color: var(--gold);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(216, 178, 125, 0.1);
+}
+
+.applyInputCode {
+    padding: 0 20px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+.voucherList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.noVouchers {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-muted);
+}
+
+.noVouchers p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.voucherItem {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #fff;
+}
+
+.voucherItem:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+}
+
+.voucherItemApplied {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+
+.voucherCardLeft {
+    width: 80px;
+    background: #fcf8f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-right: 1px dashed var(--border);
+    color: var(--gold-dark);
+}
+
+.voucherItemApplied .voucherCardLeft {
+    background: #dcfce7;
+    color: #166534;
+    border-right-color: #bbf7d0;
+}
+
+.voucherTypeBadge {
+    font-size: 10px;
+    font-weight: 800;
+    background: var(--gold);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.voucherCardRight {
+    flex: 1;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.voucherCodeLabel {
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+}
+
+.voucherDesc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.voucherExpiry {
+    font-size: 10px;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.appliedIndicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #166534;
 }
 
 @media (max-width: 900px) {

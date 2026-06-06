@@ -28,6 +28,7 @@ const ReceivingOrders = lazy(() => import('./pages/admin/ReceivingOrders'));
 const ReportsOverview = lazy(() => import('./pages/admin/ReportsOverview'));
 const UserManagement = lazy(() => import('./pages/admin/UserManagement'));
 const RoleManagement = lazy(() => import('./pages/admin/RoleManagement'));
+const VoucherManagement = lazy(() => import('./pages/admin/VoucherManagement'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -123,6 +124,7 @@ function App() {
                 <Route path="/admin/reports" element={<ReportsOverview />} />
                 <Route path="/admin/users" element={<UserManagement />} />
                 <Route path="/admin/roles" element={<RoleManagement />} />
+                <Route path="/admin/vouchers" element={<VoucherManagement />} />
 
               </Routes>
             </Suspense>

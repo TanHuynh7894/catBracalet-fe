@@ -12,7 +12,8 @@ import {
     ChevronRight,
     LogOut,
     Settings,
-    Users
+    Users,
+    Ticket
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -106,6 +107,12 @@ const AdminSidebar = () => {
                 { title: 'Quản lý người dùng', path: '/admin/users' },
                 { title: 'Quản lý vai trò', path: '/admin/roles' }
             ]
+        },
+        {
+            id: 'vouchers',
+            title: 'Khuyến mãi',
+            icon: <Ticket size={18} />,
+            path: '/admin/vouchers'
         }
     ];
 
