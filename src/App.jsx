@@ -29,6 +29,8 @@ const ReportsOverview = lazy(() => import('./pages/admin/ReportsOverview'));
 const UserManagement = lazy(() => import('./pages/admin/UserManagement'));
 const RoleManagement = lazy(() => import('./pages/admin/RoleManagement'));
 const VoucherManagement = lazy(() => import('./pages/admin/VoucherManagement'));
+const MaterialManagement = lazy(() => import('./pages/admin/MaterialManagement'));
+const ConsultationManagement = lazy(() => import('./pages/admin/ConsultationManagement'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -115,9 +117,10 @@ function App() {
 
                 {/* Product Routes */}
                 <Route path="/admin/products" element={<ProductList />} />
-                <Route path="/admin/products/:id" element={<AdminProductDetail />} />
                 <Route path="/admin/products/categories" element={<ProductCategories />} />
+                <Route path="/admin/products/materials" element={<MaterialManagement />} />
                 <Route path="/admin/products/prices" element={<PriceList />} />
+                <Route path="/admin/products/:id" element={<AdminProductDetail />} />
 
                 <Route path="/admin/inventory/stock" element={<Inventory />} />
                 <Route path="/admin/inventory/receiving" element={<ReceivingOrders />} />
@@ -125,6 +128,7 @@ function App() {
                 <Route path="/admin/users" element={<UserManagement />} />
                 <Route path="/admin/roles" element={<RoleManagement />} />
                 <Route path="/admin/vouchers" element={<VoucherManagement />} />
+                <Route path="/admin/consultations" element={<ConsultationManagement />} />
 
               </Routes>
             </Suspense>

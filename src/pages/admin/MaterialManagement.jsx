@@ -1,34 +1,56 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
     Search, Plus, Edit3, Trash2, X, Loader2,
-    Layers, Tag, FileText, ToggleLeft, ToggleRight,
-    AlertTriangle, AlertCircle
+    Gem, Palette, Layers, FileText, ToggleLeft,
+    ToggleRight, AlertTriangle, Pipette, AlertCircle
 } from 'lucide-react';
 import {
-    getProductCategories,
-    createCategory,
-    updateCategory,
-    deleteCategory,
-    forceDeleteCategory,
-} from '../../services/categoryService';
+    getProductMaterials,
+    createMaterial,
+    updateMaterial,
+    softDeleteMaterialPatch,
+    deleteMaterial,
+    forceDeleteMaterial,
+} from '../../services/materialService';
 import { useToast } from '../../context/ToastContext';
-import styles from './ProductCategories.module.css';
+import styles from './MaterialManagement.module.css';
 
-const EMPTY_FORM = { categoryName: '', description: '' };
+const EMPTY_FORM = { materialName: '', materialType: '', color: '' };
+
+// Preset colour swatches for quick picking
+const COLOR_PRESETS = [
+    { name: 'Red', hex: '#ef4444' },
+    { name: 'Orange', hex: '#f97316' },
+    { name: 'Yellow', hex: '#eab308' },
+    { name: 'Green', hex: '#22c55e' },
+    { name: 'Blue', hex: '#3b82f6' },
+    { name: 'Purple', hex: '#a855f7' },
+    { name: 'Pink', hex: '#ec4899' },
+    { name: 'Brown', hex: '#92400e' },
+    { name: 'White', hex: '#f3f4f6' },
+    { name: 'Black', hex: '#1f2937' },
+    { name: 'Silver', hex: '#9ca3af' },
+    { name: 'Gold', hex: '#d97706' },
+];
+
+const MATERIAL_TYPES = [
+    'Gemstone', 'Metal', 'Natural', 'Synthetic', 'Wood', 'Ceramic', 'Glass', 'Other'
+];
 
 // ─────────────────────────────────────────────────────────────────────────────
-const ProductCategories = () => {
+const MaterialManagement = () => {
     const { showToast } = useToast();
 
-    const [categories, setCategories] = useState([]);
+    const [materials, setMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('ALL');
+    const [filterType, setFilterType] = useState('ALL');
 
     // Modal states
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Delete confirm
@@ -40,55 +62,68 @@ const ProductCategories = () => {
     const [errors, setErrors] = useState({});
 
     // ─── Fetch ────────────────────────────────────────────────────────────────
-    const fetchCategories = async (isInitial = false) => {
+    const fetchMaterials = async (isInitial = false) => {
         if (isInitial) setLoading(true);
         try {
-            const data = await getProductCategories();
-            setCategories(Array.isArray(data) ? data : []);
+            const data = await getProductMaterials();
+            setMaterials(Array.isArray(data) ? data : []);
         } catch {
-            showToast('Không thể tải danh sách danh mục', 'error');
+            showToast('Không thể tải danh sách chất liệu', 'error');
         } finally {
             if (isInitial) setLoading(false);
         }
     };
 
-    useEffect(() => { fetchCategories(true); }, []);
+    useEffect(() => { fetchMaterials(true); }, []);
 
     // ─── Derived ──────────────────────────────────────────────────────────────
+    const allTypes = useMemo(() => {
+        const types = [...new Set(materials.map(m => m.materialType).filter(Boolean))];
+        return types;
+    }, [materials]);
+
     const filtered = useMemo(() => {
-        return categories.filter(c => {
-            const matchSearch = c.categoryName?.toLowerCase().includes(searchTerm.toLowerCase())
-                || c.description?.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchStatus = filterStatus === 'ALL' || c.status === filterStatus;
-            return matchSearch && matchStatus;
+        return materials.filter(m => {
+            const matchSearch =
+                m.materialName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                m.materialType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                m.color?.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchStatus = filterStatus === 'ALL' || m.status === filterStatus;
+            const matchType = filterType === 'ALL' || m.materialType === filterType;
+            return matchSearch && matchStatus && matchType;
         });
-    }, [categories, searchTerm, filterStatus]);
+    }, [materials, searchTerm, filterStatus, filterType]);
 
     const stats = useMemo(() => ({
-        total: categories.length,
-        active: categories.filter(c => c.status === 'ACTIVE').length,
-        inactive: categories.filter(c => c.status === 'INACTIVE').length,
-    }), [categories]);
+        total: materials.length,
+        active: materials.filter(m => m.status === 'ACTIVE').length,
+        inactive: materials.filter(m => m.status === 'INACTIVE').length,
+        types: new Set(materials.map(m => m.materialType).filter(Boolean)).size,
+    }), [materials]);
 
     // ─── Modal helpers ────────────────────────────────────────────────────────
     const openAdd = () => {
         setModalMode('add');
-        setSelectedCategory(null);
+        setSelectedMaterial(null);
         setFormData(EMPTY_FORM);
         setErrors({});
         setShowModal(true);
     };
 
-    const openEdit = (c) => {
+    const openEdit = (m) => {
         setModalMode('edit');
-        setSelectedCategory(c);
-        setFormData({ categoryName: c.categoryName, description: c.description || '' });
+        setSelectedMaterial(m);
+        setFormData({
+            materialName: m.materialName || '',
+            materialType: m.materialType || '',
+            color: m.color || '',
+        });
         setErrors({});
         setShowModal(true);
     };
 
-    const openDelete = (c, type = 'soft') => {
-        setSelectedCategory(c);
+    const openDelete = (m, type = 'soft') => {
+        setSelectedMaterial(m);
         setDeleteType(type);
         setShowDeleteConfirm(true);
     };
@@ -96,7 +131,9 @@ const ProductCategories = () => {
     // ─── Validation ───────────────────────────────────────────────────────────
     const validate = () => {
         const e = {};
-        if (!formData.categoryName.trim()) e.categoryName = 'Tên danh mục không được để trống';
+        if (!formData.materialName.trim()) e.materialName = 'Tên chất liệu không được để trống';
+        if (!formData.materialType.trim()) e.materialType = 'Loại chất liệu không được để trống';
+        if (!formData.color.trim()) e.color = 'Màu sắc không được để trống';
         return e;
     };
 
@@ -108,20 +145,21 @@ const ProductCategories = () => {
 
         setIsProcessing(true);
         const payload = {
-            categoryName: formData.categoryName.trim(),
-            description: formData.description.trim(),
+            materialName: formData.materialName.trim(),
+            materialType: formData.materialType.trim(),
+            color: formData.color.trim(),
         };
 
         try {
             if (modalMode === 'add') {
-                await createCategory(payload);
-                showToast('Tạo danh mục thành công', 'success');
+                await createMaterial(payload);
+                showToast('Tạo chất liệu thành công', 'success');
             } else {
-                await updateCategory(selectedCategory.id, payload);
-                showToast('Cập nhật danh mục thành công', 'success');
+                await updateMaterial(selectedMaterial.id, payload);
+                showToast('Cập nhật chất liệu thành công', 'success');
             }
             setShowModal(false);
-            fetchCategories();
+            fetchMaterials();
         } catch (err) {
             showToast(err?.response?.data?.message || err?.message || 'Thao tác thất bại', 'error');
         } finally {
@@ -134,23 +172,23 @@ const ProductCategories = () => {
         setIsProcessing(true);
         try {
             if (deleteType === 'force') {
-                await forceDeleteCategory(selectedCategory.id);
-                showToast('Đã xóa vĩnh viễn danh mục', 'success');
+                await forceDeleteMaterial(selectedMaterial.id);
+                showToast('Đã xóa vĩnh viễn chất liệu', 'success');
             } else {
-                await deleteCategory(selectedCategory.id);
-                const isActivating = selectedCategory.status === 'INACTIVE';
-                showToast(isActivating ? 'Đã kích hoạt danh mục' : 'Đã vô hiệu hoá danh mục', 'success');
+                await deleteMaterial(selectedMaterial.id);
+                const isActivating = selectedMaterial.status === 'INACTIVE';
+                showToast(isActivating ? 'Đã kích hoạt chất liệu' : 'Đã vô hiệu hoá chất liệu', 'success');
             }
             setShowDeleteConfirm(false);
-            fetchCategories();
+            fetchMaterials();
         } catch {
-            showToast('Không thể xóa danh mục', 'error');
+            showToast('Không thể xóa chất liệu', 'error');
         } finally {
             setIsProcessing(false);
         }
     };
 
-    // ─── Status badge ─────────────────────────────────────────────────────────
+    // ─── Helpers ──────────────────────────────────────────────────────────────
     const StatusBadge = ({ status }) => {
         if (status === 'ACTIVE') {
             return (
@@ -167,11 +205,32 @@ const ProductCategories = () => {
         );
     };
 
+    const TypeBadge = ({ type }) => {
+        const colorMap = {
+            Gemstone: { bg: '#fdf4ff', text: '#a21caf' },
+            Metal: { bg: '#eff6ff', text: '#1d4ed8' },
+            Natural: { bg: '#f0fdf4', text: '#15803d' },
+            Synthetic: { bg: '#fff7ed', text: '#c2410c' },
+            Wood: { bg: '#fefce8', text: '#a16207' },
+            Ceramic: { bg: '#f0f9ff', text: '#0369a1' },
+            Glass: { bg: '#fafafa', text: '#374151' },
+        };
+        const c = colorMap[type] || { bg: '#f3f4f6', text: '#6b7280' };
+        return (
+            <span
+                className="px-2.5 py-1 rounded-full text-[11px] font-bold w-fit"
+                style={{ background: c.bg, color: c.text }}
+            >
+                {type || '—'}
+            </span>
+        );
+    };
+
     // ─── Render ───────────────────────────────────────────────────────────────
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">
             <Loader2 size={40} className="animate-spin text-rose-800 mb-4" />
-            <p className="text-gray-500 font-medium">Đang tải danh mục...</p>
+            <p className="text-gray-500 font-medium">Đang tải danh sách chất liệu...</p>
         </div>
     );
 
@@ -181,20 +240,21 @@ const ProductCategories = () => {
             {/* ── Header ──────────────────────────────────────────────────── */}
             <div className={styles.header}>
                 <div>
-                    <h1 className={styles.title}>Quản lý Danh mục</h1>
-                    <p className="text-sm text-gray-400 mt-1">Tạo và quản lý danh mục sản phẩm trong cửa hàng</p>
+                    <h1 className={styles.title}>Quản lý Chất liệu</h1>
+                    <p className="text-sm text-gray-400 mt-1">Tạo và quản lý chất liệu dùng trong sản phẩm</p>
                 </div>
                 <button onClick={openAdd} className={styles.primaryBtn}>
-                    <Plus size={14} /> Thêm danh mục
+                    <Plus size={14} /> Thêm chất liệu
                 </button>
             </div>
 
             {/* ── Stats Grid ──────────────────────────────────────────────── */}
             <div className={styles.statsGrid}>
                 {[
-                    { label: 'Tổng danh mục', value: stats.total, icon: <Layers size={20} />, color: '#7A1E1E', bg: '#FDF2F2' },
+                    { label: 'Tổng chất liệu', value: stats.total, icon: <Gem size={20} />, color: '#7A1E1E', bg: '#FDF2F2' },
                     { label: 'Đang hoạt động', value: stats.active, icon: <ToggleRight size={20} />, color: '#057A55', bg: '#DEF7EC' },
                     { label: 'Không hoạt động', value: stats.inactive, icon: <ToggleLeft size={20} />, color: '#6B7280', bg: '#F3F4F6' },
+                    { label: 'Loại chất liệu', value: stats.types, icon: <Layers size={20} />, color: '#4F46E5', bg: '#EEF2FF' },
                 ].map((s, i) => (
                     <div key={i} className={styles.statCard}>
                         <div className={styles.statIcon} style={{ background: s.bg, color: s.color }}>
@@ -216,12 +276,23 @@ const ProductCategories = () => {
                         <Search size={16} style={{ color: '#9ca3af' }} />
                         <input
                             type="text"
-                            placeholder="Tìm tên hoặc mô tả danh mục..."
+                            placeholder="Tìm tên, loại, màu sắc..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
                             className={styles.searchInput}
                         />
                     </div>
+                    <select
+                        value={filterType}
+                        onChange={e => setFilterType(e.target.value)}
+                        className={styles.filterBtn}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <option value="ALL">Tất cả loại</option>
+                        {allTypes.map(t => (
+                            <option key={t} value={t}>{t}</option>
+                        ))}
+                    </select>
                     <select
                         value={filterStatus}
                         onChange={e => setFilterStatus(e.target.value)}
@@ -233,7 +304,7 @@ const ProductCategories = () => {
                         <option value="INACTIVE">Không hoạt động</option>
                     </select>
                     <span className="text-xs text-gray-400 font-bold ml-auto whitespace-nowrap">
-                        {filtered.length} / {categories.length} danh mục
+                        {filtered.length} / {materials.length} chất liệu
                     </span>
                 </div>
 
@@ -242,7 +313,7 @@ const ProductCategories = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                         <thead>
                             <tr style={{ background: '#f9fafb', borderBottom: '1px solid #f3f4f6' }}>
-                                {['#', 'Tên danh mục', 'Mô tả', 'Trạng thái', 'Thao tác'].map(h => (
+                                {['#', 'Tên chất liệu', 'Loại', 'Màu sắc', 'Trạng thái', 'Thao tác'].map(h => (
                                     <th key={h} style={{ padding: '14px 16px', color: '#9ca3af', fontWeight: 700, textTransform: 'uppercase', fontSize: 10 }}>
                                         {h}
                                     </th>
@@ -252,13 +323,13 @@ const ProductCategories = () => {
                         <tbody>
                             {filtered.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="text-center py-16 text-gray-400">
-                                        <Layers size={40} strokeWidth={1} className="mx-auto mb-3 opacity-30" />
-                                        <p className="font-medium">Không tìm thấy danh mục nào</p>
+                                    <td colSpan={6} className="text-center py-16 text-gray-400">
+                                        <Gem size={40} strokeWidth={1} className="mx-auto mb-3 opacity-30" />
+                                        <p className="font-medium">Không tìm thấy chất liệu nào</p>
                                     </td>
                                 </tr>
-                            ) : filtered.map((c, idx) => (
-                                <tr key={c.id} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
+                            ) : filtered.map((m, idx) => (
+                                <tr key={m.id} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
                                     {/* Index */}
                                     <td style={{ padding: '16px', color: '#9ca3af', fontSize: 12, fontWeight: 700 }}>
                                         {idx + 1}
@@ -267,46 +338,52 @@ const ProductCategories = () => {
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-3">
                                             <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#7A1E1E' }}>
-                                                <Tag size={16} />
+                                                <Gem size={16} />
                                             </div>
                                             <div>
-                                                <div className="font-extrabold text-gray-900">{c.categoryName}</div>
-                                                <div className="text-[10px] text-gray-400 mt-0.5">ID: {c.id?.substring(0, 8)}...</div>
+                                                <div className="font-extrabold text-gray-900">{m.materialName}</div>
+                                                <div className="text-[10px] text-gray-400 mt-0.5">ID: {m.id?.substring(0, 8)}...</div>
                                             </div>
                                         </div>
                                     </td>
-                                    {/* Description */}
-                                    <td style={{ padding: '16px', maxWidth: 280 }}>
-                                        <span className="text-gray-500 text-xs leading-relaxed line-clamp-2">
-                                            {c.description || <span className="italic text-gray-300">—</span>}
-                                        </span>
+                                    {/* Type */}
+                                    <td style={{ padding: '16px' }}>
+                                        <TypeBadge type={m.materialType} />
+                                    </td>
+                                    {/* Color */}
+                                    <td style={{ padding: '16px' }}>
+                                        <div className="flex items-center gap-2">
+                                            {/* Color dot — try to map common color names */}
+                                            <ColorDot colorName={m.color} />
+                                            <span className="text-sm text-gray-700 font-medium">{m.color || '—'}</span>
+                                        </div>
                                     </td>
                                     {/* Status */}
                                     <td style={{ padding: '16px' }}>
-                                        <StatusBadge status={c.status} />
+                                        <StatusBadge status={m.status} />
                                     </td>
                                     {/* Actions */}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-1">
                                             <button
-                                                onClick={() => openEdit(c)}
+                                                onClick={() => openEdit(m)}
                                                 className="p-2 hover:bg-amber-50 text-amber-600 rounded-lg transition-colors"
                                                 title="Chỉnh sửa"
                                             >
                                                 <Edit3 size={16} />
                                             </button>
                                             <button
-                                                onClick={() => openDelete(c, 'soft')}
-                                                className={`p-2 rounded-lg transition-colors ${c.status === 'ACTIVE'
+                                                onClick={() => openDelete(m, 'soft')}
+                                                className={`p-2 rounded-lg transition-colors ${m.status === 'ACTIVE'
                                                     ? 'text-green-500 hover:bg-green-50'
                                                     : 'text-gray-300 hover:bg-gray-100'
                                                     }`}
-                                                title={c.status === 'ACTIVE' ? 'Đang hoạt động - Click để vô hiệu hoá' : 'Đang tắt - Click để kích hoạt'}
+                                                title={m.status === 'ACTIVE' ? 'Đang hoạt động - Click để vô hiệu hoá' : 'Đang tắt - Click để kích hoạt'}
                                             >
-                                                {c.status === 'ACTIVE' ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
+                                                {m.status === 'ACTIVE' ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
                                             </button>
                                             <button
-                                                onClick={() => openDelete(c, 'force')}
+                                                onClick={() => openDelete(m, 'force')}
                                                 className="p-2 hover:bg-red-50 text-red-500 rounded-lg transition-colors"
                                                 title="Xóa vĩnh viễn"
                                             >
@@ -322,25 +399,25 @@ const ProductCategories = () => {
             </div>
 
             {/* ═══════════════════════════════════════════════════════════════
-                Modal: Add / Edit Category
+                Modal: Add / Edit Material
             ══════════════════════════════════════════════════════════════════ */}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
-                    <div className={styles.modalContent} style={{ width: 520 }} onClick={e => e.stopPropagation()}>
+                    <div className={styles.modalContent} style={{ width: 540 }} onClick={e => e.stopPropagation()}>
                         {/* Header */}
                         <div className="flex justify-between items-center px-7 py-5 border-b border-gray-100">
                             <div className="flex items-center gap-3">
                                 <div className="p-2.5 rounded-xl bg-rose-50">
-                                    <Layers size={20} className="text-rose-800" />
+                                    <Gem size={20} className="text-rose-800" />
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-extrabold text-gray-900">
-                                        {modalMode === 'add' ? 'Thêm danh mục mới' : 'Chỉnh sửa danh mục'}
+                                        {modalMode === 'add' ? 'Thêm chất liệu mới' : 'Chỉnh sửa chất liệu'}
                                     </h3>
                                     <p className="text-xs text-gray-400 mt-0.5">
                                         {modalMode === 'add'
-                                            ? 'Điền thông tin để tạo danh mục sản phẩm mới'
-                                            : `Đang chỉnh sửa: ${selectedCategory?.categoryName}`}
+                                            ? 'Điền thông tin để tạo chất liệu mới'
+                                            : `Đang chỉnh sửa: ${selectedMaterial?.materialName}`}
                                     </p>
                                 </div>
                             </div>
@@ -351,41 +428,79 @@ const ProductCategories = () => {
 
                         {/* Body */}
                         <form onSubmit={handleSubmit} className="px-7 py-6 space-y-5">
-                            {/* Category Name */}
+                            {/* Material Name */}
                             <div>
                                 <label className={styles.formLabel}>
-                                    Tên danh mục <span className="text-red-500">*</span>
+                                    Tên chất liệu <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
-                                    <Tag size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <Gem size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                                     <input
                                         type="text"
                                         className={styles.formInput}
                                         style={{ paddingLeft: 36 }}
-                                        placeholder="VD: Vòng tay, Dây chuyền..."
-                                        value={formData.categoryName}
-                                        onChange={e => setFormData({ ...formData, categoryName: e.target.value })}
+                                        placeholder="VD: Ruby, Silver, Leather..."
+                                        value={formData.materialName}
+                                        onChange={e => setFormData({ ...formData, materialName: e.target.value })}
                                     />
                                 </div>
-                                {errors.categoryName && <p className="text-xs text-red-500 mt-1">{errors.categoryName}</p>}
+                                {errors.materialName && <p className="text-xs text-red-500 mt-1">{errors.materialName}</p>}
                             </div>
 
-                            {/* Description */}
+                            {/* Material Type */}
                             <div>
                                 <label className={styles.formLabel}>
-                                    Mô tả
+                                    Loại chất liệu <span className="text-red-500">*</span>
                                 </label>
                                 <div className="relative">
-                                    <FileText size={15} className="absolute left-3.5 top-3.5 text-gray-400" />
-                                    <textarea
-                                        rows={3}
+                                    <Layers size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        list="material-type-list"
                                         className={styles.formInput}
-                                        style={{ paddingLeft: 36, resize: 'none' }}
-                                        placeholder="Mô tả ngắn về danh mục sản phẩm..."
-                                        value={formData.description}
-                                        onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                        style={{ paddingLeft: 36 }}
+                                        placeholder="VD: Gemstone, Metal, Natural..."
+                                        value={formData.materialType}
+                                        onChange={e => setFormData({ ...formData, materialType: e.target.value })}
+                                    />
+                                    <datalist id="material-type-list">
+                                        {MATERIAL_TYPES.map(t => <option key={t} value={t} />)}
+                                    </datalist>
+                                </div>
+                                {errors.materialType && <p className="text-xs text-red-500 mt-1">{errors.materialType}</p>}
+                            </div>
+
+                            {/* Color */}
+                            <div>
+                                <label className={styles.formLabel}>
+                                    Màu sắc <span className="text-red-500">*</span>
+                                </label>
+                                <div className="relative">
+                                    <Pipette size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        className={styles.formInput}
+                                        style={{ paddingLeft: 36 }}
+                                        placeholder="VD: Red, Brown, Silver..."
+                                        value={formData.color}
+                                        onChange={e => setFormData({ ...formData, color: e.target.value })}
                                     />
                                 </div>
+                                {errors.color && <p className="text-xs text-red-500 mt-1">{errors.color}</p>}
+                                {/* Color presets */}
+                                <div className="flex flex-wrap gap-2 mt-3">
+                                    {COLOR_PRESETS.map(cp => (
+                                        <button
+                                            key={cp.name}
+                                            type="button"
+                                            title={cp.name}
+                                            onClick={() => setFormData({ ...formData, color: cp.name })}
+                                            className={`w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 ${formData.color === cp.name ? 'border-gray-800 scale-110' : 'border-transparent'}`}
+                                            style={{ background: cp.hex }}
+                                        />
+                                    ))}
+                                </div>
+                                <p className="text-[10px] text-gray-400 mt-1.5">Click vào ô màu để chọn nhanh</p>
                             </div>
 
                             {/* Footer Buttons */}
@@ -404,7 +519,7 @@ const ProductCategories = () => {
                                 >
                                     {isProcessing
                                         ? <Loader2 size={16} className="animate-spin" />
-                                        : modalMode === 'add' ? 'Tạo danh mục' : 'Lưu thay đổi'
+                                        : modalMode === 'add' ? 'Tạo chất liệu' : 'Lưu thay đổi'
                                     }
                                 </button>
                             </div>
@@ -427,18 +542,19 @@ const ProductCategories = () => {
                             {deleteType === 'force' ? <Trash2 size={36} strokeWidth={2.5} /> : <AlertCircle size={36} strokeWidth={2.5} />}
                         </div>
                         <h3 className="text-2xl font-black mb-4 text-gray-900 tracking-tight">
-                            {deleteType === 'force' ? 'XÓA VĨNH VIỄN?' : (selectedCategory?.status === 'ACTIVE' ? 'VÔ HIỆU HOÁ?' : 'KÍCH HOẠT?')}
+                            {deleteType === 'force' ? 'XÓA VĨNH VIỄN?' : (selectedMaterial?.status === 'ACTIVE' ? 'VÔ HIỆU HOÁ?' : 'KÍCH HOẠT?')}
                         </h3>
                         <p className="text-gray-500 text-[15px] mb-2 leading-relaxed px-4">
-                            {deleteType === 'force'
-                                ? <>Danh mục <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedCategory?.categoryName}</span> sẽ bị xóa hoàn toàn và không thể khôi phục.</>
-                                : (selectedCategory?.status === 'ACTIVE'
-                                    ? <>Danh mục <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedCategory?.categoryName}</span> sẽ bị vô hiệu hoá (INACTIVE).</>
-                                    : <>Kích hoạt lại danh mục <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedCategory?.categoryName}</span> để sử dụng (ACTIVE).</>)
-                            }
+                            {deleteType === 'force' ? (
+                                <>Chất liệu <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedMaterial?.materialName}</span> sẽ bị xóa hoàn toàn khỏi hệ thống.</>
+                            ) : (
+                                selectedMaterial?.status === 'ACTIVE'
+                                    ? <>Chất liệu <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedMaterial?.materialName}</span> sẽ bị vô hiệu hoá (INACTIVE).</>
+                                    : <>Kích hoạt lại chất liệu <span className="font-extrabold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{selectedMaterial?.materialName}</span> để sử dụng (ACTIVE).</>
+                            )}
                         </p>
                         {deleteType === 'force' && (
-                            <p className="text-orange-500 text-xs font-bold mb-8 flex items-center justify-center gap-1.5">
+                            <p className="text-orange-500 text-xs font-bold mb-4 flex items-center justify-center gap-1.5">
                                 <AlertTriangle size={12} /> Hành động này không thể hoàn tác!
                             </p>
                         )}
@@ -459,7 +575,7 @@ const ProductCategories = () => {
                             >
                                 {isProcessing
                                     ? <Loader2 className="animate-spin" size={18} />
-                                    : deleteType === 'force' ? 'XÓA VĨNH VIỄN' : (selectedCategory?.status === 'ACTIVE' ? 'VÔ HIỆU HOÁ' : 'KÍCH HOẠT')
+                                    : deleteType === 'force' ? 'XÓA VĨNH VIỄN' : (selectedMaterial?.status === 'ACTIVE' ? 'VÔ HIỆU HOÁ' : 'KÍCH HOẠT')
                                 }
                             </button>
                         </div>
@@ -470,4 +586,23 @@ const ProductCategories = () => {
     );
 };
 
-export default ProductCategories;
+// ─── Tiny colour dot helper ───────────────────────────────────────────────────
+const COLOR_MAP = {
+    red: '#ef4444', orange: '#f97316', yellow: '#eab308',
+    green: '#22c55e', blue: '#3b82f6', purple: '#a855f7',
+    pink: '#ec4899', brown: '#92400e', white: '#e5e7eb',
+    black: '#1f2937', silver: '#9ca3af', gold: '#d97706',
+    grey: '#9ca3af', gray: '#9ca3af',
+};
+
+const ColorDot = ({ colorName }) => {
+    const hex = COLOR_MAP[colorName?.toLowerCase()] || '#d1d5db';
+    return (
+        <span
+            className="w-4 h-4 rounded-full flex-shrink-0 border border-gray-200 inline-block"
+            style={{ background: hex }}
+        />
+    );
+};
+
+export default MaterialManagement;

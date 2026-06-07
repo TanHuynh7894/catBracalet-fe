@@ -43,6 +43,12 @@ export const softDeleteMaterialPatch = async (id) => {
 
 /** Xóa mềm chất liệu (Delete) */
 export const deleteMaterial = async (id) => {
-    const response = await api.delete(`/materials/${id}/soft-delete`);
+    const response = await api.patch(`/materials/${id}/soft-delete`);
+    return response.data;
+};
+
+/** Xóa vĩnh viễn chất liệu */
+export const forceDeleteMaterial = async (id) => {
+    const response = await api.delete(`/materials/${id}/force`);
     return response.data;
 };

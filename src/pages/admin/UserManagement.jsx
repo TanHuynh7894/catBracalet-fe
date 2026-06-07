@@ -3,7 +3,7 @@ import {
     Search, Filter, Download, Upload, Plus,
     ChevronDown, ChevronLeft, ChevronRight, Eye, Edit3, Trash2,
     Shield, ShieldCheck, ShieldAlert, UserCheck, UserX, Mail, Phone,
-    Calendar, MapPin, X, Check, AlertTriangle, Loader2, Camera, User
+    Calendar, MapPin, X, Check, AlertTriangle, Loader2, Camera, User, ToggleLeft, ToggleRight, AlertCircle
 } from 'lucide-react';
 import styles from './UserManagement.module.css';
 import {
@@ -128,7 +128,8 @@ const UserManagement = () => {
         setIsProcessing(true);
         try {
             await softDeleteUser(selectedUser.id);
-            showToast('Đã vô hiệu hóa người dùng', 'success');
+            const isActivating = selectedUser.status === 'INACTIVE' || selectedUser.status === 'BLOCKED';
+            showToast(isActivating ? 'Đã kích hoạt lại tài khoản người dùng' : 'Đã vô hiệu hóa tài khoản người dùng', 'success');
             setShowDeleteConfirm(false);
             fetchUsers();
         } catch (error) {
@@ -324,7 +325,16 @@ const UserManagement = () => {
                                         <div className="flex justify-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => openUserModal(user, 'view')} className="p-2 hover:bg-slate-100 text-slate-500 rounded-lg transition-colors" title="Xem chi tiết"><Eye size={16} /></button>
                                             <button onClick={() => openUserModal(user, 'edit')} className="p-2 hover:bg-amber-50 text-amber-500 rounded-lg transition-colors" title="Sửa"><Edit3 size={16} /></button>
-                                            <button onClick={() => { setSelectedUser(user); setShowDeleteConfirm(true); }} className="p-2 hover:bg-rose-50 text-rose-500 rounded-lg transition-colors" title="Vô hiệu hóa"><Trash2 size={16} /></button>
+                                            <button
+                                                onClick={() => { setSelectedUser(user); setShowDeleteConfirm(true); }}
+                                                className={`p-2 rounded-lg transition-colors ${user.status === 'ACTIVE'
+                                                    ? 'text-green-500 hover:bg-green-50'
+                                                    : 'text-gray-300 hover:bg-gray-100'
+                                                    }`}
+                                                title={user.status === 'ACTIVE' ? 'Đang hoạt động - Click để khóa' : 'Đang bị khóa - Click để mở'}
+                                            >
+                                                {user.status === 'ACTIVE' ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -353,12 +363,17 @@ const UserManagement = () => {
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div className={styles.modalContent} style={{ width: 480, textAlign: 'center', padding: '56px 48px' }} onClick={e => e.stopPropagation()}>
-                        <div className="mb-6 p-5 rounded-2xl inline-flex bg-rose-50 text-rose-600 shadow-sm">
-                            <AlertTriangle size={36} strokeWidth={2.5} />
+                        <div className={`mb-6 p-5 rounded-2xl inline-flex shadow-sm ${selectedUser?.status === 'ACTIVE' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                            <AlertCircle size={36} strokeWidth={2.5} />
                         </div>
-                        <h3 className="text-2xl font-black mb-5 text-gray-900 tracking-tight">Vô hiệu hóa tài khoản?</h3>
+                        <h3 className="text-2xl font-black mb-5 text-gray-900 tracking-tight">
+                            {selectedUser?.status === 'ACTIVE' ? 'Vô hiệu hóa tài khoản?' : 'Kích hoạt lại tài khoản?'}
+                        </h3>
                         <p className="text-gray-500 text-[15px] mb-12 leading-relaxed">
-                            Tài khoản <b>{selectedUser?.fullName}</b> sẽ <span className="text-rose-600 font-bold">không thể đăng nhập</span> vào hệ thống cho đến khi được quản trị viên kích hoạt lại.
+                            {selectedUser?.status === 'ACTIVE'
+                                ? <>Tài khoản <b>{selectedUser?.fullName}</b> sẽ <span className="text-rose-600 font-bold">không thể đăng nhập</span> vào hệ thống cho đến khi được quản trị viên kích hoạt lại.</>
+                                : <>Bạn có chắc chắn muốn <span className="text-emerald-600 font-extrabold">KÍCH HOẠT LẠI</span> tài khoản cho <b>{selectedUser?.fullName}</b>?</>
+                            }
                         </p>
                         <div className="flex gap-4">
                             <button

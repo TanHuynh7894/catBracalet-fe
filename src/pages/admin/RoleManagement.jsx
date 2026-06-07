@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
     Search, Plus, Edit3, Trash2, Shield, ShieldCheck, UserCheck,
-    Check, X, Loader2, AlertTriangle, Download
+    Check, X, Loader2, AlertTriangle, Download, ToggleLeft, ToggleRight, AlertCircle
 } from 'lucide-react';
 import { getAllRoles, createRole, updateRole, deleteRoleSoft, hardDeleteRole } from '../../services/roleService';
 import { useToast } from '../../context/ToastContext';
@@ -95,7 +95,8 @@ const RoleManagement = () => {
             if (deleteType === 'soft') {
                 const newStatus = selectedRole.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
                 await deleteRoleSoft(selectedRole.id, newStatus);
-                showToast(newStatus === 'ACTIVE' ? 'Đã khôi phục hoạt động cho vai trò' : 'Đã chuyển vai trò sang trạng thái không hoạt động', 'success');
+                const isActivating = newStatus === 'ACTIVE';
+                showToast(isActivating ? 'Đã khôi phục hoạt động cho vai trò' : 'Đã vô hiệu hoá vai trò thành công', 'success');
             } else {
                 await hardDeleteRole(selectedRole.id);
                 showToast('Đã xóa vĩnh viễn vai trò khỏi hệ thống', 'success');
@@ -213,23 +214,16 @@ const RoleManagement = () => {
                                                 >
                                                     <Edit3 size={16} />
                                                 </button>
-                                                {role.status === 'ACTIVE' ? (
-                                                    <button
-                                                        onClick={() => { setSelectedRole(role); setDeleteType('soft'); setShowDeleteConfirm(true); }}
-                                                        className="p-2 hover:bg-rose-50 text-rose-500 rounded-lg transition-colors"
-                                                        title="Khóa vai trò"
-                                                    >
-                                                        <X size={16} />
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        onClick={() => { setSelectedRole(role); setDeleteType('soft'); setShowDeleteConfirm(true); }}
-                                                        className="p-2 hover:bg-green-50 text-green-600 rounded-lg transition-colors"
-                                                        title="Khôi phục"
-                                                    >
-                                                        <Check size={16} />
-                                                    </button>
-                                                )}
+                                                <button
+                                                    onClick={() => { setSelectedRole(role); setDeleteType('soft'); setShowDeleteConfirm(true); }}
+                                                    className={`p-2 rounded-lg transition-colors ${role.status === 'ACTIVE'
+                                                        ? 'text-green-500 hover:bg-green-50'
+                                                        : 'text-gray-300 hover:bg-gray-100'
+                                                        }`}
+                                                    title={role.status === 'ACTIVE' ? 'Đang hoạt động - Click để vô hiệu hoá' : 'Đang tắt - Click để kích hoạt'}
+                                                >
+                                                    {role.status === 'ACTIVE' ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
+                                                </button>
                                                 <button
                                                     onClick={() => { setSelectedRole(role); setDeleteType('hard'); setShowDeleteConfirm(true); }}
                                                     className="p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors"
@@ -300,11 +294,8 @@ const RoleManagement = () => {
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div className={styles.modalContent} style={{ width: 480, textAlign: 'center', padding: '56px 48px' }} onClick={e => e.stopPropagation()}>
-                        <div className={`mb-6 p-5 rounded-2xl inline-flex shadow-sm ${deleteType === 'hard' ? 'bg-red-50 text-red-600' :
-                            selectedRole?.status === 'ACTIVE' ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'
-                            }`}>
-                            {deleteType === 'hard' ? <Trash2 size={36} strokeWidth={2.5} /> :
-                                selectedRole?.status === 'ACTIVE' ? <AlertTriangle size={36} strokeWidth={2.5} /> : <Check size={36} strokeWidth={2.5} />}
+                        <div className={`mb-6 p-5 rounded-2xl inline-flex shadow-sm ${deleteType === 'hard' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
+                            {deleteType === 'hard' ? <Trash2 size={36} strokeWidth={2.5} /> : <AlertCircle size={36} strokeWidth={2.5} />}
                         </div>
                         <h3 className="text-2xl font-black mb-5 text-gray-900 tracking-tight">
                             {deleteType === 'hard' ? 'XÓA VĨNH VIỄN?' :

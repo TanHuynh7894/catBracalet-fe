@@ -7,6 +7,8 @@ import {
     ShieldCheck, Clock, Star, MoveRight, ChevronRight,
     Brain, Flower2, Flower
 } from 'lucide-react';
+import { createConsultation } from '../../services/consultationService';
+import { useToast } from '../../context/ToastContext';
 import styles from './HomePage.module.css';
 
 // ─── LOCAL ASSETS ────────────────────────────────────────────────────────────
@@ -94,14 +96,42 @@ const fadeUpDelay = (d = 0) => ({
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 const HomePage = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [wishlist, setWishlist] = useState([]);
-    const [form, setForm] = useState({ name: '', dob: '', gender: 'Nam', phone: '', menh: 'Chưa rõ', goal: '' });
+    const [form, setForm] = useState({
+        fullName: '',
+        dateOfBirth: '',
+        timeOfBirth: '',
+        gender: 'MALE',
+        phoneNumber: '',
+        objective: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const toggleWishlist = (id) =>
         setWishlist(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
     const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-    const handleSubmit = e => { e.preventDefault(); };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            await createConsultation(form);
+            showToast('Gửi thông tin tư vấn thành công!', 'success');
+            setForm({
+                fullName: '',
+                dateOfBirth: '',
+                timeOfBirth: '',
+                gender: 'MALE',
+                phoneNumber: '',
+                objective: ''
+            });
+        } catch (error) {
+            showToast(error.message || 'Gửi thông tin thất bại', 'error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className={styles.page}>
@@ -396,45 +426,44 @@ const HomePage = () => {
                                 <div className={styles.formRow}>
                                     <div className={styles.formField}>
                                         <label className={styles.formLabel}>Họ và tên</label>
-                                        <input name="name" value={form.name} onChange={handleChange} type="text" placeholder="Nhập họ và tên" className={styles.formInput} />
+                                        <input name="fullName" value={form.fullName} onChange={handleChange} type="text" placeholder="Nhập họ và tên" className={styles.formInput} required />
                                     </div>
                                     <div className={styles.formField}>
                                         <label className={styles.formLabel}>Ngày sinh</label>
-                                        <input name="dob" value={form.dob} onChange={handleChange} type="date" className={styles.formInput} />
+                                        <input name="dateOfBirth" value={form.dateOfBirth} onChange={handleChange} type="date" className={styles.formInput} required />
                                     </div>
                                 </div>
                                 <div className={styles.formRow}>
+                                    <div className={styles.formField}>
+                                        <label className={styles.formLabel}>Giờ sinh (nếu biết)</label>
+                                        <input name="timeOfBirth" value={form.timeOfBirth} onChange={handleChange} type="time" className={styles.formInput} />
+                                    </div>
                                     <div className={styles.formField}>
                                         <label className={styles.formLabel}>Giới tính</label>
                                         <select name="gender" value={form.gender} onChange={handleChange} className={styles.formSelect}>
-                                            <option>Nam</option>
-                                            <option>Nữ</option>
+                                            <option value="MALE">Nam</option>
+                                            <option value="FEMALE">Nữ</option>
                                         </select>
-                                    </div>
-                                    <div className={styles.formField}>
-                                        <label className={styles.formLabel}>Số điện thoại</label>
-                                        <input name="phone" value={form.phone} onChange={handleChange} type="tel" placeholder="Nhập số điện thoại" className={styles.formInput} />
                                     </div>
                                 </div>
                                 <div className={styles.formRow}>
                                     <div className={styles.formField}>
-                                        <label className={styles.formLabel}>Mệnh (nếu biết)</label>
-                                        <select name="menh" value={form.menh} onChange={handleChange} className={styles.formSelect}>
-                                            <option>Kim</option>
-                                            <option>Mộc</option>
-                                            <option>Thủy</option>
-                                            <option>Hỏa</option>
-                                            <option>Thổ</option>
-                                            <option>Chưa rõ</option>
-                                        </select>
+                                        <label className={styles.formLabel}>Số điện thoại</label>
+                                        <input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} type="tel" placeholder="Nhập số điện thoại" className={styles.formInput} required />
                                     </div>
                                     <div className={styles.formField}>
                                         <label className={styles.formLabel}>Mục tiêu của bạn</label>
-                                        <input name="goal" value={form.goal} onChange={handleChange} type="text" placeholder="Ví dụ: Tài lộc, bình an..." className={styles.formInput} />
+                                        <input name="objective" value={form.objective} onChange={handleChange} type="text" placeholder="Ví dụ: Tài lộc, bình an..." className={styles.formInput} required />
                                     </div>
                                 </div>
-                                <motion.button type="submit" className={styles.btnSubmit} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                    GỬI THÔNG TIN
+                                <motion.button
+                                    type="submit"
+                                    className={styles.btnSubmit}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'ĐANG GỬI...' : 'GỬI THÔNG TIN'}
                                 </motion.button>
                             </form>
 

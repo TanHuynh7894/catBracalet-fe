@@ -13,7 +13,8 @@ import {
     LogOut,
     Settings,
     Users,
-    Ticket
+    Ticket,
+    MessageSquare
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -82,6 +83,7 @@ const AdminSidebar = () => {
             subItems: [
                 { title: 'Danh sách sản phẩm', path: '/admin/products' },
                 { title: 'Danh mục sản phẩm', path: '/admin/products/categories' },
+                { title: 'Chất liệu', path: '/admin/products/materials' },
                 { title: 'Bảng giá', path: '/admin/products/prices' }
             ]
         },
@@ -113,6 +115,12 @@ const AdminSidebar = () => {
             title: 'Khuyến mãi',
             icon: <Ticket size={18} />,
             path: '/admin/vouchers'
+        },
+        {
+            id: 'consultations',
+            title: 'Đăng ký tư vấn',
+            icon: <MessageSquare size={18} />,
+            path: '/admin/consultations'
         }
     ];
 
