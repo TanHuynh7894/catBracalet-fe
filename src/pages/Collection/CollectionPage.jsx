@@ -85,9 +85,9 @@ const CollectionPage = () => {
                     getProductCategories(),
                     getProductMaterials()
                 ]);
-                setProducts(productData || []);
-                setCategories(catData || []);
-                setMaterials(matData || []);
+                setProducts(Array.isArray(productData) ? productData : (productData?.products || []));
+                setCategories(Array.isArray(catData) ? catData : (catData?.categories || []));
+                setMaterials(Array.isArray(matData) ? matData : (matData?.materials || []));
             } catch (error) {
                 console.error("Error loading collection data:", error);
             } finally {
@@ -160,7 +160,8 @@ const CollectionPage = () => {
                 // Nếu có từ khóa tìm kiếm, ưu tiên dùng API search-by-name
                 if (searchKeyword) {
                     console.log(`Calling searchProductsByName for: "${searchKeyword}"`);
-                    data = await searchProductsByName(searchKeyword);
+                    const searchData = await searchProductsByName(searchKeyword);
+                    data = Array.isArray(searchData) ? searchData : (searchData?.products || []);
                     console.log("Search API results:", data);
 
                     // Nếu có thêm các bộ lọc khác (category, price), ta sẽ lọc tiếp trên kết quả search này
@@ -190,7 +191,8 @@ const CollectionPage = () => {
                     else if (selectedPrice === '120to200') { params.minPrice = 120000; params.maxPrice = 200000; }
 
                     console.log("Calling filter API with params:", params);
-                    const variants = await filterProductVariants(params);
+                    const variantsRaw = await filterProductVariants(params);
+                    const variants = Array.isArray(variantsRaw) ? variantsRaw : (variantsRaw?.variants || []);
 
                     const productsFromVariants = variants.map(v => {
                         const firstMapping = v.productVariantMappings?.[0];

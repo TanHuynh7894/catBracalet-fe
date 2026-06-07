@@ -71,14 +71,21 @@ export default function ProductDetail() {
                     getProducts(),
                     getAllProductVariants()
                 ]);
+
+                const productsList = Array.isArray(allProducts) ? allProducts : (allProducts?.products || []);
+                const variantsList = Array.isArray(allVariants) ? allVariants : (allVariants?.variants || []);
+
                 setProduct(data);
                 setCategories(catData || []);
                 setMaterials(matData || []);
 
                 // Tìm tất cả các variant thuộc về product này
-                const variantsForProduct = allVariants?.filter(v =>
-                    v.productVariantMappings?.some(m => m.productId === productId)
-                ) || [];
+                const variantsForProduct = variantsList.filter(v =>
+                    v.status === 'ACTIVE' &&
+                    (v.productVariantMappings || v.product_variant_mappings)?.some(m =>
+                        (m.productId === productId || m.product_id === productId) && m.status === 'ACTIVE'
+                    )
+                );
 
                 setProductVariants(variantsForProduct);
 
@@ -111,7 +118,7 @@ export default function ProductDetail() {
                     } catch (e) { }
                 }
 
-                const related = allProducts
+                const related = productsList
                     .filter(p => p.id !== productId)
                     .slice(0, 4);
                 setRelatedProducts(related);
@@ -133,10 +140,14 @@ export default function ProductDetail() {
 
     const images = (variant?.productVariantMappings?.length > 0)
         ? variant.productVariantMappings.flatMap(m =>
-            m.product?.productImages?.map(img => getFullImageUrl(img.imageUrl)) || []
+            (m.product?.productImages || m.product?.product_images)
+                ?.filter(img => img.status === 'ACTIVE')
+                ?.map(img => getFullImageUrl(img.imageUrl || img.url)) || []
         )
-        : (product?.productImages?.length > 0)
-            ? product.productImages.map(img => getFullImageUrl(img.imageUrl))
+        : ((product?.productImages || product?.product_images)?.length > 0)
+            ? (product.productImages || product.product_images)
+                .filter(img => img.status === 'ACTIVE')
+                .map(img => getFullImageUrl(img.imageUrl || img.url))
             : [getFullImageUrl(product?.thumbnail)].filter(Boolean);
 
     // Bỏ qua các ảnh trùng lặp nếu có

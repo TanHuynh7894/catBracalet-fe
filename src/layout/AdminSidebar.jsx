@@ -78,13 +78,12 @@ const AdminSidebar = () => {
         },
         {
             id: 'products',
-            title: 'Sản phẩm',
+            title: 'Quản lý sản phẩm',
             icon: <Package size={18} />,
             subItems: [
-                { title: 'Danh sách sản phẩm', path: '/admin/products' },
-                { title: 'Danh mục sản phẩm', path: '/admin/products/categories' },
+                { title: 'Tất cả sản phẩm', path: '/admin/products' },
+                { title: 'Danh mục', path: '/admin/products/categories' },
                 { title: 'Chất liệu', path: '/admin/products/materials' },
-                { title: 'Bảng giá', path: '/admin/products/prices' }
             ]
         },
         {
