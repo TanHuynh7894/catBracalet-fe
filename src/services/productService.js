@@ -145,7 +145,7 @@ export const filterProductVariants = async (params) => {
 
 /**
  * Lấy chi tiết biến thể theo ID
- * @param {string} variantId 
+ * @param {string} variantId
  */
 export const getProductVariantById = async (variantId) => {
     try {

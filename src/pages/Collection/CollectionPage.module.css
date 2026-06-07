@@ -296,137 +296,235 @@
     cursor: pointer;
 }
 
-/* Radio */
-.radioLabel {
+/* ── NEW SIDEBAR COMPONENTS ────────────────────────────── */
+
+/* Category/Collection List */
+.categoryList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.categoryOption {
     display: flex;
     align-items: center;
-    gap: 9px;
-    padding: 5px 0;
+    gap: 12px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
     cursor: pointer;
-    transition: color 0.2s;
+    text-align: left;
+    font-size: 13px;
+    color: var(--p-text);
+    transition: all 0.2s ease;
+    width: 100%;
 }
 
-.radioLabel:hover .radioText {
+.categoryOption:hover {
+    background: var(--p-bg);
+}
+
+.categoryOption.active {
+    background: rgba(122, 30, 30, 0.05);
+    border-color: rgba(122, 30, 30, 0.1);
     color: var(--p-primary);
+    font-weight: 600;
 }
 
-.radioInput {
-    display: none;
-}
-
-.radioCustom {
-    width: 15px;
-    height: 15px;
+.radioDot {
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     border: 1.5px solid var(--p-border);
+    background: #fff;
     flex-shrink: 0;
     position: relative;
-    transition: border-color 0.2s;
-    background: #FFFFFF;
 }
 
-.radioInput:checked+.radioCustom {
+.categoryOption.active .radioDot {
     border-color: var(--p-primary);
 }
 
-.radioInput:checked+.radioCustom::after {
+.categoryOption.active .radioDot::after {
     content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--p-primary);
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--p-primary);
 }
 
-.radioText {
-    font-size: 12.5px;
-    color: var(--p-text);
-    transition: color 0.2s;
-}
-
-/* Checkbox */
-.checkboxLabel {
+/* Material Grid */
+.materialGrid {
     display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 5px 0;
-    cursor: pointer;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.checkboxLabel:hover .checkboxText {
+.materialBtn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--p-border);
+    background: #fff;
+    font-size: 12px;
+    color: var(--p-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.materialBtn:hover {
+    border-color: var(--p-primary);
     color: var(--p-primary);
 }
 
-.checkboxInput {
-    display: none;
+.materialBtn.active {
+    background: var(--p-primary);
+    color: #fff;
+    border-color: var(--p-primary);
 }
 
-.checkboxCustom {
-    width: 15px;
-    height: 15px;
-    border-radius: 3px;
-    border: 1.5px solid var(--p-border);
-    flex-shrink: 0;
+/* Swatch Grid (Colors) */
+.swatchGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px 8px;
+}
+
+.swatchBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.swatchColor {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
     position: relative;
-    transition: all 0.2s;
-    background: #FFFFFF;
 }
 
-.checkboxInput:checked+.checkboxCustom {
+.swatchBtn:hover .swatchColor {
+    transform: scale(1.15);
+}
+
+.swatchBtn.active .swatchColor {
+    transform: scale(1.15);
+    outline: 2px solid var(--p-primary);
+    outline-offset: 2px;
+}
+
+.swatchLabel {
+    font-size: 10px;
+    color: var(--p-text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.swatchBtn.active .swatchLabel {
+    color: var(--p-primary);
+    font-weight: 700;
+}
+
+/* Size Grid */
+.sizeGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.sizeBtn {
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1.5px solid var(--p-border-light);
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--p-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sizeBtn:hover {
+    border-color: var(--p-primary);
+    color: var(--p-primary);
+}
+
+.sizeBtn.active {
+    background: #4B3A32;
+    color: #fff;
+    border-color: #4B3A32;
+}
+
+/* Price List */
+.priceList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.priceOption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid var(--p-border-light);
+    cursor: pointer;
+    font-size: 12.5px;
+    color: var(--p-text);
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.priceOption:hover {
+    border-color: var(--p-primary);
+    background: var(--p-bg);
+}
+
+.priceOption.active {
+    border-color: var(--p-primary);
+    background: rgba(122, 30, 30, 0.02);
+    color: var(--p-primary);
+    font-weight: 600;
+}
+
+.checkIcon {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--p-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.priceOption.active .checkIcon {
     border-color: var(--p-primary);
     background: var(--p-primary);
 }
 
-.checkboxInput:checked+.checkboxCustom::after {
-    content: '';
-    width: 4px;
-    height: 7px;
-    border: 1.5px solid #FFFFFF;
+.checkDot {
+    width: 10px;
+    height: 5px;
+    border: 2px solid #fff;
     border-top: none;
     border-left: none;
-    position: absolute;
-    top: 1px;
-    left: 4px;
-    transform: rotate(45deg);
-}
-
-.checkboxText {
-    font-size: 12.5px;
-    color: var(--p-text);
-    transition: color 0.2s;
-}
-
-/* Color picker */
-.colorGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-    padding: 4px 0;
-}
-
-.colorCircle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2.5px solid transparent;
-    outline: 2px solid var(--p-border);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-
-.colorCircle:hover {
-    outline-color: var(--p-text-muted);
-    transform: scale(1.1);
-}
-
-.colorCircleActive {
-    outline-color: var(--p-primary);
-    box-shadow: 0 0 0 2px rgba(122, 30, 30, 0.2);
-    transform: scale(1.12);
+    transform: rotate(45deg) translate(-1px, -1px);
 }
 
 /* Clear filter button */
@@ -449,10 +547,17 @@
     transition: all 0.25s ease;
 }
 
+.clearFilterBtn span {
+    flex: 1;
+    text-align: center;
+}
+
 .clearFilterBtn:hover {
     border-color: var(--p-primary);
     color: var(--p-primary);
     background: rgba(122, 30, 30, 0.03);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(122, 30, 30, 0.08);
 }
 
 /* ── SEARCH BAR ──────────────────────────────────────────────── */

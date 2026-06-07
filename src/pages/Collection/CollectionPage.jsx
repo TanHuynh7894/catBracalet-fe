@@ -6,7 +6,7 @@ import {
     Eye, SlidersHorizontal, X, Gem, Leaf, Sparkles, ShieldCheck,
 } from 'lucide-react';
 import styles from './CollectionPage.module.css';
-import { getProducts, filterProductVariants, searchProductsByName } from '../../services/productService';
+import { getProducts, filterProducts, filterProductVariants, searchProductsByName } from '../../services/productService';
 import { getProductCategories } from '../../services/categoryService';
 import { getProductMaterials } from '../../services/materialService';
 import { addToCart } from '../../services/cartService';
@@ -56,6 +56,20 @@ const CollectionPage = () => {
     const navigate = useNavigate();
     const { refreshCart } = useCart();
     const { showToast } = useToast();
+
+    // Map tên màu sang mã HEX để hiển thị swatch
+    const colorMap = {
+        'Đỏ': '#C0392B',
+        'Đen': '#2C3E50',
+        'Trắng': '#FFFFFF',
+        'Xanh': '#2980B9',
+        'Vàng': '#F1C40F',
+        'Nâu': '#8D6E63',
+        'Tím': '#8E44AD',
+        'Hồng': '#FF80AB',
+        'Xanh lá': '#27AE60',
+        'Trong suốt': 'transparent'
+    };
     // API State
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -63,16 +77,18 @@ const CollectionPage = () => {
     const [loading, setLoading] = useState(true);
 
     // Filter state
-    const [selectedCollection, setSelectedCollection] = useState(''); // Category ID
-    const [selectedStones, setSelectedStones] = useState([]); // Material IDs
+    const [selectedCollection, setSelectedCollection] = useState(''); // Category ID (client)
+    const [selectedStones, setSelectedStones] = useState([]); // Material IDs -> stoneType
     const [selectedPrice, setSelectedPrice] = useState('');
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedElements, setSelectedElements] = useState([]);
+    const [selectedColor, setSelectedColor] = useState('');        // color
+    const [selectedStoneColor, setSelectedStoneColor] = useState(''); // stoneColor
+    const [selectedSize, setSelectedSize] = useState('');          // size
     const [sortBy, setSortBy] = useState('newest');
     const [sortOpen, setSortOpen] = useState(false);
     const [wishlist, setWishlist] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+    const [filterLoading, setFilterLoading] = useState(false);
 
     const ITEMS_PER_PAGE = 9;
 
@@ -102,27 +118,19 @@ const CollectionPage = () => {
         setSelectedStones(prev =>
             prev.includes(materialId) ? prev.filter(s => s !== materialId) : [...prev, materialId]
         );
+        setCurrentPage(1);
     };
 
-    // Toggle element checkbox
-    const handleElementToggle = (el) => {
-        setSelectedElements(prev =>
-            prev.includes(el) ? prev.filter(e => e !== el) : [...prev, el]
-        );
+    // Toggle BST (click lần 2 để bỏ chọn)
+    const handleCollectionToggle = (id) => {
+        setSelectedCollection(prev => prev === id ? '' : id);
+        setCurrentPage(1);
     };
 
-    // Toggle color
-    const handleColorToggle = (color) => {
-        setSelectedColors(prev =>
-            prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
-        );
-    };
-
-    // Toggle wishlist
-    const handleWishlistToggle = (id) => {
-        setWishlist(prev =>
-            prev.includes(id) ? prev.filter(w => w !== id) : [...prev, id]
-        );
+    // Toggle giá (click lần 2 để bỏ chọn)
+    const handlePriceToggle = (value) => {
+        setSelectedPrice(prev => prev === value ? '' : value);
+        setCurrentPage(1);
     };
 
     // Clear all filters
@@ -130,8 +138,17 @@ const CollectionPage = () => {
         setSelectedCollection('');
         setSelectedStones([]);
         setSelectedPrice('');
-        setSelectedColors([]);
-        setSelectedElements([]);
+        setSelectedColor('');
+        setSelectedStoneColor('');
+        setSelectedSize('');
+        setCurrentPage(1);
+    };
+
+    // Toggle wishlist
+    const handleWishlistToggle = (id) => {
+        setWishlist(prev =>
+            prev.includes(id) ? prev.filter(w => w !== id) : [...prev, id]
+        );
     };
 
     const getFullImageUrl = (url) => {
@@ -146,30 +163,70 @@ const CollectionPage = () => {
 
     useEffect(() => {
         const fetchFiltered = async () => {
-            // Nếu không có bộ lọc nào được chọn và không có từ khóa tìm kiếm
-            if (!searchKeyword && !selectedCollection && !selectedPrice && sortBy === 'newest') {
-                console.log("No filters applied, showing all products:", products);
+            const hasFilters = searchKeyword || selectedCollection || selectedPrice ||
+                selectedStones.length > 0 || selectedColor || selectedStoneColor || selectedSize || sortBy !== 'newest';
+
+            if (!hasFilters) {
+                console.log("[Filter] No active filters, showing all products");
                 setFilteredResults(products);
                 return;
             }
 
-            setLoading(true);
+            setFilterLoading(true);
             try {
-                let data = [];
+                let initialData = [];
 
-                // Nếu có từ khóa tìm kiếm, ưu tiên dùng API search-by-name
                 if (searchKeyword) {
-                    console.log(`Calling searchProductsByName for: "${searchKeyword}"`);
+                    console.log("[Filter] Searching by keyword:", searchKeyword);
                     const searchData = await searchProductsByName(searchKeyword);
-                    data = Array.isArray(searchData) ? searchData : (searchData?.products || []);
-                    console.log("Search API results:", data);
+                    initialData = Array.isArray(searchData) ? searchData : (searchData?.products || []);
+                } else {
+                    // Map màu sang tiếng Anh cho API (dựa trên Swagger mẫu)
+                    const vntoenColor = {
+                        'Đỏ': 'Red', 'Đen': 'Black', 'Trắng': 'White', 'Xanh': 'Blue',
+                        'Vàng': 'Yellow', 'Nâu': 'Brown', 'Tím': 'Purple', 'Hồng': 'Pink', 'Xanh lá': 'Green'
+                    };
 
-                    // Nếu có thêm các bộ lọc khác (category, price), ta sẽ lọc tiếp trên kết quả search này
-                    let results = data;
-                    if (selectedCollection) {
-                        results = results.filter(p => p.categoryId === selectedCollection);
+                    const params = {};
+                    if (selectedStones.length > 0) {
+                        const mat = materials.find(m => m.id === selectedStones[0]);
+                        if (mat) params.stoneType = mat.materialName;
                     }
-                    // Filter giá (vì API search-by-name có thể không hỗ trợ filter giá trên server)
+                    if (selectedColor) params.color = vntoenColor[selectedColor] || selectedColor;
+                    if (selectedStoneColor) params.stoneColor = vntoenColor[selectedStoneColor] || selectedStoneColor;
+                    if (selectedSize) params.size = selectedSize;
+
+                    if (selectedPrice === 'under80') {
+                        params.maxPrice = 80000;
+                    } else if (selectedPrice === '80to120') {
+                        params.minPrice = 80000;
+                        params.maxPrice = 120000;
+                    } else if (selectedPrice === '120to200') {
+                        params.minPrice = 120000;
+                        params.maxPrice = 200000;
+                    }
+
+                    console.log("[Filter] >>> REQUEST PARAMS:", params);
+                    const filteredRaw = await filterProducts(params);
+                    console.log("[Filter] <<< API RESPONSE:", filteredRaw);
+
+                    initialData = Array.isArray(filteredRaw) ? filteredRaw : (filteredRaw?.products || filteredRaw?.data || []);
+                }
+
+                let results = initialData;
+
+                // Lọc theo danh mục (BST) - API ko hỗ trợ nên lọc client
+                if (selectedCollection) {
+                    results = results.filter(p => p.categoryId === selectedCollection);
+                }
+
+                // Nếu là search, lọc tiếp các tiêu chuẩn khác ở client
+                if (searchKeyword) {
+                    if (selectedStones.length > 0) {
+                        results = results.filter(p =>
+                            p.product_materials?.some(m => selectedStones.includes(m.material_id || m.materialId))
+                        );
+                    }
                     if (selectedPrice) {
                         results = results.filter(p => {
                             const price = Number(p.basePrice);
@@ -179,45 +236,25 @@ const CollectionPage = () => {
                             return true;
                         });
                     }
-                    setFilteredResults(results);
-                } else {
-                    // Nếu không có keyword nhưng có các bộ lọc khác, dùng API filter
-                    const params = {};
-                    if (selectedCollection) params.categoryId = selectedCollection;
-                    if (sortBy && sortBy !== 'newest') params.sortBy = sortBy;
-
-                    if (selectedPrice === 'under80') { params.maxPrice = 80000; }
-                    else if (selectedPrice === '80to120') { params.minPrice = 80000; params.maxPrice = 120000; }
-                    else if (selectedPrice === '120to200') { params.minPrice = 120000; params.maxPrice = 200000; }
-
-                    console.log("Calling filter API with params:", params);
-                    const variantsRaw = await filterProductVariants(params);
-                    const variants = Array.isArray(variantsRaw) ? variantsRaw : (variantsRaw?.variants || []);
-
-                    const productsFromVariants = variants.map(v => {
-                        const firstMapping = v.productVariantMappings?.[0];
-                        if (!firstMapping?.product) return null;
-                        return {
-                            ...firstMapping.product,
-                            variantId: v.id,
-                            displayPrice: Number(firstMapping.product.basePrice)
-                        };
-                    }).filter(Boolean);
-
-                    const uniqueProducts = Array.from(new Map(productsFromVariants.map(p => [p.id, p])).values());
-                    setFilteredResults(uniqueProducts);
                 }
+
+                // Sắp xếp
+                if (sortBy === 'priceAsc') results = [...results].sort((a, b) => Number(a.basePrice) - Number(b.basePrice));
+                else if (sortBy === 'priceDesc') results = [...results].sort((a, b) => Number(b.basePrice) - Number(a.basePrice));
+
+                console.log("[Filter] Result count:", results.length);
+                setFilteredResults(Array.from(new Map(results.map(p => [p.id, p])).values()));
             } catch (error) {
-                console.error("Search/Filter Error:", error);
+                console.error("[Filter] CRITICAL ERROR:", error);
                 setFilteredResults(products);
             } finally {
-                setLoading(false);
+                setFilterLoading(false);
             }
         };
 
-        const timer = setTimeout(fetchFiltered, 500); // Thêm lại debounce để tránh spam API
+        const timer = setTimeout(fetchFiltered, 400);
         return () => clearTimeout(timer);
-    }, [searchKeyword, selectedCollection, selectedPrice, sortBy, products]);
+    }, [searchKeyword, selectedCollection, selectedPrice, sortBy, products, selectedStones, selectedColor, selectedStoneColor, selectedSize]);
 
     const totalPages = Math.ceil(filteredResults.length / ITEMS_PER_PAGE);
     const paginatedProducts = filteredResults.slice(
@@ -342,103 +379,124 @@ const CollectionPage = () => {
                                 <X size={16} />
                             </button>
                         </div>
-                        <p className={styles.sidebarSubtitle}>Chọn bộ lọc sản phẩm</p>
+                        <p className={styles.sidebarSubtitle}>Chọn bộ lọc sản phẩm để tìm kiếm phiên bản ưng ý nhất</p>
 
                         {/* Collection Filter */}
                         <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Tên BST</h3>
-                            {categories.map(col => (
-                                <label key={col.id} className={styles.radioLabel}>
-                                    <input
-                                        type="radio"
-                                        name="collection"
-                                        value={col.id}
-                                        checked={selectedCollection === col.id}
-                                        onChange={() => setSelectedCollection(col.id)}
-                                        className={styles.radioInput}
-                                    />
-                                    <span className={styles.radioCustom}></span>
-                                    <span className={styles.radioText}>{col.categoryName}</span>
-                                </label>
-                            ))}
-                        </div>
-
-                        {/* Stone Type Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Loại đá</h3>
-                            {materials.map(stone => (
-                                <label key={stone.id} className={styles.checkboxLabel}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedStones.includes(stone.id)}
-                                        onChange={() => handleStoneToggle(stone.id)}
-                                        className={styles.checkboxInput}
-                                    />
-                                    <span className={styles.checkboxCustom}></span>
-                                    <span className={styles.checkboxText}>{stone.materialName}</span>
-                                </label>
-                            ))}
-                        </div>
-
-                        {/* Price Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Giá tiền</h3>
-                            {[
-                                { label: 'Dưới 80k', value: 'under80' },
-                                { label: '80k - 120k', value: '80to120' },
-                                { label: '120k - 200k', value: '120to200' },
-                            ].map(price => (
-                                <label key={price.value} className={styles.radioLabel}>
-                                    <input
-                                        type="radio"
-                                        name="price"
-                                        value={price.value}
-                                        checked={selectedPrice === price.value}
-                                        onChange={() => setSelectedPrice(price.value)}
-                                        className={styles.radioInput}
-                                    />
-                                    <span className={styles.radioCustom}></span>
-                                    <span className={styles.radioText}>{price.label}</span>
-                                </label>
-                            ))}
-                        </div>
-
-                        {/* Color Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Màu sắc</h3>
-                            <div className={styles.colorGrid}>
-                                {colorOptions.map(col => (
+                            <h3 className={styles.filterGroupTitle}>Bộ sưu tập</h3>
+                            <div className={styles.categoryList}>
+                                {categories.map(col => (
                                     <button
-                                        key={col.value}
-                                        className={`${styles.colorCircle} ${selectedColors.includes(col.value) ? styles.colorCircleActive : ''}`}
-                                        style={{ backgroundColor: col.hex }}
-                                        onClick={() => handleColorToggle(col.value)}
-                                        title={col.label}
-                                        aria-label={col.label}
-                                    />
+                                        key={col.id}
+                                        className={`${styles.categoryOption} ${selectedCollection === col.id ? styles.active : ''}`}
+                                        onClick={() => handleCollectionToggle(col.id)}
+                                    >
+                                        <span className={styles.radioDot}></span>
+                                        {col.categoryName}
+                                    </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Element Filter */}
+                        {/* Stone Type Filter */}
                         <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Mệnh phù hợp</h3>
-                            {['Kim', 'Mộc', 'Thủy', 'Hỏa', 'Thổ'].map(el => (
-                                <label key={el} className={styles.checkboxLabel}>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedElements.includes(el)}
-                                        onChange={() => handleElementToggle(el)}
-                                        className={styles.checkboxInput}
-                                    />
-                                    <span className={styles.checkboxCustom}></span>
-                                    <span className={styles.checkboxText}>{el}</span>
-                                </label>
-                            ))}
+                            <h3 className={styles.filterGroupTitle}>Chất liệu đá</h3>
+                            <div className={styles.materialGrid}>
+                                {materials.map(stone => (
+                                    <button
+                                        key={stone.id}
+                                        className={`${styles.materialBtn} ${selectedStones.includes(stone.id) ? styles.active : ''}`}
+                                        onClick={() => handleStoneToggle(stone.id)}
+                                    >
+                                        {stone.materialName}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Color Filter */}
+                        <div className={styles.filterGroup}>
+                            <h3 className={styles.filterGroupTitle}>Màu sắc dây</h3>
+                            <div className={styles.swatchGrid}>
+                                {['Đỏ', 'Đen', 'Trắng', 'Xanh', 'Vàng', 'Nâu', 'Tím', 'Hồng'].map(c => (
+                                    <button
+                                        key={c}
+                                        className={`${styles.swatchBtn} ${selectedColor === c ? styles.active : ''}`}
+                                        onClick={() => setSelectedColor(prev => prev === c ? '' : c)}
+                                        title={c}
+                                    >
+                                        <div
+                                            className={styles.swatchColor}
+                                            style={{ backgroundColor: colorMap[c] || '#ddd' }}
+                                        ></div>
+                                        <span className={styles.swatchLabel}>{c}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Stone Color Filter */}
+                        <div className={styles.filterGroup}>
+                            <h3 className={styles.filterGroupTitle}>Màu sắc đá</h3>
+                            <div className={styles.swatchGrid}>
+                                {['Đỏ', 'Xanh', 'Trắng', 'Tím', 'Vàng', 'Xanh lá', 'Đen', 'Hồng'].map(c => (
+                                    <button
+                                        key={c}
+                                        className={`${styles.swatchBtn} ${selectedStoneColor === c ? styles.active : ''}`}
+                                        onClick={() => setSelectedStoneColor(prev => prev === c ? '' : c)}
+                                        title={c}
+                                    >
+                                        <div
+                                            className={styles.swatchColor}
+                                            style={{ backgroundColor: colorMap[c] || '#ddd' }}
+                                        ></div>
+                                        <span className={styles.swatchLabel}>{c}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Size Filter */}
+                        <div className={styles.filterGroup}>
+                            <h3 className={styles.filterGroupTitle}>Kích thước</h3>
+                            <div className={styles.sizeGrid}>
+                                {['13cm', '14cm', '15cm', '16cm', '17cm', '18cm', 'S', 'M', 'L'].map(s => (
+                                    <button
+                                        key={s}
+                                        className={`${styles.sizeBtn} ${selectedSize === s ? styles.active : ''}`}
+                                        onClick={() => setSelectedSize(prev => prev === s ? '' : s)}
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Price Filter */}
+                        <div className={styles.filterGroup}>
+                            <h3 className={styles.filterGroupTitle}>Khoảng giá</h3>
+                            <div className={styles.priceList}>
+                                {[
+                                    { label: 'Dưới 80,000đ', value: 'under80' },
+                                    { label: '80,000đ - 120,000đ', value: '80to120' },
+                                    { label: '120,000đ - 200,000đ', value: '120to200' },
+                                ].map(price => (
+                                    <button
+                                        key={price.value}
+                                        className={`${styles.priceOption} ${selectedPrice === price.value ? styles.active : ''}`}
+                                        onClick={() => handlePriceToggle(price.value)}
+                                    >
+                                        <div className={styles.checkIcon}>
+                                            {selectedPrice === price.value && <div className={styles.checkDot}></div>}
+                                        </div>
+                                        {price.label}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         <button className={styles.clearFilterBtn} onClick={handleClearFilters}>
-                            Xóa tất cả bộ lọc
+                            <span>Xóa tất cả bộ lọc</span>
                             <X size={14} />
                         </button>
                     </aside>
@@ -498,7 +556,11 @@ const CollectionPage = () => {
                         </div>
 
                         {/* Product Grid */}
-                        {paginatedProducts.length > 0 ? (
+                        {filterLoading ? (
+                            <div className="flex justify-center items-center py-24">
+                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: '#7A1E1E' }}></div>
+                            </div>
+                        ) : paginatedProducts.length > 0 ? (
                             <div className={styles.productGrid}>
                                 {paginatedProducts.map((product, i) => (
                                     <motion.div
