@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Phone, Edit2, Trash2, MapPin, X, Plus, Check } from 'lucide-react';
+import { Phone, Edit2, Trash2, MapPin, X, Plus, Check, ChevronDown } from 'lucide-react';
 import { getAddressesByUserId, createAddress, updateAddress, deleteAddress, setDefaultAddress } from '../../services/addressService';
+import { getProvinces, getDistricts, getWards } from '../../services/shipmentService';
 import { useToast } from '../../context/ToastContext';
 import styles from './ShippingAddresses.module.css';
+
 
 const ShippingAddresses = () => {
     const { showToast, showConfirm } = useToast();
@@ -14,20 +16,40 @@ const ShippingAddresses = () => {
     const [editingAddress, setEditingAddress] = useState(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // Form state
     const [formData, setFormData] = useState({
         receiverName: '',
         phone: '',
         province: '',
+        provinceId: '',
         district: '',
+        districtId: '',
         ward: '',
+        wardId: '',
         detailAddress: '',
         isDefault: false
     });
 
+    const [provinces, setProvinces] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
+
     useEffect(() => {
         fetchAddresses();
+        loadProvinces();
     }, []);
+
+    const loadProvinces = async () => {
+        try {
+            const data = await getProvinces();
+            console.log('Provinces data:', data);
+            setProvinces(Array.isArray(data) ? data : (data?.data || []));
+        } catch (err) {
+            console.error('Error loading provinces:', err);
+        }
+    };
+
+
 
     const fetchAddresses = async () => {
         try {
@@ -40,38 +62,62 @@ const ShippingAddresses = () => {
             setError(null);
         } catch (err) {
             console.error('Error fetching addresses:', err);
-            setError('Không thể tải danh sách địa chỉ. Vui lòng thử lại sau.');
+            setError(typeof err === 'string' ? err : (err?.message || 'Không thể tải danh sách địa chỉ. Vui lòng thử lại sau.'));
         } finally {
             setLoading(false);
         }
     };
 
-    const handleOpenModal = (address = null) => {
+    const handleOpenModal = async (address = null) => {
         if (address) {
             setEditingAddress(address);
             setFormData({
-                receiverName: address.receiverName,
-                phone: address.phone,
-                province: address.province,
-                district: address.district,
-                ward: address.ward,
-                detailAddress: address.detailAddress,
-                isDefault: address.isDefault
+                receiverName: address.receiverName || '',
+                phone: address.phone || '',
+                province: address.province || '',
+                provinceId: address.provinceId || '',
+                district: address.district || '',
+                districtId: address.districtId || '',
+                ward: address.ward || '',
+                wardId: address.wardId || '',
+                detailAddress: address.detailAddress || '',
+                isDefault: address.isDefault || false
             });
+
+            // Load districts and wards if they exist
+            if (address.provinceId) {
+                try {
+                    const d = await getDistricts(address.provinceId);
+                    setDistricts(Array.isArray(d) ? d : (d?.data || []));
+                    if (address.districtId) {
+                        const w = await getWards(address.districtId);
+                        setWards(Array.isArray(w) ? w : (w?.data || []));
+                    }
+                } catch (err) {
+                    console.error('Error loading sub-locations:', err);
+                }
+            }
+
         } else {
             setEditingAddress(null);
+            setDistricts([]);
+            setWards([]);
             setFormData({
                 receiverName: '',
                 phone: '',
                 province: '',
+                provinceId: '',
                 district: '',
+                districtId: '',
                 ward: '',
+                wardId: '',
                 detailAddress: '',
                 isDefault: false
             });
         }
         setIsModalOpen(true);
     };
+
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -86,6 +132,69 @@ const ShippingAddresses = () => {
         }));
     };
 
+    const handleProvinceChange = async (e) => {
+        const provinceId = e.target.value;
+        const provinceName = provinces.find(p => p.id === provinceId)?.name || '';
+
+        setFormData(prev => ({
+            ...prev,
+            province: provinceName,
+            provinceId: provinceId,
+            district: '',
+            districtId: '',
+            ward: '',
+            wardId: ''
+        }));
+        setDistricts([]);
+        setWards([]);
+
+        if (provinceId) {
+            try {
+                const data = await getDistricts(provinceId);
+                setDistricts(Array.isArray(data) ? data : (data?.data || []));
+            } catch (err) {
+                showToast('Không thể tải danh sách Quận/Huyện', 'error');
+            }
+        }
+
+    };
+
+    const handleDistrictChange = async (e) => {
+        const districtId = e.target.value;
+        const districtName = districts.find(d => d.id === districtId)?.name || '';
+
+        setFormData(prev => ({
+            ...prev,
+            district: districtName,
+            districtId: districtId,
+            ward: '',
+            wardId: ''
+        }));
+        setWards([]);
+
+        if (districtId) {
+            try {
+                const data = await getWards(districtId);
+                setWards(Array.isArray(data) ? data : (data?.data || []));
+            } catch (err) {
+                showToast('Không thể tải danh sách Phường/Xã', 'error');
+            }
+        }
+
+    };
+
+    const handleWardChange = (e) => {
+        const wardId = e.target.value;
+        const wardName = wards.find(w => w.id === wardId)?.name || '';
+
+        setFormData(prev => ({
+            ...prev,
+            ward: wardName,
+            wardId: wardId
+        }));
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
@@ -93,22 +202,26 @@ const ShippingAddresses = () => {
             const userDataStr = localStorage.getItem('user');
             const userData = JSON.parse(userDataStr);
 
+            // Strip IDs before sending to backend as requested
+            const { provinceId, districtId, wardId, ...finalData } = formData;
+
             if (editingAddress) {
                 await updateAddress(userData.id, editingAddress.id, {
-                    ...formData,
+                    ...finalData,
                     status: 'ACTIVE'
                 });
             } else {
                 await createAddress(userData.id, {
-                    ...formData,
+                    ...finalData,
                     status: 'ACTIVE'
                 });
             }
+
             showToast(editingAddress ? 'Cập nhật địa chỉ thành công' : 'Thêm địa chỉ mới thành công');
             await fetchAddresses();
             handleCloseModal();
         } catch (err) {
-            showToast(err || 'Đã xảy ra lỗi khi lưu địa chỉ.', 'error');
+            showToast(typeof err === 'string' ? err : (err?.message || 'Đã xảy ra lỗi khi lưu địa chỉ.'), 'error');
         } finally {
             setSubmitting(false);
         }
@@ -125,8 +238,9 @@ const ShippingAddresses = () => {
                     await fetchAddresses();
                     showToast('Đã xóa địa chỉ');
                 } catch (err) {
-                    showToast(err || 'Không thể xóa địa chỉ.', 'error');
+                    showToast(typeof err === 'string' ? err : (err?.message || 'Không thể xóa địa chỉ.'), 'error');
                 }
+
             }
         );
     };
@@ -139,8 +253,9 @@ const ShippingAddresses = () => {
             await fetchAddresses();
             showToast('Đã thiết lập địa chỉ mặc định');
         } catch (err) {
-            showToast(err || 'Không thể đặt mặc định.', 'error');
+            showToast(typeof err === 'string' ? err : (err?.message || 'Không thể đặt mặc định.'), 'error');
         }
+
     };
 
     const renderModal = () => {
@@ -185,43 +300,61 @@ const ShippingAddresses = () => {
                         </div>
                         <div className={styles.field}>
                             <label className={styles.label}>Tỉnh / Thành phố</label>
-                            <select
-                                name="province"
-                                value={formData.province}
-                                onChange={handleInputChange}
-                                className={styles.select}
-                                required
-                            >
-                                <option value="">Chọn Tỉnh/TP</option>
-                                <option value="TP. Ho Chi Minh">TP. Hồ Chí Minh</option>
-                                <option value="Ha Noi">Hà Nội</option>
-                                <option value="Da Nang">Đà Nẵng</option>
-                            </select>
+                            <div className="relative">
+                                <select
+                                    name="provinceId"
+                                    value={formData.provinceId}
+                                    onChange={handleProvinceChange}
+                                    className={styles.select}
+                                    required
+                                >
+                                    <option value="">Chọn Tỉnh/TP</option>
+                                    {Array.isArray(provinces) && provinces.map(p => (
+                                        <option key={p.id} value={p.id}>{p.name}</option>
+                                    ))}
+
+                                </select>
+                            </div>
                         </div>
                         <div className={styles.field}>
                             <label className={styles.label}>Quận / Huyện</label>
-                            <input
-                                type="text"
-                                name="district"
-                                value={formData.district}
-                                onChange={handleInputChange}
-                                className={styles.input}
-                                placeholder="Vd: Quận 1"
-                                required
-                            />
+                            <div className="relative">
+                                <select
+                                    name="districtId"
+                                    value={formData.districtId}
+                                    onChange={handleDistrictChange}
+                                    className={styles.select}
+                                    disabled={!formData.provinceId}
+                                    required
+                                >
+                                    <option value="">Chọn Quận/Huyện</option>
+                                    {Array.isArray(districts) && districts.map(d => (
+                                        <option key={d.id} value={d.id}>{d.name}</option>
+                                    ))}
+
+                                </select>
+                            </div>
                         </div>
                         <div className={styles.field}>
                             <label className={styles.label}>Phường / Xã</label>
-                            <input
-                                type="text"
-                                name="ward"
-                                value={formData.ward}
-                                onChange={handleInputChange}
-                                className={styles.input}
-                                placeholder="Vd: Phường 1"
-                                required
-                            />
+                            <div className="relative">
+                                <select
+                                    name="wardId"
+                                    value={formData.wardId}
+                                    onChange={handleWardChange}
+                                    className={styles.select}
+                                    disabled={!formData.districtId}
+                                    required
+                                >
+                                    <option value="">Chọn Phường/Xã</option>
+                                    {Array.isArray(wards) && wards.map(w => (
+                                        <option key={w.id} value={w.id}>{w.name}</option>
+                                    ))}
+
+                                </select>
+                            </div>
                         </div>
+
                         <div className={`${styles.field} ${styles.fieldFull}`}>
                             <label className={styles.label}>Địa chỉ chi tiết</label>
                             <input
@@ -292,8 +425,8 @@ const ShippingAddresses = () => {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {addresses.length > 0 ? (
-                    addresses.sort((a, b) => (b.isDefault ? 1 : -1)).map((address) => (
+                {Array.isArray(addresses) && addresses.length > 0 ? (
+                    [...addresses].sort((a, b) => (b.isDefault ? 1 : -1)).map((address) => (
                         <div
                             key={address.id}
                             className={`relative group p-8 border rounded-2xl shadow-sm transition-all duration-300 ${address.isDefault

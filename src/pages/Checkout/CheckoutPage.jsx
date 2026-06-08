@@ -1,91 +1,336 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
-    User, Calendar, Phone, Mail, Globe, MapPin, Building2,
-    Home, FileText, Gift, Tag, ChevronRight, Lock,
-    ShieldCheck, Gem, Headphones, Package
+    User, Phone, Mail, MapPin, Building2,
+    Home, Tag, ChevronRight, Lock,
+    ShieldCheck, Gem, Headphones, Ticket, X as CloseIcon, Loader2, ArrowLeft
 } from 'lucide-react';
 import styles from './CheckoutPage.module.css';
+import { getProvinces, getDistricts, getWards, calculateShippingFee } from '../../services/shipmentService';
+import { getActiveVouchers, getVoucherByCode } from '../../services/voucherService';
+import { getAddressesByUserId } from '../../services/addressService';
+import { checkout } from '../../services/orderService';
+import { useToast } from '../../context/ToastContext';
+import { useCart } from '../../context/CartContext';
+import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-const CART_ITEMS = [
-    {
-        id: 1,
-        name: 'VÒNG THẠCH ANH VÀNG 3A',
-        stone: 'Thạch anh vàng 3A',
-        charm: 'Hoa sen vàng 24K',
-        beadSize: '8mm',
-        wristSize: '15cm',
-        price: 1450000,
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1573408301185-9519f94816b4?w=200&h=200&fit=crop&q=80',
-    },
-    {
-        id: 2,
-        name: 'VÒNG OBSIDIAN ĐEN 5A',
-        stone: 'Obsidian đen 5A',
-        charm: 'Tỳ hưu vàng 24K',
-        beadSize: '10mm',
-        wristSize: '16cm',
-        price: 1250000,
-        quantity: 1,
-        image: 'https://images.unsplash.com/photo-1615209853186-e4bd66602508?w=200&h=200&fit=crop&q=80',
-    },
-];
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 
 const PAYMENT_METHODS = [
-    { id: 'vnpay', label: 'VNPay', logo: '💳', color: '#E7392C' },
-    { id: 'momo', label: 'MoMo', logo: '📱', color: '#A50064' },
-    { id: 'bank', label: 'Chuyển khoản ngân hàng', logo: '🏦', color: '#2563EB' },
-    { id: 'cod', label: 'Thanh toán khi nhận hàng (COD)', logo: '🚚', color: '#16A34A' },
+    { id: 'bank', label: 'Chuyển khoản ngân hàng (PayOS)', logo: '🏦', color: '#2563EB' },
 ];
 
-const PROVINCES = ['Hà Nội', 'TP. Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ'];
-const DISTRICTS = ['Quận 1', 'Quận 2', 'Quận 3', 'Bình Thạnh', 'Gò Vấp'];
-const WARDS = ['Phường Bến Nghé', 'Phường Bến Thành', 'Phường Cầu Kho', 'Phường Nguyễn Thái Bình'];
-
-const SHIPPING_FEE = 30000;
-const GIFT_FEE = 49000;
-const DISCOUNT = 100000;
-
-const formatVND = (n) => new Intl.NumberFormat('vi-VN').format(n) + 'đ';
+const formatVND = (amount) => new Intl.NumberFormat('vi-VN').format(amount) + 'đ';
 
 const fadeUp = {
-    initial: { opacity: 0, y: 30 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: false },
-    transition: { duration: 0.6 },
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 }
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 const CheckoutPage = () => {
+    const navigate = useNavigate();
+    const { showToast } = useToast();
+    const { cartItems, refreshCart } = useCart();
+
+    const [currentUser, setCurrentUser] = useState(null);
+    const [addresses, setAddresses] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+
     const [form, setForm] = useState({
-        fullName: '', dob: '', phone: '', email: '',
-        country: 'Việt Nam', province: '', district: '', ward: '',
-        address: '', note: '',
+        fullName: '', phone: '', email: '',
+        provinceId: '', province: '', districtId: '', district: '', wardId: '', ward: '',
+        address: '',
     });
-    const [isGift, setIsGift] = useState(true);
-    const [giftMessage, setGiftMessage] = useState('');
+
     const [promoOpen, setPromoOpen] = useState(false);
-    const [payment, setPayment] = useState('vnpay');
+    const [payment, setPayment] = useState('bank');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [shippingFee, setShippingFee] = useState(0);
+    const [isCalculatingShip, setIsCalculatingShip] = useState(false);
+
+    const [provinces, setProvinces] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
+    // Voucher state
+    const [voucherCode, setVoucherCode] = useState('');
+    const [appliedVoucher, setAppliedVoucher] = useState(null);
+    const [availableVouchers, setAvailableVouchers] = useState([]);
+    const [showVoucherModal, setShowVoucherModal] = useState(false);
+    const [isApplyingVoucher, setIsApplyingVoucher] = useState(false);
+
+    useEffect(() => {
+        const loadInitialData = async () => {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                showToast('Vui lòng đăng nhập để thanh toán', 'error');
+                navigate('/login');
+                return;
+            }
+            const user = JSON.parse(userStr);
+            setCurrentUser(user);
+
+            // Auto-fill form with user info
+            setForm(prev => ({
+                ...prev,
+                fullName: user.fullName || '',
+                phone: user.phone || '',
+                email: user.email || ''
+            }));
+
+            try {
+                const [pData, vData, addrData] = await Promise.all([
+                    getProvinces(),
+                    getActiveVouchers(),
+                    getAddressesByUserId(user.id)
+                ]);
+
+                setProvinces(Array.isArray(pData) ? pData : (pData?.data || []));
+                setAvailableVouchers(Array.isArray(vData) ? vData : []);
+
+                const addressList = Array.isArray(addrData) ? addrData : (addrData?.data || []);
+                setAddresses(addressList);
+
+                // Find default address
+                const defaultAddr = addressList.find(a => a.isDefault) || addressList[0];
+                if (defaultAddr) {
+                    setSelectedAddress(defaultAddr);
+                    setForm(prev => ({
+                        ...prev,
+                        fullName: defaultAddr.receiverName || user.fullName,
+                        phone: defaultAddr.phone || user.phone,
+                        province: defaultAddr.province,
+                        district: defaultAddr.district,
+                        ward: defaultAddr.ward,
+                        address: defaultAddr.detailAddress
+                    }));
+                }
+            } catch (err) {
+                console.error('Error loading checkout data:', err);
+            }
+        };
+        loadInitialData();
+    }, [navigate, showToast]);
+
+    // Handle Shipping Fee Calculation when address changes
+    useEffect(() => {
+        const fetchShippingFee = async () => {
+            if (selectedAddress?.id) {
+                setIsCalculatingShip(true);
+                try {
+                    const data = await calculateShippingFee(selectedAddress.id);
+                    setShippingFee(data.total_shipping_fee || 0);
+                } catch (err) {
+                    console.error('Lỗi tính phí ship:', err);
+                    setShippingFee(0);
+                } finally {
+                    setIsCalculatingShip(false);
+                }
+            } else {
+                setShippingFee(0);
+            }
+        };
+        fetchShippingFee();
+    }, [selectedAddress]);
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-    const subtotal = CART_ITEMS.reduce((s, i) => s + i.price * i.quantity, 0);
-    const giftFee = isGift ? GIFT_FEE : 0;
-    const total = subtotal + SHIPPING_FEE + giftFee - DISCOUNT;
+    const handleProvinceChange = async (e) => {
+        const pId = e.target.value;
+        const pName = provinces.find(p => p.id === pId)?.name || '';
+        setForm(prev => ({
+            ...prev,
+            provinceId: pId,
+            province: pName,
+            districtId: '',
+            district: '',
+            wardId: '',
+            ward: ''
+        }));
+        setDistricts([]);
+        setWards([]);
+        if (pId) {
+            try {
+                const data = await getDistricts(pId);
+                setDistricts(Array.isArray(data) ? data : (data?.data || []));
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
+
+    const handleDistrictChange = async (e) => {
+        const dId = e.target.value;
+        const dName = districts.find(d => d.id === dId)?.name || '';
+        setForm(prev => ({
+            ...prev,
+            districtId: dId,
+            district: dName,
+            wardId: '',
+            ward: ''
+        }));
+        setWards([]);
+        if (dId) {
+            try {
+                const data = await getWards(dId);
+                setWards(Array.isArray(data) ? data : (data?.data || []));
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
+
+    const handleWardChange = (e) => {
+        const wId = e.target.value;
+        const wName = wards.find(w => w.id === wId)?.name || '';
+        setForm(prev => ({
+            ...prev,
+            wardId: wId,
+            ward: wName
+        }));
+    };
+
+    // ── Voucher Logic ───────────────────────────────────────────────────────
+    const handleApplyVoucher = async (codeToApply = voucherCode) => {
+        if (!codeToApply.trim()) return;
+        setIsApplyingVoucher(true);
+        try {
+            const voucher = await getVoucherByCode(codeToApply.trim());
+            const now = new Date();
+            const start = new Date(voucher.startDate);
+            const end = new Date(voucher.endDate);
+
+            if (voucher.status !== 'ACTIVE') {
+                showToast('Mã giảm giá này hiện không khả dụng', 'error');
+                return;
+            }
+            if (now < start || now > end) {
+                showToast('Mã giảm giá đã hết hạn hoặc chưa đến thời gian sử dụng', 'error');
+                return;
+            }
+            if (voucher.quantity <= 0) {
+                showToast('Mã giảm giá đã hết lượt sử dụng', 'error');
+                return;
+            }
+
+            setAppliedVoucher(voucher);
+            setVoucherCode(voucher.code);
+            setShowVoucherModal(false);
+            showToast(`Đã áp dụng mã ${voucher.code}`, 'success');
+        } catch (err) {
+            showToast('Mã giảm giá không hợp lệ', 'error');
+        } finally {
+            setIsApplyingVoucher(false);
+        }
+    };
+
+    const handleRemoveVoucher = () => {
+        setAppliedVoucher(null);
+        setVoucherCode('');
+        showToast('Đã bỏ áp dụng mã giảm giá');
+    };
+
+    const handleSelectVoucherFromList = (v) => {
+        setVoucherCode(v.code);
+        handleApplyVoucher(v.code);
+    };
+
+    // ── Image Helper ────────────────────────────────────────────────────────
+    const getProductImage = (item) => {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
+        if (!thumb && item?.product?.productImages?.length > 0) {
+            thumb = item.product.productImages[0].imageUrl;
+        }
+        if (!thumb) thumb = item?.product?.thumbnail;
+        if (!thumb) return fallbackProductImg;
+        if (thumb.startsWith('http')) return thumb;
+        return `${baseUrl}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
+    };
+
+    // ── Totals Calculation ──────────────────────────────────────────────────
+    const subtotal = useMemo(() => {
+        return cartItems.reduce((sum, item) => {
+            const price = Number(item.variantDetails?.extraPrice ?? item.unitPrice ?? 0);
+            return sum + (price * (item.quantity || 1));
+        }, 0);
+    }, [cartItems]);
+
+    const discountAmount = useMemo(() => {
+        if (!appliedVoucher) return 0;
+        const val = parseFloat(appliedVoucher.discountValue);
+        if (appliedVoucher.discountType === 'PERCENT') {
+            // Apply percentage discount on both Subtotal and Shipping Fee as requested
+            return ((subtotal + shippingFee) * val) / 100;
+        }
+        return val;
+    }, [subtotal, shippingFee, appliedVoucher]);
+
+    const total = Math.max(0, (subtotal + shippingFee) - discountAmount);
+
+    // ── Place Order Logic ───────────────────────────────────────────────────
+    const handlePlaceOrder = async () => {
+        if (!currentUser) return;
+        if (!selectedAddress && (!form.province || !form.district || !form.ward || !form.address)) {
+            showToast('Vui lòng cung cấp địa chỉ nhận hàng', 'error');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const payload = {
+                userId: currentUser.id,
+                addressId: selectedAddress?.id || null,
+                voucherCode: appliedVoucher?.code || ""
+            };
+
+            const response = await checkout(payload);
+
+            if (response.payment?.checkoutUrl) {
+                // Save full response for the success page to display invoice data
+                sessionStorage.setItem('lastCheckout', JSON.stringify(response));
+                // Redirect to PayOS payment page
+                window.location.href = response.payment.checkoutUrl;
+            } else {
+                showToast('Có lỗi xảy ra khi tạo thanh toán', 'error');
+            }
+        } catch (err) {
+            showToast(typeof err === 'string' ? err : 'Không thể tạo đơn hàng', 'error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
 
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
+                <header className={styles.checkoutHeader}>
+                    <button onClick={() => navigate('/cart')} className={styles.backBtn}>
+                        <ArrowLeft size={20} /> <span>QUAY LẠI GIỎ HÀNG</span>
+                    </button>
+                    <h1 className={styles.title}>THANH TOÁN</h1>
+                </header>
 
-                {/* ── PROMO BAR ─────────────────────────────────────────────── */}
+                {/* ── PROMO/VOUCHER BAR ─────────────────────────────────────── */}
                 <motion.div {...fadeUp} className={styles.promoBar} onClick={() => setPromoOpen(!promoOpen)}>
                     <div className={styles.promoLeft}>
                         <Tag size={16} className={styles.promoIcon} />
-                        <span>Bạn có mã ưu đãi? Nhấn vào đây để nhập mã giảm giá.</span>
+                        <span>{appliedVoucher ? `Đã áp dụng mã: ${appliedVoucher.code}` : 'Bạn có mã ưu đãi? Nhấn vào đây để nhập mã giảm giá.'}</span>
                     </div>
-                    <ChevronRight size={18} className={promoOpen ? styles.promoChevronOpen : styles.promoChevron} />
+                    <div className={styles.promoRightActions}>
+                        <button
+                            className={styles.viewListBtn}
+                            onClick={(e) => { e.stopPropagation(); setShowVoucherModal(true); }}
+                        >
+                            Xem danh sách
+                        </button>
+                        <ChevronRight size={18} className={promoOpen ? styles.promoChevronOpen : styles.promoChevron} />
+                    </div>
                 </motion.div>
 
                 {promoOpen && (
@@ -95,24 +340,39 @@ const CheckoutPage = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className={styles.promoInputRow}
                     >
-                        <input type="text" className={styles.promoInput} placeholder="Nhập mã giảm giá" />
-                        <button className={styles.promoBtn}>ÁP DỤNG</button>
+                        <div className={styles.promoInputWrapper}>
+                            <input
+                                type="text"
+                                className={styles.promoInput}
+                                placeholder="Nhập mã giảm giá"
+                                value={voucherCode}
+                                onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                            />
+                            {appliedVoucher ? (
+                                <button className={styles.promoBtnRemove} onClick={handleRemoveVoucher}>GỠ BỎ</button>
+                            ) : (
+                                <button
+                                    className={styles.promoBtn}
+                                    onClick={() => handleApplyVoucher()}
+                                    disabled={isApplyingVoucher || !voucherCode.trim()}
+                                >
+                                    {isApplyingVoucher ? '...' : 'ÁP DỤNG'}
+                                </button>
+                            )}
+                        </div>
                     </motion.div>
                 )}
 
                 {/* ── MAIN LAYOUT ───────────────────────────────────────────── */}
                 <div className={styles.mainGrid}>
-
-                    {/* ══ LEFT: CUSTOMER INFO ═══════════════════════════════════ */}
+                    {/* LEFT: CUSTOMER INFO & ADDRESS */}
                     <div className={styles.leftCol}>
-
-                        {/* Section: Customer Info */}
+                        {/* ── Customer Info ────────────────────────────────── */}
                         <motion.section {...fadeUp} className={styles.section}>
                             <h2 className={styles.sectionTitle}>THÔNG TIN KHÁCH HÀNG</h2>
                             <div className={styles.sectionDivider}><span className={styles.sectionOrn}>❧</span></div>
 
                             <div className={styles.formGrid}>
-                                {/* Row 1 */}
                                 <div className={styles.formField}>
                                     <label className={styles.label}>Họ và tên <span className={styles.required}>*</span></label>
                                     <div className={styles.inputWrapper}>
@@ -122,15 +382,6 @@ const CheckoutPage = () => {
                                 </div>
 
                                 <div className={styles.formField}>
-                                    <label className={styles.label}>Ngày sinh</label>
-                                    <div className={styles.inputWrapper}>
-                                        <Calendar size={15} className={styles.inputIcon} />
-                                        <input name="dob" value={form.dob} onChange={handleChange} className={styles.input} placeholder="DD / MM / YYYY" type="text" />
-                                    </div>
-                                </div>
-
-                                {/* Row 2 */}
-                                <div className={styles.formField}>
                                     <label className={styles.label}>Số điện thoại <span className={styles.required}>*</span></label>
                                     <div className={styles.inputWrapper}>
                                         <Phone size={15} className={styles.inputIcon} />
@@ -138,179 +389,119 @@ const CheckoutPage = () => {
                                     </div>
                                 </div>
 
-                                <div className={styles.formField}>
+                                <div className={`${styles.formField} ${styles.spanFull}`}>
                                     <label className={styles.label}>Email <span className={styles.required}>*</span></label>
                                     <div className={styles.inputWrapper}>
                                         <Mail size={15} className={styles.inputIcon} />
                                         <input name="email" value={form.email} onChange={handleChange} className={styles.input} placeholder="Nhập email" type="email" />
                                     </div>
                                 </div>
-
-                                {/* Row 3: Country + Province + District */}
-                                <div className={`${styles.formField} ${styles.spanFull}`}>
-                                    <div className={styles.tripleGrid}>
-                                        <div className={styles.formField}>
-                                            <label className={styles.label}>Quốc gia <span className={styles.required}>*</span></label>
-                                            <div className={styles.inputWrapper}>
-                                                <Globe size={15} className={styles.inputIcon} />
-                                                <select name="country" value={form.country} onChange={handleChange} className={styles.select}>
-                                                    <option>Việt Nam</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className={styles.formField}>
-                                            <label className={styles.label}>Tỉnh / Thành phố <span className={styles.required}>*</span></label>
-                                            <div className={styles.inputWrapper}>
-                                                <MapPin size={15} className={styles.inputIcon} />
-                                                <select name="province" value={form.province} onChange={handleChange} className={styles.select}>
-                                                    <option value="">Chọn tỉnh / thành phố</option>
-                                                    {PROVINCES.map(p => <option key={p}>{p}</option>)}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className={styles.formField}>
-                                            <label className={styles.label}>Quận / Huyện <span className={styles.required}>*</span></label>
-                                            <div className={styles.inputWrapper}>
-                                                <Building2 size={15} className={styles.inputIcon} />
-                                                <select name="district" value={form.district} onChange={handleChange} className={styles.select}>
-                                                    <option value="">Chọn quận / huyện</option>
-                                                    {DISTRICTS.map(d => <option key={d}>{d}</option>)}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Row 4: Ward + Address */}
-                                <div className={styles.formField}>
-                                    <label className={styles.label}>Phường / Xã <span className={styles.required}>*</span></label>
-                                    <div className={styles.inputWrapper}>
-                                        <Home size={15} className={styles.inputIcon} />
-                                        <select name="ward" value={form.ward} onChange={handleChange} className={styles.select}>
-                                            <option value="">Chọn phường / xã</option>
-                                            {WARDS.map(w => <option key={w}>{w}</option>)}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className={styles.formField}>
-                                    <label className={styles.label}>Địa chỉ chi tiết <span className={styles.required}>*</span></label>
-                                    <div className={styles.inputWrapper}>
-                                        <MapPin size={15} className={styles.inputIcon} />
-                                        <input name="address" value={form.address} onChange={handleChange} className={styles.input} placeholder="Số nhà, tên đường, tòa nhà, căn hộ..." />
-                                    </div>
-                                </div>
-
-                                {/* Note - full width */}
-                                <div className={`${styles.formField} ${styles.spanFull}`}>
-                                    <label className={styles.label}>Ghi chú đơn hàng (tùy chọn)</label>
-                                    <div className={styles.inputWrapper}>
-                                        <FileText size={15} className={`${styles.inputIcon} ${styles.inputIconTop}`} />
-                                        <textarea name="note" value={form.note} onChange={handleChange} className={styles.textarea} placeholder="Nhập ghi chú cho đơn hàng của bạn..." rows={3} />
-                                    </div>
-                                </div>
                             </div>
                         </motion.section>
 
-                        {/* Section: Gift Experience */}
-                        <motion.section {...fadeUp} transition={{ duration: 0.6, delay: 0.1 }} className={styles.section}>
-                            <div className={styles.giftSectionHeader}>
-                                <Gift size={20} className={styles.giftTitleIcon} />
-                                <h2 className={styles.sectionTitle}>TRẢI NGHIỆM QUÀ TẶNG</h2>
+                        {/* ── Delivery Address ─────────────────────────────── */}
+                        <motion.section {...fadeUp} className={styles.section} style={{ marginTop: '20px' }}>
+                            <div className={styles.sectionHeader}>
+                                <h2 className={styles.sectionTitle}>ĐỊA CHỈ NHẬN HÀNG</h2>
+                                <button className={styles.editAddressBtn} onClick={() => navigate('/shipping-addresses')}>
+                                    + THÊM ĐỊA CHỈ
+                                </button>
                             </div>
                             <div className={styles.sectionDivider}><span className={styles.sectionOrn}>❧</span></div>
 
-                            <div className={styles.giftLayout}>
-                                {/* Left: Checkbox + Description */}
-                                <div className={styles.giftLeft}>
-                                    <label className={styles.giftCheckLabel}>
-                                        <input type="checkbox" checked={isGift} onChange={e => setIsGift(e.target.checked)} className={styles.giftCheck} />
-                                        <span className={styles.giftCheckText}>Gói quà cao cấp <strong>(+49.000đ)</strong></span>
-                                    </label>
-                                    <p className={styles.giftDesc}>
-                                        Bao gồm: Hộp nhung cao cấp, ruy băng champagne,<br />thiệp chúc mừng và túi giấy thương hiệu.
-                                    </p>
+                            {addresses.length > 0 ? (
+                                <div className={styles.addressList}>
+                                    {addresses.map(addr => (
+                                        <div
+                                            key={addr.id}
+                                            className={`${styles.addressCard} ${selectedAddress?.id === addr.id ? styles.addressCardActive : ''}`}
+                                            onClick={() => setSelectedAddress(addr)}
+                                        >
+                                            <div className={styles.addressInfo}>
+                                                <div className={styles.addrNameRow}>
+                                                    <span className={styles.addrName}>{addr.receiverName}</span>
+                                                    {addr.isDefault && <span className={styles.defaultBadge}>Mặc định</span>}
+                                                </div>
+                                                <p className={styles.addrPhone}>SĐT: {addr.phone}</p>
+                                                <p className={styles.addrText}>{addr.detailAddress}, {addr.ward}, {addr.district}, {addr.province}</p>
+                                            </div>
+                                            <div className={`${styles.radio} ${selectedAddress?.id === addr.id ? styles.radioActive : ''}`} />
+                                        </div>
+                                    ))}
                                 </div>
-
-                                {/* Right: Gift Visual */}
-                                <div className={styles.giftImages}>
-                                    <img
-                                        src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&h=200&fit=crop&q=80"
-                                        alt="Hộp quà"
-                                        className={styles.giftImg}
-                                    />
-                                    <img
-                                        src="https://images.unsplash.com/photo-1606293459339-2a10f3f0fe1e?w=300&h=200&fit=crop&q=80"
-                                        alt="Thiệp cảm ơn"
-                                        className={styles.giftImg}
-                                    />
-                                    <img
-                                        src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&h=200&fit=crop&q=80"
-                                        alt="Túi thương hiệu"
-                                        className={styles.giftImg}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Gift Message + Preview */}
-                            <div className={styles.giftMessageRow}>
-                                <div className={styles.giftMessageLeft}>
-                                    <p className={styles.giftMessageLabel}>LỜI NHẮN TẶNG QUÀ</p>
-                                    <div className={styles.giftTextareaWrapper}>
-                                        <textarea
-                                            className={styles.giftTextarea}
-                                            placeholder="Nhập lời chúc dành cho người nhận..."
-                                            maxLength={200}
-                                            value={giftMessage}
-                                            onChange={e => setGiftMessage(e.target.value)}
-                                            rows={5}
-                                        />
-                                        <span className={styles.charCount}>{giftMessage.length}/200</span>
+                            ) : (
+                                /* Manual address form if no saved addresses */
+                                <div className={styles.formGrid}>
+                                    <div className={`${styles.formField} ${styles.spanFull}`}>
+                                        <div className={styles.tripleGrid}>
+                                            <div className={styles.formField}>
+                                                <label className={styles.label}>Tỉnh / Thành phố</label>
+                                                <div className={styles.inputWrapper}>
+                                                    <MapPin size={15} className={styles.inputIcon} />
+                                                    <select name="provinceId" value={form.provinceId} onChange={handleProvinceChange} className={styles.select}>
+                                                        <option value="">Chọn tỉnh/thành</option>
+                                                        {provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className={styles.formField}>
+                                                <label className={styles.label}>Quận / Huyện</label>
+                                                <div className={styles.inputWrapper}>
+                                                    <Building2 size={15} className={styles.inputIcon} />
+                                                    <select name="districtId" value={form.districtId} onChange={handleDistrictChange} className={styles.select} disabled={!form.provinceId}>
+                                                        <option value="">Chọn quận/huyện</option>
+                                                        {districts.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className={styles.formField}>
+                                                <label className={styles.label}>Phường / Xã</label>
+                                                <div className={styles.inputWrapper}>
+                                                    <Home size={15} className={styles.inputIcon} />
+                                                    <select name="wardId" value={form.wardId} onChange={handleWardChange} className={styles.select} disabled={!form.districtId}>
+                                                        <option value="">Chọn phường/xã</option>
+                                                        {wards.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className={styles.giftPreviewCard}>
-                                    <p className={styles.giftPreviewLabel}>THIỆP XEM TRƯỚC</p>
-                                    <div className={styles.previewCard}>
-                                        <div className={styles.previewCardInner}>
-                                            <p className={styles.previewBrand}>Cát</p>
-                                            <p className={styles.previewBrandSub}>BRACELET</p>
-                                            <div className={styles.previewDivider} />
-                                            <p className={styles.previewMsg}>{giftMessage || 'Lời chúc của bạn sẽ hiển thị ở đây...'}</p>
-                                            <div className={styles.previewFloral}>❋</div>
+                                    <div className={`${styles.formField} ${styles.spanFull}`}>
+                                        <label className={styles.label}>Địa chỉ chi tiết</label>
+                                        <div className={styles.inputWrapper}>
+                                            <MapPin size={15} className={styles.inputIcon} />
+                                            <input name="address" value={form.address} onChange={handleChange} className={styles.input} placeholder="Số nhà, tên đường, tòa nhà..." />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </motion.section>
-
                     </div>
 
-                    {/* ══ RIGHT: ORDER SUMMARY ══════════════════════════════════ */}
+
+                    {/* RIGHT: ORDER SUMMARY */}
                     <div className={styles.rightCol}>
                         <div className={styles.stickySummary}>
                             <motion.div {...fadeUp} className={styles.summaryCard}>
                                 <h3 className={styles.summaryTitle}>THÔNG TIN ĐƠN HÀNG</h3>
                                 <div className={styles.summaryDivider}><span className={styles.summaryOrn}>❧</span></div>
 
-                                {/* Products */}
+                                {/* Product List */}
                                 <div className={styles.productList}>
-                                    {CART_ITEMS.map((item) => (
-                                        <div key={item.id} className={styles.productItem}>
+                                    {cartItems.map((item) => (
+                                        <div key={item.cartItemId} className={styles.productItem}>
                                             <div className={styles.productImgWrapper}>
-                                                <img src={item.image} alt={item.name} className={styles.productImg} />
+                                                <img src={getProductImage(item)} alt={item.product?.productName} className={styles.productImg} />
                                                 <span className={styles.productQtyBadge}>{item.quantity}</span>
                                             </div>
                                             <div className={styles.productInfo}>
-                                                <p className={styles.productName}>{item.name}</p>
-                                                <p className={styles.productMeta}>Đá: {item.stone}</p>
-                                                <p className={styles.productMeta}>Charm: {item.charm}</p>
-                                                <p className={styles.productMetaRow}>
-                                                    <span>Hạt đá: {item.beadSize}</span>
-                                                    <span className={styles.metaSep}>|</span>
-                                                    <span>Size tay: {item.wristSize}</span>
+                                                <p className={styles.productName}>{item.product?.productName}</p>
+                                                <p className={styles.productMeta}>
+                                                    {item.variantDetails?.color && `Màu: ${item.variantDetails.color}`}
+                                                    {item.variantDetails?.size && ` | Size: ${item.variantDetails.size}`}
                                                 </p>
                                             </div>
-                                            <div className={styles.productPrice}>{formatVND(item.price)}</div>
+                                            <div className={styles.productPrice}>{formatVND(item.variantDetails?.extraPrice ?? item.unitPrice)}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -323,18 +514,23 @@ const CheckoutPage = () => {
                                     </div>
                                     <div className={styles.totalRow}>
                                         <span>Phí vận chuyển</span>
-                                        <span>{formatVND(SHIPPING_FEE)}</span>
+                                        {isCalculatingShip ? (
+                                            <span className="flex items-center gap-1"><Loader2 size={12} className="animate-spin" /> Đang tính...</span>
+                                        ) : (
+                                            <span>{formatVND(shippingFee)}</span>
+                                        )}
                                     </div>
-                                    {isGift && (
+                                    {appliedVoucher && (
                                         <div className={styles.totalRow}>
-                                            <span>Phí gói quà</span>
-                                            <span>{formatVND(GIFT_FEE)}</span>
+                                            <div className={styles.discountLabelCol}>
+                                                <span>Giảm giá ({appliedVoucher.code})</span>
+                                                <small className={styles.discountDesc}>
+                                                    {appliedVoucher.discountType === 'PERCENT' ? `Giảm ${appliedVoucher.discountValue}%` : `Giảm ${formatVND(appliedVoucher.discountValue)}`}
+                                                </small>
+                                            </div>
+                                            <span className={styles.discountVal}>-{formatVND(discountAmount)}</span>
                                         </div>
                                     )}
-                                    <div className={styles.totalRow}>
-                                        <span>Giảm giá</span>
-                                        <span className={styles.discountVal}>-{formatVND(DISCOUNT)}</span>
-                                    </div>
                                 </div>
 
                                 <div className={styles.grandTotalRow}>
@@ -342,7 +538,7 @@ const CheckoutPage = () => {
                                     <span className={styles.grandTotalVal}>{formatVND(total)}</span>
                                 </div>
 
-                                {/* Payment Methods */}
+                                {/* Payment */}
                                 <div className={styles.paymentSection}>
                                     <p className={styles.paymentTitle}>PHƯƠNG THỨC THANH TOÁN</p>
                                     <div className={styles.paymentGrid}>
@@ -360,41 +556,71 @@ const CheckoutPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Place Order Button */}
                                 <motion.button
                                     className={styles.btnPlaceOrder}
                                     whileHover={{ scale: 1.015 }}
                                     whileTap={{ scale: 0.985 }}
+                                    onClick={handlePlaceOrder}
+                                    disabled={isSubmitting || cartItems.length === 0}
                                 >
-                                    <Lock size={18} />
-                                    ĐẶT HÀNG
+                                    {isSubmitting ? (
+                                        <Loader2 size={18} className="animate-spin" />
+                                    ) : (
+                                        <>
+                                            <Lock size={18} /> THANH TOÁN NGAY
+                                        </>
+                                    )}
                                 </motion.button>
 
-                                {/* Trust Badges */}
                                 <div className={styles.trustGrid}>
-                                    <div className={styles.trustItem}>
-                                        <Gem size={18} className={styles.trustIcon} />
-                                        <span>Đá tự nhiên tuyển chọn</span>
-                                    </div>
-                                    <div className={styles.trustItem}>
-                                        <ShieldCheck size={18} className={styles.trustIcon} />
-                                        <span>Bảo hành trọn đời</span>
-                                    </div>
-                                    <div className={styles.trustItem}>
-                                        <Lock size={18} className={styles.trustIcon} />
-                                        <span>Thanh toán bảo mật SSL</span>
-                                    </div>
-                                    <div className={styles.trustItem}>
-                                        <Headphones size={18} className={styles.trustIcon} />
-                                        <span>Hỗ trợ tư vấn phong thủy miễn phí</span>
-                                    </div>
+                                    <div className={styles.trustItem}><Gem size={18} /> <span>Đá tự nhiên</span></div>
+                                    <div className={styles.trustItem}><ShieldCheck size={18} /> <span>Bảo hành trọn đời</span></div>
+                                    <div className={styles.trustItem}><Lock size={18} /> <span>Bảo mật SSL</span></div>
+                                    <div className={styles.trustItem}><Headphones size={18} /> <span>Tư vấn miễn phí</span></div>
                                 </div>
                             </motion.div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
+            {/* Voucher Modal */}
+            {showVoucherModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowVoucherModal(false)}>
+                    <motion.div
+                        className={styles.voucherModal}
+                        onClick={e => e.stopPropagation()}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                    >
+                        <div className={styles.modalHeader}>
+                            <h3 className={styles.modalTitle}><Ticket size={20} /> Chọn mã giảm giá</h3>
+                            <button onClick={() => setShowVoucherModal(false)} className={styles.closeBtn}><CloseIcon size={20} /></button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.voucherList}>
+                                {availableVouchers.length === 0 ? (
+                                    <p className={styles.noVouchers}>Hiện không có mã giảm giá nào.</p>
+                                ) : (
+                                    availableVouchers.map(v => (
+                                        <div
+                                            key={v.id}
+                                            className={`${styles.voucherItem} ${appliedVoucher?.id === v.id ? styles.voucherItemApplied : ''}`}
+                                            onClick={() => handleSelectVoucherFromList(v)}
+                                        >
+                                            <div className={styles.vLeft}><Ticket size={24} /></div>
+                                            <div className={styles.vRight}>
+                                                <div className={styles.vCode}>{v.code}</div>
+                                                <div className={styles.vDesc}>Giảm {v.discountType === 'PERCENT' ? `${v.discountValue}%` : formatVND(v.discountValue)}</div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 };

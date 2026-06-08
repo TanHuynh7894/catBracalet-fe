@@ -47,6 +47,7 @@ const StoryPage = lazy(() => import('./pages/StoryPage/StoryPage'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
 const CartPage = lazy(() => import('./pages/Cart/CartPage'));
 const CheckoutPage = lazy(() => import('./pages/Checkout/CheckoutPage'));
+const FailedPayment = lazy(() => import('./pages/FailedPayment'));
 
 // A simple loading placeholder for Suspense
 const PageLoading = () => (
@@ -81,6 +82,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/successfulpayment" element={<SuccessfulPayment />} />
+                <Route path="/failedpayment" element={<FailedPayment />} />
 
                 {/* Account Sub-Routes Sharing a Layout */}
                 <Route element={<AccountLayout />}>

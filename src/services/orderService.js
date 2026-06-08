@@ -23,3 +23,23 @@ export const getOrderById = async (orderId) => {
         throw error.response?.data || error.message;
     }
 };
+/**
+ * Create a new order and get checkout URL
+ * @param {Object} data - { userId, addressId, voucherCode }
+ */
+export const checkout = async (data) => {
+    try {
+        const response = await api.post('/orders/checkout', data);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.response?.data?.error || error.message;
+    }
+};
+
+const orderService = {
+    getOrdersByUserId,
+    getOrderById,
+    checkout,
+};
+
+export default orderService;
