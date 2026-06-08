@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, Filter, Download, Upload, Plus, ChevronDown, Trash2, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ProductList.module.css';
-import { getProducts, searchProductsByName, createProduct, softDeleteProduct, forceDeleteProduct, updateProductStatus } from '../../services/productService';
+import { getProducts, searchProductsByName, createProduct, softDeleteProduct, forceDeleteProduct } from '../../services/productService';
 import { getProductCategories } from '../../services/categoryService';
 import { getProductMaterials } from '../../services/materialService';
 import { useToast } from '../../context/ToastContext';
@@ -152,12 +152,22 @@ const ProductList = () => {
         showConfirm(
             `Bạn có chắc chắn muốn ${actionText} sản phẩm "${product.productName}"?`,
             async () => {
+                const originalStatus = product.status;
+                const nextStatus = originalStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+
+                // Optimistic Update: Cập nhật UI ngay lập tức
+                setProducts(prev => prev.map(p =>
+                    p.id == product.id ? { ...p, status: nextStatus } : p
+                ));
+
                 try {
-                    // Sử dụng softDeleteProduct cho cả 2 vì backend thường thiết kế endpoint này là Toggle
                     await softDeleteProduct(product.id);
                     showToast(`Đã ${actionText} sản phẩm thành công`, 'success');
-                    fetchData();
                 } catch (error) {
+                    // Hoàn tác nếu lỗi
+                    setProducts(prev => prev.map(p =>
+                        p.id == product.id ? { ...p, status: originalStatus } : p
+                    ));
                     showToast(error.toString(), 'error');
                 }
             }
@@ -281,7 +291,7 @@ const ProductList = () => {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="pr-6 py-4">
+                                        <td className="pr-6 py-4" onClick={(e) => e.stopPropagation()}>
                                             <div className="flex items-center justify-end gap-3">
                                                 <div className="flex items-center pr-3 border-r border-gray-100">
                                                     <label className="relative inline-flex items-center cursor-pointer">

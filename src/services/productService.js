@@ -70,19 +70,7 @@ export const createProduct = async (formData) => {
     }
 };
 
-/**
- * Cập nhật trạng thái sản phẩm
- * @param {string} id 
- * @param {string} status 
- */
-export const updateProductStatus = async (id, status) => {
-    try {
-        const response = await api.patch(`/products/${id}`, { status });
-        return response.data;
-    } catch (error) {
-        throw error.response?.data?.message || 'Không thể cập nhật trạng thái';
-    }
-};
+
 
 /**
  * Cập nhật sản phẩm (multipart/form-data)

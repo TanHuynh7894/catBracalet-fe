@@ -209,11 +209,18 @@ const AdminProductDetail = () => {
         showConfirm(
             `Bạn có chắc chắn muốn ${actionText} sản phẩm này?`,
             async () => {
+                const originalStatus = product.status;
+                const nextStatus = originalStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+
+                // Optimistic Update: Cập nhật UI ngay lập tức
+                setProduct(prev => ({ ...prev, status: nextStatus }));
+
                 try {
                     await softDeleteProduct(id);
                     showToast(`Đã ${actionText} sản phẩm thành công`, 'success');
-                    fetchInitialData();
                 } catch (error) {
+                    // Hoàn tác nếu lỗi
+                    setProduct(prev => ({ ...prev, status: originalStatus }));
                     showToast(error.toString(), 'error');
                 }
             }

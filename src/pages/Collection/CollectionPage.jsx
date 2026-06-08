@@ -101,7 +101,8 @@ const CollectionPage = () => {
                     getProductCategories(),
                     getProductMaterials()
                 ]);
-                setProducts(Array.isArray(productData) ? productData : (productData?.products || []));
+                const allProducts = Array.isArray(productData) ? productData : (productData?.products || []);
+                setProducts(allProducts.filter(p => p.status === 'ACTIVE'));
                 setCategories(Array.isArray(catData) ? catData : (catData?.categories || []));
                 setMaterials(Array.isArray(matData) ? matData : (matData?.materials || []));
             } catch (error) {
@@ -242,8 +243,11 @@ const CollectionPage = () => {
                 if (sortBy === 'priceAsc') results = [...results].sort((a, b) => Number(a.basePrice) - Number(b.basePrice));
                 else if (sortBy === 'priceDesc') results = [...results].sort((a, b) => Number(b.basePrice) - Number(a.basePrice));
 
-                console.log("[Filter] Result count:", results.length);
-                setFilteredResults(Array.from(new Map(results.map(p => [p.id, p])).values()));
+                console.log("[Filter] Result count before status filter:", results.length);
+                // Chỉ hiển thị sản phẩm ACTIVE cho khách hàng
+                const activeResults = results.filter(p => p.status === 'ACTIVE');
+
+                setFilteredResults(Array.from(new Map(activeResults.map(p => [p.id, p])).values()));
             } catch (error) {
                 console.error("[Filter] CRITICAL ERROR:", error);
                 setFilteredResults(products);
