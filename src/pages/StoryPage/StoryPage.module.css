@@ -122,7 +122,10 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center right;
+    /* Focus more on the product on the right */
+    image-rendering: -webkit-optimize-contrast;
+    filter: contrast(1.05) brightness(1.02);
 }
 
 .heroOverlay {
@@ -131,7 +134,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(250, 247, 242, 0.8) 0%, rgba(250, 247, 242, 0.4) 50%, transparent 100%);
+    background: linear-gradient(to right, rgba(250, 247, 242, 0.7) 0%, rgba(250, 247, 242, 0.2) 60%, transparent 100%);
     z-index: 2;
 }
 
@@ -169,14 +172,14 @@
    S3: ORIGIN – CÁT RA ĐỜI NHƯ THẾ NÀO
    ============================================================ */
 .originSection {
-    padding: 100px 0;
+    padding: 60px 0;
     background-color: var(--bg);
 }
 
 .originGrid {
     display: grid;
     grid-template-columns: 0.85fr 1fr;
-    gap: 120px;
+    gap: 60px;
     align-items: center;
 }
 
@@ -202,7 +205,7 @@
 .originContent {
     display: flex;
     flex-direction: column;
-    padding-right: 60px;
+    padding-right: 20px;
     max-width: 580px;
 }
 
@@ -210,7 +213,7 @@
    S4: RED BANNER – Ý NGHĨA TÊN GỌI
    ============================================================ */
 .redBannerSection {
-    padding: 48px 0;
+    padding: 30px 0;
     background-color: var(--bg);
 }
 
@@ -301,7 +304,7 @@
    S5: BELIEFS – ĐIỀU CÁT TIN TƯỞNG
    ============================================================ */
 .beliefSection {
-    padding: 80px 0;
+    padding: 50px 0;
     background-color: var(--bg);
 }
 
@@ -379,14 +382,14 @@
    S6: TRUTH – KHÔNG BÁN PHÉP MÀU
    ============================================================ */
 .truthSection {
-    padding: 80px 0;
+    padding: 50px 0;
     background: linear-gradient(180deg, var(--bg) 0%, #f2ebe2 100%);
 }
 
 .truthGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 50px;
     align-items: center;
 }
 
@@ -460,7 +463,7 @@
    S7: VALUES – GIÁ TRỊ CỐT LÕI
    ============================================================ */
 .valuesSection {
-    padding: 80px 0;
+    padding: 50px 0;
     background-color: var(--bg);
 }
 
@@ -516,7 +519,7 @@
    S8: CTA RED BANNER
    ============================================================ */
 .ctaSection {
-    padding: 48px 0 80px;
+    padding: 30px 0 60px;
     background-color: var(--bg);
 }
 

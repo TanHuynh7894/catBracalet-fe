@@ -2,9 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Diamond, Users, Zap, Leaf, Scale, Heart, TrendingUp } from 'lucide-react';
-import heroBg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
+import heroBg from '../../assets/Ảnh UI/ảnh chi tiết/about.png';
 import heroBg1 from '../../assets/Ảnh UI/ảnh chi tiết/about..png';
-import heroBg2 from '../../assets/Ảnh UI/ảnh chi tiết/canbang.png';
+import heroBg3 from '../../assets/Ảnh UI/ảnh chi tiết/about...png';
+import heroBg2 from '../../assets/Ảnh UI/ảnh chi tiết/kichhoat.png';
+import heroBg4 from '../../assets/Ảnh UI/ảnh chi tiết/nangluongtichcuc.jpg';
+import heroBg5 from '../../assets/Ảnh UI/ảnh chi tiết/donghanh.png';
 import styles from './StoryPage.module.css';
 
 /* ───── animation preset ───── */
@@ -36,14 +39,14 @@ const beliefCards = [
         icon: <Users size={28} strokeWidth={1.5} />,
         title: 'THIẾT KẾ CÁ NHÂN HÓA',
         desc: 'Mỗi người đều có câu chuyện riêng.',
-        img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80',
+        img: heroBg3,
     },
     {
         id: 3,
         icon: <Zap size={28} strokeWidth={1.5} />,
         title: 'NĂNG LƯỢNG TÍCH CỰC',
         desc: 'Vòng tay giúp kết nối và nuôi dưỡng năng lượng tốt lành mỗi ngày.',
-        img: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&q=80',
+        img: heroBg4,
     },
 ];
 
@@ -209,7 +212,7 @@ export default function StoryPage() {
                             transition={{ duration: 0.9 }}
                         >
                             <img
-                                src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=600&q=85"
+                                src={heroBg5}
                                 alt="Vòng tay đá tự nhiên"
                                 className={styles.truthImg}
                             />
