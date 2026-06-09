@@ -25,7 +25,7 @@ export const getOrderById = async (orderId) => {
 };
 /**
  * Create a new order and get checkout URL
- * @param {Object} data - { userId, addressId, voucherCode }
+ * @param {Object} data - { userId, addressId, voucherCode, cartItemIds }
  */
 export const checkout = async (data) => {
     try {

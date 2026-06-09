@@ -75,7 +75,6 @@ const AccountLayout = ({ activeTab }) => {
         { path: '/change-password', label: 'Thay đổi mật khẩu', icon: Lock },
         { path: '/order-history', label: 'Lịch sử đơn hàng', icon: ReceiptText },
         { path: '/shipping-addresses', label: 'Địa chỉ giao hàng', icon: MapPin },
-        { path: '/wishlist', label: 'Sản phẩm yêu thích', icon: Heart },
     ];
 
     // Helper for VIP Name

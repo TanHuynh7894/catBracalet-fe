@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
     User, Phone, Mail, MapPin, Building2,
     Home, Tag, ChevronRight, Lock,
@@ -33,8 +33,16 @@ const fadeUp = {
 // ─── Component ────────────────────────────────────────────────────────────────
 const CheckoutPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { showToast } = useToast();
-    const { cartItems, refreshCart } = useCart();
+    const { cartItems: allCartItems, refreshCart } = useCart();
+
+    const selectedCartItemIds = useMemo(() => location.state?.selectedCartItemIds || [], [location.state]);
+
+    const cartItems = useMemo(() => {
+        if (!selectedCartItemIds.length) return allCartItems;
+        return allCartItems.filter(item => selectedCartItemIds.includes(item.cartItemId));
+    }, [allCartItems, selectedCartItemIds]);
 
     const [currentUser, setCurrentUser] = useState(null);
     const [addresses, setAddresses] = useState([]);
@@ -285,7 +293,8 @@ const CheckoutPage = () => {
             const payload = {
                 userId: currentUser.id,
                 addressId: selectedAddress?.id || null,
-                voucherCode: appliedVoucher?.code || ""
+                voucherCode: appliedVoucher?.code || "",
+                cartItemIds: selectedCartItemIds.length > 0 ? selectedCartItemIds : undefined
             };
 
             const response = await checkout(payload);

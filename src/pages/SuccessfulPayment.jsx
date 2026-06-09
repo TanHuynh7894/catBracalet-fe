@@ -31,7 +31,7 @@ const STATUS_LABELS = {
 
 const SuccessfulPayment = () => {
     const [searchParams] = useSearchParams();
-    const urlOrderId = searchParams.get('orderId');
+    const urlOrderId = searchParams.get('orderId') || searchParams.get('id');
     const urlOrderCode = searchParams.get('orderCode');
 
     // Read cached checkout response from before PayOS redirect
@@ -46,32 +46,40 @@ const SuccessfulPayment = () => {
     const [fetchError, setFetchError] = useState(null);
 
     // Resolve data: prefer live API data, fall back to cached
-    const orderId = urlOrderId || cached?.payment?.orderId || cached?.order?.id;
-    const orderCode = urlOrderCode || cached?.payment?.orderCode;
-    const pricing = cached?.pricing || null;
+    const finalOrderId = urlOrderId || cached?.payment?.orderId || cached?.order?.id;
+    const finalOrderCode = urlOrderCode || cached?.payment?.orderCode;
+    const pricing = cached?.pricing || cached?.order || null;
 
     useEffect(() => {
         const fetchOrder = async () => {
-            if (!orderId) {
-                setOrder(cached?.order || null);
+            if (!finalOrderId) {
+                if (cached?.order) {
+                    setOrder(cached.order);
+                } else {
+                    // If we have orderCode but no ID, we can't fetch but might still have cached data
+                    if (!cached?.order) setFetchError('Không tìm thấy thông tin đơn hàng.');
+                }
                 setLoading(false);
                 return;
             }
+
             try {
-                const data = await getOrderById(orderId);
-                setOrder(data?.order || data);
+                const data = await getOrderById(finalOrderId);
+                const orderData = data?.order || data;
+                setOrder(orderData);
             } catch (err) {
-                // Fallback to cached order data
-                setOrder(cached?.order || null);
-                if (!cached?.order) setFetchError('Không thể tải thông tin đơn hàng.');
+                console.error('Error fetching order:', err);
+                if (cached?.order) {
+                    setOrder(cached.order);
+                } else {
+                    setFetchError('Không thể tải thông tin đơn hàng từ máy chủ.');
+                }
             } finally {
                 setLoading(false);
-                // Clean up after reading
-                sessionStorage.removeItem('lastCheckout');
             }
         };
         fetchOrder();
-    }, [orderId]);
+    }, [finalOrderId, cached]);
 
     const displayOrder = order || cached?.order;
 
@@ -117,7 +125,7 @@ const SuccessfulPayment = () => {
                                 <div className={styles.infoItem}>
                                     <span className={styles.label}>Mã đơn hàng</span>
                                     <span className={styles.value}>
-                                        #{orderCode || displayOrder?.id?.substring(0, 8).toUpperCase()}
+                                        #{finalOrderCode || displayOrder?.id?.substring(0, 8).toUpperCase()}
                                     </span>
                                 </div>
 
@@ -129,7 +137,7 @@ const SuccessfulPayment = () => {
                                 <div className={styles.infoItem}>
                                     <span className={styles.label}>Trạng thái</span>
                                     <span className={styles.statusBadge}>
-                                        {STATUS_LABELS[displayOrder?.status] || 'Đã xác nhận'}
+                                        {STATUS_LABELS[displayOrder?.status] || (displayOrder?.status === 'PAID' ? 'Đã thanh toán' : 'Đã xác nhận')}
                                     </span>
                                 </div>
 
@@ -143,13 +151,16 @@ const SuccessfulPayment = () => {
                                             <span className={styles.userName}>
                                                 {displayOrder.address.receiverName}
                                             </span>
-                                            <p style={{ margin: '0 0 4px', fontSize: '0.85rem', color: '#6b7280' }}>
-                                                <Phone size={12} style={{ display: 'inline', marginRight: 4 }} />
-                                                {displayOrder.address.phone}
-                                            </p>
-                                            <p style={{ margin: 0 }}>
-                                                {displayOrder.address.detailAddress}, {displayOrder.address.ward}, {displayOrder.address.district}, {displayOrder.address.province}
-                                            </p>
+                                            <div className={styles.addrLine}>
+                                                <Phone size={12} />
+                                                <span>{displayOrder.address.phone}</span>
+                                            </div>
+                                            <div className={styles.addrLine}>
+                                                <MapPin size={12} />
+                                                <span>
+                                                    {displayOrder.address.detailAddress}, {displayOrder.address.ward}, {displayOrder.address.district}, {displayOrder.address.province}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -157,11 +168,12 @@ const SuccessfulPayment = () => {
                         </div>
 
                         {/* ── Product Items ───────────────────────────────── */}
-                        {displayOrder?.items?.length > 0 && (
+                        {(displayOrder?.items?.length > 0 || displayOrder?.orderItems?.length > 0) && (
                             <div className={styles.itemsSection}>
                                 <p className={styles.itemsTitle}>Chi tiết sản phẩm</p>
-                                {displayOrder.items.map(item => {
-                                    const product = item.variant?.productVariantMappings?.[0]?.product;
+                                {(displayOrder?.items || displayOrder?.orderItems || []).map(item => {
+                                    const variant = item.variant || item.productVariant;
+                                    const product = variant?.productVariantMappings?.[0]?.product;
                                     return (
                                         <div key={item.id} className={styles.itemRow}>
                                             <div className={styles.itemInfo}>
@@ -169,13 +181,13 @@ const SuccessfulPayment = () => {
                                                     {product?.productName || 'Sản phẩm'}
                                                 </span>
                                                 <span className={styles.itemMeta}>
-                                                    {item.variant?.color && `${item.variant.color}`}
-                                                    {item.variant?.size && ` • ${item.variant.size}`}
-                                                    {` • Số lượng: ${item.quantity}`}
+                                                    {variant?.color && `${variant.color}`}
+                                                    {variant?.size && ` • ${variant.size}`}
+                                                    {` • SL: ${item.quantity}`}
                                                 </span>
                                             </div>
                                             <span className={styles.itemPrice}>
-                                                {formatVND(item.totalPrice || item.unitPrice)}
+                                                {formatVND(item.totalPrice || item.unitPrice || item.price)}
                                             </span>
                                         </div>
                                     );
@@ -185,35 +197,26 @@ const SuccessfulPayment = () => {
 
                         {/* ── Pricing Breakdown ────────────────────────────── */}
                         <div className={styles.pricingSection}>
-                            {pricing ? (
-                                <>
-                                    <div className={styles.pricingRow}>
-                                        <span>Tạm tính</span>
-                                        <span>{formatVND(pricing.subtotal)}</span>
-                                    </div>
-                                    <div className={styles.pricingRow}>
-                                        <span>Phí vận chuyển</span>
-                                        <span>{formatVND(pricing.shippingFee)}</span>
-                                    </div>
-                                    {pricing.discountAmount > 0 && (
-                                        <div className={styles.pricingRow}>
-                                            <span>Giảm giá</span>
-                                            <span style={{ color: '#10B981', fontWeight: 600 }}>-{formatVND(pricing.discountAmount)}</span>
-                                        </div>
-                                    )}
-                                    <div className={styles.pricingRowTotal}>
-                                        <span>Tổng thanh toán</span>
-                                        <span>{formatVND(pricing.totalAmount)}</span>
-                                    </div>
-                                </>
-                            ) : (
-                                displayOrder?.totalAmount && (
-                                    <div className={styles.pricingRowTotal}>
-                                        <span>Tổng thanh toán</span>
-                                        <span>{formatVND(displayOrder.totalAmount)}</span>
-                                    </div>
-                                )
+                            <div className={styles.pricingRow}>
+                                <span>Tạm tính</span>
+                                <span>{formatVND(pricing?.subtotal || displayOrder?.subtotal)}</span>
+                            </div>
+                            <div className={styles.pricingRow}>
+                                <span>Phí vận chuyển</span>
+                                <span>{formatVND(pricing?.shippingFee || displayOrder?.shippingFee || displayOrder?.shipment?.total_shipping_fee)}</span>
+                            </div>
+                            {(pricing?.discountAmount > 0 || displayOrder?.discountAmount > 0) && (
+                                <div className={styles.pricingRow}>
+                                    <span>Giảm giá</span>
+                                    <span style={{ color: '#10B981', fontWeight: 600 }}>
+                                        -{formatVND(pricing?.discountAmount || displayOrder?.discountAmount)}
+                                    </span>
+                                </div>
                             )}
+                            <div className={styles.pricingRowTotal}>
+                                <span>Tổng thanh toán</span>
+                                <span>{formatVND(pricing?.totalAmount || displayOrder?.totalAmount)}</span>
+                            </div>
                         </div>
 
                         {/* ── Voucher used ────────────────────────────────── */}
@@ -231,8 +234,8 @@ const SuccessfulPayment = () => {
 
                 {/* ── Actions ──────────────────────────────────────────────── */}
                 <div className={styles.actions}>
-                    {orderId && (
-                        <Link to={`/order-detail/${orderId}`} className={styles.primaryBtn} style={{ background: '#7A1E1E' }}>
+                    {finalOrderId && (
+                        <Link to={`/order-detail/${finalOrderId}`} className={styles.primaryBtn} style={{ background: '#7A1E1E' }}>
                             <Package size={20} />
                             <span>Xem chi tiết đơn hàng</span>
                         </Link>

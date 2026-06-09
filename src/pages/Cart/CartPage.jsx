@@ -31,6 +31,8 @@ const CartPage = () => {
     const [updatingId, setUpdatingId] = useState(null); // cartItemId đang được update
     const [error, setError] = useState('');
 
+    const [selectedIds, setSelectedIds] = useState([]);
+
     // ── Fetch cart ──────────────────────────────────────────────────────────
     const fetchCart = useCallback(async () => {
         try {
@@ -38,8 +40,11 @@ const CartPage = () => {
             setError('');
             const data = await getCart();
             setCartData(data);
-            setCartItems(data.items || []);
-            refreshCart(); // Sync global count
+            const items = data.items || [];
+            setCartItems(items);
+            // Default all selected
+            setSelectedIds(items.map(i => i.cartItemId));
+            refreshCart();
         } catch (err) {
             setError(typeof err === 'string' ? err : 'Không thể tải giỏ hàng. Vui lòng đăng nhập.');
         } finally {
@@ -51,17 +56,30 @@ const CartPage = () => {
         fetchCart();
     }, [fetchCart]);
 
+    // ── Selection Logic ─────────────────────────────────────────────────────
+    const toggleSelect = (id) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === cartItems.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(cartItems.map(i => i.cartItemId));
+        }
+    };
+
     // ── Update quantity ─────────────────────────────────────────────────────
     const handleIncrease = async (item) => {
         const newQty = item.quantity + 1;
         setUpdatingId(item.cartItemId);
-        // Optimistic UI
-        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty, subTotal: i.unitPrice * newQty } : i));
+        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty } : i));
         try {
             await updateCartItem(item.cartItemId, newQty);
             refreshCart();
         } catch {
-            // rollback on error
             fetchCart();
         } finally {
             setUpdatingId(null);
@@ -72,7 +90,7 @@ const CartPage = () => {
         if (item.quantity <= 1) return;
         const newQty = item.quantity - 1;
         setUpdatingId(item.cartItemId);
-        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty, subTotal: i.unitPrice * newQty } : i));
+        setCartItems(prev => prev.map(i => i.cartItemId === item.cartItemId ? { ...i, quantity: newQty } : i));
         try {
             await updateCartItem(item.cartItemId, newQty);
             refreshCart();
@@ -87,6 +105,7 @@ const CartPage = () => {
     const handleRemove = async (cartItemId) => {
         setUpdatingId(cartItemId);
         setCartItems(prev => prev.filter(i => i.cartItemId !== cartItemId));
+        setSelectedIds(prev => prev.filter(i => i !== cartItemId));
         try {
             await removeCartItem(cartItemId);
             refreshCart();
@@ -106,6 +125,7 @@ const CartPage = () => {
                     setLoading(true);
                     await clearCart();
                     setCartItems([]);
+                    setSelectedIds([]);
                     refreshCart();
                     showToast('Đã làm trống giỏ hàng');
                 } catch (error) {
@@ -119,30 +139,30 @@ const CartPage = () => {
 
     // ── Derived totals ──────────────────────────────────────────────────────
     const subtotal = cartItems.reduce((sum, item) => {
+        if (!selectedIds.includes(item.cartItemId)) return sum;
         const price = Number(item.variantDetails?.extraPrice ?? item.unitPrice ?? 0);
         return sum + (price * (item.quantity || 1));
     }, 0);
 
     const total = subtotal;
 
-    // ── Product image helper ────────────────────────────────────────────────
+    // ── Image Helper ────────────────────────────────────────────────────────
     const getProductImage = (item) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
-
-        // Prioritize variant image, then first site image, then thumbnail
         let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
-
-        if (!thumb && item?.product?.productImages?.length > 0) {
-            thumb = item.product.productImages[0].imageUrl;
-        }
-
-        if (!thumb) {
-            thumb = item?.product?.thumbnail;
-        }
-
+        if (!thumb && item?.product?.productImages?.length > 0) thumb = item.product.productImages[0].imageUrl;
+        if (!thumb) thumb = item?.product?.thumbnail;
         if (!thumb) return fallbackProductImg;
         if (thumb.startsWith('http')) return thumb;
         return `${baseUrl}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
+    };
+
+    const handleCheckout = () => {
+        if (selectedIds.length === 0) {
+            showToast('Vui lòng chọn ít nhất một sản phẩm để thanh toán', 'warning');
+            return;
+        }
+        navigate('/checkout', { state: { selectedCartItemIds: selectedIds } });
     };
 
     // ─── Render: Loading ────────────────────────────────────────────────────
@@ -165,9 +185,7 @@ const CartPage = () => {
                     <div className={styles.emptyCart}>
                         <ShoppingBag size={64} strokeWidth={1} className={styles.emptyIcon} />
                         <p className={styles.emptyText}>{error}</p>
-                        <button onClick={() => navigate('/login')} className={styles.btnShopNow}>
-                            ĐĂNG NHẬP
-                        </button>
+                        <button onClick={() => navigate('/login')} className={styles.btnShopNow}>ĐĂNG NHẬP</button>
                     </div>
                 </div>
             </div>
@@ -177,47 +195,39 @@ const CartPage = () => {
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
-                {/* ── Header ───────────────────────────────────────────────── */}
                 <header className={styles.header}>
                     <button onClick={() => navigate(-1)} className={styles.backBtn}>
-                        <ArrowLeft size={20} strokeWidth={1.5} />
-                        <span>QUAY LẠI</span>
+                        <ArrowLeft size={20} /> <span>QUAY LẠI</span>
                     </button>
                     <h1 className={styles.title}>GIỎ HÀNG CỦA BẠN</h1>
                     <div className={styles.divider}><span className={styles.dividerOrn}>❧</span></div>
                 </header>
 
                 <div className={styles.mainContent}>
-                    {/* ── LEFT: ITEMS ──────────────────────────────────────── */}
                     <div className={styles.leftCol}>
                         <section className={styles.itemsSection}>
                             {cartItems.length === 0 ? (
                                 <div className={styles.emptyCartContainer}>
                                     <div className={styles.emptyCartContent}>
-                                        <div className={styles.emptyCartIllustration}>
-                                            <ShoppingBag size={80} strokeWidth={0.5} className={styles.emptyIconLarge} />
-                                            <div className={styles.iconHole} />
-                                        </div>
+                                        <ShoppingBag size={80} strokeWidth={0.5} className={styles.emptyIconLarge} />
                                         <h2 className={styles.emptyTitleLarge}>Giỏ hàng của bạn đang trống</h2>
-                                        <p className={styles.emptyDescLarge}>
-                                            Có vẻ như bạn chưa chọn được món đồ ưng ý. <br />
-                                            Hãy khám phá những bộ sưu tập mới nhất của chúng tôi để tìm thấy phụ kiện hoàn hảo cho phong cách của bạn.
-                                        </p>
-                                        <button
-                                            onClick={() => navigate('/collection')}
-                                            className={styles.btnExploreNow}
-                                        >
-                                            KHÁM PHÁ NGAY
-                                        </button>
+                                        <button onClick={() => navigate('/collection')} className={styles.btnExploreNow}>KHÁM PHÁ NGAY</button>
                                     </div>
                                 </div>
                             ) : (
                                 <>
                                     <div className={styles.cartHeaderActions}>
-                                        <h2 className={styles.cartCountTitle}>Sản phẩm ({cartItems.length})</h2>
+                                        <div className={styles.selectAllBox}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedIds.length === cartItems.length && cartItems.length > 0}
+                                                onChange={toggleSelectAll}
+                                                id="selectAll"
+                                            />
+                                            <label htmlFor="selectAll">Chọn tất cả ({cartItems.length})</label>
+                                        </div>
                                         <button onClick={handleClearCart} className={styles.btnClearAll}>
-                                            <Trash2 size={16} />
-                                            Xóa tất cả
+                                            <Trash2 size={16} /> Xóa tất cả
                                         </button>
                                     </div>
                                     {cartItems.map((item, index) => (
@@ -226,76 +236,36 @@ const CartPage = () => {
                                                 className={`${styles.cartItem} ${updatingId === item.cartItemId ? styles.cartItemUpdating : ''}`}
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: index * 0.08 }}
+                                                transition={{ delay: index * 0.05 }}
                                             >
-                                                {/* Image */}
-                                                <div className={styles.itemImageWrapper}>
-                                                    <img
-                                                        src={getProductImage(item)}
-                                                        alt={item.product?.productName || 'Sản phẩm'}
-                                                        className={styles.itemImage}
+                                                <div className={styles.itemCheckbox}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedIds.includes(item.cartItemId)}
+                                                        onChange={() => toggleSelect(item.cartItemId)}
                                                     />
                                                 </div>
-
-                                                {/* Info */}
+                                                <div className={styles.itemImageWrapper}>
+                                                    <img src={getProductImage(item)} alt={item.product?.productName} className={styles.itemImage} />
+                                                </div>
                                                 <div className={styles.itemInfo}>
-                                                    <h2 className={styles.itemName}>
-                                                        {item.product?.productName || 'Sản phẩm'}
-                                                    </h2>
+                                                    <h2 className={styles.itemName}>{item.product?.productName}</h2>
                                                     <div className={styles.itemMeta}>
-                                                        {item.variantDetails?.color && (
-                                                            <div className={styles.metaRow}>
-                                                                <span className={styles.metaLabel}>Màu sắc:</span>
-                                                                <span className={styles.metaValue}>{item.variantDetails.color}</span>
-                                                            </div>
-                                                        )}
-                                                        {item.variantDetails?.size && (
-                                                            <div className={styles.metaRow}>
-                                                                <span className={styles.metaLabel}>Size:</span>
-                                                                <span className={styles.metaValue}>{item.variantDetails.size}</span>
-                                                            </div>
-                                                        )}
+                                                        {item.variantDetails?.color && <span>Màu: {item.variantDetails.color}</span>}
+                                                        {item.variantDetails?.size && <span>Size: {item.variantDetails.size}</span>}
                                                     </div>
                                                 </div>
-
-                                                {/* Actions */}
                                                 <div className={styles.itemActions}>
                                                     <span className={styles.itemPrice}>{formatVND(item.variantDetails?.extraPrice ?? item.unitPrice)}</span>
                                                     <div className={styles.itemControls}>
                                                         <div className={styles.quantitySelector}>
-                                                            <button
-                                                                className={styles.qtyBtn}
-                                                                onClick={() => handleDecrease(item)}
-                                                                disabled={item.quantity <= 1 || updatingId === item.cartItemId}
-                                                            >
-                                                                <Minus size={14} />
-                                                            </button>
-                                                            <span className={styles.qtyValue}>
-                                                                {updatingId === item.cartItemId
-                                                                    ? <Loader2 size={14} className={styles.spinnerIcon} />
-                                                                    : item.quantity
-                                                                }
-                                                            </span>
-                                                            <button
-                                                                className={styles.qtyBtn}
-                                                                onClick={() => handleIncrease(item)}
-                                                                disabled={updatingId === item.cartItemId}
-                                                            >
-                                                                <Plus size={14} />
-                                                            </button>
+                                                            <button onClick={() => handleDecrease(item)} disabled={item.quantity <= 1}><Minus size={14} /></button>
+                                                            <span>{item.quantity}</span>
+                                                            <button onClick={() => handleIncrease(item)}><Plus size={14} /></button>
                                                         </div>
-                                                        <button
-                                                            className={styles.removeBtn}
-                                                            onClick={() => handleRemove(item.cartItemId)}
-                                                            disabled={updatingId === item.cartItemId}
-                                                        >
-                                                            <Trash2 size={18} />
-                                                        </button>
+                                                        <button onClick={() => handleRemove(item.cartItemId)} className={styles.removeBtn}><Trash2 size={18} /></button>
                                                     </div>
-                                                    {/* Subtotal */}
-                                                    <span className={styles.itemSubtotal}>
-                                                        {formatVND((item.variantDetails?.extraPrice ?? item.unitPrice ?? 0) * (item.quantity || 1))}
-                                                    </span>
+                                                    <span className={styles.itemSubtotal}>{formatVND((item.variantDetails?.extraPrice ?? item.unitPrice) * item.quantity)}</span>
                                                 </div>
                                             </motion.div>
                                             {index < cartItems.length - 1 && <div className={styles.itemDivider} />}
@@ -306,13 +276,14 @@ const CartPage = () => {
                         </section>
                     </div>
 
-                    {/* ── RIGHT: SUMMARY ───────────────────────────────────── */}
                     <div className={styles.rightCol}>
                         <div className={styles.stickySummary}>
                             <section className={styles.summaryCard}>
                                 <h3 className={styles.summaryTitle}>TỔNG ĐƠN HÀNG</h3>
-                                <div className={styles.summaryRow}><span>Tạm tính ({cartItems.length} loại sản phẩm)</span><span>{formatVND(subtotal)}</span></div>
-
+                                <div className={styles.summaryRow}>
+                                    <span>Tạm tính ({selectedIds.length} sản phẩm)</span>
+                                    <span>{formatVND(subtotal)}</span>
+                                </div>
                                 <div className={styles.summaryDivider} />
                                 <div className={styles.totalRow}>
                                     <span className={styles.totalLabel}>TỔNG CỘNG</span>
@@ -320,30 +291,16 @@ const CartPage = () => {
                                 </div>
                             </section>
 
-                            <section className={styles.benefitsSection}>
-                                <div className={styles.benefitsGrid}>
-                                    {BENEFITS.map((benefit) => (
-                                        <div key={benefit.id} className={styles.benefitItem}>
-                                            <Check size={14} className={styles.benefitIcon} />
-                                            <span>{benefit.text}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-
                             <div className={styles.actionButtons}>
                                 <motion.button
                                     className={styles.btnCheckout}
                                     whileHover={{ scale: 1.01 }}
-                                    whileTap={{ scale: 0.99 }}
-                                    onClick={() => navigate('/checkout')}
-                                    disabled={cartItems.length === 0}
+                                    onClick={handleCheckout}
+                                    disabled={selectedIds.length === 0}
                                 >
-                                    <Lock size={16} /> ĐẶT HÀNG
+                                    <Lock size={16} /> ĐẶT HÀNG ({selectedIds.length})
                                 </motion.button>
-                                <button onClick={() => navigate('/collection')} className={styles.btnContinue}>
-                                    TIẾP TỤC MUA SẮM
-                                </button>
+                                <button onClick={() => navigate('/collection')} className={styles.btnContinue}>TIẾP TỤC MUA SẮM</button>
                             </div>
                         </div>
                     </div>
