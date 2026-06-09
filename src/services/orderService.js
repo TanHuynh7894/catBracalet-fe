@@ -1,28 +1,7 @@
 import api from './api';
 
-/**
- * Get all orders for a specific user (Order History)
- */
-export const getOrdersByUserId = async (userId) => {
-    try {
-        const response = await api.get(`/orders/user/${userId}`);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data || error.message;
-    }
-};
+// ─── USER & ADMIN SHARED ──────────────────────────────────────
 
-/**
- * Get details for a specific order
- */
-export const getOrderById = async (orderId) => {
-    try {
-        const response = await api.get(`/orders/${orderId}`);
-        return response.data;
-    } catch (error) {
-        throw error.response?.data || error.message;
-    }
-};
 /**
  * Create a new order and get checkout URL
  * @param {Object} data - { userId, addressId, voucherCode, cartItemIds }
@@ -37,23 +16,118 @@ export const checkout = async (data) => {
 };
 
 /**
- * Retry payment for an existing order
- * @param {string} orderId
+ * Get details for a specific order
  */
-export const retryPayment = async (orderId) => {
+export const getOrderById = async (orderId) => {
     try {
-        const response = await api.post('/api/payment/retry', { orderId });
+        const response = await api.get(`/orders/${orderId}`);
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || error.response?.data?.error || error.message;
+        throw error.response?.data || error.message;
     }
 };
 
-const orderService = {
-    getOrdersByUserId,
-    getOrderById,
-    checkout,
-    retryPayment,
+/**
+ * Cancel an order (User can cancel PENDING orders)
+ */
+export const cancelOrder = async (orderId) => {
+    try {
+        const response = await api.patch(`/orders/${orderId}/cancel`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.message;
+    }
 };
 
-export default orderService;
+/**
+ * Retry payment for an existing unpaid order
+ */
+export const retryPayment = async (orderId) => {
+    try {
+        // Assuming your retry endpoint is standard
+        const response = await api.post('/payment/retry', { orderId });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.message;
+    }
+};
+
+// ─── ADMIN / STAFF ONLY ──────────────────────────────────────
+
+/**
+ * Get all orders in the system (Admin/Staff)
+ */
+export const getAllOrders = async () => {
+    try {
+        const response = await api.get('/orders');
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};
+
+/**
+ * Filter orders by status
+ */
+export const getOrdersByStatus = async (status) => {
+    try {
+        const response = await api.get(`/orders/status/${status}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};
+
+/**
+ * Update order status (Confirm, Ship, etc.)
+ * @param {string} orderId 
+ * @param {string} status - e.g., "CONFIRMED", "DELIVERED"
+ */
+export const updateOrderStatus = async (orderId, status) => {
+    try {
+        const response = await api.patch(`/orders/${orderId}/status`, { status });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.message;
+    }
+};
+
+/**
+ * Get orders by time range
+ * @param {string} start - Date string
+ * @param {string} end - Date string
+ */
+export const getOrdersByTime = async (start, end) => {
+    try {
+        const response = await api.get('/orders/filter/time', { params: { start, end } });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};
+
+/**
+ * Confirm order (after payment)
+ * @param {string} orderId 
+ */
+export const confirmOrder = async (orderId) => {
+    try {
+        const response = await api.patch(`/orders/${orderId}/confirm`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.message;
+    }
+};
+
+// Use named export for consistency
+export const orderService = {
+    checkout,
+    getOrderById,
+    cancelOrder,
+    retryPayment,
+    getAllOrders,
+    getOrdersByStatus,
+    updateOrderStatus,
+    getOrdersByTime,
+    confirmOrder
+};

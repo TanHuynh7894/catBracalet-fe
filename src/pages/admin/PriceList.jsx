@@ -19,12 +19,6 @@ const PriceList = () => {
             <div className={styles.header}>
                 <h1 className={styles.title}>Bảng giá</h1>
                 <div className={styles.filterGroup}>
-                    <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 text-gray-600">
-                        <Download size={16} /> Xuất file
-                    </button>
-                    <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 text-gray-600">
-                        <Upload size={16} /> Nhập file
-                    </button>
                     <button className={styles.primaryBtn + " flex items-center gap-2"}>
                         <Plus size={16} /> Thêm bảng giá
                     </button>

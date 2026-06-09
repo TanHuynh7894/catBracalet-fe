@@ -195,9 +195,6 @@ const ProductList = () => {
             <div className={styles.header}>
                 <h1 className={styles.title}>Danh sách sản phẩm</h1>
                 <div className={styles.filterGroup}>
-                    <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 text-gray-600 shadow-sm transition-all">
-                        <Download size={16} /> Xuất file
-                    </button>
                     <button
                         onClick={() => setIsCreateModalOpen(true)}
                         className="flex items-center gap-2 bg-[#680006] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4d0004] shadow-md transition-all"

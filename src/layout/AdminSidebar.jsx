@@ -49,31 +49,18 @@ const AdminSidebar = () => {
             id: 'orders',
             title: 'Đơn hàng',
             icon: <ClipboardList size={18} />,
-            subItems: [
-                { title: 'Danh sách đơn hàng', path: '/admin/orders' },
-                { title: 'Trả hàng', path: '/admin/orders/returns' },
-                { title: 'Đơn hàng chưa hoàn tất', path: '/admin/orders/incomplete' }
-            ]
+            path: '/admin/orders'
         },
         {
             id: 'processing',
             title: 'Xử lý đơn hàng',
             icon: <CircleDot size={18} />,
             subItems: [
-                { title: 'Chờ xác nhận', path: '/admin/processing/pending' },
-                { title: 'Chờ xử lý', path: '/admin/processing/handling' },
-                { title: 'In & Đóng gói', path: '/admin/processing/packing' },
-                { title: 'Bàn giao kiện hàng', path: '/admin/processing/handover' },
-                { title: 'Tất cả kiện hàng', path: '/admin/processing/all' }
-            ]
-        },
-        {
-            id: 'shipping',
-            title: 'Vận chuyển',
-            icon: <Truck size={18} />,
-            subItems: [
-                { title: 'Tổng quan vận chuyển', path: '/admin/shipping/overview' },
-                { title: 'Vận đơn', path: '/admin/shipping/waybills' }
+                { title: 'Chờ xác nhận', path: '/admin/orders?status=PENDING' },
+                { title: 'Đã xác nhận', path: '/admin/orders?status=CONFIRMED' },
+                { title: 'Chọn vận chuyển', path: '/admin/orders?status=SHIP_FLOW' },
+                { title: 'Hoàn thành', path: '/admin/orders?status=DELIVERED' },
+                { title: 'Đơn đã hủy', path: '/admin/orders?status=CANCELLED' }
             ]
         },
         {
@@ -86,20 +73,8 @@ const AdminSidebar = () => {
                 { title: 'Chất liệu', path: '/admin/products/materials' },
             ]
         },
-        {
-            id: 'inventory',
-            title: 'Quản lý kho',
-            icon: <Warehouse size={18} />,
-            subItems: [
-                { title: 'Tồn kho', path: '/admin/inventory/stock' }
-            ]
-        },
-        {
-            id: 'reports',
-            title: 'Báo cáo',
-            icon: <BarChart3 size={18} />,
-            path: '/admin/reports'
-        },
+
+
         {
             id: 'users',
             title: 'Tài khoản & Phân quyền',

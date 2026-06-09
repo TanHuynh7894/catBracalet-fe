@@ -56,3 +56,54 @@ export const calculateShippingFee = async (addressId) => {
         throw error.response?.data?.message || error.response?.data?.error || 'Không thể tính phí vận chuyển';
     }
 };
+
+/**
+ * Lấy danh sách báo giá vận chuyển cho một đơn hàng (Goship)
+ * @param {string} orderId 
+ * @param {Object} packageInfo { weight, width, height, length, cod }
+ */
+export const getShippingRates = async (orderId, packageInfo) => {
+    try {
+        const response = await api.post(`/shipments/orders/${orderId}/rates`, packageInfo);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.response?.data?.error || 'Không thể lấy báo giá vận chuyển';
+    }
+};
+
+/**
+ * Tạo vận đơn trên Goship
+ * @param {Object} shipmentData 
+ */
+export const createShipment = async (shipmentData) => {
+    try {
+        const response = await api.post('/shipments/create', shipmentData);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.response?.data?.error || 'Không thể tạo vận đơn';
+    }
+};
+
+/**
+ * Theo dõi hành trình vận đơn
+ * @param {string} orderId 
+ */
+export const trackShipment = async (orderId) => {
+    try {
+        const response = await api.get(`/shipments/track/${orderId}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.response?.data?.error || 'Không thể theo dõi vận đơn';
+    }
+};
+
+// No default export to avoid Vite resolution issues
+export const shipmentService = {
+    getProvinces,
+    getDistricts,
+    getWards,
+    calculateShippingFee,
+    getShippingRates,
+    createShipment,
+    trackShipment
+};

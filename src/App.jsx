@@ -12,6 +12,7 @@ import './index.css';
 // Lazy loading components
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const Orders = lazy(() => import('./pages/admin/Orders'));
+const AdminOrderDetail = lazy(() => import('./pages/admin/OrderDetail'));
 const Returns = lazy(() => import('./pages/admin/Returns'));
 const IncompleteOrders = lazy(() => import('./pages/admin/IncompleteOrders'));
 const PendingConfirmation = lazy(() => import('./pages/admin/PendingConfirmation'));
@@ -104,6 +105,7 @@ function App() {
                 {/* Admin Routes */}
                 <Route path="/admin" element={<Dashboard />} />
                 <Route path="/admin/orders" element={<Orders />} />
+                <Route path="/admin/orders/:id" element={<AdminOrderDetail />} />
                 <Route path="/admin/orders/returns" element={<Returns />} />
                 <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
 

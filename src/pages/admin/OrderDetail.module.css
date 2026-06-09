@@ -1,0 +1,540 @@
+/* ═══════════════════════════════════════════════════════════════
+   Admin Order Detail - CSS Module
+   ═══════════════════════════════════════════════════════════════ */
+
+.container {
+    background: #f8fafc;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.backBtn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.backBtn:hover {
+    background: #680006;
+    color: #fff;
+    border-color: #680006;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+    margin: 2px 0 0;
+}
+
+.primaryBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #680006;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primaryBtn:hover:not(:disabled) {
+    background: #4d0004;
+}
+
+.primaryBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.secondaryBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondaryBtn:hover {
+    background: #f8fafc;
+}
+
+/* ── Layout Grid ─────────────────────────────────────────────── */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 340px);
+    gap: 20px;
+    align-items: start;
+}
+
+.leftCol,
+.rightCol {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #64748b;
+}
+
+.cardHeader h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+/* ── Product Items ───────────────────────────────────────────── */
+.itemList {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item:hover {
+    background: #fafafa;
+}
+
+.itemImg {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    background: #f8fafc;
+}
+
+.itemImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemInfo h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 4px;
+}
+
+.itemInfo p {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.itemPrice {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.itemPrice span {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.itemPrice strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* ── Order Summary ───────────────────────────────────────────── */
+.summary {
+    padding: 16px 20px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.total {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    padding-top: 10px;
+    border-top: 1px dashed #e2e8f0;
+    margin-top: 4px;
+}
+
+/* ── Timeline ────────────────────────────────────────────────── */
+.timeline {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.timelineItem {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 24px;
+    position: relative;
+}
+
+.timelineItem:last-child {
+    padding-bottom: 0;
+}
+
+.timelineItem:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 18px;
+    bottom: 0;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.timelineItem.active:not(:last-child)::after {
+    background: #22c55e;
+}
+
+.dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    flex-shrink: 0;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px #e2e8f0;
+    margin-top: 2px;
+}
+
+.active .dot {
+    background: #22c55e;
+    box-shadow: 0 0 0 2px #22c55e;
+}
+
+.cancelled .dot {
+    background: #ef4444;
+    box-shadow: 0 0 0 2px #ef4444;
+}
+
+.content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 2px;
+}
+
+.content p {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* ── Status Management ───────────────────────────────────────── */
+.statusCurrent {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.actionGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btnAction {
+    width: 100%;
+    padding: 12px;
+    background: #680006;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btnAction:hover {
+    background: #4d0004;
+}
+
+.btnDanger {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnDanger:hover {
+    background: #fee2e2;
+}
+
+/* ── Customer Card ───────────────────────────────────────────── */
+.customerCard {
+    padding: 20px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #680006, #9f1239);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.infoList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.infoItem svg {
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+/* ── Shipment Management ─────────────────────────────────────── */
+.shipmentSection {
+    padding: 20px;
+    background: #fff;
+    border-top: 1px solid #f1f5f9;
+}
+
+.inputGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inputField label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.inputField input {
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.inputField input:focus {
+    border-color: #680006;
+}
+
+.ratesGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.rateCard {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rateCard:hover {
+    border-color: #680006;
+    background: #fdfbf7;
+}
+
+.rateCard.selected {
+    border-color: #680006;
+    background: #fff5f5;
+    box-shadow: 0 0 0 1px #680006;
+}
+
+.carrierLogo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.rateInfo {
+    flex: 1;
+}
+
+.rateInfo h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 2px;
+}
+
+.rateInfo p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+.ratePrice {
+    text-align: right;
+}
+
+.ratePrice strong {
+    font-size: 15px;
+    color: #680006;
+    display: block;
+}
+
+.ratePrice span {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.trackingCard {
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border-left: 4px solid #680006;
+}
+
+.trackingHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.trackingStatus {
+    font-weight: 700;
+    color: #680006;
+    font-size: 14px;
+}
+
+.trackingUpdate {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.trackingLog {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rightCol {
+        order: -1;
+    }
+}

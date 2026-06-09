@@ -230,7 +230,6 @@ const UserManagement = () => {
             <div className={styles.header}>
                 <h1 className={styles.title}>Quản lý người dùng</h1>
                 <div className={styles.filterGroup}>
-                    <button className={styles.secondaryBtn}><Download size={14} /> Xuất file</button>
                     <button className={styles.primaryBtn}><Plus size={14} /> Thêm người dùng</button>
                 </div>
             </div>

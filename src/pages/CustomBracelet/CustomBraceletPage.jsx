@@ -83,28 +83,50 @@ const CustomBraceletPage = () => {
     }, []);
 
     const openConfigurator = (product, type) => {
-        const productVariants = allVariants.filter(v =>
-            (v.productVariantMappings || v.product_variant_mappings)?.some(m =>
-                (m.productId === product.id || m.product_id === product.id)
-            )
-        );
+        // 1. Tìm biến thể (ưu tiên lấy trực tiếp từ sản phẩm nếu backend đã trả về kèm theo)
+        let productVariants = product.product_variants || product.variants || [];
+
+        // 2. Nếu không có, tìm trong danh sách allVariants thông qua mapping
+        if (productVariants.length === 0) {
+            productVariants = allVariants.filter(v =>
+                v.status === 'ACTIVE' &&
+                (v.productVariantMappings || v.product_variant_mappings || [])?.some(m =>
+                    (m.productId === product.id || m.product_id === product.id)
+                )
+            );
+        }
+
+        // 3. Nếu vẫn không có, kiểm tra mapping trực tiếp trên product (nếu có id)
+        if (productVariants.length === 0 && (product.productVariantMappings || product.product_variant_mappings)?.length > 0) {
+            const mapping = product.productVariantMappings || product.product_variant_mappings;
+            productVariants = allVariants.filter(v =>
+                mapping.some(m => m.variantId === v.id || m.variant_id === v.id)
+            );
+        }
+
+        console.log(`[CustomDesign] Product ${product.productName} has ${productVariants.length} variants`);
 
         setConfiguringProduct({ ...product, variants: productVariants });
         setConfigType(type);
 
+        // Nếu là Dây (Wire) và chỉ có 1 biến thể, có thể thêm nhanh vì thường chỉ dùng 1 dây
         if (type === 'wire' && productVariants.length === 1) {
-            // If wire has only 1 variant, select it immediately
             const v = productVariants[0];
-            setSelectedWire({
+            const itemInfo = {
                 productId: product.id,
                 variantId: v.id,
                 name: product.productName,
                 price: Number(v.extraPrice || 0),
-                image: product.image
-            });
+                image: product.image,
+                color: v.color,
+                size: v.size,
+                quantity: 1
+            };
+            setSelectedWire(itemInfo);
             setConfiguringProduct(null);
+            showToast(`Đã thêm ${product.productName}`, 'success');
         } else {
-            // Initialize options
+            // Với Đá (Stone) và Charm, hoặc Dây có nhiều mẫu: Luôn mở bảng để chọn (đặc biệt là chọn số lượng)
             const firstV = productVariants[0];
             setCurrentOptions({
                 color: firstV?.color || '',
@@ -375,7 +397,7 @@ const CustomBraceletPage = () => {
                                         <img src={getFullImageUrl(s.image)} className={styles.selectedItemImg} />
                                         <div className={styles.selectedItemInfo}>
                                             <p className={styles.selectedItemName}>{s.name}</p>
-                                            <p className={styles.selectedItemDetail}>{s.color} | {s.size}</p>
+                                            <p className={styles.selectedItemDetail}>{s.color} | {s.size} | x{s.quantity}</p>
                                         </div>
                                         <button onClick={() => removeStone(idx)} className={styles.removeBtn}><X size={14} /></button>
                                     </div>
@@ -426,7 +448,26 @@ const CustomBraceletPage = () => {
                                 </div>
                                 <div className={styles.modalRight}>
                                     <h4 className={styles.modalProdName}>{configuringProduct.productName}</h4>
-                                    <p className={styles.modalPrice}>{formatPrice(Number(configuringProduct.variants.find(v => v.id === currentOptions.variantId)?.extraPrice || 0))}</p>
+                                    <div className={styles.modalMeta}>
+                                        {(() => {
+                                            const v = configuringProduct.variants.find(varnt => varnt.id === currentOptions.variantId);
+                                            const price = v ? Number(v.extraPrice || 0) : Number(configuringProduct.basePrice || 0);
+                                            const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? null;
+
+                                            return (
+                                                <>
+                                                    <p className={styles.modalPrice}>{formatPrice(price)}</p>
+                                                    {stock !== null ? (
+                                                        <p className={`${styles.stockBadge} ${stock > 0 ? '' : styles.outOfStock}`}>
+                                                            {stock > 0 ? `Còn lại: ${stock}` : 'Hết hàng'}
+                                                        </p>
+                                                    ) : (
+                                                        <p className={styles.stockBadge}>Còn hàng</p>
+                                                    )}
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
 
                                     <div className={styles.optionsWrap}>
                                         {/* Color Selection */}
@@ -434,18 +475,23 @@ const CustomBraceletPage = () => {
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Màu sắc</p>
                                                 <div className={styles.optionList}>
-                                                    {Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).map(c => (
-                                                        <button
-                                                            key={c}
-                                                            className={`${styles.optBtn} ${currentOptions.color === c ? styles.optBtnActive : ''}`}
-                                                            onClick={() => {
-                                                                const v = configuringProduct.variants.find(varnt => varnt.color === c && (configType === 'charm' || varnt.size === currentOptions.size));
-                                                                setCurrentOptions({ ...currentOptions, color: c, variantId: v?.id || currentOptions.variantId });
-                                                            }}
-                                                        >
-                                                            {c}
-                                                        </button>
-                                                    ))}
+                                                    {Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).map(c => {
+                                                        const match = configuringProduct.variants.find(v => v.color === c);
+                                                        const stock = match?.stockQuantity ?? match?.stock_quantity ?? match?.quantity ?? 999;
+                                                        const isAvailable = stock > 0;
+                                                        return (
+                                                            <button
+                                                                key={c}
+                                                                className={`${styles.optBtn} ${currentOptions.color === c ? styles.optBtnActive : ''} ${!isAvailable ? styles.optBtnDisabled : ''}`}
+                                                                onClick={() => {
+                                                                    const v = configuringProduct.variants.find(varnt => varnt.color === c && (configType === 'charm' || varnt.size === currentOptions.size));
+                                                                    setCurrentOptions({ ...currentOptions, color: c, variantId: v?.id || currentOptions.variantId });
+                                                                }}
+                                                            >
+                                                                {c}
+                                                            </button>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         )}
@@ -455,55 +501,104 @@ const CustomBraceletPage = () => {
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Kích thước</p>
                                                 <div className={styles.optionList}>
-                                                    {Array.from(new Set(configuringProduct.variants.filter(v => v.color === currentOptions.color).map(v => v.size).filter(Boolean))).map(s => (
-                                                        <button
-                                                            key={s}
-                                                            className={`${styles.optBtn} ${currentOptions.size === s ? styles.optBtnActive : ''}`}
-                                                            onClick={() => {
-                                                                const v = configuringProduct.variants.find(varnt => varnt.color === currentOptions.color && varnt.size === s);
-                                                                setCurrentOptions({ ...currentOptions, size: s, variantId: v?.id || currentOptions.variantId });
-                                                            }}
-                                                        >
-                                                            {s}
-                                                        </button>
-                                                    ))}
+                                                    {Array.from(new Set(configuringProduct.variants.filter(v => v.color === currentOptions.color).map(v => v.size).filter(Boolean))).map(s => {
+                                                        const v = configuringProduct.variants.find(varnt => varnt.color === currentOptions.color && varnt.size === s);
+                                                        const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                                        const isAvailable = stock > 0;
+                                                        return (
+                                                            <button
+                                                                key={s}
+                                                                className={`${styles.optBtn} ${currentOptions.size === s ? styles.optBtnActive : ''} ${!isAvailable ? styles.optBtnDisabled : ''}`}
+                                                                onClick={() => {
+                                                                    setCurrentOptions({ ...currentOptions, size: s, variantId: v?.id || currentOptions.variantId });
+                                                                }}
+                                                            >
+                                                                {s}
+                                                            </button>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         )}
+
+                                        {/* Fallback Variant Selection for Stone/Charm with no Color/Size */}
+                                        {configType !== 'wire' &&
+                                            Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).length === 0 &&
+                                            Array.from(new Set(configuringProduct.variants.map(v => v.size).filter(Boolean))).length === 0 &&
+                                            configuringProduct.variants.length > 1 && (
+                                                <div className={styles.optionGroup}>
+                                                    <p className={styles.optionLabel}>Tùy chọn</p>
+                                                    <div className={styles.optionList}>
+                                                        {configuringProduct.variants.map(v => {
+                                                            const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                                            return (
+                                                                <button
+                                                                    key={v.id}
+                                                                    className={`${styles.optBtn} ${currentOptions.variantId === v.id ? styles.optBtnActive : ''} ${stock <= 0 ? styles.optBtnDisabled : ''}`}
+                                                                    onClick={() => setCurrentOptions({ ...currentOptions, variantId: v.id })}
+                                                                >
+                                                                    {v.sku || `Mẫu #${v.id.slice(-4)}`} - {formatPrice(Number(v.extraPrice || 0))}
+                                                                    {stock > 0 ? (stock < 999 ? ` (Còn ${stock})` : '') : ' (Hết hàng)'}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            )}
 
                                         {/* Variant Selection for Wire */}
                                         {configType === 'wire' && configuringProduct.variants.length > 0 && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Loại dây</p>
                                                 <div className={styles.optionList}>
-                                                    {configuringProduct.variants.map(v => (
-                                                        <button
-                                                            key={v.id}
-                                                            className={`${styles.optBtn} ${currentOptions.variantId === v.id ? styles.optBtnActive : ''}`}
-                                                            onClick={() => setCurrentOptions({ ...currentOptions, variantId: v.id })}
-                                                        >
-                                                            {(v.color || v.size) ? `${v.color || ''} ${v.size || ''}`.trim() : (v.sku || 'Loại cơ bản')} - {formatPrice(Number(v.extraPrice || 0))}
-                                                        </button>
-                                                    ))}
+                                                    {configuringProduct.variants.map(v => {
+                                                        const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                                        return (
+                                                            <button
+                                                                key={v.id}
+                                                                className={`${styles.optBtn} ${currentOptions.variantId === v.id ? styles.optBtnActive : ''} ${stock <= 0 ? styles.optBtnDisabled : ''}`}
+                                                                onClick={() => setCurrentOptions({ ...currentOptions, variantId: v.id })}
+                                                            >
+                                                                {(v.color || v.size) ? `${v.color || ''} ${v.size || ''}`.trim() : (v.sku || 'Loại cơ bản')} - {formatPrice(Number(v.extraPrice || 0))}
+                                                                {stock > 0 ? (stock < 999 ? ` (Còn ${stock})` : '') : ' (Hết hàng)'}
+                                                            </button>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         )}
 
-                                        {/* Quantity Selection for Charm */}
-                                        {configType === 'charm' && (
+                                        {/* Quantity Selection for Stone & Charm */}
+                                        {(configType === 'charm' || configType === 'stone') && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Số lượng</p>
                                                 <div className={styles.qtyControl}>
                                                     <button onClick={() => setCurrentOptions(prev => ({ ...prev, quantity: Math.max(1, prev.quantity - 1) }))}><Minus size={14} /></button>
                                                     <span>{currentOptions.quantity}</span>
-                                                    <button onClick={() => setCurrentOptions(prev => ({ ...prev, quantity: Math.min(10, prev.quantity + 1) }))}><Plus size={14} /></button>
+                                                    <button onClick={() => {
+                                                        const v = configuringProduct.variants.find(vr => vr.id === currentOptions.variantId);
+                                                        const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                                        setCurrentOptions(prev => ({ ...prev, quantity: Math.min(stock, prev.quantity + 1) }));
+                                                    }}><Plus size={14} /></button>
                                                 </div>
                                             </div>
                                         )}
                                     </div>
 
-                                    <button className={styles.addBtn} onClick={handleAddConfigured}>
-                                        THÊM VÀO THIẾT KẾ
+                                    <button
+                                        className={styles.addBtn}
+                                        onClick={handleAddConfigured}
+                                        disabled={(() => {
+                                            const v = configuringProduct?.variants?.find(vr => vr.id === currentOptions.variantId);
+                                            const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                            return stock <= 0;
+                                        })()}
+                                    >
+                                        {(() => {
+                                            const v = configuringProduct?.variants?.find(vr => vr.id === currentOptions.variantId);
+                                            const stock = v?.stockQuantity ?? v?.stock_quantity ?? v?.quantity ?? 999;
+                                            return stock > 0 ? 'THÊM VÀO THIẾT KẾ' : 'HIỆN ĐANG HẾT HÀNG';
+                                        })()}
                                     </button>
                                 </div>
                             </div>
