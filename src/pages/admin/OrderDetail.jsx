@@ -78,7 +78,7 @@ const AdminOrderDetail = () => {
         setIsGettingRates(true);
         try {
             const data = await shipmentService.getShippingRates(id, packageInfo);
-            setShippingRates(data.rates || []);
+            setShippingRates(data.carriers || []);
             showToast('Đã cập nhật danh sách giá vận chuyển', 'success');
         } catch (error) {
             showToast(error || 'Không thể lấy thông tin giá vận chuyển', 'error');
@@ -300,20 +300,29 @@ const AdminOrderDetail = () => {
                                     <div className="animate-fade-in">
                                         <h3 className="text-sm font-bold text-gray-700 mb-3">Chọn đơn vị vận chuyển</h3>
                                         <div className={styles.rateList}>
-                                            {shippingRates.map((rate) => (
-                                                <div
-                                                    key={rate.id}
-                                                    className={`${styles.rateCard} ${selectedRateId === rate.id ? styles.selected : ''}`}
-                                                    onClick={() => setSelectedRateId(rate.id)}
-                                                >
-                                                    <img src={rate.carrier_logo} alt={rate.carrier_name} className={styles.carrierLogo} />
-                                                    <div className={styles.carrierInfo}>
-                                                        <p className={styles.carrierName}>{rate.carrier_name}</p>
-                                                        <p className={styles.carrierService}>{rate.service} • {rate.expected}</p>
+                                            {shippingRates.map((carrier, cIdx) => (
+                                                <div key={cIdx} className="mb-4">
+                                                    <div className="flex items-center gap-2 mb-2 px-1">
+                                                        <img src={carrier.carrier_logo} alt={carrier.carrier_name} className="w-5 h-5 object-contain" />
+                                                        <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{carrier.carrier_name}</span>
                                                     </div>
-                                                    <div className={styles.ratePrice}>
-                                                        <p className={styles.fee}>{new Intl.NumberFormat('vi-VN').format(rate.total_amount)}đ</p>
-                                                        {rate.cod_fee > 0 && <p className={styles.expected}>Phí COD: {new Intl.NumberFormat('vi-VN').format(rate.cod_fee)}đ</p>}
+                                                    <div className="flex flex-col gap-2">
+                                                        {carrier.services?.map((svc) => (
+                                                            <div
+                                                                key={svc.rateId}
+                                                                className={`${styles.rateCard} ${selectedRateId === svc.rateId ? styles.selected : ''}`}
+                                                                onClick={() => setSelectedRateId(svc.rateId)}
+                                                            >
+                                                                <div className={styles.carrierInfo}>
+                                                                    <p className={styles.carrierName}>{svc.service}</p>
+                                                                    <p className={styles.carrierService}>{svc.expected}</p>
+                                                                </div>
+                                                                <div className={styles.ratePrice}>
+                                                                    <p className={styles.fee}>{new Intl.NumberFormat('vi-VN').format(svc.total_amount)}đ</p>
+                                                                    {svc.cod_fee > 0 && <p className={styles.expected}>Phí COD: {new Intl.NumberFormat('vi-VN').format(svc.cod_fee)}đ</p>}
+                                                                </div>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             ))}
