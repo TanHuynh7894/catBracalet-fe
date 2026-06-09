@@ -344,6 +344,18 @@
     color: #fff;
 }
 
+.sizeBtnDisabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f0f0f0;
+    border-style: dashed;
+}
+
+.sizeBtnDisabled:hover {
+    border-color: var(--border);
+    color: var(--text-muted);
+}
+
 .quantityRow {
     display: flex;
     align-items: center;

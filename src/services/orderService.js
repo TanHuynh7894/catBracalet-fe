@@ -36,10 +36,24 @@ export const checkout = async (data) => {
     }
 };
 
+/**
+ * Retry payment for an existing order
+ * @param {string} orderId
+ */
+export const retryPayment = async (orderId) => {
+    try {
+        const response = await api.post('/api/payment/retry', { orderId });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || error.response?.data?.error || error.message;
+    }
+};
+
 const orderService = {
     getOrdersByUserId,
     getOrderById,
     checkout,
+    retryPayment,
 };
 
 export default orderService;

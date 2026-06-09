@@ -1,15 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { ArrowRight, Calendar, CreditCard, CheckCircle2, Clock, AlertCircle, ShoppingBag } from 'lucide-react';
-import { getOrdersByUserId } from '../../services/orderService';
+import { ArrowRight, Calendar, CreditCard, CheckCircle2, Clock, AlertCircle, ShoppingBag, Truck, Package, CreditCard as PaymentIcon, Loader2 } from 'lucide-react';
+import { getOrdersByUserId, retryPayment } from '../../services/orderService';
+import { useToast } from '../../context/ToastContext';
 import styles from './OrderHistory.module.css';
 
 const OrderHistory = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('ALL');
+    const [retryingId, setRetryingId] = useState(null);
+
+    const handleRetry = async (orderId) => {
+        try {
+            setRetryingId(orderId);
+            const data = await retryPayment(orderId);
+            if (data.checkoutUrl) {
+                window.location.href = data.checkoutUrl;
+            } else {
+                showToast('Không tìm thấy liên kết thanh toán', 'error');
+            }
+        } catch (err) {
+            console.error('Retry error:', err);
+            showToast(err, 'error');
+        } finally {
+            setRetryingId(null);
+        }
+    };
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -57,16 +77,33 @@ const OrderHistory = () => {
 
     const getStatusInfo = (status) => {
         switch (status) {
+            case 'PENDING':
+                return { label: 'Chờ xử lý', color: 'slate', icon: Clock };
             case 'CONFIRMED':
                 return { label: 'Đã xác nhận', color: 'emerald', icon: CheckCircle2 };
-            case 'PENDING':
-                return { label: 'Đang xử lý', color: 'slate', icon: Clock };
             case 'SHIPPING':
-                return { label: 'Đang giao', color: 'amber', icon: Clock };
+                return { label: 'Đang giao hàng', color: 'amber', icon: Truck };
+            case 'DELIVERED':
+                return { label: 'Đã giao hàng', color: 'green', icon: CheckCircle2 };
             case 'CANCELLED':
                 return { label: 'Đã hủy', color: 'red', icon: AlertCircle };
             default:
                 return { label: status, color: 'slate', icon: Clock };
+        }
+    };
+
+    const getPaymentStatusInfo = (status) => {
+        switch (status) {
+            case 'PAID':
+                return { label: 'Đã thanh toán', color: 'emerald' };
+            case 'PENDING':
+                return { label: 'Chờ thanh toán', color: 'amber' };
+            case 'UNPAID':
+                return { label: 'Chưa thanh toán', color: 'slate' };
+            case 'CANCELLED':
+                return { label: 'Đã hủy thanh toán', color: 'red' };
+            default:
+                return { label: 'Chưa thanh toán', color: 'slate' };
         }
     };
 
@@ -121,22 +158,30 @@ const OrderHistory = () => {
             <div className="space-y-6">
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => {
-                        const status = getStatusInfo(order.status);
-                        const StatusIcon = status.icon;
+                        const statusInfo = getStatusInfo(order.status);
+                        const payStatusInfo = getPaymentStatusInfo(order.paymentStatus);
+                        const StatusIcon = statusInfo.icon;
 
                         return (
-                            <div key={order.id} className={`bg-white rounded-xl shadow-sm border-l-4 border-${status.color}-500 overflow-hidden transition-all hover:shadow-md`}>
+                            <div key={order.id} className={`bg-white rounded-xl shadow-sm border-l-4 border-${statusInfo.color}-500 overflow-hidden transition-all hover:shadow-md`}>
                                 <div className="p-6 md:p-8">
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                                         <div className="space-y-1">
                                             <span className="font-body text-[10px] text-primary uppercase tracking-[0.2em] font-bold">Mã đơn hàng</span>
-                                            <h3 className="font-headline text-2xl text-on-surface uppercase overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]">#{order.id.split('-')[0]}</h3>
+                                            <h3 className="font-headline text-2xl text-on-surface uppercase overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]">
+                                                #{order.paymentOrderCode || order.id.split('-')[0]}
+                                            </h3>
                                         </div>
                                         <div className="flex flex-col items-start md:items-end gap-2">
-                                            <span className={`px-4 py-1 rounded-full bg-${status.color}-50 text-${status.color}-700 font-body text-[11px] uppercase tracking-widest flex items-center gap-2 border border-${status.color}-100 font-bold`}>
-                                                <StatusIcon size={14} />
-                                                {status.label}
-                                            </span>
+                                            <div className="flex flex-wrap gap-2 justify-end">
+                                                <span className={`px-4 py-1 rounded-full bg-${statusInfo.color}-50 text-${statusInfo.color}-700 font-body text-[11px] uppercase tracking-widest flex items-center gap-2 border border-${statusInfo.color}-100 font-bold`}>
+                                                    <StatusIcon size={14} />
+                                                    {statusInfo.label}
+                                                </span>
+                                                <span className={`px-4 py-1 rounded-full bg-${payStatusInfo.color}-50 text-${payStatusInfo.color}-700 font-body text-[11px] uppercase tracking-widest border border-${payStatusInfo.color}-100 font-bold`}>
+                                                    {payStatusInfo.label}
+                                                </span>
+                                            </div>
                                             <p className="text-xs text-on-surface-variant font-body italic">Cập nhật: {formatDate(order.createdAt)}</p>
                                         </div>
                                     </div>
@@ -155,10 +200,24 @@ const OrderHistory = () => {
                                                 <span className="font-body text-body-md font-bold text-lg">{formatPrice(order.totalAmount)}</span>
                                             </div>
                                         </div>
-                                        <div className="flex items-center md:justify-end">
+                                        <div className="flex items-center md:justify-end gap-3 flex-wrap">
+                                            {order.paymentStatus !== 'PAID' && order.status !== 'CANCELLED' && (
+                                                <button
+                                                    onClick={() => handleRetry(order.id)}
+                                                    disabled={retryingId === order.id}
+                                                    className="flex items-center gap-2 px-5 py-2.5 bg-[#D8B27D] text-white rounded-lg hover:bg-[#c4a16d] transition-all group font-body text-xs uppercase tracking-widest font-bold disabled:opacity-50 shadow-sm"
+                                                >
+                                                    {retryingId === order.id ? (
+                                                        <Loader2 size={18} className="animate-spin" />
+                                                    ) : (
+                                                        <CreditCard size={18} />
+                                                    )}
+                                                    <span>Thanh toán ngay</span>
+                                                </button>
+                                            )}
                                             <NavLink
                                                 to={`/order-detail/${order.id}`}
-                                                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-[#8c1515] transition-all group font-body text-xs uppercase tracking-widest font-bold"
+                                                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-[#8c1515] transition-all group font-body text-xs uppercase tracking-widest font-bold shadow-sm"
                                             >
                                                 <span>Chi tiết đơn</span>
                                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

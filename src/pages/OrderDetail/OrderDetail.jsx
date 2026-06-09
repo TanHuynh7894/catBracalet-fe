@@ -114,23 +114,45 @@ const OrderDetail = () => {
                     )}
                 </div>
 
-                {/* Voucher & Customer Info */}
+                {/* Payment & Customer Info */}
                 <div className="p-8 bg-white border border-outline-variant/20 rounded-2xl shadow-sm">
                     <div className="flex items-center mb-6 space-x-2">
                         <CreditCard className="text-primary" size={24} />
-                        <h3 className="font-headline text-primary text-2xl">Ưu đãi & Khách hàng</h3>
+                        <h3 className="font-headline text-primary text-2xl">Thanh toán & Đơn hàng</h3>
                     </div>
                     <div className="space-y-4">
-                        <div>
-                            <p className="text-[10px] text-outline uppercase font-bold tracking-widest mb-1">Khách hàng</p>
-                            <p className="font-body text-body-md font-bold text-on-surface">{order.user?.fullName || 'N/A'}</p>
-                            <p className="font-body text-xs text-on-surface-variant">{order.user?.email || 'N/A'}</p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <p className="text-[10px] text-outline uppercase font-bold tracking-widest mb-1">Trạng thái thanh toán</p>
+                                <span className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${order.paymentStatus === 'PAID' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-amber-50 text-amber-700 border border-amber-100'}`}>
+                                    {order.paymentStatus === 'PAID' ? 'Đã thanh toán' : (order.paymentStatus === 'PENDING' ? 'Chờ thanh toán' : 'Chưa hoàn tất')}
+                                </span>
+                            </div>
+                            {order.paymentOrderCode && (
+                                <div>
+                                    <p className="text-[10px] text-outline uppercase font-bold tracking-widest mb-1">Mã đối soát (PayOS)</p>
+                                    <p className="font-body text-body-md font-bold text-on-surface">#{order.paymentOrderCode}</p>
+                                </div>
+                            )}
                         </div>
+
+                        <div>
+                            <p className="text-[10px] text-outline uppercase font-bold tracking-widest mb-1">Thời gian đặt</p>
+                            <p className="font-body text-body-md text-on-surface font-medium">{new Date(order.createdAt).toLocaleString('vi-VN')}</p>
+                        </div>
+
+                        {order.paidAt && (
+                            <div>
+                                <p className="text-[10px] text-emerald-700 uppercase font-bold tracking-widest mb-1">Hoàn tất thanh toán</p>
+                                <p className="font-body text-body-md text-emerald-800 font-medium">{new Date(order.paidAt).toLocaleString('vi-VN')}</p>
+                            </div>
+                        )}
+
                         {order.voucher && (
                             <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
                                 <p className="text-[10px] text-emerald-700 uppercase font-bold tracking-widest mb-1">Mã giảm giá đã dùng</p>
                                 <p className="font-body text-body-md font-bold text-emerald-800">{order.voucher.code}</p>
-                                <p className="text-xs text-emerald-600">Giảm {order.voucher.discountValue}{order.voucher.discountType === 'PERCENT' ? '%' : 'đ'}</p>
+                                <p className="text-xs text-emerald-600">Giảm {order.voucher.discountType === 'PERCENT' ? `${order.voucher.discountValue}%` : formatPrice(order.voucher.discountValue)}</p>
                             </div>
                         )}
                     </div>
@@ -200,21 +222,25 @@ const OrderDetail = () => {
                         <div className="flex justify-between items-center text-emerald-600">
                             <span className="font-body text-body-md">Giảm giá (Voucher)</span>
                             <span className="font-body text-body-md tabular-nums font-bold">
-                                -{order.voucher.discountType === 'PERCENT'
-                                    ? `${order.voucher.discountValue}%`
-                                    : formatPrice(order.voucher.discountValue)}
+                                {order.voucher.discountType === 'PERCENT'
+                                    ? `-${order.voucher.discountValue}%`
+                                    : `-${formatPrice(order.voucher.discountValue)}`}
                             </span>
                         </div>
                     )}
                     <div className="flex justify-between items-center">
                         <span className="font-body text-body-md text-on-surface-variant">Phí vận chuyển</span>
-                        <span className="font-body text-secondary font-bold uppercase tracking-wider text-xs">Theo khu vực</span>
+                        <span className="font-body text-on-surface font-bold">
+                            {order.shippingFee > 0 ? formatPrice(order.shippingFee) : 'Miễn phí'}
+                        </span>
                     </div>
                     <div className="pt-6 border-t-2 border-primary/10 flex justify-between items-baseline">
                         <span className="font-headline text-on-surface text-xl">Tổng thanh toán</span>
                         <div className="text-right">
                             <p className="font-headline text-primary text-3xl font-bold">{formatPrice(order.totalAmount)}</p>
-                            <p className="text-[10px] text-on-surface-variant uppercase tracking-widest mt-1 font-body">Cập nhật lúc {new Date(order.createdAt).toLocaleTimeString()}</p>
+                            <p className="text-[10px] text-on-surface-variant uppercase tracking-widest mt-1 font-body font-bold">
+                                Cập nhật lúc {new Date(order.createdAt).toLocaleTimeString('vi-VN')}
+                            </p>
                         </div>
                     </div>
 

@@ -59,6 +59,37 @@ export default function ProductDetail() {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [adding, setAdding] = useState(false);
 
+    // Dynamic attributes calculation
+    const allColors = React.useMemo(() => [...new Set(productVariants.map(v => v.color))].filter(Boolean), [productVariants]);
+    const allSizes = React.useMemo(() => [...new Set(productVariants.map(v => v.size))].filter(Boolean), [productVariants]);
+
+    const handleAttributeSelect = (type, value) => {
+        let newColor = selectedColor;
+        let newSize = selectedSize;
+
+        if (type === 'color') {
+            newColor = value;
+            // If current size is incompatible with new color, pick first available size for this color
+            if (!productVariants.some(v => v.color === value && v.size === selectedSize)) {
+                const firstValid = productVariants.find(v => v.color === value);
+                newSize = firstValid?.size || '';
+            }
+        } else {
+            newSize = value;
+            // If current color is incompatible with new size, pick first available color for this size
+            if (!productVariants.some(v => v.size === value && v.color === selectedColor)) {
+                const firstValid = productVariants.find(v => v.size === value);
+                newColor = firstValid?.color || '';
+            }
+        }
+
+        setSelectedColor(newColor);
+        setSelectedSize(newSize);
+
+        const match = productVariants.find(v => v.color === newColor && v.size === newSize);
+        if (match) setVariant(match);
+    };
+
     useEffect(() => {
         const loadDetail = async () => {
             if (!productId) return;
@@ -89,32 +120,19 @@ export default function ProductDetail() {
 
                 setProductVariants(variantsForProduct);
 
-                // Lấy danh sách size và color duy nhất
-                const sizes = [...new Set(variantsForProduct.map(v => v.size))].filter(Boolean);
-                const colors = [...new Set(variantsForProduct.map(v => v.color))].filter(Boolean);
-
-                setAvailableSizes(sizes);
-                setAvailableColors(colors);
-
                 if (variantsForProduct.length > 0) {
                     const firstV = variantsForProduct[0];
                     setVariant(firstV);
-                    if (firstV.size) setSelectedSize(firstV.size);
-                    if (firstV.color) setSelectedColor(firstV.color);
+                    setSelectedSize(firstV.size || '');
+                    setSelectedColor(firstV.color || '');
                 } else if (data.productVariantMappings?.length > 0) {
                     try {
                         const vId = data.productVariantMappings[0].variantId;
                         const vData = await getProductVariantById(vId);
                         setVariant(vData);
                         setProductVariants([vData]);
-                        if (vData.size) {
-                            setAvailableSizes([vData.size]);
-                            setSelectedSize(vData.size);
-                        }
-                        if (vData.color) {
-                            setAvailableColors([vData.color]);
-                            setSelectedColor(vData.color);
-                        }
+                        setSelectedSize(vData.size || '');
+                        setSelectedColor(vData.color || '');
                     } catch (e) { }
                 }
 
@@ -344,22 +362,20 @@ export default function ProductDetail() {
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn màu sắc</p>
                                 <div className={styles.sizeButtons}>
-                                    {availableColors.length > 0 ? (
-                                        availableColors.map((c) => (
-                                            <button
-                                                key={c}
-                                                className={`${styles.sizeBtn} ${selectedColor === c ? styles.sizeBtnActive : ''}`}
-                                                onClick={() => {
-                                                    setSelectedColor(c);
-                                                    // Tìm variant có color này (nếu có combo size + color thì tìm chính xác hơn)
-                                                    const match = productVariants.find(v => v.color === c && (selectedSize ? v.size === selectedSize : true))
-                                                        || productVariants.find(v => v.color === c);
-                                                    if (match) setVariant(match);
-                                                }}
-                                            >
-                                                {c}
-                                            </button>
-                                        ))
+                                    {allColors.length > 0 ? (
+                                        allColors.map((c) => {
+                                            const isAvailable = !selectedSize || productVariants.some(v => v.color === c && v.size === selectedSize);
+                                            return (
+                                                <button
+                                                    key={c}
+                                                    className={`${styles.sizeBtn} ${selectedColor === c ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
+                                                    onClick={() => handleAttributeSelect('color', c)}
+                                                    title={!isAvailable ? 'Không sẵn có cho size này' : ''}
+                                                >
+                                                    {c}
+                                                </button>
+                                            );
+                                        })
                                     ) : (
                                         <span className={styles.noInfoText}>Đang cập nhật...</span>
                                     )}
@@ -370,22 +386,20 @@ export default function ProductDetail() {
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn size vòng</p>
                                 <div className={styles.sizeButtons}>
-                                    {availableSizes.length > 0 ? (
-                                        availableSizes.map((s) => (
-                                            <button
-                                                key={s}
-                                                className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''}`}
-                                                onClick={() => {
-                                                    setSelectedSize(s);
-                                                    // Tìm variant có size này
-                                                    const match = productVariants.find(v => v.size === s && (selectedColor ? v.color === selectedColor : true))
-                                                        || productVariants.find(v => v.size === s);
-                                                    if (match) setVariant(match);
-                                                }}
-                                            >
-                                                {s}
-                                            </button>
-                                        ))
+                                    {allSizes.length > 0 ? (
+                                        allSizes.map((s) => {
+                                            const isAvailable = !selectedColor || productVariants.some(v => v.size === s && v.color === selectedColor);
+                                            return (
+                                                <button
+                                                    key={s}
+                                                    className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
+                                                    onClick={() => handleAttributeSelect('size', s)}
+                                                    title={!isAvailable ? 'Không sẵn có cho màu này' : ''}
+                                                >
+                                                    {s}
+                                                </button>
+                                            );
+                                        })
                                     ) : (
                                         <span className={styles.noInfoText}>Đang cập nhật...</span>
                                     )}
