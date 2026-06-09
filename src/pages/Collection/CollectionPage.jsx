@@ -14,7 +14,7 @@ import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 
 // ─── Import Logo ────────────────────────────────────────────────────────────
-import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
+import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/anhbosuutap.png';
 import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
 // ─── Color Picker Data ───────────────────────────────────────────────────────

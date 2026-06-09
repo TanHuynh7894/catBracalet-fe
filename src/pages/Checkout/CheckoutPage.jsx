@@ -145,6 +145,18 @@ const CheckoutPage = () => {
         fetchShippingFee();
     }, [selectedAddress]);
 
+    // Body scroll lock when modal is open
+    useEffect(() => {
+        if (showVoucherModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showVoucherModal]);
+
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
     const handleProvinceChange = async (e) => {
@@ -325,52 +337,8 @@ const CheckoutPage = () => {
                     <h1 className={styles.title}>THANH TOÁN</h1>
                 </header>
 
-                {/* ── PROMO/VOUCHER BAR ─────────────────────────────────────── */}
-                <motion.div {...fadeUp} className={styles.promoBar} onClick={() => setPromoOpen(!promoOpen)}>
-                    <div className={styles.promoLeft}>
-                        <Tag size={16} className={styles.promoIcon} />
-                        <span>{appliedVoucher ? `Đã áp dụng mã: ${appliedVoucher.code}` : 'Bạn có mã ưu đãi? Nhấn vào đây để nhập mã giảm giá.'}</span>
-                    </div>
-                    <div className={styles.promoRightActions}>
-                        <button
-                            className={styles.viewListBtn}
-                            onClick={(e) => { e.stopPropagation(); setShowVoucherModal(true); }}
-                        >
-                            Xem danh sách
-                        </button>
-                        <ChevronRight size={18} className={promoOpen ? styles.promoChevronOpen : styles.promoChevron} />
-                    </div>
-                </motion.div>
+                {/* ── PROMO/VOUCHER BAR (Now moved to sidebar) ────────────────── */}
 
-                {promoOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className={styles.promoInputRow}
-                    >
-                        <div className={styles.promoInputWrapper}>
-                            <input
-                                type="text"
-                                className={styles.promoInput}
-                                placeholder="Nhập mã giảm giá"
-                                value={voucherCode}
-                                onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
-                            />
-                            {appliedVoucher ? (
-                                <button className={styles.promoBtnRemove} onClick={handleRemoveVoucher}>GỠ BỎ</button>
-                            ) : (
-                                <button
-                                    className={styles.promoBtn}
-                                    onClick={() => handleApplyVoucher()}
-                                    disabled={isApplyingVoucher || !voucherCode.trim()}
-                                >
-                                    {isApplyingVoucher ? '...' : 'ÁP DỤNG'}
-                                </button>
-                            )}
-                        </div>
-                    </motion.div>
-                )}
 
                 {/* ── MAIN LAYOUT ───────────────────────────────────────────── */}
                 <div className={styles.mainGrid}>
@@ -513,6 +481,34 @@ const CheckoutPage = () => {
                                             <div className={styles.productPrice}>{formatVND(item.variantDetails?.extraPrice ?? item.unitPrice)}</div>
                                         </div>
                                     ))}
+                                </div>
+
+                                {/* Coupon Input Section (Integrated) */}
+                                <div className={styles.sidebarCoupon}>
+                                    <div className={styles.couponHeader}>
+                                        <span className={styles.couponLabel}>MÃ ƯU ĐÃI</span>
+                                        <button className={styles.viewListLink} onClick={() => setShowVoucherModal(true)}>Xem danh sách</button>
+                                    </div>
+                                    <div className={styles.couponInputBox}>
+                                        <input
+                                            type="text"
+                                            className={styles.couponInput}
+                                            placeholder="Nhập mã giảm giá"
+                                            value={voucherCode}
+                                            onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                                        />
+                                        {appliedVoucher ? (
+                                            <button className={styles.applyBtnRemove} onClick={handleRemoveVoucher}>GỠ</button>
+                                        ) : (
+                                            <button
+                                                className={styles.applyBtn}
+                                                onClick={() => handleApplyVoucher()}
+                                                disabled={isApplyingVoucher || !voucherCode.trim()}
+                                            >
+                                                {isApplyingVoucher ? <Loader2 size={14} className="animate-spin" /> : 'ÁP DỤNG'}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Totals */}

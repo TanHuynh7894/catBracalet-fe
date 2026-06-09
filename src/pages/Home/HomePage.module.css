@@ -165,6 +165,10 @@
     object-fit: cover;
     object-position: center right;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 /* Gradient fade from left (text readable) to transparent right */
@@ -365,6 +369,8 @@
     object-position: center left;
     display: block;
     z-index: 1;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
 }
 
 .problemOverlayContent {
@@ -519,6 +525,8 @@
     /* Bracelet is on the right */
     display: block;
     z-index: 1;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
 }
 
 .aboutOverlayContent {
@@ -527,10 +535,8 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    /* Light white tint instead of heavy gradient to keep image sharp */
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: brightness(1.05);
-    /* Slightly brighten the image */
+    /* Removed backdrop-filter to keep background sharp */
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .aboutTextContainer {
@@ -715,6 +721,8 @@
     /* Bracelet on the left */
     display: block;
     z-index: 1;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
 }
 
 .bannerTextContainer {
@@ -962,6 +970,8 @@
     object-position: center;
     display: block;
     z-index: 1;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
 }
 
 .ctaOverlayContent {

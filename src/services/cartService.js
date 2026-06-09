@@ -9,6 +9,7 @@ export const getCart = async () => {
         const response = await api.get('/cart');
         return response.data;
     } catch (error) {
+        console.error("[CartService] GetCart error:", error);
         throw error.response?.data?.message || 'Không thể lấy giỏ hàng';
     }
 };
@@ -24,7 +25,8 @@ export const addToCart = async (variantId, quantity = 1) => {
         const response = await api.post('/cart/add', { variantId, quantity });
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || 'Không thể thêm vào giỏ hàng';
+        console.error("[CartService] AddToCart error:", error);
+        throw error.response?.data?.message || error.message || 'Không thể thêm vào giỏ hàng';
     }
 };
 
@@ -39,6 +41,7 @@ export const updateCartItem = async (cartItemId, quantity) => {
         const response = await api.patch(`/cart/item/${cartItemId}`, { quantity });
         return response.data;
     } catch (error) {
+        console.error("[CartService] Update error:", error);
         throw error.response?.data?.message || 'Không thể cập nhật số lượng';
     }
 };
@@ -53,6 +56,7 @@ export const removeCartItem = async (cartItemId) => {
         const response = await api.delete(`/cart/item/${cartItemId}`);
         return response.data;
     } catch (error) {
+        console.error("[CartService] Remove error:", error);
         throw error.response?.data?.message || 'Không thể xóa sản phẩm';
     }
 };
@@ -66,6 +70,7 @@ export const clearCart = async () => {
         const response = await api.delete('/cart/clear');
         return response.data;
     } catch (error) {
+        console.error("[CartService] Clear error:", error);
         throw error.response?.data?.message || 'Không thể xóa giỏ hàng';
     }
 };

@@ -14,7 +14,7 @@ import styles from './HomePage.module.css';
 // ─── LOCAL ASSETS ────────────────────────────────────────────────────────────
 import heroImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne...jpg';
 import problemImg from '../../assets/Ảnh UI/ảnh chi tiết/Home ne.png';
-import aboutBgImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne..png';
+import aboutBgImg from '../../assets/Ảnh UI/ảnh chi tiết/catlagi.png';
 import step1Img from '../../assets/Ảnh UI/ảnh chi tiết/Thanhtay.png';
 import step2Img from '../../assets/Ảnh UI/ảnh chi tiết/kichhoat.png';
 import step3Img from '../../assets/Ảnh UI/ảnh chi tiết/canbang.png';
@@ -318,48 +318,10 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ FEATURED COLLECTIONS ══════════════════════════════════════ */}
-            <section className={styles.collectionsSection}>
-                <div className={styles.container}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>Bộ sưu tập nổi bật</h2>
-                        <motion.button
-                            className={styles.btnTextLink}
-                            onClick={() => navigate('/collection')}
-                            whileHover={{ x: 4 }}
-                        >
-                            XEM TẤT CẢ BỘ SƯU TẬP <ArrowRight size={14} />
-                        </motion.button>
-                    </div>
-                    <div className={styles.productsGrid}>
-                        {PRODUCTS.map((p, i) => (
-                            <motion.div
-                                key={p.id}
-                                className={styles.productCard}
-                                {...fadeUpDelay(i * 0.08)}
-                                whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(75,58,50,0.12)' }}
-                            >
-                                <div className={styles.productImgWrap}>
-                                    <div className={styles.productImgPlaceholder}>
-                                        <Gem size={36} strokeWidth={1} className={styles.productPlaceholderIcon} />
-                                    </div>
-                                    <button
-                                        className={`${styles.wishlistBtn} ${wishlist.includes(p.id) ? styles.wishlistActive : ''}`}
-                                        onClick={() => toggleWishlist(p.id)}
-                                    >
-                                        <Heart size={15} fill={wishlist.includes(p.id) ? 'currentColor' : 'none'} />
-                                    </button>
-                                </div>
-                                <div className={styles.productInfo}>
-                                    <h3 className={styles.productName}>{p.name}</h3>
-                                    <p className={styles.productDescText}>{p.desc}</p>
-                                    <span className={styles.productPrice}>{p.price}</span>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* ══ FEATURED COLLECTIONS (Hidden as requested) ══════════════ */}
+            {/* <section className={styles.collectionsSection}>
+                ...
+            </section> */}
 
             {/* ══ TESTIMONIALS ══════════════════════════════════════════════ */}
             <section className={styles.testimonialsSection}>

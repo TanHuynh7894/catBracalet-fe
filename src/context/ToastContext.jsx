@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, X, Trash2 } from 'lucide-react';
+import { CheckCircle2, XCircle, X, Trash2, Info } from 'lucide-react';
 
 const ToastContext = createContext();
 
@@ -57,17 +57,19 @@ export const ToastProvider = ({ children }) => {
                                 flex items-center gap-4 transition-all duration-300
                                 ${toast.type === 'success'
                                     ? 'bg-white/90 border-green-100'
-                                    : 'bg-white/90 border-red-100'}
+                                    : toast.type === 'info'
+                                        ? 'bg-white/90 border-blue-100'
+                                        : 'bg-white/90 border-red-100'}
                             `}>
                                 <div className={`
                                     w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                                    ${toast.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}
+                                    ${toast.type === 'success' ? 'bg-green-50 text-green-600' : toast.type === 'info' ? 'bg-blue-50 text-blue-600' : 'bg-red-50 text-red-600'}
                                 `}>
-                                    {toast.type === 'success' ? <CheckCircle2 size={24} /> : <XCircle size={24} />}
+                                    {toast.type === 'success' ? <CheckCircle2 size={24} /> : toast.type === 'info' ? <Info size={24} /> : <XCircle size={24} />}
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-[13px] font-semibold text-[#4B3A32]">
-                                        {toast.type === 'success' ? 'Thành công' : 'Thông báo'}
+                                        {toast.type === 'success' ? 'Thành công' : toast.type === 'info' ? 'Thông tin' : 'Thông báo'}
                                     </p>
                                     <p className="text-[12px] text-[#8C7B72] mt-0.5 leading-relaxed">
                                         {toast.message}
@@ -84,7 +86,7 @@ export const ToastProvider = ({ children }) => {
                                     initial={{ width: '100%' }}
                                     animate={{ width: '0%' }}
                                     transition={{ duration: 5, ease: 'linear' }}
-                                    className={`absolute bottom-0 left-0 h-1 rounded-full ${toast.type === 'success' ? 'bg-green-500/30' : 'bg-red-500/30'}`}
+                                    className={`absolute bottom-0 left-0 h-1 rounded-full ${toast.type === 'success' ? 'bg-green-500/30' : toast.type === 'info' ? 'bg-blue-500/30' : 'bg-red-500/30'}`}
                                 />
                             </div>
                         </motion.div>

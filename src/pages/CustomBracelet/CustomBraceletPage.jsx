@@ -37,9 +37,15 @@ const CustomBraceletPage = () => {
     const [loading, setLoading] = useState(true);
 
     // Selected items
-    const [selectedWire, setSelectedWire] = useState(null); // ID của dây
-    const [selectedStones, setSelectedStones] = useState([]); // Array IDs của đá
-    const [selectedCharms, setSelectedCharms] = useState([]); // Array IDs của charm
+    const [selectedWire, setSelectedWire] = useState(null); // { productId, variantId, name, price, image }
+    const [selectedStones, setSelectedStones] = useState([]); // Array of { productId, variantId, name, price, color, size, image }
+    const [selectedCharms, setSelectedCharms] = useState([]); // Array of { productId, variantId, name, price, color, quantity, image }
+
+    // Configuration Modal state
+    const [configuringProduct, setConfiguringProduct] = useState(null);
+    const [configType, setConfigType] = useState(null); // 'stone', 'charm', 'wire'
+    const [allVariants, setAllVariants] = useState([]);
+    const [currentOptions, setCurrentOptions] = useState({ color: '', size: '', quantity: 1, variantId: null });
 
 
     useEffect(() => {
@@ -54,24 +60,17 @@ const CustomBraceletPage = () => {
 
                 const allProds = Array.isArray(productData) ? productData : (productData?.products || []);
                 const allCats = Array.isArray(catData) ? catData : (catData?.categories || []);
-                const allVariants = Array.isArray(variantData) ? variantData : [];
-
-                // Ánh xạ productId -> variantId đầu tiên (vì nguyên liệu thường chỉ có 1 variant)
-                const enhancedProds = allProds.map(p => {
-                    const firstVariant = allVariants.find(v =>
-                        (v.productVariantMappings || v.product_variant_mappings)?.some(m => m.productId === p.id || m.product_id === p.id)
-                    );
-                    return { ...p, variantId: firstVariant?.id };
-                });
+                const variants = Array.isArray(variantData) ? variantData : [];
+                setAllVariants(variants);
 
                 // Phân loại dựa trên danh mục (Category)
                 const wireCat = allCats.find(c => c.categoryName.toLowerCase().includes('dây'));
                 const charmCat = allCats.find(c => c.categoryName.toLowerCase().includes('charm'));
                 const stoneCat = allCats.find(c => c.categoryName.toLowerCase().includes('đá'));
 
-                setWires(enhancedProds.filter(p => (p.categoryId === wireCat?.id) && p.status === 'ACTIVE'));
-                setCharms(enhancedProds.filter(p => (p.categoryId === charmCat?.id) && p.status === 'ACTIVE'));
-                setStones(enhancedProds.filter(p => (p.categoryId === stoneCat?.id) && p.status === 'ACTIVE'));
+                setWires(allProds.filter(p => (p.categoryId === wireCat?.id) && p.status === 'ACTIVE'));
+                setCharms(allProds.filter(p => (p.categoryId === charmCat?.id) && p.status === 'ACTIVE'));
+                setStones(allProds.filter(p => (p.categoryId === stoneCat?.id) && p.status === 'ACTIVE'));
 
             } catch (error) {
                 console.error("Error loading custom bracelet components:", error);
@@ -83,11 +82,68 @@ const CustomBraceletPage = () => {
         loadComponents();
     }, []);
 
-    const toggleStone = (id) =>
-        setSelectedStones(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+    const openConfigurator = (product, type) => {
+        const productVariants = allVariants.filter(v =>
+            (v.productVariantMappings || v.product_variant_mappings)?.some(m =>
+                (m.productId === product.id || m.product_id === product.id)
+            )
+        );
 
-    const toggleCharm = (id) =>
-        setSelectedCharms(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
+        setConfiguringProduct({ ...product, variants: productVariants });
+        setConfigType(type);
+
+        if (type === 'wire' && productVariants.length === 1) {
+            // If wire has only 1 variant, select it immediately
+            const v = productVariants[0];
+            setSelectedWire({
+                productId: product.id,
+                variantId: v.id,
+                name: product.productName,
+                price: Number(v.extraPrice || 0),
+                image: product.image
+            });
+            setConfiguringProduct(null);
+        } else {
+            // Initialize options
+            const firstV = productVariants[0];
+            setCurrentOptions({
+                color: firstV?.color || '',
+                size: firstV?.size || '',
+                quantity: 1,
+                variantId: firstV?.id || null
+            });
+        }
+    };
+
+    const handleAddConfigured = () => {
+        if (!configuringProduct || !currentOptions.variantId) return;
+
+        const variant = configuringProduct.variants.find(v => v.id === currentOptions.variantId);
+        const itemInfo = {
+            productId: configuringProduct.id,
+            variantId: variant.id,
+            name: configuringProduct.productName,
+            price: Number(variant.extraPrice || 0),
+            image: configuringProduct.image,
+            color: variant.color,
+            size: variant.size,
+            quantity: currentOptions.quantity
+        };
+
+        if (configType === 'wire') {
+            setSelectedWire(itemInfo);
+        } else if (configType === 'stone') {
+            setSelectedStones(prev => [...prev, itemInfo]);
+        } else if (configType === 'charm') {
+            setSelectedCharms(prev => [...prev, itemInfo]);
+        }
+
+        setConfiguringProduct(null);
+        showToast(`Đã thêm ${configuringProduct.productName}`, 'success');
+    };
+
+    const removeStone = (index) => setSelectedStones(prev => prev.filter((_, i) => i !== index));
+    const removeCharm = (index) => setSelectedCharms(prev => prev.filter((_, i) => i !== index));
 
     const handleBuyIngredients = async () => {
         const token = localStorage.getItem('accessToken');
@@ -98,16 +154,9 @@ const CustomBraceletPage = () => {
         }
 
         const selectedItems = [];
-        // Lấy thông tin product đầy đủ (bao gồm variantId) để add to cart
-        if (selectedWire) selectedItems.push(wires.find(w => w.id === selectedWire));
-        selectedStones.forEach(sid => {
-            const s = stones.find(stone => stone.id === sid);
-            if (s) selectedItems.push(s);
-        });
-        selectedCharms.forEach(cid => {
-            const c = charms.find(charm => charm.id === cid);
-            if (c) selectedItems.push(c);
-        });
+        if (selectedWire) selectedItems.push(selectedWire);
+        selectedStones.forEach(s => selectedItems.push(s));
+        selectedCharms.forEach(c => selectedItems.push(c));
 
         if (selectedItems.length === 0) {
             showToast('Chưa chọn nguyên liệu nào', 'warning');
@@ -115,21 +164,23 @@ const CustomBraceletPage = () => {
         }
 
         try {
-            showToast('Đang thêm vào giỏ hàng...', 'info');
+            // Cập nhật nội dung thông báo theo yêu cầu
+            const loadingToast = showToast('Đang thêm vào giỏ hàng...', 'info');
 
+            // Gửi lần lượt để tránh xung đột DB, nhưng đợi tất cả xong mới báo thành công
             for (const item of selectedItems) {
-                if (item.variantId) {
-                    await addToCart(item.variantId, 1);
-                } else {
-                    console.warn(`Sản phẩm ${item.productName} không có variant nào`);
-                }
+                console.log("[CustomDesign] Adding item:", item.name, "Variant:", item.variantId);
+                await addToCart(item.variantId, item.quantity || 1);
             }
 
+            // Chỉ refresh giỏ hàng một lần duy nhất sau khi xong tất cả
             await refreshCart();
-            showToast('Đã thêm thành công nguyên liệu vào giỏ hàng!', 'success');
+
+            showToast('Đã thêm thành công tất cả nguyên liệu vào giỏ hàng!', 'success');
             navigate('/cart');
         } catch (error) {
-            showToast(error.toString(), 'error');
+            console.error("[CustomDesign] Add error:", error);
+            showToast(typeof error === 'string' ? error : 'Có lỗi khi thêm một số nguyên liệu. Vui lòng kiểm tra lại giỏ hàng.', 'error');
         }
     };
 
@@ -242,14 +293,13 @@ const CustomBraceletPage = () => {
                                 {wires.map(opt => (
                                     <button
                                         key={opt.id}
-                                        className={`${styles.wireCard} ${selectedWire === opt.id ? styles.wireCardActive : ''}`}
-                                        onClick={() => setSelectedWire(opt.id === selectedWire ? null : opt.id)}
+                                        className={`${styles.wireCard} ${selectedWire?.productId === opt.id ? styles.wireCardActive : ''}`}
+                                        onClick={() => openConfigurator(opt, 'wire')}
                                     >
                                         <div className={styles.wireImgWrap}>
                                             <img src={getFullImageUrl(opt.image)} alt={opt.productName} className={styles.wireImg} />
                                         </div>
                                         <span className={styles.wireLabel}>{opt.productName}</span>
-                                        <span className={styles.priceTag}>{formatPrice(opt.basePrice)}</span>
                                     </button>
                                 ))}
                             </div>
@@ -269,14 +319,13 @@ const CustomBraceletPage = () => {
                                 {stones.map(stone => (
                                     <button
                                         key={stone.id}
-                                        className={`${styles.stoneCard} ${selectedStones.includes(stone.id) ? styles.stoneCardActive : ''}`}
-                                        onClick={() => toggleStone(stone.id)}
+                                        className={styles.stoneCard}
+                                        onClick={() => openConfigurator(stone, 'stone')}
                                     >
                                         <div className={styles.stoneImgWrap}>
                                             <img src={getFullImageUrl(stone.image)} alt={stone.productName} className={styles.stoneImg} />
                                         </div>
                                         <span className={styles.stoneLabel}>{stone.productName}</span>
-                                        <span className={styles.priceTag}>{formatPrice(stone.basePrice)}</span>
                                     </button>
                                 ))}
                             </div>
@@ -295,15 +344,51 @@ const CustomBraceletPage = () => {
                                 {charms.map(c => (
                                     <button
                                         key={c.id}
-                                        className={`${styles.charmCard} ${selectedCharms.includes(c.id) ? styles.charmCardActive : ''}`}
-                                        onClick={() => toggleCharm(c.id)}
+                                        className={styles.charmCard}
+                                        onClick={() => openConfigurator(c, 'charm')}
                                     >
                                         <div className={styles.charmImgWrap}>
                                             <img src={getFullImageUrl(c.image)} alt={c.productName} className={styles.charmImg} />
                                         </div>
                                         <span className={styles.charmLabel}>{c.productName}</span>
-                                        <span className={styles.priceTag}>{formatPrice(c.basePrice)}</span>
                                     </button>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* ─── SELECTED LIST ──────────────── */}
+                        <motion.div {...fadeUp} className={styles.selectedSection}>
+                            <h3 className={styles.selectedTitle}>Các phần đã chọn</h3>
+                            <div className={styles.selectedGrid}>
+                                {selectedWire && (
+                                    <div className={styles.selectedItemCard}>
+                                        <img src={getFullImageUrl(selectedWire.image)} className={styles.selectedItemImg} />
+                                        <div className={styles.selectedItemInfo}>
+                                            <p className={styles.selectedItemName}>{selectedWire.name}</p>
+                                            <p className={styles.selectedItemDetail}>Dây</p>
+                                        </div>
+                                        <button onClick={() => setSelectedWire(null)} className={styles.removeBtn}><X size={14} /></button>
+                                    </div>
+                                )}
+                                {selectedStones.map((s, idx) => (
+                                    <div key={`s-${idx}`} className={styles.selectedItemCard}>
+                                        <img src={getFullImageUrl(s.image)} className={styles.selectedItemImg} />
+                                        <div className={styles.selectedItemInfo}>
+                                            <p className={styles.selectedItemName}>{s.name}</p>
+                                            <p className={styles.selectedItemDetail}>{s.color} | {s.size}</p>
+                                        </div>
+                                        <button onClick={() => removeStone(idx)} className={styles.removeBtn}><X size={14} /></button>
+                                    </div>
+                                ))}
+                                {selectedCharms.map((c, idx) => (
+                                    <div key={`c-${idx}`} className={styles.selectedItemCard}>
+                                        <img src={getFullImageUrl(c.image)} className={styles.selectedItemImg} />
+                                        <div className={styles.selectedItemInfo}>
+                                            <p className={styles.selectedItemName}>{c.name}</p>
+                                            <p className={styles.selectedItemDetail}>{c.color} | x{c.quantity}</p>
+                                        </div>
+                                        <button onClick={() => removeCharm(idx)} className={styles.removeBtn}><X size={14} /></button>
+                                    </div>
                                 ))}
                             </div>
                         </motion.div>
@@ -311,17 +396,121 @@ const CustomBraceletPage = () => {
                         {/* ─── ACTION BUTTONS ──────────────── */}
                         <motion.div {...fadeUp} className={styles.actions}>
                             <div className={styles.totalInfo}>
-                                <span>Đã chọn: {(selectedWire ? 1 : 0) + selectedStones.length + selectedCharms.length} nguyên liệu</span>
+                                <span>Tổng cộng: {formatPrice((selectedWire?.price || 0) + selectedStones.reduce((a, b) => a + b.price, 0) + selectedCharms.reduce((a, b) => a + b.price * b.quantity, 0))}</span>
                             </div>
                             <button className={styles.btnFill} onClick={handleBuyIngredients}>
                                 <ShoppingBag size={18} strokeWidth={1.5} />
                                 MUA NGUYÊN LIỆU & ĐI ĐẾN GIỎ HÀNG
                             </button>
                         </motion.div>
-
                     </div>
                 </div>
             </section>
+
+            {/* ─── CONFIGURATION MODAL ─────────── */}
+            <AnimatePresence>
+                {configuringProduct && (
+                    <div className={styles.modalOverlay} onClick={() => setConfiguringProduct(null)}>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className={styles.modalContent}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <button className={styles.modalClose} onClick={() => setConfiguringProduct(null)}><X /></button>
+
+                            <div className={styles.modalBody}>
+                                <div className={styles.modalLeft}>
+                                    <img src={getFullImageUrl(configuringProduct.image)} className={styles.modalImg} alt="" />
+                                </div>
+                                <div className={styles.modalRight}>
+                                    <h4 className={styles.modalProdName}>{configuringProduct.productName}</h4>
+                                    <p className={styles.modalPrice}>{formatPrice(Number(configuringProduct.variants.find(v => v.id === currentOptions.variantId)?.extraPrice || 0))}</p>
+
+                                    <div className={styles.optionsWrap}>
+                                        {/* Color Selection */}
+                                        {configType !== 'wire' && Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).length > 0 && (
+                                            <div className={styles.optionGroup}>
+                                                <p className={styles.optionLabel}>Màu sắc</p>
+                                                <div className={styles.optionList}>
+                                                    {Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).map(c => (
+                                                        <button
+                                                            key={c}
+                                                            className={`${styles.optBtn} ${currentOptions.color === c ? styles.optBtnActive : ''}`}
+                                                            onClick={() => {
+                                                                const v = configuringProduct.variants.find(varnt => varnt.color === c && (configType === 'charm' || varnt.size === currentOptions.size));
+                                                                setCurrentOptions({ ...currentOptions, color: c, variantId: v?.id || currentOptions.variantId });
+                                                            }}
+                                                        >
+                                                            {c}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Size Selection */}
+                                        {configType === 'stone' && Array.from(new Set(configuringProduct.variants.map(v => v.size).filter(Boolean))).length > 0 && (
+                                            <div className={styles.optionGroup}>
+                                                <p className={styles.optionLabel}>Kích thước</p>
+                                                <div className={styles.optionList}>
+                                                    {Array.from(new Set(configuringProduct.variants.filter(v => v.color === currentOptions.color).map(v => v.size).filter(Boolean))).map(s => (
+                                                        <button
+                                                            key={s}
+                                                            className={`${styles.optBtn} ${currentOptions.size === s ? styles.optBtnActive : ''}`}
+                                                            onClick={() => {
+                                                                const v = configuringProduct.variants.find(varnt => varnt.color === currentOptions.color && varnt.size === s);
+                                                                setCurrentOptions({ ...currentOptions, size: s, variantId: v?.id || currentOptions.variantId });
+                                                            }}
+                                                        >
+                                                            {s}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Variant Selection for Wire */}
+                                        {configType === 'wire' && configuringProduct.variants.length > 0 && (
+                                            <div className={styles.optionGroup}>
+                                                <p className={styles.optionLabel}>Loại dây</p>
+                                                <div className={styles.optionList}>
+                                                    {configuringProduct.variants.map(v => (
+                                                        <button
+                                                            key={v.id}
+                                                            className={`${styles.optBtn} ${currentOptions.variantId === v.id ? styles.optBtnActive : ''}`}
+                                                            onClick={() => setCurrentOptions({ ...currentOptions, variantId: v.id })}
+                                                        >
+                                                            {(v.color || v.size) ? `${v.color || ''} ${v.size || ''}`.trim() : (v.sku || 'Loại cơ bản')} - {formatPrice(Number(v.extraPrice || 0))}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Quantity Selection for Charm */}
+                                        {configType === 'charm' && (
+                                            <div className={styles.optionGroup}>
+                                                <p className={styles.optionLabel}>Số lượng</p>
+                                                <div className={styles.qtyControl}>
+                                                    <button onClick={() => setCurrentOptions(prev => ({ ...prev, quantity: Math.max(1, prev.quantity - 1) }))}><Minus size={14} /></button>
+                                                    <span>{currentOptions.quantity}</span>
+                                                    <button onClick={() => setCurrentOptions(prev => ({ ...prev, quantity: Math.min(10, prev.quantity + 1) }))}><Plus size={14} /></button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button className={styles.addBtn} onClick={handleAddConfigured}>
+                                        THÊM VÀO THIẾT KẾ
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             {/* ═══════════════════════════════════════════════════
                 4. USP SECTION

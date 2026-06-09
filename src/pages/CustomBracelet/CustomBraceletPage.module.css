@@ -1390,3 +1390,327 @@
         padding: 24px 0;
     }
 }
+
+/* ─── SELECTED SECTION ────────────────────────────────── */
+.selectedSection {
+    background: var(--c-bg);
+    border: 2px dashed var(--c-border);
+    border-radius: var(--r-card);
+    padding: 24px;
+    margin: 40px 0 20px;
+}
+
+.selectedTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--c-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.selectedGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.selectedItemCard {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--c-white);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--c-border-soft);
+    position: relative;
+    box-shadow: var(--shadow-card);
+}
+
+.selectedItemImg {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--c-bg);
+}
+
+.selectedItemInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.selectedItemName {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.selectedItemDetail {
+    font-size: 11px;
+    color: var(--c-muted);
+    margin: 2px 0 0;
+}
+
+.removeBtn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--c-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(122, 30, 30, 0.2);
+    transition: all 0.2s;
+    z-index: 5;
+}
+
+.removeBtn:hover {
+    transform: scale(1.1);
+    background: #000;
+}
+
+/* ─── MODAL ────────────────────────────────────────────── */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(75, 58, 50, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modalContent {
+    background: var(--c-bg);
+    width: 100%;
+    max-width: 850px;
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(122, 30, 30, 0.15);
+}
+
+.modalClose {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: var(--c-white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--c-text);
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modalClose:hover {
+    transform: rotate(90deg);
+    background: var(--c-primary);
+    color: white;
+}
+
+.modalBody {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    min-height: 520px;
+}
+
+.modalLeft {
+    background: var(--c-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    border-right: 1px solid var(--c-border-soft);
+}
+
+.modalImg {
+    width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.modalContent:hover .modalImg {
+    transform: scale(1.02);
+}
+
+.modalRight {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalProdName {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--c-primary);
+    margin: 0 0 10px;
+    line-height: 1.2;
+}
+
+.modalPrice {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    margin-bottom: 35px;
+}
+
+.optionsWrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.optionGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.optionLabel {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--c-muted);
+}
+
+.optionList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.optBtn {
+    padding: 10px 20px;
+    border: 1.5px solid var(--c-border);
+    border-radius: 10px;
+    background: var(--c-white);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-text);
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Inter', sans-serif;
+}
+
+.optBtn:hover {
+    border-color: var(--c-primary);
+    color: var(--c-primary);
+    background: rgba(122, 30, 30, 0.02);
+}
+
+.optBtnActive {
+    background: var(--c-primary) !important;
+    color: white !important;
+    border-color: var(--c-primary) !important;
+    box-shadow: 0 4px 12px rgba(122, 30, 30, 0.2);
+}
+
+.qtyControl {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--c-white);
+    padding: 10px 20px;
+    border-radius: 14px;
+    border: 1.5px solid var(--c-border);
+    width: fit-content;
+}
+
+.qtyControl button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: var(--c-primary);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.qtyControl button:active {
+    transform: scale(0.9);
+}
+
+.qtyControl span {
+    font-weight: 800;
+    font-size: 18px;
+    min-width: 24px;
+    text-align: center;
+    color: var(--c-text);
+}
+
+.addBtn {
+    width: 100%;
+    padding: 18px;
+    background: var(--c-primary);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+.addBtn:hover {
+    background: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 991px) {
+    .modalContent {
+        max-width: 500px;
+    }
+
+    .modalBody {
+        grid-template-columns: 1fr;
+    }
+
+    .modalLeft {
+        padding: 30px;
+        border-right: none;
+        border-bottom: 1px solid var(--c-border-soft);
+    }
+
+    .modalImg {
+        max-height: 280px;
+    }
+
+    .modalRight {
+        padding: 30px;
+    }
+
+    .selectedGrid {
+        grid-template-columns: 1fr;
+    }
+}
