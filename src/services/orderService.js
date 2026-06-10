@@ -55,16 +55,18 @@ export const cancelOrder = async (orderId) => {
 
 /**
  * Retry payment for an existing unpaid order
+ * @param {string} orderId
  */
 export const retryPayment = async (orderId) => {
     try {
-        // Assuming your retry endpoint is standard
-        const response = await api.post('/payment/retry', { orderId });
+        const response = await api.post('api/payment/retry', { orderId });
         return response.data;
     } catch (error) {
         throw error.response?.data?.message || error.message;
     }
 };
+
+
 
 // ─── ADMIN / STAFF ONLY ──────────────────────────────────────
 
