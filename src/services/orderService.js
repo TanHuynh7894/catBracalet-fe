@@ -28,6 +28,20 @@ export const getOrderById = async (orderId) => {
 };
 
 /**
+ * Get all orders by a specific user ID
+ * @param {string} userId
+ */
+export const getOrdersByUserId = async (userId) => {
+    try {
+        const response = await api.get(`/orders/user/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+};
+
+
+/**
  * Cancel an order (User can cancel PENDING orders)
  */
 export const cancelOrder = async (orderId) => {
