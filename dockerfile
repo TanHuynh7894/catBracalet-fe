@@ -30,7 +30,7 @@ RUN npm install -g serve --silent
 COPY --from=builder /app/dist ./dist
 
 # Expose the desired port
-EXPOSE 5173
+EXPOSE 5174
 
 # Start the static server
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["serve", "-s", "dist", "-l", "5174"]

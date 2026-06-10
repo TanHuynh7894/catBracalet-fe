@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: '0.0.0.0',
-      port: Number(env.PORT) || 5173,
+      port: Number(env.PORT) || 5174,
       allowedHosts,
     },
   }
