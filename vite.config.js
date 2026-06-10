@@ -1,12 +1,26 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-    allowedHosts: ['truongnguyen.me'],
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+
+  const allowedHosts = (env.VITE_URL_FE || '')
+    .split(',')
+    .map(url => {
+      try {
+        return new URL(url.trim()).hostname
+      } catch {
+        return null
+      }
+    })
+    .filter(Boolean)
+
+  return {
+    plugins: [react()],
+    server: {
+      host: '0.0.0.0',
+      port: Number(env.PORT) || 5173,
+      allowedHosts,
+    },
+  }
 })
