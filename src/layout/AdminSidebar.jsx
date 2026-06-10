@@ -27,24 +27,28 @@ const AdminSidebar = () => {
         products: false,
         inventory: false
     });
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const toggleMenu = (menu) => {
         setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
     };
 
     const handleLogout = () => {
-        if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-            navigate('/');
-        }
+        setShowLogoutModal(true);
+    };
+
+    const confirmLogout = () => {
+        setShowLogoutModal(false);
+        navigate('/');
     };
 
     const menuItems = [
-        {
-            id: 'dashboard',
-            title: 'Tổng quan',
-            icon: <LayoutDashboard size={18} />,
-            path: '/admin'
-        },
+        // {
+        //     id: 'dashboard',
+        //     title: 'Tổng quan',
+        //     icon: <LayoutDashboard size={18} />,
+        //     path: '/admin'
+        // },
         {
             id: 'orders',
             title: 'Đơn hàng',
@@ -99,62 +103,85 @@ const AdminSidebar = () => {
     ];
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.logoContainer}>
-                <div className={styles.logoCircle}>C</div>
-                <span className={styles.logoText}>Cát Admin</span>
-            </div>
+        <>
+            <aside className={styles.sidebar}>
+                <div className={styles.logoContainer}>
+                    <div className={styles.logoCircle}>C</div>
+                    <span className={styles.logoText}>Cát Admin</span>
+                </div>
 
-            <nav className={styles.nav}>
-                {menuItems.map((item) => (
-                    <div key={item.id} className={styles.menuWrapper}>
-                        {item.subItems ? (
-                            <>
-                                <button
-                                    className={`${styles.menuHeader} ${openMenus[item.id] ? styles.active : ''}`}
-                                    onClick={() => toggleMenu(item.id)}
+                <nav className={styles.nav}>
+                    {menuItems.map((item) => (
+                        <div key={item.id} className={styles.menuWrapper}>
+                            {item.subItems ? (
+                                <>
+                                    <button
+                                        className={`${styles.menuHeader} ${openMenus[item.id] ? styles.active : ''}`}
+                                        onClick={() => toggleMenu(item.id)}
+                                    >
+                                        <span className={styles.icon}>{item.icon}</span>
+                                        <span className={styles.title}>{item.title}</span>
+                                        <span className={styles.chevron}>
+                                            {openMenus[item.id] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                                        </span>
+                                    </button>
+                                    {openMenus[item.id] && (
+                                        <div className={styles.subMenu}>
+                                            {item.subItems.map((sub, idx) => (
+                                                <NavLink
+                                                    key={idx}
+                                                    to={sub.path}
+                                                    className={({ isActive }) => `${styles.subItem} ${isActive ? styles.subActive : ''}`}
+                                                >
+                                                    {sub.title}
+                                                </NavLink>
+                                            ))}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <NavLink
+                                    to={item.path}
+                                    end
+                                    className={({ isActive }) => `${styles.menuHeader} ${isActive ? styles.active : ''}`}
                                 >
                                     <span className={styles.icon}>{item.icon}</span>
                                     <span className={styles.title}>{item.title}</span>
-                                    <span className={styles.chevron}>
-                                        {openMenus[item.id] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                                    </span>
-                                </button>
-                                {openMenus[item.id] && (
-                                    <div className={styles.subMenu}>
-                                        {item.subItems.map((sub, idx) => (
-                                            <NavLink
-                                                key={idx}
-                                                to={sub.path}
-                                                className={({ isActive }) => `${styles.subItem} ${isActive ? styles.subActive : ''}`}
-                                            >
-                                                {sub.title}
-                                            </NavLink>
-                                        ))}
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <NavLink
-                                to={item.path}
-                                end
-                                className={({ isActive }) => `${styles.menuHeader} ${isActive ? styles.active : ''}`}
-                            >
-                                <span className={styles.icon}>{item.icon}</span>
-                                <span className={styles.title}>{item.title}</span>
-                            </NavLink>
-                        )}
-                    </div>
-                ))}
-            </nav>
+                                </NavLink>
+                            )}
+                        </div>
+                    ))}
+                </nav>
 
-            <div className={styles.footerNav}>
-                <button className={`${styles.footerItem} ${styles.logoutBtn}`} onClick={handleLogout}>
-                    <LogOut size={18} />
-                    <span>Đăng xuất</span>
-                </button>
-            </div>
-        </aside>
+                <div className={styles.footerNav}>
+                    <button className={`${styles.footerItem} ${styles.logoutBtn}`} onClick={handleLogout}>
+                        <LogOut size={18} />
+                        <span>Đăng xuất</span>
+                    </button>
+                </div>
+            </aside>
+
+            {/* Custom Logout Confirmation Modal */}
+            {showLogoutModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowLogoutModal(false)}>
+                    <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalIcon}>
+                            <LogOut size={28} />
+                        </div>
+                        <h3 className={styles.modalTitle}>Đăng xuất</h3>
+                        <p className={styles.modalDesc}>Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</p>
+                        <div className={styles.modalActions}>
+                            <button className={styles.modalCancel} onClick={() => setShowLogoutModal(false)}>
+                                Hủy
+                            </button>
+                            <button className={styles.modalConfirm} onClick={confirmLogout}>
+                                Đăng xuất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

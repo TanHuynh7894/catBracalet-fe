@@ -93,8 +93,8 @@ const AccountLayout = ({ activeTab }) => {
         <div className="flex flex-col min-h-screen bg-background">
             <main className="pt-16 pb-20 max-w-[1400px] mx-auto px-4 md:px-10 w-full">
                 {/* User Header Section */}
-                <Reveal className="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-12 items-center">
-                    <header className="lg:col-span-4 flex flex-col md:flex-row lg:flex-col xl:flex-row items-center gap-6 mb-0">
+                <Reveal className="mb-12">
+                    <header className="flex flex-col md:flex-row items-center gap-6 mb-0">
                         <div className="relative group">
                             <motion.div
                                 className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-xl ring-4 ring-surface-container transition-transform duration-500 bg-outline-variant/30 flex items-center justify-center text-primary relative"
@@ -134,15 +134,18 @@ const AccountLayout = ({ activeTab }) => {
                                     ))}
                                 </div>
                             </div>
+                            {/* Hide VIP badge for now 
                             <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary text-primary text-[10px] uppercase tracking-widest mb-4 font-semibold">
                                 {getVipName()}
                             </span>
+                            */}
                             <p className="font-body text-body-md text-on-surface-variant italic">
                                 Thành viên từ {profile ? new Date(profile.createdAt).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' }) : '...'}
                             </p>
                         </div>
                     </header>
 
+                    {/* Hide Rewards section as requested 
                     <section className="lg:col-span-8 relative bg-primary overflow-hidden rounded-[32px] p-6 md:p-10 text-white h-full flex flex-col justify-center shadow-lg">
                         <div className="relative z-10 w-full space-y-6">
                             <div className="flex justify-between items-center">
@@ -188,10 +191,10 @@ const AccountLayout = ({ activeTab }) => {
                                 </p>
                             </div>
                         </div>
-                        {/* Luxury Accents */}
                         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-[100px]"></div>
                         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-500/5 rounded-full blur-[60px]"></div>
                     </section>
+                    */}
                 </Reveal>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
