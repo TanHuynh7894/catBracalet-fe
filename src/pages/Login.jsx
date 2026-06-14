@@ -60,7 +60,17 @@ const Login = () => {
 
             // Wait a bit then navigate
             setTimeout(() => {
-                navigate('/');
+                const roles = data.user.roles || [];
+                const roleNames = roles.map(r => r.name.toUpperCase());
+
+                const isAdmin = roleNames.includes('ADMIN');
+                const isCustomer = roleNames.includes('CUSTOMER');
+
+                if (isAdmin && !isCustomer) {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
             }, 2000);
         } catch (err) {
             console.error('Login error:', err);
