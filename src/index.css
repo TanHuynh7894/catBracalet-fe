@@ -139,4 +139,4 @@
   background: var(--color-outline);
 }
 
-/* Smooth Scroll - Managed by Lenis library */
+/* Smooth Scroll - Managed by Lenis library */.custom-cursor-active, .custom-cursor-active * { cursor: none !important; } 

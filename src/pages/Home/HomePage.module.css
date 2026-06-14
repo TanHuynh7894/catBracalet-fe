@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap');
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
-.page {
+:root {
     --primary: #7A1E1E;
     --primary-dark: #5A1414;
     --gold: #D8B27D;
@@ -16,6 +16,11 @@
     --border: #E8DED2;
     --section-bg2: #F5ECE3;
 
+    --web3-primary: #7A1E1E;
+    --web3-bg: #FAF5EF;
+}
+
+.page {
     background-color: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
@@ -151,80 +156,191 @@
 .heroSection {
     position: relative;
     overflow: hidden;
-    min-height: 460px;
+    height: 100vh;
+    min-height: 700px;
     display: flex;
-    align-items: stretch;
+    align-items: center;
+    background: #000;
 }
 
-/* Background image fills the whole section */
-.heroBgImg {
+.videoBg {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center right;
-    display: block;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    object-position: center top;
+    opacity: 1;
+    z-index: 1;
 }
 
-/* Gradient fade from left (text readable) to transparent right */
 .heroOverlay {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     width: 100%;
-    min-height: 460px;
+    height: 100%;
     display: flex;
     align-items: center;
-    background: linear-gradient(to right,
-            rgba(250, 245, 239, 0.96) 0%,
-            rgba(250, 245, 239, 0.90) 30%,
-            rgba(250, 245, 239, 0.55) 52%,
-            rgba(250, 245, 239, 0.0) 70%);
+    background: transparent;
 }
 
-/* Text content — left-aligned, uses the container max-width */
 .heroContent {
-    width: 95%;
+    width: 90%;
     margin: 0 auto;
-    padding: 72px 0;
-    max-width: 700px;
-    /* Increased to prevent word wrapping */
+    padding: 0;
+    max-width: 1400px;
     margin-left: clamp(24px, 8vw, 120px);
-    /* Pushed slightly more to the right */
+}
+
+.heroText {
+    max-width: 600px;
 }
 
 .heroTitle {
     font-family: 'Playfair Display', serif;
-    font-size: 56px;
-    /* Slightly larger like the sample */
-    font-weight: 600;
+    font-size: 64px;
+    font-weight: 700;
     line-height: 1.1;
-    /* Tighter line height for the two main phrases */
     color: var(--primary);
-    margin: 0 0 28px;
-    letter-spacing: -0.01em;
+    margin: 0 0 24px;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.heroTitle span {
+    color: var(--gold);
+    display: block;
 }
 
 .heroDesc {
-    font-size: 15px;
+    font-size: 18px;
     color: var(--text);
-    line-height: 1.72;
-    margin: 0 0 36px;
+    line-height: 1.6;
+    margin: 0 0 40px;
+    max-width: 500px;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-.heroDesc em {
-    font-style: italic;
-    color: var(--muted);
+/* ─── 3D MODEL SECTION (Redesigned) ─────────────────────── */
+.modelSection {
+    padding: 120px 0;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
 }
 
-.heroActions {
+.modelGrid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.modelContent {
+    text-align: left;
+}
+
+.modelBadge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(122, 30, 30, 0.08);
+    color: var(--primary);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.modelTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 24px;
+    line-height: 1.2;
+}
+
+.modelDesc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.modelHighlights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.highlightItem {
     display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.highlightIcon {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.highlightText h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.highlightText p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.modelCanvasArea {
+    position: relative;
+    height: 600px;
+    background: radial-gradient(circle at center, rgba(216, 178, 125, 0.15) 0%, transparent 70%);
+    border-radius: 40px;
+}
+
+.modelCanvasWrap {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+}
+
+.modelCanvasWrap:active {
+    cursor: grabbing;
+}
+
+.modelHint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 8px 20px;
+    border-radius: 100px;
+    backdrop-filter: blur(10px);
 }
 
 /* Outline button — semi-transparent, works on image bg */
@@ -257,64 +373,44 @@
    SECTION 2 – FEATURES
    ═══════════════════════════════════════════════════════════ */
 .featuresSection {
-    padding: 40px 0;
-    background: var(--bg);
+    padding: 100px 0;
+    background: var(--web3-bg);
 }
 
 .featuresGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    gap: 24px;
 }
 
 .featureCard {
     background: var(--card);
-    border-radius: 2px;
-    /* Square cut for luxury feel */
-    padding: 45px 30px;
-    text-align: center;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: left;
     border: 1px solid var(--border);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    cursor: default;
-    position: relative;
+    transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    box-shadow: 0 4px 20px rgba(75, 58, 50, 0.05);
 }
 
 .featureCard:hover {
     border-color: var(--gold);
-    box-shadow: 0 20px 40px rgba(75, 58, 50, 0.06);
-    transform: translateY(-8px);
-}
-
-.featureCard::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--gold);
-    transition: all 0.4s ease;
-    transform: translateX(-50%);
-}
-
-.featureCard:hover::after {
-    width: 40px;
+    box-shadow: 0 10px 30px rgba(75, 58, 50, 0.1);
+    transform: translateY(-10px);
 }
 
 .featureIconWrap {
-    width: 64px;
-    height: 64px;
-    background: var(--section-bg2);
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 60, 60, 0.1);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold);
+    color: var(--web3-primary);
     margin-bottom: 24px;
-    transition: transform 0.4s ease;
 }
 
 .featureCard:hover .featureIconWrap {
@@ -344,20 +440,20 @@
    SECTION 3 – PROBLEM SOLVING (Overlay style)
    ═══════════════════════════════════════════════════════════ */
 .problemSection {
-    padding: 20px 0 40px;
-    /* Reduced top padding */
-    background: var(--bg);
+    padding: 60px 0;
+    background: var(--web3-bg);
 }
 
 .problemCardOverlay {
     position: relative;
     width: 100%;
-    min-height: 480px;
+    min-height: 500px;
     background: #fff;
-    border-radius: 30px;
+    border-radius: 40px;
     overflow: hidden;
     display: flex;
-    box-shadow: 0 10px 40px rgba(75, 58, 50, 0.04);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(75, 58, 50, 0.05);
 }
 
 .problemBgImg {
@@ -380,12 +476,8 @@
     display: flex;
     justify-content: flex-end;
     background: linear-gradient(to right,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0) 45%,
-            /* Image fully clear until 45% */
-            rgba(255, 255, 255, 0.8) 60%,
-            rgba(255, 255, 255, 0.98) 75%,
-            #ffffff 100%);
+            transparent 0%,
+            var(--web3-bg) 80%);
 }
 
 .problemTextContainer {
@@ -500,19 +592,20 @@
    SECTION 4 – ABOUT CÁT (Banner Overlay style)
    ═══════════════════════════════════════════════════════════ */
 .aboutSection {
-    padding: 20px 0;
-    background: var(--bg);
+    padding: 60px 0;
+    background: var(--web3-bg);
 }
 
 .aboutBannerOverlay {
     position: relative;
     width: 100%;
-    min-height: 480px;
+    min-height: 500px;
     background: #fff;
-    border-radius: 30px;
+    border-radius: 40px;
     overflow: hidden;
     display: flex;
-    box-shadow: 0 10px 40px rgba(75, 58, 50, 0.04);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(75, 58, 50, 0.05);
 }
 
 .aboutBgImg {
@@ -550,12 +643,12 @@
 
 .aboutTitle {
     font-family: 'Playfair Display', serif;
-    font-size: 52px;
+    font-size: 64px;
     font-style: italic;
-    font-weight: 400;
+    font-weight: 700;
     margin: 0 0 24px;
-    color: var(--primary);
-    /* Wine red color */
+    color: var(--web3-primary);
+    text-shadow: 0 0 20px var(--web3-primary-glow);
 }
 
 .aboutDesc {
@@ -637,9 +730,10 @@
     height: 170px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid var(--gold);
+    border: 2px solid var(--web3-primary);
     padding: 6px;
-    background: var(--card);
+    background: var(--web3-card);
+    box-shadow: 0 0 20px var(--web3-primary-glow);
 }
 
 .stepImg {
@@ -902,10 +996,17 @@
 
 .testiCard {
     background: var(--card);
-    border-radius: 16px;
-    padding: 32px 28px;
-    box-shadow: 0 4px 20px rgba(75, 58, 50, 0.05);
+    border-radius: 24px;
+    padding: 32px;
     border: 1px solid var(--border);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(75, 58, 50, 0.05);
+}
+
+.testiCard:hover {
+    border-color: var(--gold);
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(75, 58, 50, 0.1);
 }
 
 .testiTop {
@@ -953,12 +1054,12 @@
 .ctaBannerOverlay {
     position: relative;
     width: 100%;
-    min-height: 240px;
-    background: #7a1b1b;
-    border-radius: 20px;
+    min-height: 280px;
+    background: #000;
+    border-radius: 30px;
     overflow: hidden;
     display: flex;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--web3-border);
 }
 
 .ctaBgImg {
@@ -1030,9 +1131,10 @@
 .consultCard {
     display: grid;
     grid-template-columns: 0.75fr 1.25fr;
-    background: var(--card);
-    border-radius: 24px;
+    background: #fff;
+    border-radius: 40px;
     overflow: hidden;
+    border: 1px solid var(--border);
     box-shadow: 0 24px 80px rgba(75, 58, 50, 0.10);
 }
 
@@ -1093,19 +1195,20 @@
 .formInput,
 .formSelect {
     background: #fafafa;
-    border: 1px solid #ece8e3;
-    border-radius: 8px;
-    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
     font-size: 13px;
     color: var(--text);
     outline: none;
     font-family: 'Inter', sans-serif;
-    transition: border-color 0.2s;
+    transition: all 0.3s ease;
 }
 
 .formInput:focus,
 .formSelect:focus {
     border-color: var(--gold);
+    background: #fff;
 }
 
 .formFooter {

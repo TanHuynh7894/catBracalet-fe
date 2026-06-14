@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { Canvas } from '@react-three/fiber';
+import { BraceletModel } from '../../components/ThreeD/BraceletModel';
 import {
     Gem, Palette, Gift, Sparkles, ArrowRight, Heart,
     Leaf, Wind, Scale, Link as LinkIcon, Zap,
@@ -12,7 +14,8 @@ import { useToast } from '../../context/ToastContext';
 import styles from './HomePage.module.css';
 
 // ─── LOCAL ASSETS ────────────────────────────────────────────────────────────
-import heroImg from '../../assets/Ảnh UI/ảnh chi tiết/home ne...jpg';
+import videoBg from '../../assets/0614.mp4';
+import modelPath from '../../assets/model3D.glb';
 import problemImg from '../../assets/Ảnh UI/ảnh chi tiết/Home ne.png';
 import aboutBgImg from '../../assets/Ảnh UI/ảnh chi tiết/catlagi.png';
 import step1Img from '../../assets/Ảnh UI/ảnh chi tiết/Thanhtay.png';
@@ -138,49 +141,130 @@ const HomePage = () => {
 
             {/* ══ HERO ══════════════════════════════════════════════════════ */}
             <section className={styles.heroSection}>
-                {/* Background Image */}
-                <img src={heroImg} alt="Cát Bracelet" className={styles.heroBgImg} />
+                {/* Background Video */}
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className={styles.videoBg}
+                >
+                    <source src={videoBg} type="video/mp4" />
+                </video>
 
                 {/* Overlay Content */}
                 <div className={styles.heroOverlay}>
                     <motion.div
                         className={styles.heroContent}
-                        initial={{ opacity: 0, x: -40 }}
+                        initial={{ opacity: 0, x: -60 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.85 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className={styles.heroTitle}
-                        >
-                            Năng lượng tinh khiết<br />
-                            Phong cách tinh tế
-                        </motion.h1>
-                        <p className={styles.heroDesc}>
-                            Không chỉ là một chiếc vòng.<br />
-                            <em>Đó là năng lượng bạn chọn<br />mang theo mỗi ngày.</em>
-                        </p>
-                        <div className={styles.heroActions}>
-                            <motion.button
-                                className={styles.btnPrimary}
-                                onClick={() => navigate('/collection')}
-                                whileHover={{ scale: 1.04 }}
-                                whileTap={{ scale: 0.97 }}
+                        {/* <div className={styles.heroText}>
+                            <motion.h1
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className={styles.heroTitle}
                             >
-                                KHÁM PHÁ BỘ SƯU TẬP <ArrowRight size={14} />
-                            </motion.button>
-                            <motion.button
-                                className={styles.btnOutlineHero}
-                                onClick={() => navigate('/custom')}
-                                whileHover={{ scale: 1.04 }}
-                                whileTap={{ scale: 0.97 }}
-                            >
-                                TÌM VÒNG HỢP MỆNH <ArrowRight size={14} />
-                            </motion.button>
-                        </div>
+                                Năng lượng <span>Tinh khiết</span>
+                            </motion.h1>
+                            <p className={styles.heroDesc}>
+                                Không chỉ là một chiếc vòng. <br />
+                                Đó là năng lượng bạn chọn mang theo mỗi ngày.
+                            </p>
+                            <div className={styles.heroActions}>
+                                <motion.button
+                                    className={styles.btnPrimary}
+                                    onClick={() => navigate('/collection')}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    KHÁM PHÁ NGAY <ArrowRight size={16} />
+                                </motion.button>
+                                <motion.button
+                                    className={styles.btnOutlineHero}
+                                    onClick={() => navigate('/custom')}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    TƯ VẤN MỆNH <ArrowRight size={16} />
+                                </motion.button>
+                            </div>
+                        </div> */}
                     </motion.div>
+                </div>
+            </section>
+
+            {/* ══ 3D MODEL SECTION (Redesigned) ═════════════════════════════════ */}
+            <section className={styles.modelSection}>
+                <div className={styles.container}>
+                    <div className={styles.modelGrid}>
+                        <motion.div
+                            className={styles.modelContent}
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <span className={styles.modelBadge}>Trải nghiệm thực tế ảo</span>
+                            <h2 className={styles.modelTitle}>
+                                Nghệ thuật chế tác <br /> dưới góc nhìn 3D
+                            </h2>
+                            <p className={styles.modelDesc}>
+                                Không chỉ dừng lại ở những bức ảnh, chúng tôi mang đến trải nghiệm
+                                chân thực nhất. Bạn có thể xoay, phóng to để chiêm ngưỡng từng
+                                vân đá xà cừ và sự tinh xảo trong cách bện dây thủ công của vòng Cát.
+                            </p>
+
+                            <div className={styles.modelHighlights}>
+                                <div className={styles.highlightItem}>
+                                    <div className={styles.highlightIcon}><Gem size={20} /></div>
+                                    <div className={styles.highlightText}>
+                                        <h4>Đá tự nhiên</h4>
+                                        <p>Tuyển chọn từ những khối đá tinh khiết nhất</p>
+                                    </div>
+                                </div>
+                                <div className={styles.highlightItem}>
+                                    <div className={styles.highlightIcon}><Wind size={20} /></div>
+                                    <div className={styles.highlightText}>
+                                        <h4>Dây bện thủ công</h4>
+                                        <p>Kỹ thuật đan thủ công bền bỉ, tinh tế</p>
+                                    </div>
+                                </div>
+                                <div className={styles.highlightItem}>
+                                    <div className={styles.highlightIcon}><Zap size={20} /></div>
+                                    <div className={styles.highlightText}>
+                                        <h4>Năng lượng</h4>
+                                        <p>Thanh tẩy và kích hoạt bởi nghệ nhân</p>
+                                    </div>
+                                </div>
+                                <div className={styles.highlightItem}>
+                                    <div className={styles.highlightIcon}><Sparkles size={20} /></div>
+                                    <div className={styles.highlightText}>
+                                        <h4>Độc bản</h4>
+                                        <p>Mỗi viên đá mang một vân sắc duy nhất</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            className={styles.modelCanvasArea}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <div className={styles.modelCanvasWrap}>
+                                <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+                                    <Suspense fallback={null}>
+                                        <BraceletModel modelPath={modelPath} />
+                                    </Suspense>
+                                </Canvas>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 

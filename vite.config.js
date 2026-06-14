@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    assetsInclude: ['**/*.glb'],
     server: {
       host: '0.0.0.0',
       port: Number(env.PORT) || 5174,
