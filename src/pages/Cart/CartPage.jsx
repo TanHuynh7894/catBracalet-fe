@@ -149,9 +149,14 @@ const CartPage = () => {
     // ── Image Helper ────────────────────────────────────────────────────────
     const getProductImage = (item) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+
+        // Prioritize: 1. Variant image, 2. Product thumbnail, 3. First product image, 4. Fallback
         let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
-        if (!thumb && item?.product?.productImages?.length > 0) thumb = item.product.productImages[0].imageUrl;
-        if (!thumb) thumb = item?.product?.thumbnail;
+        if (!thumb) thumb = item?.product?.thumbnail || item?.thumbnail;
+        if (!thumb && item?.product?.productImages?.length > 0) {
+            thumb = item.product.productImages[0].imageUrl || item.product.productImages[0].url;
+        }
+
         if (!thumb) return fallbackProductImg;
         if (thumb.startsWith('http')) return thumb;
         return `${baseUrl}${thumb.startsWith('/') ? '' : '/'}${thumb}`;

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-    ChevronDown, ChevronUp, X, SlidersHorizontal,
+    ChevronDown, ChevronUp, X, SlidersHorizontal, ChevronLeft, ChevronRight,
     ShoppingBag, Heart, Plus, Minus, Gem, Sparkles, User, Gift, RefreshCw,
 } from 'lucide-react';
 import styles from './CustomBraceletPage.module.css';
-import { getProducts, getAllProductVariants } from '../../services/productService';
+import { getProducts, getAllProductVariants, getProductById } from '../../services/productService';
 import { getProductCategories } from '../../services/categoryService';
 import { addToCart } from '../../services/cartService';
 import { useCart } from '../../context/CartContext';
@@ -46,6 +46,8 @@ const CustomBraceletPage = () => {
     const [configType, setConfigType] = useState(null); // 'stone', 'charm', 'wire'
     const [allVariants, setAllVariants] = useState([]);
     const [currentOptions, setCurrentOptions] = useState({ color: '', size: '', quantity: 1, variantId: null });
+    const [activeImg, setActiveImg] = useState(0);
+    const [modalImages, setModalImages] = useState([]);
 
 
     useEffect(() => {
@@ -82,51 +84,36 @@ const CustomBraceletPage = () => {
         loadComponents();
     }, []);
 
-    const openConfigurator = (product, type) => {
-        // 1. Tìm biến thể (ưu tiên lấy trực tiếp từ sản phẩm nếu backend đã trả về kèm theo)
-        let productVariants = product.product_variants || product.variants || [];
+    const openConfigurator = async (product, type) => {
+        try {
+            // Fetch full product details to get images
+            const fullProduct = await getProductById(product.id);
+            let productVariants = fullProduct.product_variants || fullProduct.variants || [];
 
-        // 2. Nếu không có, tìm trong danh sách allVariants thông qua mapping
-        if (productVariants.length === 0) {
-            productVariants = allVariants.filter(v =>
-                v.status === 'ACTIVE' &&
-                (v.productVariantMappings || v.product_variant_mappings || [])?.some(m =>
-                    (m.productId === product.id || m.product_id === product.id)
-                )
-            );
-        }
+            // If variants aren't in details, find from allVariants
+            if (productVariants.length === 0) {
+                productVariants = allVariants.filter(v =>
+                    v.status === 'ACTIVE' &&
+                    (v.productVariantMappings || v.product_variant_mappings || [])?.some(m =>
+                        (m.productId === product.id || m.product_id === product.id)
+                    )
+                );
+            }
 
-        // 3. Nếu vẫn không có, kiểm tra mapping trực tiếp trên product (nếu có id)
-        if (productVariants.length === 0 && (product.productVariantMappings || product.product_variant_mappings)?.length > 0) {
-            const mapping = product.productVariantMappings || product.product_variant_mappings;
-            productVariants = allVariants.filter(v =>
-                mapping.some(m => m.variantId === v.id || m.variant_id === v.id)
-            );
-        }
+            console.log(`[CustomDesign] Product ${fullProduct.productName} has ${productVariants.length} variants`);
 
-        console.log(`[CustomDesign] Product ${product.productName} has ${productVariants.length} variants`);
+            // Prepare images
+            const images = (fullProduct.productImages || fullProduct.product_images || [])
+                .filter(img => img.status === 'ACTIVE')
+                .map(img => getFullImageUrl(img.imageUrl || img.url));
 
-        setConfiguringProduct({ ...product, variants: productVariants });
-        setConfigType(type);
+            const uniqueImages = [...new Set([getFullImageUrl(fullProduct.thumbnail || fullProduct.image), ...images])].filter(Boolean);
 
-        // Nếu là Dây (Wire) và chỉ có 1 biến thể, có thể thêm nhanh vì thường chỉ dùng 1 dây
-        if (type === 'wire' && productVariants.length === 1) {
-            const v = productVariants[0];
-            const itemInfo = {
-                productId: product.id,
-                variantId: v.id,
-                name: product.productName,
-                price: Number(v.extraPrice || 0),
-                image: product.image,
-                color: v.color,
-                size: v.size,
-                quantity: 1
-            };
-            setSelectedWire(itemInfo);
-            setConfiguringProduct(null);
-            showToast(`Đã thêm ${product.productName}`, 'success');
-        } else {
-            // Với Đá (Stone) và Charm, hoặc Dây có nhiều mẫu: Luôn mở bảng để chọn (đặc biệt là chọn số lượng)
+            setModalImages(uniqueImages);
+            setActiveImg(0);
+            setConfiguringProduct({ ...fullProduct, variants: productVariants });
+            setConfigType(type);
+
             const firstV = productVariants[0];
             setCurrentOptions({
                 color: firstV?.color || '',
@@ -134,6 +121,9 @@ const CustomBraceletPage = () => {
                 quantity: 1,
                 variantId: firstV?.id || null
             });
+        } catch (error) {
+            console.error("Error opening configurator:", error);
+            showToast("Không thể tải thông tin chi tiết sản phẩm", "error");
         }
     };
 
@@ -146,7 +136,7 @@ const CustomBraceletPage = () => {
             variantId: variant.id,
             name: configuringProduct.productName,
             price: Number(variant.extraPrice || 0),
-            image: configuringProduct.image,
+            image: configuringProduct.thumbnail || configuringProduct.image,
             color: variant.color,
             size: variant.size,
             quantity: currentOptions.quantity
@@ -313,16 +303,19 @@ const CustomBraceletPage = () => {
                             </div>
                             <div className={styles.wireGrid}>
                                 {wires.map(opt => (
-                                    <button
+                                    <div
                                         key={opt.id}
-                                        className={`${styles.wireCard} ${selectedWire?.productId === opt.id ? styles.wireCardActive : ''}`}
+                                        className={`${styles.productCard} ${selectedWire?.productId === opt.id ? styles.productCardActive : ''}`}
                                         onClick={() => openConfigurator(opt, 'wire')}
                                     >
-                                        <div className={styles.wireImgWrap}>
-                                            <img src={getFullImageUrl(opt.image)} alt={opt.productName} className={styles.wireImg} />
+                                        <div className={styles.cardImageWrapper}>
+                                            <img src={getFullImageUrl(opt.thumbnail || opt.image)} alt={opt.productName} className={styles.cardImage} />
                                         </div>
-                                        <span className={styles.wireLabel}>{opt.productName}</span>
-                                    </button>
+                                        <div className={styles.cardBody}>
+                                            <h4 className={styles.cardName}>{opt.productName}</h4>
+                                            <p className={styles.cardPrice}>Từ {formatPrice(opt.basePrice)}</p>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </motion.div>
@@ -339,16 +332,19 @@ const CustomBraceletPage = () => {
 
                             <div className={styles.stoneGrid}>
                                 {stones.map(stone => (
-                                    <button
+                                    <div
                                         key={stone.id}
-                                        className={styles.stoneCard}
+                                        className={styles.productCard}
                                         onClick={() => openConfigurator(stone, 'stone')}
                                     >
-                                        <div className={styles.stoneImgWrap}>
-                                            <img src={getFullImageUrl(stone.image)} alt={stone.productName} className={styles.stoneImg} />
+                                        <div className={styles.cardImageWrapper}>
+                                            <img src={getFullImageUrl(stone.thumbnail || stone.image)} alt={stone.productName} className={styles.cardImage} />
                                         </div>
-                                        <span className={styles.stoneLabel}>{stone.productName}</span>
-                                    </button>
+                                        <div className={styles.cardBody}>
+                                            <h4 className={styles.cardName}>{stone.productName}</h4>
+                                            <p className={styles.cardPrice}>Từ {formatPrice(stone.basePrice)}</p>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </motion.div>
@@ -364,16 +360,19 @@ const CustomBraceletPage = () => {
                             </div>
                             <div className={styles.charmGrid}>
                                 {charms.map(c => (
-                                    <button
+                                    <div
                                         key={c.id}
-                                        className={styles.charmCard}
+                                        className={styles.productCard}
                                         onClick={() => openConfigurator(c, 'charm')}
                                     >
-                                        <div className={styles.charmImgWrap}>
-                                            <img src={getFullImageUrl(c.image)} alt={c.productName} className={styles.charmImg} />
+                                        <div className={styles.cardImageWrapper}>
+                                            <img src={getFullImageUrl(c.thumbnail || c.image)} alt={c.productName} className={styles.cardImage} />
                                         </div>
-                                        <span className={styles.charmLabel}>{c.productName}</span>
-                                    </button>
+                                        <div className={styles.cardBody}>
+                                            <h4 className={styles.cardName}>{c.productName}</h4>
+                                            <p className={styles.cardPrice}>Từ {formatPrice(c.basePrice)}</p>
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </motion.div>
@@ -444,7 +443,26 @@ const CustomBraceletPage = () => {
 
                             <div className={styles.modalBody}>
                                 <div className={styles.modalLeft}>
-                                    <img src={getFullImageUrl(configuringProduct.image)} className={styles.modalImg} alt="" />
+                                    <div className={styles.mainImgWrap}>
+                                        <img src={modalImages[activeImg]} className={styles.modalImg} alt="" />
+                                        {modalImages.length > 1 && (
+                                            <>
+                                                <button className={styles.prevBtn} onClick={() => setActiveImg(p => p === 0 ? modalImages.length - 1 : p - 1)}><ChevronLeft size={20} /></button>
+                                                <button className={styles.nextBtn} onClick={() => setActiveImg(p => p === modalImages.length - 1 ? 0 : p + 1)}><ChevronRight size={20} /></button>
+                                            </>
+                                        )}
+                                    </div>
+                                    <div className={styles.modalThumbnails}>
+                                        {modalImages.map((img, i) => (
+                                            <button
+                                                key={i}
+                                                className={`${styles.modalThumb} ${i === activeImg ? styles.modalThumbActive : ''}`}
+                                                onClick={() => setActiveImg(i)}
+                                            >
+                                                <img src={img} alt="" />
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className={styles.modalRight}>
                                     <h4 className={styles.modalProdName}>{configuringProduct.productName}</h4>

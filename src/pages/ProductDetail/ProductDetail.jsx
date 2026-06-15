@@ -136,9 +136,25 @@ export default function ProductDetail() {
                     } catch (e) { }
                 }
 
-                const related = productsList
-                    .filter(p => p.id !== productId)
-                    .slice(0, 4);
+                // Filter active related products within the same category if possible
+                const sameCategory = productsList.filter(p =>
+                    p.id !== productId &&
+                    p.status === 'ACTIVE' &&
+                    p.categoryId === data.categoryId
+                );
+
+                let related = sameCategory;
+                if (related.length < 4) {
+                    const otherActive = productsList.filter(p =>
+                        p.id !== productId &&
+                        p.status === 'ACTIVE' &&
+                        p.categoryId !== data.categoryId
+                    );
+                    related = [...related, ...otherActive].slice(0, 4);
+                } else {
+                    related = related.slice(0, 4);
+                }
+
                 setRelatedProducts(related);
             } catch (error) {
                 console.error("Error fetching product detail:", error);
@@ -573,7 +589,7 @@ export default function ProductDetail() {
                             <motion.div key={p.id} className={styles.productCard} {...fadeUpDelay(i * 0.1)}>
                                 <Link to={`/product-detail?id=${p.id}`} className={styles.cardLinkFull}>
                                     <div className={styles.cardImgWrap}>
-                                        <img src={getFullImageUrl(p.thumbnail)} alt={p.productName} className={styles.cardImg} />
+                                        <img src={getFullImageUrl(p.thumbnail || p.image)} alt={p.productName} className={styles.cardImg} />
                                     </div>
                                 </Link>
                                 <button
@@ -588,7 +604,7 @@ export default function ProductDetail() {
                                     <Link to={`/product-detail?id=${p.id}`} className={styles.cardNameLink}>
                                         <h3 className={styles.cardName}>{p.productName}</h3>
                                     </Link>
-                                    <p className={styles.cardPrice}>{Number(p.basePrice).toLocaleString('vi-VN')}đ</p>
+                                    <p className={styles.cardPrice}>Từ {Number(p.basePrice).toLocaleString('vi-VN')}đ</p>
                                     <Link to={`/product-detail?id=${p.id}`} className={styles.cardBtn}>
                                         Xem chi tiết
                                     </Link>
