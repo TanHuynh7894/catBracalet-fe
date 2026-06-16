@@ -36,7 +36,18 @@ const SupportManagement = () => {
 
     const userString = localStorage.getItem('user');
     const currentUser = userString ? JSON.parse(userString) : {};
-    const adminId = currentUser.id || currentUser._id;
+    const myId = currentUser.id || currentUser._id;
+
+    // Thu thập tất cả các giá trị có thể là ID của user hiện tại
+    const possibleAdminIds = [
+        currentUser.id,
+        currentUser._id,
+        currentUser.userId,
+        currentUser.user_id,
+        currentUser.sub,
+    ].filter(Boolean).map(v => String(v).toLowerCase());
+
+    const adminId = currentUser.id || currentUser._id || currentUser.userId || currentUser.user_id || currentUser.sub;
 
     // ---- Fetch User Name Logic (có cache) ----
     const fetchUserName = useCallback(async (uid) => {
@@ -79,7 +90,13 @@ const SupportManagement = () => {
         },
         onNewMessage: (msg) => {
             if (msg.ticket_id === activeTicket?.id) {
-                setMessages(prev => [...prev, msg]);
+                setMessages(prev => {
+                    // Xoá optimistic trùng (cùng sender + nội dung gần nhau)
+                    const filtered = prev.filter(m =>
+                        !(m.id?.startsWith('opt_') && m.message === msg.message && m.sender_id === msg.sender_id)
+                    );
+                    return [...filtered, msg];
+                });
                 fetchUserName(msg.sender_id);
             } else {
                 setUnreadMap(prev => ({ ...prev, [msg.ticket_id]: (prev[msg.ticket_id] || 0) + 1 }));
@@ -103,6 +120,7 @@ const SupportManagement = () => {
     useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
     const handleSelectTicket = async (ticket) => {
+        console.log('[DEBUG] Ticket selected:', JSON.stringify(ticket)); // xem field nào tồn tại
         setActiveTicket(ticket);
         setMessages([]);
         setLoadingMsgs(true);
@@ -121,7 +139,20 @@ const SupportManagement = () => {
 
     const handleSend = () => {
         if (!inputText.trim() || !activeTicket) return;
-        sendMessage(activeTicket.id, inputText.trim());
+        const trimmed = inputText.trim();
+
+        // Optimistic update – hiện tin ngay bên phải mà không chờ socket echo
+        const optimisticMsg = {
+            id: `opt_${Date.now()}`,
+            ticket_id: activeTicket.id,
+            sender_id: adminId,
+            sender_role: 'admin',
+            message: trimmed,
+            created_at: new Date().toISOString(),
+        };
+        setMessages(prev => [...prev, optimisticMsg]);
+
+        sendMessage(activeTicket.id, trimmed);
         setInputText('');
     };
 
@@ -254,33 +285,41 @@ const SupportManagement = () => {
                                 <div className={styles.loadingMsgs}>Đang tải lịch sử...</div>
                             ) : (
                                 messages.map((msg, idx) => {
-                                    // Quy tắc thép: Admin bên PHẢI, User bên TRÁI
-                                    const isFromAdmin = msg.sender_role === 'admin';
-                                    const isRightSide = isFromAdmin;
+                                    // Giống hệt ChatBubble: so sánh trực tiếp sender_id với myId
+                                    const isMe = msg.sender_id === myId || msg.id?.startsWith('opt_');
 
-                                    const senderInfo = userCache[msg.sender_id] || (isFromAdmin ? { name: 'Admin' } : { name: 'Khách hàng' });
-                                    const displayName = msg.sender_id === adminId ? 'Bạn' : senderInfo.name;
+                                    const senderInfo = userCache[msg.sender_id] || { name: msg.sender_role === 'admin' ? 'Hỗ trợ' : 'Khách hàng' };
 
                                     return (
-                                        <div key={msg.id || idx} className={`${styles.msgGroup} ${isRightSide ? styles.groupMe : styles.groupOther}`}>
-                                            {!isRightSide && <div className={styles.senderName}>{senderInfo.name}</div>}
-                                            <div className={`${styles.msgRow} ${isRightSide ? styles.rowMe : styles.rowOther}`}>
-                                                {!isRightSide && (
-                                                    <div className={styles.chatAvatar}>
-                                                        {senderInfo.avatar ? <img src={senderInfo.avatar} className={styles.avatarImg} /> : 'U'}
+                                        <div
+                                            key={msg.id || idx}
+                                            className={`${styles.msgRow} ${isMe ? styles.msgRowMe : styles.msgRowOther}`}
+                                        >
+                                            <div className={`${styles.nameAndBubble} ${isMe ? styles.nameAndBubbleMe : styles.nameAndBubbleOther}`}>
+                                                <span className={isMe ? styles.senderNameMe : styles.senderNameOther}>
+                                                    {senderInfo.name}
+                                                </span>
+                                                <div className={styles.bubbleRow}>
+                                                    {!isMe && (
+                                                        <div className={styles.chatAvatar}>
+                                                            {senderInfo.avatar ? (
+                                                                <img
+                                                                    src={senderInfo.avatar}
+                                                                    className={styles.avatarImg}
+                                                                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                                                                />
+                                                            ) : null}
+                                                            <span className={styles.avatarFallback} style={{ display: senderInfo.avatar ? 'none' : 'flex' }}>
+                                                                {senderInfo.name?.charAt(0).toUpperCase()}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                    <div className={`${styles.msgBubble} ${isMe ? styles.bubbleMe : styles.bubbleOther}`}>
+                                                        <p className={styles.msgText}>{msg.message}</p>
+                                                        <span className={styles.msgTime}>{formatTime(msg.created_at)}</span>
                                                     </div>
-                                                )}
-                                                <div className={`${styles.msgBubble} ${isRightSide ? styles.bubbleMe : styles.bubbleOther}`}>
-                                                    <p>{msg.message}</p>
-                                                    <span className={styles.msgTime}>{formatTime(msg.created_at)}</span>
                                                 </div>
-                                                {isRightSide && (
-                                                    <div className={`${styles.chatAvatar} ${styles.avatarAdmin}`}>
-                                                        {senderInfo.avatar ? <img src={senderInfo.avatar} className={styles.avatarImg} /> : 'A'}
-                                                    </div>
-                                                )}
                                             </div>
-                                            {isRightSide && <div className={styles.senderNameMe}>{displayName}</div>}
                                         </div>
                                     );
                                 })
