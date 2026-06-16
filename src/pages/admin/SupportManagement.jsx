@@ -254,25 +254,33 @@ const SupportManagement = () => {
                                 <div className={styles.loadingMsgs}>Đang tải lịch sử...</div>
                             ) : (
                                 messages.map((msg, idx) => {
-                                    const isMe = msg.sender_id === adminId || msg.sender_role === 'admin';
-                                    const senderInfo = userCache[msg.sender_id] || (isMe ? { name: 'Bạn' } : { name: 'Khách hàng' });
+                                    // Quy tắc thép: Admin bên PHẢI, User bên TRÁI
+                                    const isFromAdmin = msg.sender_role === 'admin';
+                                    const isRightSide = isFromAdmin;
+
+                                    const senderInfo = userCache[msg.sender_id] || (isFromAdmin ? { name: 'Admin' } : { name: 'Khách hàng' });
+                                    const displayName = msg.sender_id === adminId ? 'Bạn' : senderInfo.name;
 
                                     return (
-                                        <div key={msg.id || idx} className={`${styles.msgGroup} ${isMe ? styles.groupMe : styles.groupOther}`}>
-                                            {!isMe && <div className={styles.senderName}>{senderInfo.name}</div>}
-                                            <div className={`${styles.msgRow} ${isMe ? styles.rowMe : styles.rowOther}`}>
-                                                {!isMe && (
+                                        <div key={msg.id || idx} className={`${styles.msgGroup} ${isRightSide ? styles.groupMe : styles.groupOther}`}>
+                                            {!isRightSide && <div className={styles.senderName}>{senderInfo.name}</div>}
+                                            <div className={`${styles.msgRow} ${isRightSide ? styles.rowMe : styles.rowOther}`}>
+                                                {!isRightSide && (
                                                     <div className={styles.chatAvatar}>
                                                         {senderInfo.avatar ? <img src={senderInfo.avatar} className={styles.avatarImg} /> : 'U'}
                                                     </div>
                                                 )}
-                                                <div className={`${styles.msgBubble} ${isMe ? styles.bubbleMe : styles.bubbleOther}`}>
+                                                <div className={`${styles.msgBubble} ${isRightSide ? styles.bubbleMe : styles.bubbleOther}`}>
                                                     <p>{msg.message}</p>
                                                     <span className={styles.msgTime}>{formatTime(msg.created_at)}</span>
                                                 </div>
-                                                {isMe && <div className={`${styles.chatAvatar} ${styles.avatarAdmin}`}>A</div>}
+                                                {isRightSide && (
+                                                    <div className={`${styles.chatAvatar} ${styles.avatarAdmin}`}>
+                                                        {senderInfo.avatar ? <img src={senderInfo.avatar} className={styles.avatarImg} /> : 'A'}
+                                                    </div>
+                                                )}
                                             </div>
-                                            {isMe && <div className={styles.senderNameMe}>{senderInfo.name}</div>}
+                                            {isRightSide && <div className={styles.senderNameMe}>{displayName}</div>}
                                         </div>
                                     );
                                 })
