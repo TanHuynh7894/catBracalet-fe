@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import LoadingScreen from './LoadingScreen';
 import SmoothScroll from '../components/animations/SmoothScroll';
+import ChatBubble from '../components/ChatBubble/ChatBubble';
 import { AnimatePresence } from 'framer-motion';
 
 const MainLayout = ({ children }) => {
@@ -30,6 +31,7 @@ const MainLayout = ({ children }) => {
                         {children}
                     </main>
                     <Footer />
+                    <ChatBubble />
                 </div>
             )}
         </div>

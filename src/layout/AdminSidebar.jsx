@@ -14,7 +14,8 @@ import {
     Settings,
     Users,
     Ticket,
-    MessageSquare
+    MessageSquare,
+    Headphones
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -99,6 +100,12 @@ const AdminSidebar = () => {
             title: 'Đăng ký tư vấn',
             icon: <MessageSquare size={18} />,
             path: '/admin/consultations'
+        },
+        {
+            id: 'support',
+            title: 'Hỗ trợ khách hàng',
+            icon: <Headphones size={18} />,
+            path: '/admin/support'
         }
     ];
 
