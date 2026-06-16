@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-    Search, RefreshCw, Send, User, Clock,
-    CheckCircle, AlertCircle, Headphones, X
+    Search, RefreshCw, Send, User as UserIcon, Clock,
+    CheckCircle, Headphones, X, ChevronRight
 } from 'lucide-react';
-import { getAllTickets, getTicketMessages, closeTicket } from '../../services/supportService';
+import { getAllTickets, getTicketMessages, closeTicket, getUserById } from '../../services/supportService';
 import useSupportSocket from '../../hooks/useSupportSocket';
 import styles from './SupportManagement.module.css';
 
@@ -13,8 +13,8 @@ const formatTime = (dateStr) => {
 };
 
 const STATUS_BADGE = {
-    open: { text: 'Đang mở', class: 'statusOpen', icon: <Clock size={12} /> },
-    closed: { text: 'Đã đóng', class: 'statusClosed', icon: <CheckCircle size={12} /> },
+    open: { text: 'Đang mở', class: 'statusOpen' },
+    closed: { text: 'Đã đóng', class: 'statusClosed' },
 };
 
 const SupportManagement = () => {
@@ -25,16 +25,47 @@ const SupportManagement = () => {
     const [loadingMsgs, setLoadingMsgs] = useState(false);
     const [inputText, setInputText] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all'); // all | open | closed
+    const [filterStatus, setFilterStatus] = useState('all');
     const [unreadMap, setUnreadMap] = useState({});
+
+    // Cache thông tin user để hiển thị tên
+    const [userCache, setUserCache] = useState({});
 
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
-    // Lấy thông tin admin đang đăng nhập
     const userString = localStorage.getItem('user');
     const currentUser = userString ? JSON.parse(userString) : {};
     const adminId = currentUser.id || currentUser._id;
+
+    // ---- Fetch User Name Logic (có cache) ----
+    const fetchUserName = useCallback(async (uid) => {
+        if (!uid || userCache[uid]) return;
+        try {
+            const response = await getUserById(uid);
+            const userData = response.data || response;
+
+            // Lấy fullName và avatar từ API bạn gửi
+            const userInfo = {
+                name: userData.fullName || userData.full_name || userData.username || 'Khách hàng',
+                avatar: userData.avatar || null
+            };
+
+            setUserCache(prev => ({ ...prev, [uid]: userInfo }));
+        } catch (err) {
+            console.warn(`[Support] Lỗi lấy profile cho uid: ${uid}`, err);
+            setUserCache(prev => ({ ...prev, [uid]: { name: 'Người dùng', avatar: null } }));
+        }
+    }, [userCache]);
+
+    // Tự động fetch tên cho tất cả ticket trong danh sách
+    useEffect(() => {
+        if (tickets.length > 0) {
+            tickets.forEach(t => {
+                if (t.user_id) fetchUserName(t.user_id);
+            });
+        }
+    }, [tickets, fetchUserName]);
 
     // ---- Socket.IO ----
     const { sendMessage, joinTicket } = useSupportSocket({
@@ -43,45 +74,34 @@ const SupportManagement = () => {
             const arr = Array.isArray(data) ? data : (data?.messages || []);
             setMessages(arr);
             setLoadingMsgs(false);
+            // Lấy tên cho tất cả người gửi trong lịch sử
+            arr.forEach(m => fetchUserName(m.sender_id));
         },
         onNewMessage: (msg) => {
             if (msg.ticket_id === activeTicket?.id) {
-                setMessages(prev => {
-                    if (prev.find(m => m.id === msg.id)) return prev;
-                    return [...prev, msg];
-                });
+                setMessages(prev => [...prev, msg]);
+                fetchUserName(msg.sender_id);
             } else {
-                setUnreadMap(prev => ({
-                    ...prev,
-                    [msg.ticket_id]: (prev[msg.ticket_id] || 0) + 1
-                }));
+                setUnreadMap(prev => ({ ...prev, [msg.ticket_id]: (prev[msg.ticket_id] || 0) + 1 }));
             }
         },
     });
 
-    // ---- Fetch ticket list ----
     const fetchTickets = useCallback(async () => {
         setLoading(true);
         try {
             const data = await getAllTickets();
             setTickets(data || []);
         } catch (err) {
-            console.error('Failed to fetch tickets:', err);
+            console.error('Failed:', err);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    useEffect(() => {
-        fetchTickets();
-    }, [fetchTickets]);
+    useEffect(() => { fetchTickets(); }, [fetchTickets]);
+    useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
-    // Auto scroll
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-
-    // Select ticket
     const handleSelectTicket = async (ticket) => {
         setActiveTicket(ticket);
         setMessages([]);
@@ -92,61 +112,45 @@ const SupportManagement = () => {
         try {
             const data = await getTicketMessages(ticket.id);
             const arr = Array.isArray(data) ? data : (data?.messages || []);
-            if (arr.length > 0) {
-                setMessages(arr);
-                setLoadingMsgs(false);
-            }
-        } catch {
-            console.info('[Admin] history via socket');
-        }
-        setTimeout(() => setLoadingMsgs(false), 3000);
+            if (arr.length > 0) setMessages(arr);
+        } catch { /* wait socket */ }
+
+        setTimeout(() => setLoadingMsgs(false), 2000);
         setTimeout(() => inputRef.current?.focus(), 150);
     };
 
     const handleSend = () => {
-        const text = inputText.trim();
-        if (!text || !activeTicket) return;
-        sendMessage(activeTicket.id, text);
+        if (!inputText.trim() || !activeTicket) return;
+        sendMessage(activeTicket.id, inputText.trim());
         setInputText('');
     };
 
-    const handleCloseTicket = async () => {
-        if (!activeTicket || !window.confirm('Đóng yêu cầu hỗ trợ này?')) return;
-        try {
-            await closeTicket(activeTicket.id);
-            setActiveTicket(prev => ({ ...prev, status: 'closed' }));
-            fetchTickets();
-        } catch (err) {
-            alert('Không thể đóng ticket');
-        }
-    };
-
-    // Filtered list
     const filteredTickets = tickets.filter(t => {
-        const matchSearch = t.id.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchSearch = t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (userCache[t.user_id] || '').toLowerCase().includes(searchQuery.toLowerCase());
         const matchStatus = filterStatus === 'all' || t.status === filterStatus;
         return matchSearch && matchStatus;
     });
 
     return (
         <div className={styles.root}>
-            {/* Left Panel */}
+            {/* Sidebar */}
             <div className={styles.leftPanel}>
                 <div className={styles.leftHeader}>
                     <div>
                         <h1 className={styles.panelTitle}>Hỗ trợ khách hàng</h1>
-                        <p className={styles.panelSubtitle}>{tickets.length} ticket tổng cộng</p>
+                        <p className={styles.panelSubtitle}>{tickets.length} yêu cầu</p>
                     </div>
-                    <button className={styles.refreshBtn} onClick={fetchTickets}>
+                    <button className={styles.refreshBtn} onClick={fetchTickets} title="Làm mới">
                         <RefreshCw size={18} className={loading ? styles.spinning : ''} />
                     </button>
                 </div>
 
                 <div className={styles.searchBox}>
-                    <Search className={styles.searchIcon} size={16} />
+                    <Search className={styles.searchIcon} size={15} />
                     <input
                         type="text"
-                        placeholder="Tìm ticket theo ID..."
+                        placeholder="Tìm theo ID hoặc Tên khách..."
                         className={styles.searchInput}
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
@@ -160,21 +164,14 @@ const SupportManagement = () => {
                             className={`${styles.filterTab} ${filterStatus === s ? styles.filterTabActive : ''}`}
                             onClick={() => setFilterStatus(s)}
                         >
-                            {s === 'all' ? 'Tất cả' : s === 'open' ? 'Đang mở' : 'Đã đóng'}
+                            {s === 'all' ? 'Tất cả' : s === 'open' ? 'Mở' : 'Đóng'}
                         </button>
                     ))}
                 </div>
 
                 <div className={styles.ticketList}>
                     {loading ? (
-                        [1, 2, 3].map(i => (
-                            <div key={i} className={styles.ticketSkeleton}>
-                                <div className={styles.skeletonLine} />
-                                <div className={`${styles.skeletonLine} ${styles.skeletonShort}`} />
-                            </div>
-                        ))
-                    ) : filteredTickets.length === 0 ? (
-                        <div className={styles.emptyState}>Không tìm thấy ticket nào</div>
+                        <div className={styles.centerLoader}><RefreshCw size={24} className={styles.spinning} /></div>
                     ) : (
                         filteredTickets.map(ticket => (
                             <div
@@ -183,53 +180,70 @@ const SupportManagement = () => {
                                 onClick={() => handleSelectTicket(ticket)}
                             >
                                 <div className={styles.ticketAvatar}>
-                                    <Headphones size={18} />
+                                    {userCache[ticket.user_id]?.avatar ? (
+                                        <img src={userCache[ticket.user_id].avatar} alt="" className={styles.avatarImg} />
+                                    ) : (
+                                        <UserIcon size={18} />
+                                    )}
                                 </div>
                                 <div className={styles.ticketInfo}>
                                     <div className={styles.ticketIdRow}>
-                                        <span className={styles.ticketId}>#{ticket.id.slice(0, 8)}...</span>
-                                        {unreadMap[ticket.id] > 0 && (
-                                            <span className={styles.unreadBadge}>{unreadMap[ticket.id]}</span>
-                                        )}
+                                        <span className={styles.userName}>
+                                            {userCache[ticket.user_id]?.name || 'Đang tải...'}
+                                        </span>
+                                        {unreadMap[ticket.id] > 0 && <span className={styles.unreadBadge}>{unreadMap[ticket.id]}</span>}
                                     </div>
                                     <div className={styles.ticketMeta}>
+                                        <span className={styles.ticketIdLabel}>ID: #{ticket.id.slice(0, 8)}...</span>
                                         <span className={`${styles.ticketStatus} ${styles[STATUS_BADGE[ticket.status].class]}`}>
-                                            {ticket.status === 'open' ? '🟢' : '⚪'} {STATUS_BADGE[ticket.status].text}
-                                        </span>
-                                        <span className={styles.ticketDate}>
-                                            {new Date(ticket.created_at).toLocaleDateString()}
+                                            {ticket.status === 'open' ? '●' : '○'} {STATUS_BADGE[ticket.status].text}
                                         </span>
                                     </div>
                                 </div>
+                                <ChevronRight size={14} className={styles.chevron} />
                             </div>
                         ))
                     )}
                 </div>
             </div>
 
-            {/* Right Panel */}
+            {/* Chat Area */}
             <div className={styles.rightPanel}>
                 {!activeTicket ? (
                     <div className={styles.emptyChat}>
-                        <div className={styles.emptyChatIcon}><Headphones size={40} /></div>
-                        <h2>Trung tâm hỗ trợ</h2>
-                        <p>Chọn một yêu cầu bên trái để bắt đầu hỗ trợ khách hàng theo thời gian thực.</p>
+                        <div className={styles.emptyChatIcon}><Headphones size={48} /></div>
+                        <h2>Trung tâm Phản hồi</h2>
+                        <p>Chọn một khách hàng để bắt đầu phiên tư vấn trực tuyến.</p>
                     </div>
                 ) : (
                     <>
                         <div className={styles.chatHeader}>
-                            <div className={styles.chatHeaderInfo}>
-                                <div className={styles.chatHeaderAvatar}>T</div>
+                            <div className={styles.headerProfile}>
+                                <div className={styles.chatHeaderAvatar}>
+                                    {userCache[activeTicket.user_id]?.avatar ? (
+                                        <img src={userCache[activeTicket.user_id].avatar} alt="" className={styles.avatarImg} />
+                                    ) : (
+                                        (userCache[activeTicket.user_id]?.name || 'K').charAt(0).toUpperCase()
+                                    )}
+                                </div>
                                 <div>
-                                    <div className={styles.chatHeaderTitle}>Ticket #{activeTicket.id}</div>
-                                    <div className={styles.chatHeaderSub}>Khởi tạo lúc {new Date(activeTicket.created_at).toLocaleString()}</div>
+                                    <div className={styles.chatHeaderTitle}>
+                                        {userCache[activeTicket.user_id]?.name || 'Đang tải tên...'}
+                                    </div>
+                                    <div className={styles.chatHeaderSub}>
+                                        Ticket ID: <strong>#{activeTicket.id}</strong>
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.chatHeaderActions}>
                                 {activeTicket.status === 'open' && (
-                                    <button className={styles.closeTicketBtn} onClick={handleCloseTicket}>
-                                        Đóng ticket
-                                    </button>
+                                    <button className={styles.closeTicketBtn} onClick={async () => {
+                                        if (confirm('Đóng ticket này?')) {
+                                            await closeTicket(activeTicket.id);
+                                            setActiveTicket({ ...activeTicket, status: 'closed' });
+                                            fetchTickets();
+                                        }
+                                    }}>Đóng ticket</button>
                                 )}
                                 <button className={styles.clearBtn} onClick={() => setActiveTicket(null)}><X size={18} /></button>
                             </div>
@@ -237,21 +251,28 @@ const SupportManagement = () => {
 
                         <div className={styles.messagesArea}>
                             {loadingMsgs ? (
-                                <div className={styles.loadingMsgs}>Đang tải tin nhắn...</div>
-                            ) : messages.length === 0 ? (
-                                <div className={styles.noMessages}>Chưa có tin nhắn nào. Hãy bắt đầu hỗ trợ khách hàng!</div>
+                                <div className={styles.loadingMsgs}>Đang tải lịch sử...</div>
                             ) : (
                                 messages.map((msg, idx) => {
-                                    // SO KHỚP CHÍNH XÁC ID
                                     const isMe = msg.sender_id === adminId || msg.sender_role === 'admin';
+                                    const senderInfo = userCache[msg.sender_id] || (isMe ? { name: 'Bạn' } : { name: 'Khách hàng' });
+
                                     return (
-                                        <div key={msg.id || idx} className={`${styles.msgRow} ${isMe ? styles.msgRowRight : styles.msgRowLeft}`}>
-                                            {!isMe && <div className={styles.msgAvatar}>U</div>}
-                                            <div className={`${styles.msgBubble} ${isMe ? styles.msgBubbleAdmin : styles.msgBubbleUser}`}>
-                                                <p>{msg.message}</p>
-                                                <span className={styles.msgTime}>{formatTime(msg.created_at)}</span>
+                                        <div key={msg.id || idx} className={`${styles.msgGroup} ${isMe ? styles.groupMe : styles.groupOther}`}>
+                                            {!isMe && <div className={styles.senderName}>{senderInfo.name}</div>}
+                                            <div className={`${styles.msgRow} ${isMe ? styles.rowMe : styles.rowOther}`}>
+                                                {!isMe && (
+                                                    <div className={styles.chatAvatar}>
+                                                        {senderInfo.avatar ? <img src={senderInfo.avatar} className={styles.avatarImg} /> : 'U'}
+                                                    </div>
+                                                )}
+                                                <div className={`${styles.msgBubble} ${isMe ? styles.bubbleMe : styles.bubbleOther}`}>
+                                                    <p>{msg.message}</p>
+                                                    <span className={styles.msgTime}>{formatTime(msg.created_at)}</span>
+                                                </div>
+                                                {isMe && <div className={`${styles.chatAvatar} ${styles.avatarAdmin}`}>A</div>}
                                             </div>
-                                            {isMe && <div className={`${styles.msgAvatar} ${styles.msgAvatarAdmin}`}>A</div>}
+                                            {isMe && <div className={styles.senderNameMe}>{senderInfo.name}</div>}
                                         </div>
                                     );
                                 })
@@ -260,28 +281,18 @@ const SupportManagement = () => {
                         </div>
 
                         <div className={styles.inputArea}>
-                            {activeTicket.status === 'closed' ? (
-                                <div className={styles.closedNotice}>Yêu cầu này đã được đóng</div>
-                            ) : (
-                                <>
-                                    <textarea
-                                        ref={inputRef}
-                                        className={styles.chatInput}
-                                        placeholder="Nhập tin nhắn hỗ trợ... (Enter để gửi, Shift+Enter xuống dòng)"
-                                        value={inputText}
-                                        onChange={e => setInputText(e.target.value)}
-                                        onKeyDown={e => {
-                                            if (e.key === 'Enter' && !e.shiftKey) {
-                                                e.preventDefault();
-                                                handleSend();
-                                            }
-                                        }}
-                                    />
-                                    <button className={styles.sendBtn} onClick={handleSend} disabled={!inputText.trim()}>
-                                        <Send size={20} />
-                                    </button>
-                                </>
-                            )}
+                            <textarea
+                                ref={inputRef}
+                                className={styles.chatInput}
+                                placeholder="Nhập tin nhắn..."
+                                value={inputText}
+                                onChange={e => setInputText(e.target.value)}
+                                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+                                disabled={activeTicket.status === 'closed'}
+                            />
+                            <button className={styles.sendBtn} onClick={handleSend} disabled={!inputText.trim() || activeTicket.status === 'closed'}>
+                                <Send size={18} />
+                            </button>
                         </div>
                     </>
                 )}
