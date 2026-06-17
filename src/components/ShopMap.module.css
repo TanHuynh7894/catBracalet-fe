@@ -1,0 +1,161 @@
+.mapSection {
+    margin-bottom: 40px;
+}
+
+.sectionHeader {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sectionLabel {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #d8b27d;
+    font-weight: 500;
+}
+
+.sectionTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #5d2b2b;
+    margin: 0;
+}
+
+/* Map Wrapper: relative container chứa cả iframe + card */
+.mapWrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(93, 43, 43, 0.08);
+    box-shadow: 0 4px 24px rgba(93, 43, 43, 0.06);
+}
+
+.iframeContainer {
+    width: 100%;
+    height: 260px;
+}
+
+.iframeContainer iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: sepia(15%) saturate(90%);
+    /* Màu ấm phù hợp với theme */
+}
+
+/* Info Card nằm góc dưới-trái trên bản đồ */
+.infoCard {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(255, 251, 247, 0.97);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 14px 16px;
+    max-width: 260px;
+    border: 1px solid rgba(216, 178, 125, 0.25);
+    box-shadow: 0 4px 20px rgba(93, 43, 43, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.shopName {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #5d2b2b;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.03em;
+}
+
+.infoRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 11px;
+    color: rgba(93, 43, 43, 0.7);
+    line-height: 1.5;
+}
+
+.infoIcon {
+    color: #d8b27d;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.infoLink {
+    color: rgba(93, 43, 43, 0.7);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.infoLink:hover {
+    color: #5d2b2b;
+}
+
+.directionsBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 4px;
+    padding: 6px 12px;
+    background: #5d2b2b;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s, transform 0.2s;
+    align-self: flex-start;
+}
+
+.directionsBtn:hover {
+    background: #d8b27d;
+    transform: translateY(-1px);
+}
+
+/* Skeleton loading */
+.mapSkeleton {
+    height: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.skeletonPulse {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            rgba(93, 43, 43, 0.05) 0%,
+            rgba(93, 43, 43, 0.1) 50%,
+            rgba(93, 43, 43, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .iframeContainer {
+        height: 220px;
+    }
+
+    .infoCard {
+        max-width: 200px;
+        padding: 10px 12px;
+    }
+}

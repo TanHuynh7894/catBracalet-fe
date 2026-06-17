@@ -1,7 +1,8 @@
 import React from 'react';
-import { Instagram, Facebook, Youtube, Send, MapPin, Phone, Mail } from 'lucide-react';
+import { Instagram, Facebook, Youtube, MapPin, Phone, Mail } from 'lucide-react';
 import styles from './Footer.module.css';
 import logoImg from '../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
+import ShopMap from '../components/ShopMap';
 
 const Footer = () => {
     return (
@@ -63,6 +64,9 @@ const Footer = () => {
                         </ul>
                     </div>
                 </div>
+
+                {/* Map Section */}
+                <ShopMap />
 
                 {/* Bottom Bar */}
                 <div className={styles.bottomBar}>
