@@ -33,6 +33,7 @@ const VoucherManagement = lazy(() => import('./pages/admin/VoucherManagement'));
 const MaterialManagement = lazy(() => import('./pages/admin/MaterialManagement'));
 const ConsultationManagement = lazy(() => import('./pages/admin/ConsultationManagement'));
 const SupportManagement = lazy(() => import('./pages/admin/SupportManagement'));
+const ShopLocationManagement = lazy(() => import('./pages/admin/ShopLocationManagement'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
@@ -135,6 +136,7 @@ function App() {
                 <Route path="/admin/vouchers" element={<VoucherManagement />} />
                 <Route path="/admin/consultations" element={<ConsultationManagement />} />
                 <Route path="/admin/support" element={<SupportManagement />} />
+                <Route path="/admin/shop-locations" element={<ShopLocationManagement />} />
 
               </Routes>
             </Suspense>

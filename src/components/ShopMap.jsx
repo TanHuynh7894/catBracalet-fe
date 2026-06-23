@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Clock, ExternalLink, ChevronDown } from 'lucide-react';
 import { shopLocationService } from '../services/shopLocationService';
 import styles from './ShopMap.module.css';
 
 const ShopMap = () => {
-    const [shopInfo, setShopInfo] = useState(null);
+    const [shops, setShops] = useState([]);
+    const [selectedIdx, setSelectedIdx] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchShopLocation = async () => {
+        const fetchShops = async () => {
             try {
-                const data = await shopLocationService.getShopLocation();
-                setShopInfo(data);
+                const data = await shopLocationService.getAllShopLocations();
+                const active = Array.isArray(data) ? data.filter(s => s.isActive) : [];
+                setShops(active);
             } catch (err) {
-                console.error('Failed to fetch shop location:', err);
+                console.error('Failed to fetch shop locations:', err);
                 setError('Không thể tải thông tin cửa hàng');
             } finally {
                 setLoading(false);
             }
         };
-
-        fetchShopLocation();
+        fetchShops();
     }, []);
 
     if (loading) {
@@ -34,16 +35,14 @@ const ShopMap = () => {
         );
     }
 
-    if (error || !shopInfo) {
-        return null; // Ẩn section nếu không tải được
+    if (error || shops.length === 0) {
+        return null;
     }
 
-    const { shopName, shopAddress, phoneNumber, workingHours, shopLatitude, shopLongitude } = shopInfo;
+    const shop = shops[selectedIdx] ?? shops[0];
+    const { shopName, shopAddress, phoneNumber, workingHours, shopLatitude, shopLongitude } = shop;
 
-    // Google Maps Embed URL dùng tọa độ từ API
     const mapEmbedUrl = `https://www.google.com/maps?q=${shopLatitude},${shopLongitude}&z=16&output=embed`;
-
-    // Link mở Google Maps trên trình duyệt/app
     const mapsDirectionUrl = `https://www.google.com/maps/dir/?api=1&destination=${shopLatitude},${shopLongitude}`;
 
     return (
@@ -53,10 +52,27 @@ const ShopMap = () => {
                 <h3 className={styles.sectionTitle}>Cửa Hàng</h3>
             </div>
 
+            {/* Tab Switcher – only shown when multiple shops */}
+            {shops.length > 1 && (
+                <div className={styles.shopTabs}>
+                    {shops.map((s, i) => (
+                        <button
+                            key={s.id}
+                            className={`${styles.shopTab} ${i === selectedIdx ? styles.shopTabActive : ''}`}
+                            onClick={() => setSelectedIdx(i)}
+                        >
+                            <MapPin size={13} />
+                            {s.shopName}
+                        </button>
+                    ))}
+                </div>
+            )}
+
             <div className={styles.mapWrapper}>
                 {/* Google Maps Embed */}
                 <div className={styles.iframeContainer}>
                     <iframe
+                        key={shop.id}
                         title={`${shopName} - Bản đồ cửa hàng`}
                         src={mapEmbedUrl}
                         width="100%"

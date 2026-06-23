@@ -159,3 +159,39 @@
         padding: 10px 12px;
     }
 }
+
+/* Multi-shop tab switcher */
+.shopTabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.shopTab {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(216, 178, 125, 0.4);
+    background: rgba(255, 251, 247, 0.6);
+    color: rgba(93, 43, 43, 0.6);
+    cursor: pointer;
+    transition: all 0.22s;
+}
+
+.shopTab:hover {
+    background: rgba(216, 178, 125, 0.15);
+    color: #5d2b2b;
+    border-color: rgba(216, 178, 125, 0.7);
+}
+
+.shopTabActive {
+    background: #5d2b2b;
+    color: #fff;
+    border-color: #5d2b2b;
+}

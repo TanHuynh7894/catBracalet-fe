@@ -15,7 +15,8 @@ import {
     Users,
     Ticket,
     MessageSquare,
-    Headphones
+    Headphones,
+    MapPin
 } from 'lucide-react';
 import styles from './AdminSidebar.module.css';
 
@@ -106,6 +107,12 @@ const AdminSidebar = () => {
             title: 'Hỗ trợ khách hàng',
             icon: <Headphones size={18} />,
             path: '/admin/support'
+        },
+        {
+            id: 'shopLocations',
+            title: 'Cửa hàng',
+            icon: <MapPin size={18} />,
+            path: '/admin/shop-locations'
         }
     ];
 
