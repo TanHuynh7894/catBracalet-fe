@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import styles from './CheckoutPage.module.css';
 import { getProvinces, getDistricts, getWards, calculateShippingFee } from '../../services/shipmentService';
+import { shopLocationService } from '../../services/shopLocationService';
 import { getActiveVouchers, getVoucherByCode } from '../../services/voucherService';
 import { getAddressesByUserId } from '../../services/addressService';
 import { checkout } from '../../services/orderService';
@@ -63,6 +64,7 @@ const CheckoutPage = () => {
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
+    const [defaultShopId, setDefaultShopId] = useState(null);
 
     // Voucher state
     const [voucherCode, setVoucherCode] = useState('');
@@ -103,6 +105,14 @@ const CheckoutPage = () => {
                 const addressList = Array.isArray(addrData) ? addrData : (addrData?.data || []);
                 setAddresses(addressList);
 
+                // Lấy thông tin shop mặc định
+                try {
+                    const shopData = await shopLocationService.getShopLocation();
+                    if (shopData?.id) setDefaultShopId(shopData.id);
+                } catch (err) {
+                    console.error('Error fetching shop location:', err);
+                }
+
                 // Find default address
                 const defaultAddr = addressList.find(a => a.isDefault) || addressList[0];
                 if (defaultAddr) {
@@ -124,13 +134,20 @@ const CheckoutPage = () => {
         loadInitialData();
     }, [navigate, showToast]);
 
-    // Handle Shipping Fee Calculation when address changes
+    // Handle Shipping Fee Calculation when address changes or cart items change
     useEffect(() => {
         const fetchShippingFee = async () => {
+            // Xác định danh sách ID sản phẩm thực tế đang checkout
+            const actualCartItemIds = selectedCartItemIds.length > 0
+                ? selectedCartItemIds
+                : cartItems.map(item => item.cartItemId);
+
+            // Chỉ gọi API nếu có địa chỉ được chọn
             if (selectedAddress?.id) {
                 setIsCalculatingShip(true);
                 try {
-                    const data = await calculateShippingFee(selectedAddress.id);
+                    // API mới chỉ cần addressId và shopLocationId (tùy chọn)
+                    const data = await calculateShippingFee(selectedAddress.id, defaultShopId);
                     setShippingFee(data.total_shipping_fee || 0);
                 } catch (err) {
                     console.error('Lỗi tính phí ship:', err);
@@ -142,8 +159,10 @@ const CheckoutPage = () => {
                 setShippingFee(0);
             }
         };
+
         fetchShippingFee();
-    }, [selectedAddress]);
+        // Sử dụng JSON.stringify cho array để tránh re-render lặp do tham chiếu array mới
+    }, [selectedAddress?.id, defaultShopId, JSON.stringify(selectedCartItemIds), cartItems.length]);
 
     // Body scroll lock when modal is open
     useEffect(() => {

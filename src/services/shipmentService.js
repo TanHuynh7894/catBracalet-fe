@@ -44,13 +44,23 @@ export const getWards = async (districtId) => {
 };
 
 /**
- * Tính phí vận chuyển dựa trên địa chỉ
- * @param {string} addressId 
+ * Tính phí vận chuyển dựa trên địa chỉ và cửa hàng
+ * @param {string} addressId - ID địa chỉ giao hàng
+ * @param {string} shopLocationId - ID cửa hàng (tùy chọn)
  * @returns {Promise<Object>}
  */
-export const calculateShippingFee = async (addressId) => {
+export const calculateShippingFee = async (addressId, shopLocationId = null) => {
     try {
-        const response = await api.post('/shipments/calculate-client', { addressId });
+        const payload = { addressId };
+        if (shopLocationId) {
+            payload.shopLocationId = shopLocationId;
+        }
+        console.log('--- Calculating Shipping Fee ---');
+        console.log('Payload:', JSON.stringify(payload, null, 2));
+
+        const response = await api.post('/shipments/calculate-client', payload);
+        console.log('Response:', response.data);
+        console.log('--------------------------------');
         return response.data;
     } catch (error) {
         throw error.response?.data?.message || error.response?.data?.error || 'Không thể tính phí vận chuyển';
