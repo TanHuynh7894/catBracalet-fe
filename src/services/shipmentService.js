@@ -44,18 +44,22 @@ export const getWards = async (districtId) => {
 };
 
 /**
- * Tính phí vận chuyển dựa trên địa chỉ và cửa hàng
+ * Tính phí vận chuyển dựa trên địa chỉ, người dùng và danh sách sản phẩm
  * @param {string} addressId - ID địa chỉ giao hàng
- * @param {string} shopLocationId - ID cửa hàng (tùy chọn)
+ * @param {string} userId - ID người dùng
+ * @param {Array} cartItemIds - Danh sách ID các item trong giỏ hàng
  * @returns {Promise<Object>}
  */
-export const calculateShippingFee = async (addressId, shopLocationId = null) => {
+export const calculateShippingFee = async (addressId, userId = null, cartItemIds = []) => {
     try {
-        const payload = { addressId };
-        if (shopLocationId) {
-            payload.shopLocationId = shopLocationId;
-        }
-        console.log('--- Calculating Shipping Fee ---');
+        const payload = {
+            addressId,
+            userId,
+            cartItemIds
+        };
+
+        console.log('--- Calculating Shipping Fee (v2) ---');
+
         console.log('Payload:', JSON.stringify(payload, null, 2));
 
         const response = await api.post('/shipments/calculate-client', payload);
@@ -66,6 +70,7 @@ export const calculateShippingFee = async (addressId, shopLocationId = null) => 
         throw error.response?.data?.message || error.response?.data?.error || 'Không thể tính phí vận chuyển';
     }
 };
+
 
 /**
  * Lấy danh sách báo giá vận chuyển cho một đơn hàng (Goship)
