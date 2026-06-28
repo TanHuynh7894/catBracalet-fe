@@ -16,7 +16,7 @@
     --gold-light: #f5e6d0;
 
     background-color: var(--background);
-    font-family: 'Inter', 'Manrope', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     color: var(--text);
 }
 
@@ -202,7 +202,7 @@
 }
 
 .productName {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 28px;
     font-weight: 600;
     color: var(--text);
@@ -233,7 +233,7 @@
 }
 
 .price {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 34px;
     font-weight: 700;
     color: var(--primary);
@@ -623,7 +623,7 @@
 }
 
 .accordionSectionTitle {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 22px;
     font-weight: 600;
     color: var(--text);
@@ -722,7 +722,7 @@
 }
 
 .relatedTitle {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 24px;
     font-weight: 600;
     color: var(--text);
@@ -836,7 +836,7 @@
 }
 
 .cardPrice {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 16px;
     font-weight: 700;
     color: var(--primary);
@@ -887,7 +887,7 @@
 }
 
 .brandBannerTitle {
-    font-family: 'Playfair Display', 'Noto Serif', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 24px;
     font-weight: 600;
     color: var(--text);

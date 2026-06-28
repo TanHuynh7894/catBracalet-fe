@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     padding: 60px 20px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .card {
@@ -52,7 +52,7 @@
 }
 
 .title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 32px;
     font-weight: 700;
     color: var(--primary);
@@ -170,7 +170,7 @@
 }
 
 .itemsTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 20px;
     font-weight: 700;
     color: var(--text);
@@ -256,7 +256,7 @@
 }
 
 .pricingRowTotal span:last-child {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 24px;
     font-weight: 700;
     color: var(--primary);

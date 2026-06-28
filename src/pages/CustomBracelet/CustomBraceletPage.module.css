@@ -30,7 +30,7 @@
 .page {
     min-height: 100vh;
     background: var(--c-bg);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     color: var(--c-text);
     overflow-x: hidden;
 }
@@ -71,7 +71,7 @@
 }
 
 .heroTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: clamp(30px, 3.6vw, 50px);
     font-weight: 700;
     line-height: 1.15;
@@ -85,7 +85,7 @@
 }
 
 .heroBody {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 14px;
     line-height: 1.75;
     color: var(--c-muted);
@@ -93,7 +93,7 @@
 }
 
 .heroScript {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-style: italic;
     font-size: 14.5px;
     color: #c4a06e;
@@ -315,7 +315,7 @@
     font-weight: 600;
     color: var(--c-text);
     text-align: left;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     transition: color .2s;
 }
 
@@ -446,7 +446,7 @@
     border-radius: 6px;
     font-size: 11px;
     color: var(--c-text);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     background: #fff;
     outline: none;
     transition: border-color .2s;
@@ -474,7 +474,7 @@
     text-transform: uppercase;
     color: var(--c-primary);
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     transition: all .22s;
 }
 
@@ -502,7 +502,7 @@
 }
 
 .contentTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 20px;
     font-weight: 600;
     color: var(--c-text);
@@ -547,7 +547,7 @@
     color: var(--c-text);
     cursor: pointer;
     white-space: nowrap;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     transition: border-color .2s;
 }
 
@@ -591,7 +591,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     transition: background .15s;
 }
 
@@ -629,7 +629,7 @@
     border-radius: 50%;
     background: var(--c-primary);
     color: #fff;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 13px;
     font-weight: 700;
     display: flex;
@@ -640,7 +640,7 @@
 }
 
 .stepTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 17px;
     font-weight: 600;
     color: var(--c-text);
@@ -707,7 +707,7 @@
 }
 
 .cardName {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--c-text);
@@ -829,7 +829,7 @@
     border-right: 1px solid var(--c-border-soft);
     height: 28px;
     line-height: 28px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 /* ─── ACTION BUTTONS ──────────────────────────────────────── */
@@ -860,7 +860,7 @@
     border-radius: 10px;
     background: transparent;
     color: var(--c-primary);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: .08em;
@@ -885,7 +885,7 @@
     border-radius: 10px;
     background: var(--c-primary);
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: .08em;
@@ -1264,7 +1264,7 @@
 }
 
 .selectedTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 20px;
@@ -1505,7 +1505,7 @@
 }
 
 .modalProdName {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 32px;
     font-weight: 700;
     color: var(--c-primary);
@@ -1590,7 +1590,7 @@
     color: var(--c-text);
     cursor: pointer;
     transition: all 0.25s;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .optBtn:hover {
@@ -1654,7 +1654,7 @@
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-top: 40px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .addBtn:hover:not(:disabled) {

@@ -69,8 +69,9 @@ export default {
                 "container-max": "1440px"
             },
             fontFamily: {
-                "headline": ["Bodoni Moda", "serif"],
-                "body": ["Manrope", "sans-serif"],
+                "sans": ["Be Vietnam Pro", "sans-serif"],
+                "headline": ["Be Vietnam Pro", "sans-serif"],
+                "body": ["Be Vietnam Pro", "sans-serif"],
             },
         },
     },

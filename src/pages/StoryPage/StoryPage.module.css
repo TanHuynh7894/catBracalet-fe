@@ -18,7 +18,7 @@
     --border: #E8DED2;
 
     background-color: var(--bg);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     color: var(--text);
     overflow-x: hidden;
 }
@@ -34,7 +34,7 @@
 /* ── SHARED SECTION LABELS ────────────────────────────────── */
 .sectionNumber {
     display: block;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.22em;
@@ -45,7 +45,7 @@
 
 .sectionNumberLight {
     display: block;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.22em;
@@ -55,7 +55,7 @@
 }
 
 .sectionTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--text);
@@ -65,7 +65,7 @@
 }
 
 .sectionTitleCenter {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--text);
@@ -76,7 +76,7 @@
 }
 
 .sectionSubtitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 16px;
     font-style: italic;
     color: var(--primary);
@@ -145,7 +145,7 @@
 }
 
 .heroTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: clamp(48px, 6vw, 72px);
     font-weight: 700;
     color: var(--text);
@@ -255,7 +255,7 @@
 }
 
 .redBannerLabel {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.22em;
@@ -265,7 +265,7 @@
 }
 
 .redBannerTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: clamp(32px, 4vw, 48px);
     font-weight: 700;
     color: #FFFFFF;
@@ -285,7 +285,7 @@
 }
 
 .redBannerQuote {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 15px;
     font-style: italic;
     color: var(--gold);
@@ -361,7 +361,7 @@
 }
 
 .beliefCardTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: var(--text);
@@ -399,7 +399,7 @@
 }
 
 .truthTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: clamp(22px, 2.5vw, 30px);
     font-weight: 700;
     color: var(--text);
@@ -409,7 +409,7 @@
 }
 
 .truthSubtitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 15px;
     font-style: italic;
     color: var(--primary);
@@ -501,7 +501,7 @@
 }
 
 .valueCardTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 17px;
     font-weight: 700;
     color: var(--text);
@@ -552,7 +552,7 @@
 }
 
 .ctaTitle {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: clamp(26px, 3.2vw, 40px);
     font-weight: 700;
     color: #FFFFFF;
@@ -582,7 +582,7 @@
     justify-content: center;
     background: var(--gold);
     color: #3d0d0d;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
@@ -605,7 +605,7 @@
     justify-content: center;
     background: transparent;
     color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;

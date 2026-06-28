@@ -36,8 +36,9 @@
   --color-ivory: #fdfbf7;
   --color-cream: #f9f6f0;
 
-  --font-headline: "Bodoni Moda", serif;
-  --font-body: "Manrope", sans-serif;
+  --font-sans: "Be Vietnam Pro", sans-serif;
+  --font-headline: "Be Vietnam Pro", sans-serif;
+  --font-body: "Be Vietnam Pro", sans-serif;
 
   --spacing-margin-mobile: 20px;
   --spacing-margin-desktop: 80px;
@@ -52,7 +53,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-on-background);
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
@@ -62,7 +63,7 @@
   h3,
   h4,
   .font-serif {
-    font-family: 'Noto Serif', serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-weight: 500;
     letter-spacing: normal;
   }
@@ -139,4 +140,8 @@
   background: var(--color-outline);
 }
 
-/* Smooth Scroll - Managed by Lenis library */.custom-cursor-active, .custom-cursor-active * { cursor: none !important; } 
+/* Smooth Scroll - Managed by Lenis library */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
