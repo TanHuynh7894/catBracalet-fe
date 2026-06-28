@@ -4,6 +4,7 @@ import Footer from './Footer';
 import LoadingScreen from './LoadingScreen';
 import SmoothScroll from '../components/animations/SmoothScroll';
 import ChatBubble from '../components/ChatBubble/ChatBubble';
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop';
 import { AnimatePresence } from 'framer-motion';
 
 const MainLayout = ({ children }) => {
@@ -32,6 +33,7 @@ const MainLayout = ({ children }) => {
                     </main>
                     <Footer />
                     <ChatBubble />
+                    <ScrollToTop />
                 </div>
             )}
         </div>

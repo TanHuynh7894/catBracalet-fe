@@ -99,24 +99,28 @@ const Header = () => {
 
     return (
         <header
-            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF] ${isScrolled ? 'py-1 shadow-md' : 'py-2'}`}
+            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF]/95 backdrop-blur-md ${isScrolled ? 'py-2.5 shadow-lg border-b border-[#E8DED2]/40' : 'py-5'}`}
         >
-            <div className="max-w-[1400px] mx-auto px-4 flex items-center justify-between">
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-5 md:px-16 flex items-center justify-between">
                 {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
                 <Link to="/" className="flex items-center shrink-0">
-                    <img src={logoImg} alt="Cát" className="h-10 md:h-12 w-auto object-contain" />
+                    <img
+                        src={logoImg}
+                        alt="Cát"
+                        className={`w-auto object-contain transition-all duration-500 ${isScrolled ? 'h-10 md:h-12' : 'h-12 md:h-16'}`}
+                    />
                 </Link>
 
                 {/* ── CENTER: NAV MENU ───────────────────────────────────── */}
-                <nav className="hidden xl:flex items-center gap-12">
+                <nav className="hidden xl:flex items-center gap-16">
                     {navLinks.map((link) => {
                         const active = isActive(link.href, link.type);
                         return link.type === 'route' ? (
                             <Link
                                 key={link.name}
                                 to={link.href}
-                                className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
-                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'}`}
+                                className={`relative text-[16px] font-bold tracking-wider transition-all duration-300 py-1
+                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'}`}
                             >
                                 {link.name}
                                 {active && (
@@ -131,8 +135,8 @@ const Header = () => {
                                 key={link.name}
                                 href={link.href}
                                 onClick={(e) => handleAnchorClick(e, link.href)}
-                                className={`relative text-[13px] font-semibold tracking-wide transition-all duration-300 py-1
-                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/70 hover:text-[#7A1E1E]'} cursor-pointer`}
+                                className={`relative text-[16px] font-bold tracking-wider transition-all duration-300 py-1
+                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'} cursor-pointer`}
                             >
                                 {link.name}
                                 {active && (
@@ -217,7 +221,7 @@ const Header = () => {
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
-                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-7 py-3 rounded-full text-[11px] font-bold uppercase tracking-wider hover:bg-[#5A1414] transition-all transform hover:scale-105"
+                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[13px] font-extrabold uppercase tracking-wide hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
                     >
                         Tư vấn miễn phí
                     </a>
