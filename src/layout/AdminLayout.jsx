@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import styles from './AdminLayout.module.css';
-import { Search, Bell, HelpCircle, User, Settings, LogOut, ChevronDown, Shield, Store } from 'lucide-react';
+import { Search, LogOut, ChevronDown } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
     const [showProfile, setShowProfile] = useState(false);
@@ -40,15 +40,6 @@ const AdminLayout = ({ children }) => {
                     </div>
 
                     <div className={styles.headerActions}>
-                        <button className={styles.actionBtn}>
-                            <HelpCircle size={20} />
-                            <span className="text-sm font-medium">Trợ giúp</span>
-                        </button>
-                        <button className={`${styles.actionBtn} relative`}>
-                            <Bell size={20} />
-                            <span className={styles.notificationBadge}>99+</span>
-                        </button>
-
                         {/* User Profile with Dropdown */}
                         <div ref={profileRef} style={{ position: 'relative' }}>
                             <div

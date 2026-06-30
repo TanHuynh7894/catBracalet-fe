@@ -105,7 +105,7 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
 
                 {/* Admin Routes */}
-                <Route path="/admin" element={<Dashboard />} />
+                <Route path="/admin" element={<Orders />} />
                 <Route path="/admin/orders" element={<Orders />} />
                 <Route path="/admin/orders/:id" element={<AdminOrderDetail />} />
                 <Route path="/admin/orders/returns" element={<Returns />} />
