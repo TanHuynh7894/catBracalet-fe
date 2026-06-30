@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-    Heart, ShoppingCart, ChevronDown, ChevronLeft, ChevronRight,
+    ChevronDown, ChevronLeft, ChevronRight,
     Eye, SlidersHorizontal, X, Gem, Leaf, Sparkles, ShieldCheck,
 } from 'lucide-react';
 import styles from './CollectionPage.module.css';
@@ -79,7 +79,7 @@ const CollectionPage = () => {
     // Filter state
     const [selectedCollection, setSelectedCollection] = useState(''); // Category ID (client)
     const [selectedStones, setSelectedStones] = useState([]); // Material IDs -> stoneType
-    const [selectedPrice, setSelectedPrice] = useState('');
+    const [priceRange, setPriceRange] = useState([0, 500000]);
     const [selectedColor, setSelectedColor] = useState('');        // color
     const [selectedStoneColor, setSelectedStoneColor] = useState(''); // stoneColor
     const [selectedSize, setSelectedSize] = useState('');          // size
@@ -102,8 +102,12 @@ const CollectionPage = () => {
                     getProductMaterials()
                 ]);
                 const allProducts = Array.isArray(productData) ? productData : (productData?.products || []);
-                setProducts(allProducts.filter(p => p.status === 'ACTIVE'));
-                setCategories(Array.isArray(catData) ? catData : (catData?.categories || []));
+                const activeProducts = allProducts.filter(p => p.status === 'ACTIVE');
+                setProducts(activeProducts);
+                const allCategories = Array.isArray(catData) ? catData : (catData?.categories || []);
+                // Chỉ giữ category có ít nhất 1 sản phẩm ACTIVE
+                const activeCategoryIds = new Set(activeProducts.map(p => p.categoryId));
+                setCategories(allCategories.filter(c => activeCategoryIds.has(c.id)));
                 setMaterials(Array.isArray(matData) ? matData : (matData?.materials || []));
             } catch (error) {
                 console.error("Error loading collection data:", error);
@@ -128,9 +132,15 @@ const CollectionPage = () => {
         setCurrentPage(1);
     };
 
-    // Toggle giá (click lần 2 để bỏ chọn)
-    const handlePriceToggle = (value) => {
-        setSelectedPrice(prev => prev === value ? '' : value);
+    // Price range slider handler
+    const handlePriceRangeChange = (index, value) => {
+        setPriceRange(prev => {
+            const next = [...prev];
+            next[index] = Number(value);
+            if (index === 0 && next[0] > next[1]) next[0] = next[1];
+            if (index === 1 && next[1] < next[0]) next[1] = next[0];
+            return next;
+        });
         setCurrentPage(1);
     };
 
@@ -138,7 +148,7 @@ const CollectionPage = () => {
     const handleClearFilters = () => {
         setSelectedCollection('');
         setSelectedStones([]);
-        setSelectedPrice('');
+        setPriceRange([0, 500000]);
         setSelectedColor('');
         setSelectedStoneColor('');
         setSelectedSize('');
@@ -164,7 +174,8 @@ const CollectionPage = () => {
 
     useEffect(() => {
         const fetchFiltered = async () => {
-            const hasFilters = searchKeyword || selectedCollection || selectedPrice ||
+            const isPriceFiltered = priceRange[0] > 0 || priceRange[1] < 500000;
+            const hasFilters = searchKeyword || selectedCollection || isPriceFiltered ||
                 selectedStones.length > 0 || selectedColor || selectedStoneColor || selectedSize || sortBy !== 'newest';
 
             if (!hasFilters) {
@@ -197,15 +208,8 @@ const CollectionPage = () => {
                     if (selectedStoneColor) params.stoneColor = vntoenColor[selectedStoneColor] || selectedStoneColor;
                     if (selectedSize) params.size = selectedSize;
 
-                    if (selectedPrice === 'under80') {
-                        params.maxPrice = 80000;
-                    } else if (selectedPrice === '80to120') {
-                        params.minPrice = 80000;
-                        params.maxPrice = 120000;
-                    } else if (selectedPrice === '120to200') {
-                        params.minPrice = 120000;
-                        params.maxPrice = 200000;
-                    }
+                    if (priceRange[0] > 0) params.minPrice = priceRange[0];
+                    if (priceRange[1] < 500000) params.maxPrice = priceRange[1];
 
                     console.log("[Filter] >>> REQUEST PARAMS:", params);
                     const filteredRaw = await filterProducts(params);
@@ -228,13 +232,10 @@ const CollectionPage = () => {
                             p.product_materials?.some(m => selectedStones.includes(m.material_id || m.materialId))
                         );
                     }
-                    if (selectedPrice) {
+                    if (priceRange[0] > 0 || priceRange[1] < 500000) {
                         results = results.filter(p => {
                             const price = Number(p.basePrice);
-                            if (selectedPrice === 'under80') return price < 80000;
-                            if (selectedPrice === '80to120') return price >= 80000 && price <= 120000;
-                            if (selectedPrice === '120to200') return price >= 120000 && price <= 200000;
-                            return true;
+                            return price >= priceRange[0] && price <= priceRange[1];
                         });
                     }
                 }
@@ -258,7 +259,7 @@ const CollectionPage = () => {
 
         const timer = setTimeout(fetchFiltered, 400);
         return () => clearTimeout(timer);
-    }, [searchKeyword, selectedCollection, selectedPrice, sortBy, products, selectedStones, selectedColor, selectedStoneColor, selectedSize]);
+    }, [searchKeyword, selectedCollection, priceRange, sortBy, products, selectedStones, selectedColor, selectedStoneColor, selectedSize]);
 
     const totalPages = Math.ceil(filteredResults.length / ITEMS_PER_PAGE);
     const paginatedProducts = filteredResults.slice(
@@ -402,100 +403,46 @@ const CollectionPage = () => {
                             </div>
                         </div>
 
-                        {/* Stone Type Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Chất liệu đá</h3>
-                            <div className={styles.materialGrid}>
-                                {materials.map(stone => (
-                                    <button
-                                        key={stone.id}
-                                        className={`${styles.materialBtn} ${selectedStones.includes(stone.id) ? styles.active : ''}`}
-                                        onClick={() => handleStoneToggle(stone.id)}
-                                    >
-                                        {stone.materialName}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Color Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Màu sắc dây</h3>
-                            <div className={styles.swatchGrid}>
-                                {['Đỏ', 'Đen', 'Trắng', 'Xanh', 'Vàng', 'Nâu', 'Tím', 'Hồng'].map(c => (
-                                    <button
-                                        key={c}
-                                        className={`${styles.swatchBtn} ${selectedColor === c ? styles.active : ''}`}
-                                        onClick={() => setSelectedColor(prev => prev === c ? '' : c)}
-                                        title={c}
-                                    >
-                                        <div
-                                            className={styles.swatchColor}
-                                            style={{ backgroundColor: colorMap[c] || '#ddd' }}
-                                        ></div>
-                                        <span className={styles.swatchLabel}>{c}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Stone Color Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Màu sắc đá</h3>
-                            <div className={styles.swatchGrid}>
-                                {['Đỏ', 'Xanh', 'Trắng', 'Tím', 'Vàng', 'Xanh lá', 'Đen', 'Hồng'].map(c => (
-                                    <button
-                                        key={c}
-                                        className={`${styles.swatchBtn} ${selectedStoneColor === c ? styles.active : ''}`}
-                                        onClick={() => setSelectedStoneColor(prev => prev === c ? '' : c)}
-                                        title={c}
-                                    >
-                                        <div
-                                            className={styles.swatchColor}
-                                            style={{ backgroundColor: colorMap[c] || '#ddd' }}
-                                        ></div>
-                                        <span className={styles.swatchLabel}>{c}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Size Filter */}
-                        <div className={styles.filterGroup}>
-                            <h3 className={styles.filterGroupTitle}>Kích thước</h3>
-                            <div className={styles.sizeGrid}>
-                                {['13cm', '14cm', '15cm', '16cm', '17cm', '18cm', 'S', 'M', 'L'].map(s => (
-                                    <button
-                                        key={s}
-                                        className={`${styles.sizeBtn} ${selectedSize === s ? styles.active : ''}`}
-                                        onClick={() => setSelectedSize(prev => prev === s ? '' : s)}
-                                    >
-                                        {s}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Price Filter */}
+                        {/* Price Range Slider */}
                         <div className={styles.filterGroup}>
                             <h3 className={styles.filterGroupTitle}>Khoảng giá</h3>
-                            <div className={styles.priceList}>
-                                {[
-                                    { label: 'Dưới 80,000đ', value: 'under80' },
-                                    { label: '80,000đ - 120,000đ', value: '80to120' },
-                                    { label: '120,000đ - 200,000đ', value: '120to200' },
-                                ].map(price => (
-                                    <button
-                                        key={price.value}
-                                        className={`${styles.priceOption} ${selectedPrice === price.value ? styles.active : ''}`}
-                                        onClick={() => handlePriceToggle(price.value)}
-                                    >
-                                        <div className={styles.checkIcon}>
-                                            {selectedPrice === price.value && <div className={styles.checkDot}></div>}
-                                        </div>
-                                        {price.label}
-                                    </button>
-                                ))}
+                            <div className={styles.priceRangeWrapper}>
+                                <div className={styles.priceRangeLabels}>
+                                    <span>{priceRange[0].toLocaleString('vi-VN')}đ</span>
+                                    <span>{priceRange[1] >= 500000 ? '500,000đ+' : priceRange[1].toLocaleString('vi-VN') + 'đ'}</span>
+                                </div>
+                                <div className={styles.dualRangeTrack}>
+                                    <div
+                                        className={styles.dualRangeFill}
+                                        style={{
+                                            left: `${(priceRange[0] / 500000) * 100}%`,
+                                            width: `${((priceRange[1] - priceRange[0]) / 500000) * 100}%`
+                                        }}
+                                    />
+                                    <input
+                                        type="range"
+                                        min={0}
+                                        max={500000}
+                                        step={5000}
+                                        value={priceRange[0]}
+                                        onChange={(e) => handlePriceRangeChange(0, e.target.value)}
+                                        className={styles.rangeInput}
+                                    />
+                                    <input
+                                        type="range"
+                                        min={0}
+                                        max={500000}
+                                        step={5000}
+                                        value={priceRange[1]}
+                                        onChange={(e) => handlePriceRangeChange(1, e.target.value)}
+                                        className={styles.rangeInput}
+                                    />
+                                </div>
+                                <div className={styles.priceRangeTicks}>
+                                    <span>0đ</span>
+                                    <span>250k</span>
+                                    <span>500k+</span>
+                                </div>
                             </div>
                         </div>
 
@@ -584,13 +531,6 @@ const CollectionPage = () => {
                                                     loading="lazy"
                                                 />
                                             </Link>
-                                            <button
-                                                className={`${styles.wishlistBtn} ${wishlist.includes(product.id) ? styles.wishlistBtnActive : ''}`}
-                                                onClick={() => handleWishlistToggle(product.id)}
-                                                aria-label="Yêu thích"
-                                            >
-                                                <Heart size={16} fill={wishlist.includes(product.id) ? '#7A1E1E' : 'none'} />
-                                            </button>
                                         </div>
 
                                         <div className={styles.cardBody}>
@@ -609,13 +549,6 @@ const CollectionPage = () => {
                                                     <Eye size={14} />
                                                     Xem chi tiết
                                                 </Link>
-                                                <button
-                                                    className={styles.btnCart}
-                                                    onClick={() => handleAddToCart(product)}
-                                                >
-                                                    <ShoppingCart size={14} />
-                                                    Thêm vào giỏ
-                                                </button>
                                             </div>
                                         </div>
                                     </motion.div>

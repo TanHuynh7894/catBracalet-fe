@@ -28,7 +28,7 @@
 }
 
 .footerLogo {
-    height: 42px;
+    height: 52px;
     /* Balanced size */
     width: auto;
     object-fit: contain;
@@ -41,7 +41,8 @@
     font-size: 14px;
     line-height: 1.7;
     color: rgba(93, 43, 43, 0.6);
-    max-width: 280px;
+    max-width: 320px;
+    text-align: justify;
 }
 
 .socialLinks {

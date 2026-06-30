@@ -444,29 +444,13 @@ export default function ProductDetail() {
 
                             {/* Action Buttons */}
                             <div className={styles.actionButtons}>
-                                <div className={styles.actionRow}>
-                                    <button
-                                        className={styles.btnAddCart}
-                                        onClick={handleAddToCart}
-                                        disabled={adding || (variant && variant.stockQuantity <= 0)}
-                                    >
-                                        <ShoppingCart size={18} />
-                                        {adding ? 'Đang thêm...' : 'Thêm vào giỏ hàng'}
-                                    </button>
-                                    <button
-                                        className={`${styles.wishlistBtn} ${wishlisted ? styles.wishlistActive : ''}`}
-                                        onClick={() => setWishlisted((w) => !w)}
-                                        aria-label="Wishlist"
-                                    >
-                                        <Heart size={20} fill={wishlisted ? '#7A1E1E' : 'none'} />
-                                    </button>
-                                </div>
                                 <button
-                                    className={styles.btnBuyNow}
-                                    onClick={handleBuyNow}
+                                    className={styles.btnAddCart}
+                                    onClick={handleAddToCart}
                                     disabled={adding || (variant && variant.stockQuantity <= 0)}
                                 >
-                                    {variant && variant.stockQuantity <= 0 ? 'Hết hàng' : 'Mua ngay'}
+                                    <ShoppingCart size={18} />
+                                    {adding ? 'Đang thêm...' : (variant && variant.stockQuantity <= 0 ? 'Hết hàng' : 'Thêm vào giỏ hàng')}
                                 </button>
                             </div>
                         </motion.div>

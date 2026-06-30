@@ -331,8 +331,7 @@ const HomePage = () => {
                             <div className={styles.aboutTextContainer}>
                                 <h2 className={styles.aboutTitle}>Cát là gì?</h2>
                                 <p className={styles.aboutDesc}>
-                                    Cát Bracelet là thương hiệu trang sức phong thủy hiện đại,
-                                    kết hợp tinh thần thẩm mỹ tối giản với ý nghĩa tinh thần tích cực.
+                                    Cát Bracelet là thương hiệu vòng tay đá được xây dựng dành cho những người trẻ yêu thích vẻ đẹp tinh tế và mong muốn lựa chọn một món phụ kiện mang ý nghĩa riêng với bản thân. Mỗi thiết kế được kết hợp từ đá, màu sắc và chi tiết phù hợp với mệnh, năm sinh hoặc năng lượng mà người đeo hướng đến, để chiếc vòng không chỉ đẹp khi phối cùng trang phục mà còn trở thành một dấu ấn cá nhân.
                                 </p>
 
                                 <div className={styles.aboutValuesRow}>

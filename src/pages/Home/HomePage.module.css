@@ -225,7 +225,7 @@
 
 /* ─── 3D MODEL SECTION (Redesigned) ─────────────────────── */
 .modelSection {
-    padding: 120px 0;
+    padding: 60px 0;
     background: var(--bg);
     position: relative;
     overflow: hidden;
@@ -270,6 +270,7 @@
     line-height: 1.8;
     margin-bottom: 40px;
     opacity: 0.8;
+    text-align: justify;
 }
 
 .modelHighlights {
@@ -373,7 +374,7 @@
    SECTION 2 – FEATURES
    ═══════════════════════════════════════════════════════════ */
 .featuresSection {
-    padding: 100px 0;
+    padding: 50px 0 100px;
     background: var(--web3-bg);
 }
 
@@ -582,6 +583,26 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
     }
+
+    .aboutTextContainer {
+        width: 100%;
+        padding: 40px 24px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .aboutOverlayContent {
+        background: rgba(255, 255, 255, 0.85);
+        justify-content: center;
+    }
+
+    .aboutDesc {
+        max-width: 600px;
+    }
+
+    .aboutValuesRow {
+        justify-content: center;
+    }
 }
 
 
@@ -634,7 +655,8 @@
 
 .aboutTextContainer {
     width: 50%;
-    padding: 70px 60px;
+    padding: 70px 60px 70px 110px;
+    /* Shift content slightly to the right */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -656,7 +678,8 @@
     color: var(--text);
     line-height: 1.7;
     margin: 0 0 45px;
-    max-width: 450px;
+    max-width: 100%;
+    text-align: justify;
 }
 
 .aboutValuesRow {
@@ -670,13 +693,26 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    cursor: pointer;
 }
 
 .aboutValueIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
     color: var(--gold);
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.aboutValueItem:hover .aboutValueIcon {
+    background: var(--gold);
+    color: #fff;
+    transform: translateY(-5px);
 }
 
 .aboutValueLabel {
@@ -707,12 +743,12 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    gap: 0;
+    gap: 28px;
 }
 
 .stepCard {
     flex: 1;
-    max-width: 220px;
+    max-width: 240px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -761,7 +797,7 @@
 }
 
 .stepTitle {
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.12em;
     color: var(--text);
@@ -769,18 +805,18 @@
 }
 
 .stepDesc {
-    font-size: 12px;
+    font-size: 13.5px;
     color: var(--muted);
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 0;
-    max-width: 180px;
+    max-width: 210px;
 }
 
 .stepArrow {
     flex-shrink: 0;
     color: var(--gold);
     margin-top: 80px;
-    padding: 0 8px;
+    padding: 0;
     opacity: 0.6;
 }
 
@@ -980,7 +1016,7 @@
    SECTION 8 – TESTIMONIALS
    ═══════════════════════════════════════════════════════════ */
 .testimonialsSection {
-    padding-bottom: 35px;
+    padding: 60px 0;
 }
 
 .testimonialsSection .sectionTitle {
@@ -1048,7 +1084,7 @@
    SECTION 9 – CTA BANNER
    ═══════════════════════════════════════════════════════════ */
 .ctaSection {
-    padding-bottom: 35px;
+    padding-bottom: 40px;
 }
 
 .ctaBannerOverlay {
@@ -1076,10 +1112,9 @@
 }
 
 .ctaOverlayContent {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 2;
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1125,7 +1160,7 @@
    SECTION 10 – CONSULTATION FORM
    ═══════════════════════════════════════════════════════════ */
 .consultSection {
-    padding-bottom: 40px;
+    padding: 45px 0 60px;
 }
 
 .consultCard {

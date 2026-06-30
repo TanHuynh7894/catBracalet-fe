@@ -221,7 +221,7 @@ const Header = () => {
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
-                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[13px] font-extrabold uppercase tracking-wide hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
+                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[14px] font-semibold tracking-normal hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
                     >
                         Tư vấn miễn phí
                     </a>
