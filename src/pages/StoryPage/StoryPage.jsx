@@ -9,6 +9,7 @@ import heroBg2 from '../../assets/Ảnh UI/ảnh chi tiết/kichhoat.png';
 import heroBg4 from '../../assets/Ảnh UI/ảnh chi tiết/nangluongtichcuc.jpg';
 import heroBg5 from '../../assets/Ảnh UI/ảnh chi tiết/donghanh.png';
 import styles from './StoryPage.module.css';
+import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 /* ───── animation preset ───── */
 const fadeUp = {
@@ -83,7 +84,14 @@ export default function StoryPage() {
                     <motion.div className={styles.heroContent} {...fadeUp}>
                         <h1 className={styles.heroTitle}>
                             Câu chuyện<br />
-                            <span className={styles.heroTitleAccent}>về Cát</span>
+                            <span className={styles.heroTitleAccent}>
+                                về
+                                <img
+                                    src={logoImg}
+                                    alt="Cát"
+                                    className="h-[56px] md:h-[84px] w-auto object-contain translate-y-[2px] md:translate-y-[4px]"
+                                />
+                            </span>
                         </h1>
                         <p className={styles.heroDesc}>
                             Mỗi viên đá đều chứa đựng một lời thì thầm từ tự nhiên, và Cát ở đây để kể câu chuyện đó theo cách đẹp nhất, chạm đến trái tim và trở thành một phần hành trình của bạn.

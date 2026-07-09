@@ -16,6 +16,7 @@ import { useToast } from '../../context/ToastContext';
 // ─── Import Logo ────────────────────────────────────────────────────────────
 import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/anhbosuutap.png';
 import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
+import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
 // ─── Color Picker Data ───────────────────────────────────────────────────────
 const colorOptions = [
@@ -324,7 +325,14 @@ const CollectionPage = () => {
                 <div className={styles.heroContent}>
                     <div className={styles.heroInner}>
                         <div className={styles.heroText}>
-                            <h1 className={styles.heroTitle}>Bộ sưu tập <span className={styles.heroTitleAccent}>Cát</span></h1>
+                            <h1 className={`${styles.heroTitle} flex items-center gap-4 flex-wrap`}>
+                                Bộ sưu tập
+                                <img
+                                    src={logoImg}
+                                    alt="Cát"
+                                    className="h-[56px] md:h-[84px] w-auto object-contain translate-y-[2px] md:translate-y-[4px]"
+                                />
+                            </h1>
                             <p className={styles.heroDesc}>
                                 Chọn chiếc vòng phù hợp với năng lượng và phong cách của bạn.
                             </p>

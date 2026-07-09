@@ -42,9 +42,10 @@ const Header = () => {
 
     const navLinks = [
         { name: 'Trang chủ', href: '/', type: 'route' },
+        { name: 'Câu chuyện', href: '/story', type: 'route' },
         { name: 'Bộ sưu tập', href: '/collection', type: 'route' },
         { name: 'Thiết kế riêng', href: '/custom', type: 'route' },
-        { name: 'Câu chuyện', href: '/story', type: 'route' },
+        { name: 'Liên hệ', href: '/contact', type: 'route' },
     ];
 
     // Thêm link Admin nếu user có quyền Admin
@@ -107,7 +108,7 @@ const Header = () => {
                     <img
                         src={logoImg}
                         alt="Cát"
-                        className={`w-auto object-contain transition-all duration-500 ${isScrolled ? 'h-10 md:h-12' : 'h-12 md:h-16'}`}
+                        className={`w-auto object-contain transition-all duration-500 ${isScrolled ? 'h-14 md:h-[72px]' : 'h-20 md:h-[96px]'}`}
                     />
                 </Link>
 

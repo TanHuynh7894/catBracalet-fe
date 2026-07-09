@@ -154,10 +154,13 @@
 }
 
 .heroTitleAccent {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
     color: var(--primary);
     font-style: italic;
     font-weight: 500;
+    margin-top: 8px;
 }
 
 .heroDesc {
@@ -166,6 +169,7 @@
     line-height: 1.8;
     margin: 0;
     opacity: 0.9;
+    text-align: justify;
 }
 
 /* ============================================================
