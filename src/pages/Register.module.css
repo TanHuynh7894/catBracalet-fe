@@ -85,3 +85,49 @@
 .socialBtn {
     @apply flex items-center justify-center gap-3 border border-outline-variant py-3 hover:bg-surface-container-low transition-all duration-300 font-body text-xs hover:border-primary/30;
 }
+
+/* ── RESPONSIVE: MOBILE (max 767px) ─────────────────────── */
+@media (max-width: 767px) {
+    .authContainer {
+        padding: 16px !important;
+        padding-bottom: 32px !important;
+        align-items: flex-start;
+        min-height: unset !important;
+    }
+
+    .authTable {
+        border-radius: 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Ẩn hình ảnh bên trái trên mobile */
+    .visualSide {
+        display: none !important;
+    }
+
+    .formSide {
+        padding: 32px 24px !important;
+    }
+}
+
+/* ── RESPONSIVE: TABLET (768px – 1023px) ────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .authContainer {
+        padding: 24px !important;
+    }
+
+    .authTable {
+        max-width: 100% !important;
+    }
+
+    .visualSide {
+        min-height: 500px !important;
+    }
+
+    .formSide {
+        padding: 40px 32px !important;
+    }
+}

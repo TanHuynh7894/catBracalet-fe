@@ -29,11 +29,11 @@
 
 /* ─── CONTAINER ──────────────────────────────────────────── */
 .container {
-    width: 95%;
+    width: 100%;
     max-width: 1600px;
     margin: 0 auto;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: clamp(16px, 4vw, 40px);
+    padding-right: clamp(16px, 4vw, 40px);
 }
 
 /* ─── BUTTONS ────────────────────────────────────────────── */
@@ -138,7 +138,7 @@
 /* ─── SECTION SHARED ─────────────────────────────────────── */
 .sectionTitle {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 32px;
+    font-size: clamp(24px, 3.5vw, 32px);
     font-weight: 600;
     color: var(--text);
 }
@@ -234,7 +234,7 @@
 .modelGrid {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
-    gap: 80px;
+    gap: clamp(32px, 6vw, 80px);
     align-items: center;
 }
 
@@ -257,7 +257,7 @@
 
 .modelTitle {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 48px;
+    font-size: clamp(28px, 4vw, 48px);
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 24px;
@@ -380,8 +380,8 @@
 
 .featuresGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(16px, 3vw, 24px);
 }
 
 .featureCard {
@@ -494,10 +494,10 @@
 
 .problemTitle {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 36px;
+    font-size: clamp(24px, 3.5vw, 36px);
     font-weight: 500;
     color: var(--text);
-    margin: 0 0 40px;
+    margin: 0 0 clamp(20px, 4vw, 40px);
     line-height: 1.25;
 }
 
@@ -509,10 +509,10 @@
 
 .problemItemsRow {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: clamp(12px, 2.5vw, 24px);
     width: 100%;
-    margin-bottom: 45px;
+    margin-bottom: clamp(24px, 4vw, 45px);
 }
 
 .problemItemCol {
@@ -655,7 +655,7 @@
 
 .aboutTextContainer {
     width: 50%;
-    padding: 70px 60px 70px 110px;
+    padding: clamp(30px, 5vw, 70px) clamp(24px, 4vw, 60px) clamp(30px, 5vw, 70px) clamp(24px, 6vh, 110px);
     /* Shift content slightly to the right */
     display: flex;
     flex-direction: column;
@@ -665,7 +665,7 @@
 
 .aboutTitle {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 64px;
+    font-size: clamp(32px, 5vw, 64px);
     font-style: italic;
     font-weight: 700;
     margin: 0 0 24px;
@@ -677,14 +677,14 @@
     font-size: 16px;
     color: var(--text);
     line-height: 1.7;
-    margin: 0 0 45px;
+    margin: 0 0 clamp(24px, 4vw, 45px);
     max-width: 100%;
     text-align: justify;
 }
 
 .aboutValuesRow {
     display: flex;
-    gap: 40px;
+    gap: clamp(16px, 3vw, 40px);
     flex-wrap: wrap;
 }
 
@@ -873,7 +873,7 @@
 
 .bannerTagline {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 56px;
+    font-size: clamp(24px, 5vw, 56px);
     font-style: italic;
     font-weight: 400;
     color: #fcf2e8;
@@ -1026,8 +1026,8 @@
 
 .testimonialsGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(16px, 3vw, 28px);
 }
 
 .testiCard {
@@ -1125,11 +1125,11 @@
 
 .ctaTextTitle {
     font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 36px;
+    font-size: clamp(20px, 4vw, 36px);
     font-weight: 500;
     font-style: italic;
     color: #fcf2e8;
-    margin: 0 0 24px;
+    margin: 0 0 clamp(16px, 3vw, 24px);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -1262,9 +1262,7 @@
     color: var(--muted);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — TABLET  (≤ 1200px)
-   ═══════════════════════════════════════════════════════════ */
+/* ─── RESPONSIVE — TABLET  (≤ 1200px) ────────────────────────── */
 @media (max-width: 1200px) {
     .container {
         padding-left: 20px;
@@ -1301,11 +1299,12 @@
         gap: 60px;
     }
 
-    .ctaBanner {
+    .ctaOverlayContent {
         padding: 40px 48px;
     }
 }
 
+/* ─── RESPONSIVE — MID-TABLET (≤ 992px) ─────────────────────── */
 @media (max-width: 992px) {
     .heroSection {
         min-height: 380px;
@@ -1313,11 +1312,8 @@
 
     .heroOverlay {
         min-height: 380px;
-        background: linear-gradient(to right,
-                rgba(250, 245, 239, 0.97) 0%,
-                rgba(250, 245, 239, 0.88) 40%,
-                rgba(250, 245, 239, 0.3) 70%,
-                transparent 100%);
+        background: transparent !important;
+        /* Remove beige gradient layer masking the video */
     }
 
     .heroContent {
@@ -1332,6 +1328,43 @@
 
     .heroActions {
         justify-content: flex-start;
+    }
+
+    /* 3D Model responsive grid - prevent canvas overflow */
+    .modelGrid {
+        grid-template-columns: 100%;
+        gap: 40px;
+        overflow: hidden;
+        /* Prevent ThreeJS Canvas horizontal expansion */
+        width: 100%;
+    }
+
+    .modelContent {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .modelDesc {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .modelHighlights {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .modelCanvasArea {
+        height: 400px;
+        width: 100%;
+        overflow: hidden;
     }
 
     .featuresGrid {
@@ -1352,6 +1385,16 @@
         justify-content: center;
     }
 
+    .stepsRow {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+    }
+
+    .stepCard {
+        max-width: 240px;
+    }
+
     .testimonialsGrid {
         grid-template-columns: 1fr;
         max-width: 520px;
@@ -1366,30 +1409,34 @@
         height: 260px;
     }
 
-    .ctaBanner {
-        flex-direction: column;
-        text-align: center;
+    /* Energy Banner fixed selectors */
+    .bannerOverlayContent {
+        justify-content: center;
+        min-height: 220px;
     }
 
-    .ctaImgWrap {
-        display: none;
-    }
-
-    .energyBanner {
-        flex-direction: column;
+    .bannerTextContainer {
+        width: 100%;
         padding: 36px 40px;
-        gap: 24px;
-        text-align: center;
+        background: rgba(122, 27, 27, 0.75);
     }
 
     .bannerTagline {
         font-size: 36px;
     }
+
+    /* CTA Banner fixed selectors */
+    .ctaBannerOverlay {
+        min-height: 220px;
+    }
+
+    .ctaOverlayContent {
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.4);
+    }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — MOBILE  (≤ 640px)
-   ═══════════════════════════════════════════════════════════ */
+/* ─── RESPONSIVE — MOBILE (≤ 640px) ─────────────────────────── */
 @media (max-width: 640px) {
     .heroSection {
         min-height: 300px;
@@ -1397,7 +1444,8 @@
 
     .heroOverlay {
         min-height: 300px;
-        background: rgba(250, 245, 239, 0.88);
+        background: transparent !important;
+        /* Make sure background is fully transparent on phone view too */
     }
 
     .heroContent {
@@ -1419,6 +1467,44 @@
         align-items: flex-start;
     }
 
+    .modelTitle {
+        font-size: 28px;
+    }
+
+    .modelDesc {
+        font-size: 14px;
+    }
+
+    .modelHighlights {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .modelCanvasArea {
+        height: 300px;
+        border-radius: 24px;
+    }
+
+    .aboutTitle {
+        font-size: 30px;
+    }
+
+    .aboutDesc {
+        font-size: 14px;
+        text-align: left;
+        /* Keep left alignment or standard read flow */
+    }
+
+    .aboutBannerOverlay {
+        min-height: unset;
+        border-radius: 24px;
+    }
+
+    .problemCardOverlay {
+        min-height: unset;
+        border-radius: 24px;
+    }
+
     .featuresGrid {
         grid-template-columns: 1fr;
     }
@@ -1429,7 +1515,7 @@
     }
 
     .sectionTitle {
-        font-size: 26px;
+        font-size: 24px;
     }
 
     .sectionHeader {
@@ -1446,21 +1532,37 @@
         gap: 32px;
     }
 
-    .ctaBanner {
-        padding: 32px 28px;
+    .ctaBannerOverlay {
+        min-height: 180px;
+        border-radius: 20px;
+    }
+
+    .ctaTextTitle {
+        font-size: 18px;
+        margin-bottom: 16px;
+        padding: 0 10px;
+    }
+
+    .ctaStartBtn {
+        padding: 10px 24px;
+        font-size: 12px;
     }
 
     .consultFormWrap {
-        padding: 32px 24px;
+        padding: 32px 16px;
     }
 
-    .energyBanner {
-        padding: 28px 28px;
+    .bannerOverlayContent {
+        min-height: 160px;
         border-radius: 18px;
     }
 
+    .bannerTextContainer {
+        padding: 20px 16px;
+    }
+
     .bannerTagline {
-        font-size: 28px;
+        font-size: 24px;
     }
 
     .testimonialsGrid {

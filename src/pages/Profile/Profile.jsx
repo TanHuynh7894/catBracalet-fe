@@ -115,95 +115,90 @@ const Profile = () => {
     );
 
     return (
-        <div className="max-w-[1200px] mx-auto space-y-12 pb-20">
+        <div className="max-w-[1200px] mx-auto">
             {profile && (
-                <>
-                    <div className="space-y-12">
-                        {/* Profile Info Form */}
-                        <section className="bg-white p-10 rounded-[32px] shadow-sm border border-outline-variant/20 animate-fade-in">
-                            <div className="flex items-center gap-4 mb-10 pb-6 border-b border-outline-variant/20">
-                                <div className="bg-primary/10 p-3 rounded-2xl text-primary">
-                                    <CreditCard size={24} />
-                                </div>
-                                <div>
-                                    <h2 className="font-bold text-xl text-on-surface">Hồ sơ cá nhân</h2>
-                                    <p className="text-outline text-xs mt-0.5">Thông tin này được sử dụng cho việc đặt hàng và ưu đãi</p>
-                                </div>
-                            </div>
-
-                            {successMessage && (
-                                <div className="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-700 px-6 py-4 rounded-2xl flex items-center gap-3">
-                                    <CheckCircle2 size={20} className="text-emerald-500" />
-                                    <p className="text-sm font-bold">{successMessage}</p>
-                                </div>
-                            )}
-
-                            {error && (
-                                <div className="mb-8 bg-red-50 border border-red-100 text-red-700 px-6 py-4 rounded-2xl flex items-center gap-3">
-                                    <AlertCircle size={20} className="text-red-500" />
-                                    <p className="text-sm font-bold">{error}</p>
-                                </div>
-                            )}
-
-                            <form onSubmit={handleUpdate} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                                <div className="group">
-                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
-                                        <User size={14} /> Họ và Tên quý khách
-                                    </label>
-                                    <input
-                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface placeholder:text-outline/40"
-                                        type="text"
-                                        name="fullName"
-                                        value={formData.fullName}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="group">
-                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
-                                        <Mail size={14} /> Địa chỉ Email
-                                    </label>
-                                    <input
-                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-                                <div className="group">
-                                    <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
-                                        <Phone size={14} /> Số điện thoại liên hệ
-                                    </label>
-                                    <input
-                                        className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-
-                                <div className="md:col-span-2 pt-10 flex justify-end">
-                                    <button
-                                        className={`bg-primary text-white px-12 py-5 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all duration-300 transform active:scale-95 uppercase flex items-center gap-3 ${updating ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#8c1515] hover:shadow-2xl hover:shadow-primary/30'}`}
-                                        type="submit"
-                                        disabled={updating}
-                                    >
-                                        {updating ? (
-                                            <>
-                                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                                Đang lưu...
-                                            </>
-                                        ) : 'Lưu thay đổi hồ sơ'}
-                                    </button>
-                                </div>
-                            </form>
-                        </section>
+                <section className="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-outline-variant/20 animate-fade-in">
+                    <div className="flex items-center gap-4 mb-10 pb-6 border-b border-outline-variant/20">
+                        <div className="bg-primary/10 p-3 rounded-2xl text-primary">
+                            <CreditCard size={24} />
+                        </div>
+                        <div>
+                            <h2 className="font-bold text-xl text-on-surface">Hồ sơ cá nhân</h2>
+                            <p className="text-outline text-xs mt-0.5">Thông tin này được sử dụng cho việc đặt hàng và ưu đãi</p>
+                        </div>
                     </div>
-                </>
+
+                    {successMessage && (
+                        <div className="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-700 px-6 py-4 rounded-2xl flex items-center gap-3">
+                            <CheckCircle2 size={20} className="text-emerald-500" />
+                            <p className="text-sm font-bold">{successMessage}</p>
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="mb-8 bg-red-50 border border-red-100 text-red-700 px-6 py-4 rounded-2xl flex items-center gap-3">
+                            <AlertCircle size={20} className="text-red-500" />
+                            <p className="text-sm font-bold">{error}</p>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleUpdate} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                        <div className="group">
+                            <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                <User size={14} /> Họ và Tên quý khách
+                            </label>
+                            <input
+                                className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface placeholder:text-outline/40"
+                                type="text"
+                                name="fullName"
+                                value={formData.fullName}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="group">
+                            <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                <Mail size={14} /> Địa chỉ Email
+                            </label>
+                            <input
+                                className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className="group">
+                            <label className="flex items-center gap-2 font-bold text-[11px] text-outline uppercase tracking-widest mb-2 group-focus-within:text-primary transition-colors">
+                                <Phone size={14} /> Số điện thoại liên hệ
+                            </label>
+                            <input
+                                className="w-full bg-[#FAF5EF]/30 border-b-2 border-outline-variant py-3 focus:border-primary focus:outline-none transition-all font-body text-body-lg text-on-surface"
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="md:col-span-2 pt-10 flex justify-end">
+                            <button
+                                className={`bg-primary text-white px-12 py-5 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all duration-300 transform active:scale-95 uppercase flex items-center gap-3 ${updating ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#8c1515] hover:shadow-2xl hover:shadow-primary/30'}`}
+                                type="submit"
+                                disabled={updating}
+                            >
+                                {updating ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        Đang lưu...
+                                    </>
+                                ) : 'Lưu thay đổi hồ sơ'}
+                            </button>
+                        </div>
+                    </form>
+                </section>
             )}
         </div>
     );
