@@ -1568,4 +1568,46 @@
     .testimonialsGrid {
         max-width: 100%;
     }
+
+    /* ── Thu nhỏ khoảng cách section trên mobile ── */
+    .modelSection {
+        padding: 28px 0;
+    }
+
+    .featuresSection {
+        padding: 24px 0 40px;
+    }
+
+    .problemSection {
+        padding: 24px 0;
+    }
+
+    .aboutSection {
+        padding: 24px 0;
+    }
+
+    .stepsSection {
+        padding: 24px 0;
+    }
+
+    .stepsTitle {
+        font-size: 22px;
+        margin-bottom: 28px;
+    }
+
+    .testimonialsSection {
+        padding: 24px 0;
+    }
+
+    .consultSection {
+        padding: 24px 0;
+    }
+
+    .ctaSection {
+        padding: 24px 0;
+    }
+
+    .bannerSection {
+        padding: 24px 0;
+    }
 }
