@@ -15,10 +15,11 @@
 .hero {
     position: relative;
     width: 100%;
-    min-height: 320px;
+    min-height: 350px;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #f8f0e3 0%, #fdf6ed 50%, #f2e8d8 100%);
+    background-size: cover;
+    background-position: center;
     overflow: hidden;
 }
 
@@ -45,7 +46,13 @@
 }
 
 .heroOverlay {
-    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(250, 245, 239, 0.85) 0%, rgba(250, 245, 239, 0.5) 60%, rgba(250, 245, 239, 0.15) 100%);
+    z-index: 1;
 }
 
 .heroContent {

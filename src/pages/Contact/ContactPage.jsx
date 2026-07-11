@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, ShieldCheck, Heart, Clock } f
 import styles from './ContactPage.module.css';
 import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 import ShopMap from '../../components/ShopMap';
+import heroBg from '../../assets/Ảnh UI/ảnh chi tiết/lienhe.png';
 
 const TiktokIcon = ({ size = 18 }) => (
     <svg viewBox="0 0 24 24" width={size} height={size} stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -56,7 +57,7 @@ const ContactPage = () => {
         <div className={styles.page}>
 
             {/* ── HERO ─────────────────────────────────────── */}
-            <section className={styles.hero}>
+            <section className={styles.hero} style={{ backgroundImage: `url(${heroBg})` }}>
                 <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
                     <motion.div {...fadeUp}>
