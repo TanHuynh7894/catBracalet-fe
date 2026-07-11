@@ -7,7 +7,7 @@ import {
     Gem, Palette, Gift, Sparkles, ArrowRight, Heart,
     Leaf, Wind, Scale, Link as LinkIcon, Zap,
     ShieldCheck, Clock, Star, MoveRight, ChevronRight,
-    Brain, Flower2, Flower
+    Brain, Flower2, Flower, Play
 } from 'lucide-react';
 import { createConsultation } from '../../services/consultationService';
 import { useToast } from '../../context/ToastContext';
@@ -141,58 +141,84 @@ const HomePage = () => {
 
             {/* ══ HERO ══════════════════════════════════════════════════════ */}
             <section className={styles.heroSection}>
-                {/* Background Video */}
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className={styles.videoBg}
-                >
-                    <source src={videoBg} type="video/mp4" />
-                </video>
+                <div className={styles.container}>
+                    <div className={styles.heroGrid}>
 
-                {/* Overlay Content */}
-                <div className={styles.heroOverlay}>
-                    <motion.div
-                        className={styles.heroContent}
-                        initial={{ opacity: 0, x: -60 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        {/* <div className={styles.heroText}>
-                            <motion.h1
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className={styles.heroTitle}
-                            >
-                                Năng lượng <span>Tinh khiết</span>
-                            </motion.h1>
+                        {/* LEFT: Text content */}
+                        <motion.div
+                            className={styles.heroLeft}
+                            initial={{ opacity: 0, x: -50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <h1 className={styles.heroTitle}>
+                                Trang sức đá tự nhiên<br />
+                                kể câu chuyện của bạn.
+                            </h1>
                             <p className={styles.heroDesc}>
-                                Không chỉ là một chiếc vòng. <br />
-                                Đó là năng lượng bạn chọn mang theo mỗi ngày.
+                                Mỗi viên đá là một mảnh ghép từ thiên nhiên,<br />
+                                mang năng lượng và vẻ đẹp thuần khiết.
+                            </p>
+                            <p className={styles.heroDesc2}>
+                                Thiết kế riêng để tôn vinh cá tính và hành trình của bạn.
                             </p>
                             <div className={styles.heroActions}>
                                 <motion.button
                                     className={styles.btnPrimary}
                                     onClick={() => navigate('/collection')}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
                                 >
-                                    KHÁM PHÁ NGAY <ArrowRight size={16} />
+                                    Khám phá bộ sưu tập <ArrowRight size={16} />
                                 </motion.button>
                                 <motion.button
                                     className={styles.btnOutlineHero}
                                     onClick={() => navigate('/custom')}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
                                 >
-                                    TƯ VẤN MỆNH <ArrowRight size={16} />
+                                    Thiết kế riêng ✧
                                 </motion.button>
                             </div>
-                        </div> */}
-                    </motion.div>
+                            <div className={styles.heroBadges}>
+                                <div className={styles.heroBadgeItem}>
+                                    <Leaf size={16} className={styles.heroBadgeIcon} />
+                                    <div>
+                                        <strong>Đá tự nhiên</strong>
+                                        <span>Chọn lọc kỹ lưỡng</span>
+                                    </div>
+                                </div>
+                                <div className={styles.heroBadgeItem}>
+                                    <Sparkles size={16} className={styles.heroBadgeIcon} />
+                                    <div>
+                                        <strong>Thiết kế riêng</strong>
+                                        <span>Cá nhân hóa theo bạn</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* RIGHT: Pure Video showcase */}
+                        <motion.div
+                            className={styles.heroRight}
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.15 }}
+                        >
+                            <div className={styles.heroVideoCard}>
+                                {/* Video */}
+                                <video
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    className={styles.heroVideo}
+                                >
+                                    <source src={videoBg} type="video/mp4" />
+                                </video>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -322,29 +348,56 @@ const HomePage = () => {
             {/* ══ ABOUT CÁT ══════════════════════════════════════════════ */}
             <section className={styles.aboutSection}>
                 <div className={styles.container}>
-                    <motion.div className={styles.aboutBannerOverlay} {...fadeUp}>
-                        {/* Background Image */}
-                        <img src={aboutBgImg} alt="Cát Background" className={styles.aboutBgImg} />
+                    <div className={styles.aboutGrid}>
 
-                        {/* Content Overlay */}
-                        <div className={styles.aboutOverlayContent}>
-                            <div className={styles.aboutTextContainer}>
-                                <h2 className={styles.aboutTitle}>Cát là gì?</h2>
-                                <p className={styles.aboutDesc}>
-                                    Cát Bracelet là thương hiệu vòng tay đá được xây dựng dành cho những người trẻ yêu thích vẻ đẹp tinh tế và mong muốn lựa chọn một món phụ kiện mang ý nghĩa riêng với bản thân. Mỗi thiết kế được kết hợp từ đá, màu sắc và chi tiết phù hợp với mệnh, năm sinh hoặc năng lượng mà người đeo hướng đến, để chiếc vòng không chỉ đẹp khi phối cùng trang phục mà còn trở thành một dấu ấn cá nhân.
-                                </p>
+                        {/* LEFT: Text */}
+                        <motion.div className={styles.aboutLeft} {...fadeUp}>
+                            <h2 className={styles.aboutTitle}>
+                                Cát là gì? <span className={styles.aboutTitleDeco}>✦</span>
+                            </h2>
+                            <p className={styles.aboutDesc}>
+                                Cát Bracelet là thương hiệu vòng tay đá được xây dựng dành cho những người trẻ yêu thích vẻ đẹp tinh tế và mong muốn lựa chọn một món phụ kiện mang ý nghĩa riêng với bản thân. Mỗi thiết kế được kết hợp từ đá, màu sắc và chi tiết phù hợp với mệnh, năm sinh hoặc năng lượng mà người đeo hướng đến, để chiếc vòng không chỉ đẹp khi phối cùng trang phục mà còn trở thành một dấu ấn cá nhân.
+                            </p>
+                        </motion.div>
 
-                                <div className={styles.aboutValuesRow}>
-                                    {VALUES.map((v, i) => (
-                                        <div key={i} className={styles.aboutValueItem}>
-                                            <div className={styles.aboutValueIcon}>{v.icon}</div>
-                                            <span className={styles.aboutValueLabel}>{v.label}</span>
-                                        </div>
-                                    ))}
+                        {/* RIGHT: Image + Quote card */}
+                        <motion.div
+                            className={styles.aboutRight}
+                            initial={{ opacity: 0, x: 50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.15 }}
+                        >
+                            <div className={styles.aboutImgCard}>
+                                <img src={aboutBgImg} alt="Vòng tay Cát" className={styles.aboutImg} />
+                                {/* Quote card floating inside */}
+                                <div className={styles.aboutQuoteCard}>
+                                    <div className={styles.quoteIconLeft}>“</div>
+                                    <div className={styles.quoteContent}>
+                                        <p className={styles.quoteText}>Mỗi thiết kế là một câu chuyện.</p>
+                                        <span className={styles.quoteSubText}>Cát đồng hành cùng bạn trên hành trình sống an yên và trọn vẹn.</span>
+                                    </div>
+                                    <div className={styles.quoteOrnamentRight}>
+                                        <Leaf size={24} className={styles.ornamentIcon} strokeWidth={1} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+
+                        {/* BOTTOM / LEFT-BOTTOM: Values items row */}
+                        <motion.div className={styles.aboutValuesRow} {...fadeUp}>
+                            {VALUES.map((v, i) => (
+                                <motion.div key={i} className={styles.aboutValueItem} {...fadeUpDelay(i * 0.08)}>
+                                    <div className={styles.aboutValueIcon}>{v.icon}</div>
+                                    <strong className={styles.aboutValueLabel}>{v.label}</strong>
+                                    <span className={styles.aboutValueSub}>
+                                        {i === 0 ? 'Đá tự nhiên chọn lọc' : i === 1 ? 'Năng lượng thuần khiết' : i === 2 ? 'Hài hòa thân tâm trí' : 'Gắn kết yêu thương và ý nghĩa'}
+                                    </span>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+
+                    </div>
                 </div>
             </section>
 
