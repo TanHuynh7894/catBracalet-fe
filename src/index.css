@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* ── CUSTOM FONTS ──────────────────────────────────────────────── */
+@font-face {
+  font-family: 'DFVNAbygaer';
+  src: url('./assets/font_chu/DFVNAbygaer - font header/DFVNAbygaer/OpenType-PS/DFVN Abygaer.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./assets/font_chu/Roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./assets/font_chu/Roboto/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 
 @theme {
   --color-primary-container: #8c1515;
@@ -36,9 +61,9 @@
   --color-ivory: #fdfbf7;
   --color-cream: #f9f6f0;
 
-  --font-sans: "Be Vietnam Pro", sans-serif;
-  --font-headline: "Be Vietnam Pro", sans-serif;
-  --font-body: "Be Vietnam Pro", sans-serif;
+  --font-sans: 'Roboto', sans-serif;
+  --font-headline: 'DFVNAbygaer', serif;
+  --font-body: 'Roboto', sans-serif;
 
   --spacing-margin-mobile: 20px;
   --spacing-margin-desktop: 80px;
@@ -53,7 +78,7 @@
   body {
     background-color: var(--color-background);
     color: var(--color-on-background);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
@@ -62,10 +87,13 @@
   h2,
   h3,
   h4,
-  .font-serif {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-weight: 500;
-    letter-spacing: normal;
+  h5,
+  h6,
+  .font-serif,
+  .font-headline {
+    font-family: 'DFVNAbygaer', serif;
+    font-weight: normal;
+    letter-spacing: 0.02em;
   }
 
   ::selection {

@@ -23,7 +23,7 @@
 .page {
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
 }
 
@@ -137,7 +137,7 @@
 
 /* ─── SECTION SHARED ─────────────────────────────────────── */
 .sectionTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(24px, 3.5vw, 32px);
     font-weight: 600;
     color: var(--text);
@@ -176,7 +176,7 @@
 }
 
 .heroTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(28px, 3.8vw, 52px);
     font-weight: 700;
     line-height: 1.2;
@@ -337,7 +337,7 @@
 .videoTime {
     font-size: 11px;
     color: rgba(255, 255, 255, 0.85);
-    font-family: 'Be Vietnam Pro', monospace;
+    font-family: 'Roboto', monospace;
 }
 
 .videoControls {
@@ -397,7 +397,7 @@
 }
 
 .modelTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(28px, 4vw, 48px);
     font-weight: 700;
     color: var(--primary);
@@ -562,7 +562,7 @@
 }
 
 .featureTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 600;
     color: var(--text);
@@ -634,7 +634,7 @@
 }
 
 .problemTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(24px, 3.5vw, 36px);
     font-weight: 500;
     color: var(--text);
@@ -774,7 +774,7 @@
 }
 
 .aboutTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(36px, 5vw, 64px);
     font-style: italic;
     font-weight: 700;
@@ -892,14 +892,26 @@
 }
 
 .quoteIconLeft {
-    font-family: 'Playfair Display', serif;
-    font-size: 40px;
+    font-family: 'DFVNAbygaer', serif;
+    font-size: 44px;
     color: var(--gold);
     line-height: 1;
-    height: 30px;
-    display: flex;
-    align-items: center;
     opacity: 0.45;
+    align-self: flex-start;
+    margin-top: -6px;
+}
+
+.quoteIconRight {
+    font-family: 'DFVNAbygaer', serif;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 0;
+    opacity: 0.45;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    position: relative;
+    top: 6px;
 }
 
 .quoteContent {
@@ -954,7 +966,7 @@
 }
 
 .stepsTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 32px;
     font-weight: 600;
     text-align: center;
@@ -1095,7 +1107,7 @@
 }
 
 .bannerTagline {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(24px, 5vw, 56px);
     font-style: italic;
     font-weight: 400;
@@ -1347,7 +1359,7 @@
 }
 
 .ctaTextTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(20px, 4vw, 36px);
     font-weight: 500;
     font-style: italic;
@@ -1412,7 +1424,7 @@
 }
 
 .consultTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-weight: 600;
     color: var(--text);
@@ -1459,7 +1471,7 @@
     font-size: 13px;
     color: var(--text);
     outline: none;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     transition: all 0.3s ease;
 }
 

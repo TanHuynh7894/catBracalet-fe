@@ -7,7 +7,7 @@
 .page {
     min-height: 100vh;
     background-color: #FAF5EF;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: #4B3A32;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .heroTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: clamp(40px, 5vw, 64px);
     font-weight: 700;
     color: #4B3A32;
@@ -203,7 +203,7 @@
 }
 
 .formTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: #4B3A32;
@@ -253,7 +253,7 @@
     border-radius: 10px;
     font-size: 14px;
     color: #4B3A32;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
     outline: none;
     box-sizing: border-box;
@@ -302,7 +302,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin-top: 4px;
 }
 
@@ -368,7 +368,7 @@
 }
 
 .successBox h3 {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: #4B3A32;
@@ -393,7 +393,7 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     transition: all 0.25s ease;
 }
 
@@ -413,7 +413,7 @@
 }
 
 .mapTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: #4B3A32;

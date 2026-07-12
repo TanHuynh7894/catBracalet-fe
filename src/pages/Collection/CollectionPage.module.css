@@ -21,7 +21,7 @@
 .pageWrapper {
     min-height: 100vh;
     background-color: var(--p-bg);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: var(--p-text);
 }
 
@@ -77,7 +77,7 @@
 }
 
 .heroTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 64px;
     font-weight: 700;
     line-height: 1.1;
@@ -92,7 +92,7 @@
 }
 
 .heroDesc {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 1.6;
@@ -161,7 +161,7 @@
 }
 
 .featureTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: #4B3A32;
@@ -170,7 +170,7 @@
 }
 
 .featureSubtitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 11px;
     color: #9E8070;
     margin: 0;
@@ -291,7 +291,7 @@
 }
 
 .filterGroupTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 700;
     color: var(--p-text);
@@ -486,7 +486,7 @@
     font-size: 12.5px;
     font-weight: 700;
     color: var(--p-primary);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .dualRangeTrack {
@@ -620,7 +620,7 @@
     font-size: 14px;
     color: var(--p-text);
     transition: all 0.3s ease;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .searchInput:focus {
@@ -672,7 +672,7 @@
 }
 
 .productHeaderTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--p-text);
@@ -790,7 +790,7 @@
 }
 
 .noResults h3 {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 24px;
     color: var(--p-text);
     margin-bottom: 12px;
@@ -887,7 +887,7 @@
 }
 
 .cardName {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--p-text);
@@ -928,7 +928,7 @@
     font-weight: 700;
     color: var(--p-primary);
     margin: 2px 0 8px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .cardInfo {
@@ -1079,7 +1079,7 @@
 }
 
 .brandStoryTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 26px;
     font-weight: 700;
     color: var(--p-text);
@@ -1120,7 +1120,7 @@
 }
 
 .statValue {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 32px;
     font-weight: 700;
     color: var(--p-primary);

@@ -100,7 +100,7 @@ const Header = () => {
 
     return (
         <header
-            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF]/95 backdrop-blur-md ${isScrolled ? 'py-2.5 shadow-lg border-b border-[#E8DED2]/40' : 'py-5'}`}
+            className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF]/95 backdrop-blur-md font-headline ${isScrolled ? 'py-2.5 shadow-lg border-b border-[#E8DED2]/40' : 'py-5'}`}
         >
             <div className="max-w-[1400px] mx-auto px-4 sm:px-5 md:px-16 flex items-center justify-between">
                 {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
@@ -120,7 +120,7 @@ const Header = () => {
                             <Link
                                 key={link.name}
                                 to={link.href}
-                                className={`relative text-[16px] font-bold tracking-wider transition-all duration-300 py-1
+                                className={`relative text-[18px] font-bold tracking-wider transition-all duration-300 py-1
                                 ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'}`}
                             >
                                 {link.name}
@@ -136,7 +136,7 @@ const Header = () => {
                                 key={link.name}
                                 href={link.href}
                                 onClick={(e) => handleAnchorClick(e, link.href)}
-                                className={`relative text-[16px] font-bold tracking-wider transition-all duration-300 py-1
+                                className={`relative text-[18px] font-bold tracking-wider transition-all duration-300 py-1
                                 ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'} cursor-pointer`}
                             >
                                 {link.name}
@@ -168,7 +168,7 @@ const Header = () => {
                             ) : (
                                 <User size={22} strokeWidth={1.5} />
                             )}
-                            {user && <span className="hidden lg:block text-[11px] font-semibold tracking-wide uppercase">{user.fullName.split(' ').pop()}</span>}
+                            {user && <span className="hidden lg:block text-[13px] font-semibold tracking-wide uppercase">{user.fullName.split(' ').pop()}</span>}
                         </button>
 
                         <AnimatePresence>
@@ -222,7 +222,7 @@ const Header = () => {
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
-                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[14px] font-semibold tracking-normal hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
+                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[16px] font-semibold tracking-normal hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
                     >
                         Tư vấn miễn phí
                     </a>
@@ -259,7 +259,7 @@ const Header = () => {
                                             handleAnchorClick(e, link.href);
                                         }
                                     }}
-                                    className="text-sm font-semibold text-[#4B3A32] hover:text-[#7A1E1E] transition-colors"
+                                    className="text-[17px] font-semibold text-[#4B3A32] hover:text-[#7A1E1E] transition-colors"
                                 >
                                     {link.name}
                                 </a>
@@ -269,14 +269,14 @@ const Header = () => {
                                     setIsMobileMenuOpen(false);
                                     navigate('/profile');
                                 }}
-                                className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2"
+                                className="flex items-center gap-2 text-[17px] font-semibold text-[#4B3A32] mt-2"
                             >
                                 <User size={18} /> {user ? 'Hồ sơ của tôi' : 'Đăng nhập'}
                             </button>
                             {user && (
                                 <button
                                     onClick={handleLogout}
-                                    className="flex items-center gap-2 text-sm font-semibold text-red-600 mt-2"
+                                    className="flex items-center gap-2 text-[17px] font-semibold text-red-600 mt-2"
                                 >
                                     <LogOut size={18} /> Đăng xuất
                                 </button>
@@ -286,7 +286,7 @@ const Header = () => {
                                     setIsMobileMenuOpen(false);
                                     navigate('/cart');
                                 }}
-                                className="flex items-center gap-2 text-sm font-semibold text-[#4B3A32] mt-2"
+                                className="flex items-center gap-2 text-[17px] font-semibold text-[#4B3A32] mt-2"
                             >
                                 <ShoppingBag size={18} /> Giỏ hàng
                             </button>

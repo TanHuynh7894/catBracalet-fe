@@ -28,7 +28,7 @@
 }
 
 .footerLogo {
-    height: 52px;
+    height: 72px;
     /* Balanced size */
     width: auto;
     object-fit: contain;
@@ -36,7 +36,7 @@
 }
 
 .brandDesc {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-style: italic;
     font-size: 14px;
     line-height: 1.7;
@@ -70,7 +70,7 @@
 
 /* Link Columns */
 .navTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 24px;

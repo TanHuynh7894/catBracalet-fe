@@ -23,7 +23,7 @@
     min-height: 100vh;
     background: var(--background);
     padding: 36px 0 80px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: var(--text);
 }
 
@@ -80,7 +80,7 @@
     border: 1.5px solid var(--border);
     border-radius: 8px;
     font-size: 13px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: var(--text);
     background: #fff;
     outline: none;
@@ -149,7 +149,7 @@
 }
 
 .sectionTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -233,7 +233,7 @@
     border: 1.5px solid var(--border);
     border-radius: 12px;
     font-size: 14px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: var(--text);
     background: #fdf9f5;
     outline: none;
@@ -266,7 +266,7 @@
 }
 
 .summaryTitle {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     font-weight: 600;
     color: var(--primary);
@@ -414,7 +414,7 @@
 }
 
 .grandTotalVal {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 26px;
     font-weight: 700;
     color: var(--primary);
@@ -492,7 +492,7 @@
     color: #fff;
     border: none;
     border-radius: 14px;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.1em;

@@ -353,7 +353,7 @@ const HomePage = () => {
                         {/* LEFT: Text */}
                         <motion.div className={styles.aboutLeft} {...fadeUp}>
                             <h2 className={styles.aboutTitle}>
-                                Cát là gì? 
+                                Cát là gì?
                             </h2>
                             <p className={styles.aboutDesc}>
                                 Cát Bracelet là thương hiệu vòng tay đá được xây dựng dành cho những người trẻ yêu thích vẻ đẹp tinh tế và mong muốn lựa chọn một món phụ kiện mang ý nghĩa riêng với bản thân. Mỗi thiết kế được kết hợp từ đá, màu sắc và chi tiết phù hợp với mệnh, năm sinh hoặc năng lượng mà người đeo hướng đến, để chiếc vòng không chỉ đẹp khi phối cùng trang phục mà còn trở thành một dấu ấn cá nhân.
@@ -375,7 +375,10 @@ const HomePage = () => {
                                     <div className={styles.quoteIconLeft}>“</div>
                                     <div className={styles.quoteContent}>
                                         <p className={styles.quoteText}>Mỗi thiết kế là một câu chuyện.</p>
-                                        <span className={styles.quoteSubText}>Cát đồng hành cùng bạn trên hành trình sống an yên và trọn vẹn.</span>
+                                        <span className={styles.quoteSubText}>
+                                            Cát đồng hành cùng bạn trên hành trình sống an yên và trọn vẹn.
+                                            <span className={styles.quoteIconRight}>”</span>
+                                        </span>
                                     </div>
                                     <div className={styles.quoteOrnamentRight}>
                                         <Leaf size={24} className={styles.ornamentIcon} strokeWidth={1} />
