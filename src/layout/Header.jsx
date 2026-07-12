@@ -42,7 +42,7 @@ const Header = () => {
 
     const navLinks = [
         { name: 'Trang chủ', href: '/', type: 'route' },
-        { name: 'Câu chuyện', href: '/story', type: 'route' },
+        { name: 'Về Cát', href: '/story', type: 'route' },
         { name: 'Bộ sưu tập', href: '/collection', type: 'route' },
         { name: 'Thiết kế riêng', href: '/custom', type: 'route' },
         { name: 'Liên hệ', href: '/contact', type: 'route' },

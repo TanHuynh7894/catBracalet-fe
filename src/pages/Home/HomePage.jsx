@@ -17,7 +17,7 @@ import styles from './HomePage.module.css';
 import videoBg from '../../assets/0614.mp4';
 import modelPath from '../../assets/model3D.glb';
 import problemImg from '../../assets/Ảnh UI/ảnh chi tiết/Home ne.png';
-import aboutBgImg from '../../assets/Ảnh UI/ảnh chi tiết/catlagi.png';
+import aboutBgImg from '../../assets/Ảnh UI/ảnh chi tiết/catlagi.jpg';
 import step1Img from '../../assets/Ảnh UI/ảnh chi tiết/Thanhtay.png';
 import step2Img from '../../assets/Ảnh UI/ảnh chi tiết/kichhoat.png';
 import step3Img from '../../assets/Ảnh UI/ảnh chi tiết/canbang.png';
@@ -353,7 +353,7 @@ const HomePage = () => {
                         {/* LEFT: Text */}
                         <motion.div className={styles.aboutLeft} {...fadeUp}>
                             <h2 className={styles.aboutTitle}>
-                                Cát là gì? <span className={styles.aboutTitleDeco}>✦</span>
+                                Cát là gì? 
                             </h2>
                             <p className={styles.aboutDesc}>
                                 Cát Bracelet là thương hiệu vòng tay đá được xây dựng dành cho những người trẻ yêu thích vẻ đẹp tinh tế và mong muốn lựa chọn một món phụ kiện mang ý nghĩa riêng với bản thân. Mỗi thiết kế được kết hợp từ đá, màu sắc và chi tiết phù hợp với mệnh, năm sinh hoặc năng lượng mà người đeo hướng đến, để chiếc vòng không chỉ đẹp khi phối cùng trang phục mà còn trở thành một dấu ấn cá nhân.

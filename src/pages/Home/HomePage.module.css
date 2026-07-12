@@ -757,7 +757,7 @@
 
 .aboutGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 0.85fr;
     grid-template-rows: auto auto;
     grid-template-areas:
         "left right"
@@ -865,7 +865,8 @@
 .aboutImg {
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 4;
+    max-height: 420px;
     object-fit: cover;
     object-position: 85% center;
     border-radius: 24px;
