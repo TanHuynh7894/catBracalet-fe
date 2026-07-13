@@ -517,7 +517,7 @@ const CollectionPage = () => {
                         {/* Product Grid */}
                         {filterLoading ? (
                             <div className="flex justify-center items-center py-24">
-                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: '#7A1E1E' }}></div>
+                                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: '#ab121c' }}></div>
                             </div>
                         ) : paginatedProducts.length > 0 ? (
                             <div className={styles.productGrid}>

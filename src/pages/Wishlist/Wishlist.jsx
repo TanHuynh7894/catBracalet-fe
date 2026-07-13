@@ -66,7 +66,7 @@ const Wishlist = () => {
                             <p className="font-body text-on-surface-variant mb-6 line-clamp-2 text-sm">{product.desc}</p>
                             <div className="mt-auto flex items-center justify-between">
                                 <span className="font-headline text-xl text-primary font-bold">{product.price}</span>
-                                <button className="bg-primary text-white px-6 py-2 rounded-full font-body text-xs flex items-center gap-2 hover:bg-[#8c1515] transition-colors uppercase tracking-widest font-bold">
+                                <button className="bg-primary text-white px-6 py-2 rounded-full font-body text-xs flex items-center gap-2 hover:bg-[#c51924] transition-colors uppercase tracking-widest font-bold">
                                     <ShoppingBag size={18} />
                                     THÊM VÀO GIỎ
                                 </button>

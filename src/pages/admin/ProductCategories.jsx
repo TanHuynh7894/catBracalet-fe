@@ -192,7 +192,7 @@ const ProductCategories = () => {
             {/* ── Stats Grid ──────────────────────────────────────────────── */}
             <div className={styles.statsGrid}>
                 {[
-                    { label: 'Tổng danh mục', value: stats.total, icon: <Layers size={20} />, color: '#7A1E1E', bg: '#FDF2F2' },
+                    { label: 'Tổng danh mục', value: stats.total, icon: <Layers size={20} />, color: '#ab121c', bg: '#FDF2F2' },
                     { label: 'Đang hoạt động', value: stats.active, icon: <ToggleRight size={20} />, color: '#057A55', bg: '#DEF7EC' },
                     { label: 'Không hoạt động', value: stats.inactive, icon: <ToggleLeft size={20} />, color: '#6B7280', bg: '#F3F4F6' },
                 ].map((s, i) => (
@@ -266,7 +266,7 @@ const ProductCategories = () => {
                                     {/* Name */}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#7A1E1E' }}>
+                                            <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#ab121c' }}>
                                                 <Tag size={16} />
                                             </div>
                                             <div>

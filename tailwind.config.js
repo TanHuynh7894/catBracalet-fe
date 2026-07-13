@@ -7,7 +7,7 @@ export default {
     theme: {
         extend: {
             colors: {
-                "primary-container": "#8c1515",
+                "primary-container": "#c51924",
                 "tertiary-fixed-dim": "#c9c6c1",
                 "surface-dim": "#dbd9d9",
                 "outline-variant": "#e0bfbb",
@@ -29,7 +29,7 @@ export default {
                 "on-error-container": "#93000a",
                 "on-secondary-fixed": "#241a00",
                 "secondary": "#735c00",
-                "primary": "#680006",
+                "primary": "#ab121c",
                 "on-primary-container": "#ff998e",
                 "tertiary-container": "#474642",
                 "surface-tint": "#ae2f2a",

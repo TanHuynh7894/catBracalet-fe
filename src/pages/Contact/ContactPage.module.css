@@ -1,7 +1,7 @@
 /* ============================================================
    ContactPage.module.css
    Cát Bracelet – Contact Page
-   Tokens: --primary: #7A1E1E | --bg: #FAF5EF | --text: #4B3A32 | --gold: #D8B27D
+   Tokens: --primary: #ab121c | --bg: #FAF5EF | --text: #4B3A32 | --gold: #D8B27D
    ============================================================ */
 
 .page {
@@ -40,7 +40,7 @@
     bottom: -20px;
     left: 5%;
     font-size: 80px;
-    color: rgba(122, 30, 30, 0.04);
+    color: rgba(171, 18, 28, 0.04);
     pointer-events: none;
     line-height: 1;
 }
@@ -69,7 +69,7 @@
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #7A1E1E;
+    color: #ab121c;
     margin: 0 0 12px;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .heroAccent {
-    color: #7A1E1E;
+    color: #ab121c;
     font-style: italic;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .contactLink:hover {
-    color: #7A1E1E;
+    color: #ab121c;
 }
 
 .socialRow {
@@ -188,9 +188,9 @@
 }
 
 .socialBtn:hover {
-    border-color: #7A1E1E;
-    color: #7A1E1E;
-    background: rgba(122, 30, 30, 0.04);
+    border-color: #ab121c;
+    color: #ab121c;
+    background: rgba(171, 18, 28, 0.04);
     transform: translateY(-2px);
 }
 
@@ -262,8 +262,8 @@
 .formInput:focus,
 .formSelect:focus,
 .formTextarea:focus {
-    border-color: #7A1E1E;
-    box-shadow: 0 0 0 3px rgba(122, 30, 30, 0.06);
+    border-color: #ab121c;
+    box-shadow: 0 0 0 3px rgba(171, 18, 28, 0.06);
     background: #FFFFFF;
 }
 
@@ -289,7 +289,7 @@
 .submitBtn {
     width: 100%;
     padding: 16px;
-    background: #7A1E1E;
+    background: #ab121c;
     color: #FAF5EF;
     border: none;
     border-radius: 10px;
@@ -307,9 +307,9 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-    background: #5A1414;
+    background: #850e15;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(122, 30, 30, 0.25);
+    box-shadow: 0 8px 24px rgba(171, 18, 28, 0.25);
 }
 
 .submitBtn:disabled {
@@ -387,9 +387,9 @@
     margin-top: 16px;
     padding: 12px 28px;
     background: transparent;
-    border: 1.5px solid #7A1E1E;
+    border: 1.5px solid #ab121c;
     border-radius: 8px;
-    color: #7A1E1E;
+    color: #ab121c;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -398,7 +398,7 @@
 }
 
 .resetBtn:hover {
-    background: #7A1E1E;
+    background: #ab121c;
     color: #FAF5EF;
 }
 
@@ -429,7 +429,7 @@
 .mapWrapper {
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 16px 48px rgba(122, 30, 30, 0.08);
+    box-shadow: 0 16px 48px rgba(171, 18, 28, 0.08);
     border: 1px solid #E8DED2;
 }
 

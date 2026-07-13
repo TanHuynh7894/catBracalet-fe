@@ -50,7 +50,7 @@ const ScrollToTop = () => {
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     onClick={scrollToTop}
                     className={`fixed ${isLoggedIn ? 'bottom-[100px]' : 'bottom-[28px]'
-                        } right-[28px] z-[9990] flex items-center justify-center w-12 h-12 rounded-full bg-white border border-[#E8DED2] text-[#7A1E1E] shadow-xl hover:bg-[#7A1E1E] hover:text-[#FAF5EF] hover:border-[#7A1E1E] transition-all duration-300 transform hover:scale-110 active:scale-95`}
+                        } right-[28px] z-[9990] flex items-center justify-center w-12 h-12 rounded-full bg-white border border-[#E8DED2] text-[#ab121c] shadow-xl hover:bg-[#ab121c] hover:text-[#FAF5EF] hover:border-[#ab121c] transition-all duration-300 transform hover:scale-110 active:scale-95`}
                     aria-label="Cuộn lên đầu trang"
                 >
                     <ChevronUp size={22} strokeWidth={2.5} />

@@ -10,7 +10,7 @@
 }
 
 .logoCircle {
-    @apply w-8 h-8 rounded-lg bg-[#680006] flex items-center justify-center font-headline font-bold text-lg;
+    @apply w-8 h-8 rounded-lg bg-[#ab121c] flex items-center justify-center font-headline font-bold text-lg;
 }
 
 .logoText {

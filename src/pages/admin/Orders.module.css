@@ -121,8 +121,8 @@
 }
 
 .searchInput:focus {
-    border-color: #680006;
-    box-shadow: 0 0 0 3px rgba(104, 0, 6, 0.05);
+    border-color: #ab121c;
+    box-shadow: 0 0 0 3px rgba(171, 18, 28, 0.05);
 }
 
 .dateFilter {
@@ -195,7 +195,7 @@
 
 .orderId {
     font-weight: 700;
-    color: #680006;
+    color: #ab121c;
     cursor: pointer;
     font-size: 13px;
 }
@@ -275,12 +275,12 @@
 
 .actionBtn:hover {
     background: #f8fafc;
-    color: #680006;
-    border-color: #680006;
+    color: #ab121c;
+    border-color: #ab121c;
 }
 
 .confirmBtn {
-    background: #680006;
+    background: #ab121c;
     color: #fff;
     border: none;
     width: auto;
@@ -290,7 +290,7 @@
 }
 
 .confirmBtn:hover {
-    background: #4d0004;
+    background: #850e15;
     color: #fff;
 }
 

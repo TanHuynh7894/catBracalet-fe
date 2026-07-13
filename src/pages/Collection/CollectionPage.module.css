@@ -1,14 +1,14 @@
 /* ============================================================
    CollectionPage.module.css
    Pixel-perfect clone of Cát Bracelet Collection Page
-   Design tokens: --primary: #7A1E1E | --bg: #FAF5EF | --text: #4B3A32
+   Design tokens: --primary: #ab121c | --bg: #FAF5EF | --text: #4B3A32
    ============================================================ */
 
 
 
 :root {
-    --p-primary: #7A1E1E;
-    --p-primary-dark: #5A1414;
+    --p-primary: #ab121c;
+    --p-primary-dark: #850e15;
     --p-bg: #FAF5EF;
     --p-card: #FFFFFF;
     --p-text: #4B3A32;
@@ -121,7 +121,7 @@
     justify-content: space-around;
     background: #FFFFFF;
     border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(122, 30, 30, 0.05);
+    box-shadow: 0 8px 30px rgba(171, 18, 28, 0.05);
     padding: 30px 20px;
 }
 
@@ -259,8 +259,8 @@
 
 .sidebarCloseBtn {
     display: none;
-    background: rgba(122, 30, 30, 0.08);
-    border: 1px solid rgba(122, 30, 30, 0.15);
+    background: rgba(171, 18, 28, 0.08);
+    border: 1px solid rgba(171, 18, 28, 0.15);
     cursor: pointer;
     color: var(--p-primary);
     padding: 8px;
@@ -333,8 +333,8 @@
 }
 
 .categoryOption.active {
-    background: rgba(122, 30, 30, 0.05);
-    border-color: rgba(122, 30, 30, 0.1);
+    background: rgba(171, 18, 28, 0.05);
+    border-color: rgba(171, 18, 28, 0.1);
     color: var(--p-primary);
     font-weight: 600;
 }
@@ -529,7 +529,7 @@
     border-radius: 50%;
     background: #fff;
     border: 2.5px solid var(--p-primary);
-    box-shadow: 0 2px 8px rgba(122, 30, 30, 0.25);
+    box-shadow: 0 2px 8px rgba(171, 18, 28, 0.25);
     cursor: pointer;
     pointer-events: all;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -537,7 +537,7 @@
 
 .rangeInput::-webkit-slider-thumb:hover {
     transform: scale(1.2);
-    box-shadow: 0 4px 12px rgba(122, 30, 30, 0.4);
+    box-shadow: 0 4px 12px rgba(171, 18, 28, 0.4);
 }
 
 .rangeInput::-moz-range-thumb {
@@ -546,7 +546,7 @@
     border-radius: 50%;
     background: #fff;
     border: 2.5px solid var(--p-primary);
-    box-shadow: 0 2px 8px rgba(122, 30, 30, 0.25);
+    box-shadow: 0 2px 8px rgba(171, 18, 28, 0.25);
     cursor: pointer;
     pointer-events: all;
     transition: transform 0.15s ease;
@@ -593,9 +593,9 @@
 .clearFilterBtn:hover {
     border-color: var(--p-primary);
     color: var(--p-primary);
-    background: rgba(122, 30, 30, 0.03);
+    background: rgba(171, 18, 28, 0.03);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(122, 30, 30, 0.08);
+    box-shadow: 0 5px 15px rgba(171, 18, 28, 0.08);
 }
 
 /* ── SEARCH BAR ──────────────────────────────────────────────── */
@@ -626,7 +626,7 @@
 .searchInput:focus {
     outline: none;
     border-color: var(--p-primary);
-    box-shadow: 0 0 0 4px rgba(122, 30, 30, 0.05);
+    box-shadow: 0 0 0 4px rgba(171, 18, 28, 0.05);
 }
 
 .searchClear {
@@ -646,7 +646,7 @@
 
 .searchClear:hover {
     color: var(--p-primary);
-    background: rgba(122, 30, 30, 0.05);
+    background: rgba(171, 18, 28, 0.05);
 }
 
 /* ── PRODUCT AREA ─────────────────────────────────────────────── */
@@ -759,14 +759,14 @@
 }
 
 .sortOption:hover {
-    background: rgba(122, 30, 30, 0.05);
+    background: rgba(171, 18, 28, 0.05);
     color: var(--p-primary);
 }
 
 .sortOptionActive {
     color: var(--p-primary);
     font-weight: 600;
-    background: rgba(122, 30, 30, 0.04);
+    background: rgba(171, 18, 28, 0.04);
 }
 
 /* ── NO RESULTS ──────────────────────────────────────────────── */
@@ -824,7 +824,7 @@
 
 .productCard:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 48px rgba(122, 30, 30, 0.10);
+    box-shadow: 0 20px 48px rgba(171, 18, 28, 0.10);
 }
 
 .cardImageWrapper {
@@ -873,7 +873,7 @@
 
 .wishlistBtnActive {
     color: var(--p-primary);
-    border-color: rgba(122, 30, 30, 0.3);
+    border-color: rgba(171, 18, 28, 0.3);
 }
 
 /* Card Body */
@@ -973,7 +973,7 @@
 }
 
 .btnDetail:hover {
-    background: rgba(122, 30, 30, 0.06);
+    background: rgba(171, 18, 28, 0.06);
 }
 
 .btnCart {
@@ -1116,7 +1116,7 @@
 
 .statCard:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(122, 30, 30, 0.07);
+    box-shadow: 0 12px 32px rgba(171, 18, 28, 0.07);
 }
 
 .statValue {

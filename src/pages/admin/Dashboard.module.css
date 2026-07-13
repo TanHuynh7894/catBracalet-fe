@@ -21,7 +21,7 @@
 }
 
 .primaryBtn {
-    @apply bg-[#680006] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#4d0004] transition-colors;
+    @apply bg-[#ab121c] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#850e15] transition-colors;
 }
 
 /* Stats Cards */
@@ -83,7 +83,7 @@
 }
 
 .textBtn {
-    @apply text-sm text-[#680006] hover:underline font-medium;
+    @apply text-sm text-[#ab121c] hover:underline font-medium;
 }
 
 /* Table Styles */

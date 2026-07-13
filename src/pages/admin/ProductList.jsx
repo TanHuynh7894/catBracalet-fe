@@ -197,7 +197,7 @@ const ProductList = () => {
                 <div className={styles.filterGroup}>
                     <button
                         onClick={() => setIsCreateModalOpen(true)}
-                        className="flex items-center gap-2 bg-[#680006] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4d0004] shadow-md transition-all"
+                        className="flex items-center gap-2 bg-[#ab121c] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#850e15] shadow-md transition-all"
                     >
                         <Plus size={16} /> Thêm sản phẩm
                     </button>
@@ -207,7 +207,7 @@ const ProductList = () => {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 {/* Search & Filters */}
                 <div className="p-4 bg-white border-b border-gray-100 flex items-center gap-3">
-                    <div className="flex-1 flex items-center bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 gap-3 transition-all focus-within:border-[#680006] focus-within:bg-white focus-within:shadow-sm">
+                    <div className="flex-1 flex items-center bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 gap-3 transition-all focus-within:border-[#ab121c] focus-within:bg-white focus-within:shadow-sm">
                         <Search size={18} className="text-gray-400" />
                         <input
                             type="text"
@@ -236,7 +236,7 @@ const ProductList = () => {
                                 <tr>
                                     <td colSpan="5" className="py-20 text-center">
                                         <div className="flex flex-col items-center gap-3">
-                                            <Loader2 className="animate-spin text-[#680006]" size={32} />
+                                            <Loader2 className="animate-spin text-[#ab121c]" size={32} />
                                             <span className="text-sm text-gray-400">Đang tải dữ liệu...</span>
                                         </div>
                                     </td>
@@ -262,7 +262,7 @@ const ProductList = () => {
                                                     )}
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-gray-800 font-bold hover:text-[#680006] transition-colors">{product.productName}</span>
+                                                    <span className="text-gray-800 font-bold hover:text-[#ab121c] transition-colors">{product.productName}</span>
                                                     <span className="text-[10px] text-gray-400 font-mono uppercase tracking-tighter truncate max-w-[200px]">ID: {product.id}</span>
                                                 </div>
                                             </div>
@@ -340,7 +340,7 @@ const ProductList = () => {
                                         <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Tên sản phẩm *</label>
                                         <input
                                             type="text"
-                                            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#680006] outline-none text-sm transition-all shadow-sm"
+                                            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#ab121c] outline-none text-sm transition-all shadow-sm"
                                             placeholder="Nhập tên sản phẩm"
                                             value={formData.productName}
                                             onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
@@ -352,7 +352,7 @@ const ProductList = () => {
                                         <div className="relative">
                                             <input
                                                 type="number"
-                                                className="w-full pl-4 pr-10 py-2.5 border border-gray-200 rounded-xl focus:border-[#680006] outline-none text-sm transition-all shadow-sm"
+                                                className="w-full pl-4 pr-10 py-2.5 border border-gray-200 rounded-xl focus:border-[#ab121c] outline-none text-sm transition-all shadow-sm"
                                                 placeholder="0"
                                                 value={formData.basePrice}
                                                 onChange={(e) => setFormData({ ...formData, basePrice: e.target.value })}
@@ -364,7 +364,7 @@ const ProductList = () => {
                                     <div>
                                         <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Danh mục</label>
                                         <select
-                                            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#680006] outline-none text-sm appearance-none bg-white transition-all shadow-sm"
+                                            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#ab121c] outline-none text-sm appearance-none bg-white transition-all shadow-sm"
                                             value={formData.categoryId}
                                             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                                         >
@@ -380,7 +380,7 @@ const ProductList = () => {
                                     <div>
                                         <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Ảnh Thumbnail</label>
                                         <div
-                                            className="aspect-square border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#680006] hover:text-[#680006] transition-all cursor-pointer bg-gray-50 overflow-hidden relative group"
+                                            className="aspect-square border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-gray-400 hover:border-[#ab121c] hover:text-[#ab121c] transition-all cursor-pointer bg-gray-50 overflow-hidden relative group"
                                             onClick={() => document.getElementById('thumbnailInput').click()}
                                         >
                                             {previewUrl ? (
@@ -411,7 +411,7 @@ const ProductList = () => {
                             <div>
                                 <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Mô tả</label>
                                 <textarea
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#680006] outline-none text-sm min-h-[100px] transition-all shadow-sm"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-[#ab121c] outline-none text-sm min-h-[100px] transition-all shadow-sm"
                                     placeholder="Nhập mô tả sản phẩm..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -427,8 +427,8 @@ const ProductList = () => {
                                             type="button"
                                             onClick={() => handleMaterialToggle(mat.id)}
                                             className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${formData.materialIds.includes(mat.id)
-                                                ? 'bg-[#680006] text-white border-[#680006] shadow-md'
-                                                : 'bg-white text-gray-500 border-gray-200 hover:border-[#680006] hover:text-[#680006]'
+                                                ? 'bg-[#ab121c] text-white border-[#ab121c] shadow-md'
+                                                : 'bg-white text-gray-500 border-gray-200 hover:border-[#ab121c] hover:text-[#ab121c]'
                                                 }`}
                                         >
                                             {mat.materialName}
@@ -449,7 +449,7 @@ const ProductList = () => {
                             <button
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
-                                className="px-8 py-2.5 bg-[#680006] text-white rounded-xl font-bold text-sm shadow-lg hover:bg-[#4d0004] transition-all flex items-center gap-2 disabled:opacity-50"
+                                className="px-8 py-2.5 bg-[#ab121c] text-white rounded-xl font-bold text-sm shadow-lg hover:bg-[#850e15] transition-all flex items-center gap-2 disabled:opacity-50"
                             >
                                 {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}
                                 Tạo sản phẩm

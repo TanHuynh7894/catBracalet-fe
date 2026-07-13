@@ -29,7 +29,7 @@ const Returns = () => {
             {/* Summary Cards Row - Arranged in 1 row (7 columns) */}
             <div className="grid grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
                 <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gray-100 group-hover:bg-[#680006] transition-colors" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gray-100 group-hover:bg-[#ab121c] transition-colors" />
                     <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-wider">
                         <Calendar size={14} /> 7 ngày qua
                     </div>
@@ -46,7 +46,7 @@ const Returns = () => {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="flex border-b border-gray-100 bg-gray-50/50">
                     {['Tất cả', 'Đang hoàn trả'].map((tab, idx) => (
-                        <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-widest ${idx === 0 ? 'border-b-2 border-[#680006] text-[#680006]' : 'text-gray-400 hover:text-gray-600'}`}>
+                        <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-widest ${idx === 0 ? 'border-b-2 border-[#ab121c] text-[#ab121c]' : 'text-gray-400 hover:text-gray-600'}`}>
                             {tab}
                         </button>
                     ))}
@@ -98,10 +98,10 @@ const Returns = () => {
                             ].map((row, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="pl-6 text-center"><input type="checkbox" className="rounded" /></td>
-                                    <td className="font-medium text-[#680006] hover:underline cursor-pointer">{row.id}</td>
+                                    <td className="font-medium text-[#ab121c] hover:underline cursor-pointer">{row.id}</td>
                                     <td>{row.date}</td>
                                     <td>{row.customer}</td>
-                                    <td className="text-[#680006]">{row.orderId}</td>
+                                    <td className="text-[#ab121c]">{row.orderId}</td>
                                     <td>
                                         <span className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500">
                                             <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />

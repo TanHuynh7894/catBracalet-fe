@@ -295,7 +295,7 @@ const UserManagement = () => {
                                     <td style={{ padding: 16 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                             <div style={{
-                                                width: 44, height: 44, borderRadius: 14, background: '#7A1E1E',
+                                                width: 44, height: 44, borderRadius: 14, background: '#ab121c',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 color: '#fff', fontWeight: 900, border: '3px solid #fff',
                                                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', overflow: 'hidden',
@@ -438,7 +438,7 @@ const UserDetailModal = ({
                             }}>
                                 <div style={{
                                     width: 64, height: 64, borderRadius: 16,
-                                    background: '#7A1E1E',
+                                    background: '#ab121c',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     color: '#fff', fontWeight: 800, fontSize: 20, flexShrink: 0
                                 }}>

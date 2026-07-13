@@ -185,7 +185,7 @@ const Profile = () => {
 
                         <div className="md:col-span-2 pt-10 flex justify-end">
                             <button
-                                className={`bg-primary text-white px-12 py-5 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all duration-300 transform active:scale-95 uppercase flex items-center gap-3 ${updating ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#8c1515] hover:shadow-2xl hover:shadow-primary/30'}`}
+                                className={`bg-primary text-white px-12 py-5 rounded-2xl font-bold text-xs tracking-[0.2em] transition-all duration-300 transform active:scale-95 uppercase flex items-center gap-3 ${updating ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#c51924] hover:shadow-2xl hover:shadow-primary/30'}`}
                                 type="submit"
                                 disabled={updating}
                             >

@@ -1,7 +1,7 @@
 /* ============================================================
    StoryPage.module.css
    Cát Bracelet – Story Page
-   Tones: #7A1E1E | #FAF7F2 | #4B3A32 | #D8B27D | #E8DED2
+   Tones: #ab121c | #FAF7F2 | #4B3A32 | #D8B27D | #E8DED2
    Fonts: Playfair Display (heading) + Inter (body)
    ============================================================ */
 
@@ -9,8 +9,8 @@
 
 /* ── TOKENS ───────────────────────────────────────────────── */
 .page {
-    --primary: #7A1E1E;
-    --primary-dark: #5A1414;
+    --primary: #ab121c;
+    --primary-dark: #850e15;
     --gold: #D8B27D;
     --bg: #FAF7F2;
     --text: #4B3A32;
@@ -223,7 +223,7 @@
 
 .redBanner {
     position: relative;
-    background: linear-gradient(135deg, #7A1E1E 0%, #5A1414 60%, #3d0d0d 100%);
+    background: linear-gradient(135deg, #ab121c 0%, #850e15 60%, #5a0a0f 100%);
     border-radius: 24px;
     padding: 56px 64px;
     display: grid;
@@ -331,7 +331,7 @@
 
 .beliefCard:hover {
     transform: translateY(-10px);
-    box-shadow: 0 24px 56px rgba(122, 30, 30, 0.12);
+    box-shadow: 0 24px 56px rgba(171, 18, 28, 0.12);
 }
 
 .beliefImgWrap {
@@ -448,7 +448,7 @@
     border-radius: 24px;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-    box-shadow: 0 30px 70px rgba(122, 30, 30, 0.12);
+    box-shadow: 0 30px 70px rgba(171, 18, 28, 0.12);
 }
 
 .truthImg {
@@ -489,7 +489,7 @@
 
 .valueCard:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 48px rgba(122, 30, 30, 0.10);
+    box-shadow: 0 20px 48px rgba(171, 18, 28, 0.10);
 }
 
 .valueIconWrap {
@@ -529,7 +529,7 @@
 
 .ctaBanner {
     position: relative;
-    background: linear-gradient(135deg, #7A1E1E 0%, #5A1414 55%, #3d0d0d 100%);
+    background: linear-gradient(135deg, #ab121c 0%, #850e15 55%, #5a0a0f 100%);
     border-radius: 24px;
     padding: 60px 64px;
     display: grid;
@@ -585,7 +585,7 @@
     align-items: center;
     justify-content: center;
     background: var(--gold);
-    color: #3d0d0d;
+    color: #5a0a0f;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
     font-weight: 700;

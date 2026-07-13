@@ -6,8 +6,8 @@
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
 :root {
-    --primary: #7A1E1E;
-    --primary-dark: #5A1414;
+    --primary: #ab121c;
+    --primary-dark: #850e15;
     --gold: #D8B27D;
     --bg: #FAF5EF;
     --card: #FFFFFF;
@@ -16,7 +16,7 @@
     --border: #E8DED2;
     --section-bg2: #F5ECE3;
 
-    --web3-primary: #7A1E1E;
+    --web3-primary: #ab121c;
     --web3-bg: #FAF5EF;
 }
 
@@ -305,11 +305,11 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: rgba(122, 30, 30, 0.88);
+    background: rgba(171, 18, 28, 0.88);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 20px rgba(122, 30, 30, 0.4);
+    box-shadow: 0 6px 20px rgba(171, 18, 28, 0.4);
     pointer-events: all;
     cursor: pointer;
     backdrop-filter: blur(4px);
@@ -318,7 +318,7 @@
 
 .heroPlayBtn:hover {
     transform: scale(1.1);
-    background: rgba(90, 20, 20, 0.95);
+    background: rgba(133, 14, 21, 0.95);
 }
 
 .heroVideoBar {
@@ -386,7 +386,7 @@
 .modelBadge {
     display: inline-block;
     padding: 6px 16px;
-    background: rgba(122, 30, 30, 0.08);
+    background: rgba(171, 18, 28, 0.08);
     color: var(--primary);
     border-radius: 100px;
     font-size: 13px;

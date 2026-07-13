@@ -1,7 +1,7 @@
 /* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
-    --primary: #7A1E1E;
-    --primary-dark: #5A1414;
+    --primary: #ab121c;
+    --primary-dark: #850e15;
     --gold: #D8B27D;
     --gold-light: #f0dfc2;
     --background: #FAF5EF;
@@ -307,7 +307,7 @@
 .primaryBtn {
     background: var(--primary);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(122, 30, 30, 0.2);
+    box-shadow: 0 4px 12px rgba(171, 18, 28, 0.2);
 }
 
 .primaryBtn:hover {

@@ -4,8 +4,8 @@
 
 /* ─── CSS Variables ─────────────────────────────────────────────────── */
 .page {
-    --primary: #7A1E1E;
-    --primary-dark: #5A1414;
+    --primary: #ab121c;
+    --primary-dark: #850e15;
     --primary-light: #f9eaea;
     --background: #FAF5EF;
     --card: #FFFFFF;
@@ -759,7 +759,7 @@
 
 .productCard:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 50px rgba(122, 30, 30, 0.1);
+    box-shadow: 0 20px 50px rgba(171, 18, 28, 0.1);
 }
 
 .cardImgWrap {

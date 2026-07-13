@@ -30,7 +30,7 @@ const AllPackages = () => {
             {/* Summary Row */}
             <div className="grid grid-cols-6 gap-3 mb-6">
                 <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-[#680006]" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-[#ab121c]" />
                     <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-wider">
                         <Calendar size={14} /> 7 ngày qua
                     </div>

@@ -208,7 +208,7 @@ const ShopLocationManagement = () => {
     // ─── Render ────────────────────────────────────────────────────────────────
     if (loading) return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
-            <Loader2 size={40} style={{ animation: 'spin 1s linear infinite', color: '#680006', marginBottom: 16 }} />
+            <Loader2 size={40} style={{ animation: 'spin 1s linear infinite', color: '#ab121c', marginBottom: 16 }} />
             <p style={{ color: '#9ca3af', fontWeight: 500 }}>Đang tải danh sách cửa hàng...</p>
         </div>
     );
@@ -232,7 +232,7 @@ const ShopLocationManagement = () => {
             {/* ── Stats ─────────────────────────────────────────────────────── */}
             <div className={styles.statsGrid}>
                 {[
-                    { label: 'Tổng cửa hàng', value: stats.total, icon: <Store size={20} />, color: '#7A1E1E', bg: '#FDF2F2' },
+                    { label: 'Tổng cửa hàng', value: stats.total, icon: <Store size={20} />, color: '#ab121c', bg: '#FDF2F2' },
                     { label: 'Đang hoạt động', value: stats.active, icon: <ToggleRight size={20} />, color: '#057A55', bg: '#DEF7EC' },
                     { label: 'Không hoạt động', value: stats.inactive, icon: <ToggleLeft size={20} />, color: '#6B7280', bg: '#F3F4F6' },
                     { label: 'Hiển thị bản đồ', value: stats.active, icon: <Globe size={20} />, color: '#4F46E5', bg: '#EEF2FF' },
@@ -294,7 +294,7 @@ const ShopLocationManagement = () => {
                                     {/* Name */}
                                     <td style={{ padding: 16 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                                            <div style={{ padding: 10, borderRadius: 10, background: '#FDF2F2', color: '#7A1E1E', flexShrink: 0 }}>
+                                            <div style={{ padding: 10, borderRadius: 10, background: '#FDF2F2', color: '#ab121c', flexShrink: 0 }}>
                                                 <MapPin size={16} />
                                             </div>
                                             <div>
@@ -383,7 +383,7 @@ const ShopLocationManagement = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 28px', borderBottom: '1px solid #f3f4f6' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                 <div style={{ padding: 10, borderRadius: 10, background: '#FDF2F2' }}>
-                                    <Store size={20} style={{ color: '#7A1E1E' }} />
+                                    <Store size={20} style={{ color: '#ab121c' }} />
                                 </div>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#111827' }}>

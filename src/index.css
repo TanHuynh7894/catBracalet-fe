@@ -27,8 +27,8 @@
 
 
 @theme {
-  --color-primary-container: #8c1515;
-  --color-primary: #680006;
+  --color-primary-container: #c51924;
+  --color-primary: #ab121c;
   /* Deep Red / Wine Red */
   --color-secondary: #735c00;
   /* Champagne Gold */
@@ -55,7 +55,7 @@
   --color-error: #ba1a1a;
 
   /* Luxury Accents */
-  --color-wine: #680006;
+  --color-wine: #ab121c;
   --color-burgundy: #4a0004;
   --color-champagne: #d4af37;
   --color-ivory: #fdfbf7;
@@ -70,7 +70,7 @@
   --spacing-container-max: 1200px;
   --spacing-gutter: 24px;
 
-  --shadow-premium: 0 20px 50px rgba(104, 0, 6, 0.05);
+  --shadow-premium: 0 20px 50px rgba(171, 18, 28, 0.05);
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
@@ -131,10 +131,10 @@
   }
 
   .glass-dark {
-    background: rgba(104, 0, 6, 0.05);
+    background: rgba(171, 18, 28, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(104, 0, 6, 0.1);
+    border: 1px solid rgba(171, 18, 28, 0.1);
   }
 
   .text-balance {

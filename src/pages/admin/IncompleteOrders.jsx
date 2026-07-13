@@ -21,7 +21,7 @@ const IncompleteOrders = () => {
                 {/* Tabs */}
                 <div className="flex border-b border-gray-100 bg-gray-50/50">
                     {['Tất cả', 'Đặt hàng', 'Đang giao dịch', 'Đã hoàn thành', 'Đã hủy'].map((tab, idx) => (
-                        <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-widest ${idx === 0 ? 'border-b-2 border-[#680006] text-[#680006]' : 'text-gray-400 hover:text-gray-600'}`}>
+                        <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-widest ${idx === 0 ? 'border-b-2 border-[#ab121c] text-[#ab121c]' : 'text-gray-400 hover:text-gray-600'}`}>
                             {tab}
                         </button>
                     ))}
@@ -75,7 +75,7 @@ const IncompleteOrders = () => {
                             ].map((row, idx) => (
                                 <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
                                     <td className="pl-6 text-center"><input type="checkbox" className="rounded" /></td>
-                                    <td className="font-medium text-[#680006] hover:underline cursor-pointer">{row.id}</td>
+                                    <td className="font-medium text-[#ab121c] hover:underline cursor-pointer">{row.id}</td>
                                     <td className="whitespace-nowrap text-gray-500">{row.date}</td>
                                     <td>{row.customer}</td>
                                     <td>
@@ -111,7 +111,7 @@ const IncompleteOrders = () => {
                 <div className="p-4 bg-gray-50/30 flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-gray-400">
                     <span>Hiển thị 1 - 3 của 3 đơn hàng</span>
                     <div className="flex gap-1">
-                        <button className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded bg-white text-[#680006]">1</button>
+                        <button className="w-8 h-8 flex items-center justify-center border border-gray-200 rounded bg-white text-[#ab121c]">1</button>
                     </div>
                 </div>
             </div>

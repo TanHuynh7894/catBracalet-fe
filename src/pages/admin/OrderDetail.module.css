@@ -34,9 +34,9 @@
 }
 
 .backBtn:hover {
-    background: #680006;
+    background: #ab121c;
     color: #fff;
-    border-color: #680006;
+    border-color: #ab121c;
 }
 
 .title {
@@ -56,7 +56,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #680006;
+    background: #ab121c;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -68,7 +68,7 @@
 }
 
 .primaryBtn:hover:not(:disabled) {
-    background: #4d0004;
+    background: #850e15;
 }
 
 .primaryBtn:disabled {
@@ -318,7 +318,7 @@
 .btnAction {
     width: 100%;
     padding: 12px;
-    background: #680006;
+    background: #ab121c;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -329,7 +329,7 @@
 }
 
 .btnAction:hover {
-    background: #4d0004;
+    background: #850e15;
 }
 
 .btnDanger {
@@ -358,7 +358,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #680006, #9f1239);
+    background: linear-gradient(135deg, #ab121c, #9f1239);
     color: #fff;
     display: flex;
     align-items: center;
@@ -426,7 +426,7 @@
 }
 
 .inputField input:focus {
-    border-color: #680006;
+    border-color: #ab121c;
 }
 
 .ratesGrid {
@@ -448,14 +448,14 @@
 }
 
 .rateCard:hover {
-    border-color: #680006;
+    border-color: #ab121c;
     background: #fdfbf7;
 }
 
 .rateCard.selected {
-    border-color: #680006;
+    border-color: #ab121c;
     background: #fff5f5;
-    box-shadow: 0 0 0 1px #680006;
+    box-shadow: 0 0 0 1px #ab121c;
 }
 
 .carrierLogo {
@@ -489,7 +489,7 @@
 
 .ratePrice strong {
     font-size: 15px;
-    color: #680006;
+    color: #ab121c;
     display: block;
 }
 
@@ -502,7 +502,7 @@
     padding: 16px;
     background: #f8fafc;
     border-radius: 12px;
-    border-left: 4px solid #680006;
+    border-left: 4px solid #ab121c;
 }
 
 .trackingHeader {
@@ -513,7 +513,7 @@
 
 .trackingStatus {
     font-weight: 700;
-    color: #680006;
+    color: #ab121c;
     font-size: 14px;
 }
 

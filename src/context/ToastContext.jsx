@@ -128,7 +128,7 @@ export const ToastProvider = ({ children }) => {
                                     </button>
                                     <button
                                         onClick={handleConfirm}
-                                        className="flex-1 px-6 py-3 rounded-xl bg-[#7A1E1E] text-white font-semibold text-sm hover:bg-[#5A1414] transition-colors shadow-lg shadow-red-900/10"
+                                        className="flex-1 px-6 py-3 rounded-xl bg-[#ab121c] text-white font-semibold text-sm hover:bg-[#850e15] transition-colors shadow-lg shadow-red-900/10"
                                     >
                                         Đồng ý
                                     </button>

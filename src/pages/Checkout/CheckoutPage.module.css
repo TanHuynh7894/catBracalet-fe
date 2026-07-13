@@ -5,8 +5,8 @@
 
 /* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
-    --primary: #7A1E1E;
-    --primary-dark: #5A1414;
+    --primary: #ab121c;
+    --primary-dark: #850e15;
     --gold: #D8B27D;
     --gold-light: #f0dfc2;
     --background: #FAF5EF;
@@ -497,7 +497,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(122, 30, 30, 0.2);
+    box-shadow: 0 8px 24px rgba(171, 18, 28, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -509,7 +509,7 @@
 .btnPlaceOrder:hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(122, 30, 30, 0.3);
+    box-shadow: 0 12px 32px rgba(171, 18, 28, 0.3);
 }
 
 /* ── Trust Badges ──────────────────────────────────────────────── */
@@ -774,7 +774,7 @@
 .addressCardActive {
     border-color: var(--primary);
     background: #fffafa;
-    box-shadow: 0 4px 20px rgba(122, 30, 30, 0.08);
+    box-shadow: 0 4px 20px rgba(171, 18, 28, 0.08);
 }
 
 .addressInfo {

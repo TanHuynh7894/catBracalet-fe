@@ -581,7 +581,7 @@ export default function ProductDetail() {
                                     onClick={() => setWishlistRelated(prev => ({ ...prev, [p.id]: !prev[p.id] }))}
                                     aria-label="Wishlist"
                                 >
-                                    <Heart size={18} fill={wishlistRelated[p.id] ? '#7A1E1E' : 'none'} />
+                                    <Heart size={18} fill={wishlistRelated[p.id] ? '#ab121c' : 'none'} />
                                 </button>
                                 <div className={styles.cardBody}>
                                     <p className={styles.cardStone}>{getMaterialName(p.materialId)}</p>

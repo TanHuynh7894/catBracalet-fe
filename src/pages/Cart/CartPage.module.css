@@ -1,5 +1,5 @@
 :root {
-    --primary: #7A1E1E;
+    --primary: #ab121c;
     --primary-dark: #5a1515;
     --gold: #D8B27D;
     --gold-dark: #B89664;
@@ -376,14 +376,14 @@
     justify-content: center;
     gap: 10px;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(122, 30, 30, 0.2);
+    box-shadow: 0 10px 20px rgba(171, 18, 28, 0.2);
     transition: all 0.3s;
 }
 
 .btnCheckout:hover:not(:disabled) {
     background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(122, 30, 30, 0.25);
+    box-shadow: 0 15px 30px rgba(171, 18, 28, 0.25);
 }
 
 .btnCheckout:disabled {

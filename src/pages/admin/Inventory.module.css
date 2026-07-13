@@ -21,7 +21,7 @@
 }
 
 .primaryBtn {
-    @apply bg-[#680006] text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-[#4d0004] transition-all shadow-sm;
+    @apply bg-[#ab121c] text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-[#850e15] transition-all shadow-sm;
 }
 
 /* Inventory Specifics */
@@ -58,7 +58,7 @@
 }
 
 .searchInput {
-    @apply w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#680006] focus:ring-1 focus:ring-[#680006] outline-none;
+    @apply w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:border-[#ab121c] focus:ring-1 focus:ring-[#ab121c] outline-none;
 }
 
 .searchIcon {
@@ -71,7 +71,7 @@
 }
 
 .priceSale {
-    @apply font-bold text-[#680006];
+    @apply font-bold text-[#ab121c];
 }
 
 .locationBadge {

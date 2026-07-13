@@ -5,7 +5,7 @@ import styles from './ShippingOverview.module.css';
 const ShippingOverview = () => {
     const shippingStats = [
         { label: 'Chờ lấy hàng', count: 0, cod: '0đ', color: 'bg-gray-400' },
-        { label: 'Đã lấy hàng', count: 2, cod: '1,585,495đ', color: 'bg-[#680006]' },
+        { label: 'Đã lấy hàng', count: 2, cod: '1,585,495đ', color: 'bg-[#ab121c]' },
         { label: 'Đang giao hàng', count: 0, cod: '0đ', color: 'bg-gray-400' },
         { label: 'Chờ giao lại', count: 0, cod: '0đ', color: 'bg-gray-400' },
         { label: 'Đang hoàn hàng', count: 0, cod: '0đ', color: 'bg-gray-400' },

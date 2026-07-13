@@ -121,13 +121,13 @@ const Header = () => {
                                 key={link.name}
                                 to={link.href}
                                 className={`relative text-[18px] font-bold tracking-wider transition-all duration-300 py-1
-                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'}`}
+                                ${active ? 'text-[#ab121c]' : 'text-[#4B3A32]/80 hover:text-[#ab121c]'}`}
                             >
                                 {link.name}
                                 {active && (
                                     <motion.div
                                         layoutId="underline"
-                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#7A1E1E]"
+                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#ab121c]"
                                     />
                                 )}
                             </Link>
@@ -137,13 +137,13 @@ const Header = () => {
                                 href={link.href}
                                 onClick={(e) => handleAnchorClick(e, link.href)}
                                 className={`relative text-[18px] font-bold tracking-wider transition-all duration-300 py-1
-                                ${active ? 'text-[#7A1E1E]' : 'text-[#4B3A32]/80 hover:text-[#7A1E1E]'} cursor-pointer`}
+                                ${active ? 'text-[#ab121c]' : 'text-[#4B3A32]/80 hover:text-[#ab121c]'} cursor-pointer`}
                             >
                                 {link.name}
                                 {active && (
                                     <motion.div
                                         layoutId="underline"
-                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#7A1E1E]"
+                                        className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#ab121c]"
                                     />
                                 )}
                             </a>
@@ -161,10 +161,10 @@ const Header = () => {
                     >
                         <button
                             onClick={() => user ? navigate('/profile') : navigate('/login')}
-                            className="text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors py-2 flex items-center gap-1"
+                            className="text-[#4B3A32]/80 hover:text-[#ab121c] transition-colors py-2 flex items-center gap-1"
                         >
                             {user?.avatar ? (
-                                <img src={user.avatar} alt="avatar" className="w-6 h-6 rounded-full object-cover border border-[#7A1E1E]/20" />
+                                <img src={user.avatar} alt="avatar" className="w-6 h-6 rounded-full object-cover border border-[#ab121c]/20" />
                             ) : (
                                 <User size={22} strokeWidth={1.5} />
                             )}
@@ -186,7 +186,7 @@ const Header = () => {
                                                     setIsUserMenuOpen(false);
                                                     navigate('/admin');
                                                 }}
-                                                className="w-full flex items-center gap-3 px-4 py-3 text-[12px] text-[#7A1E1E] hover:bg-[#7A1E1E]/5 transition-all font-medium border-b border-[#4B3A32]/5"
+                                                className="w-full flex items-center gap-3 px-4 py-3 text-[12px] text-[#ab121c] hover:bg-[#ab121c]/5 transition-all font-medium border-b border-[#4B3A32]/5"
                                             >
                                                 <ListOrdered size={16} /> Quản trị
                                             </button>
@@ -206,13 +206,13 @@ const Header = () => {
 
                     {/* Cart Icon — Navigates to Cart Page */}
                     <button
-                        className="relative text-[#4B3A32]/80 hover:text-[#7A1E1E] transition-colors"
+                        className="relative text-[#4B3A32]/80 hover:text-[#ab121c] transition-colors"
                         onClick={() => navigate('/cart')}
                         aria-label="Đi đến giỏ hàng"
                     >
                         <ShoppingBag size={22} strokeWidth={1.5} />
                         {cartCount > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-[#7A1E1E] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                            <span className="absolute -top-1 -right-1 bg-[#ab121c] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
                                 {cartCount}
                             </span>
                         )}
@@ -222,7 +222,7 @@ const Header = () => {
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
-                        className="hidden lg:block bg-[#7A1E1E] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[16px] font-semibold tracking-normal hover:bg-[#5A1414] transition-all transform hover:scale-105 hover:shadow-md"
+                        className="hidden lg:block bg-[#ab121c] text-[#FAF5EF] px-8 py-3.5 rounded-full text-[16px] font-semibold tracking-normal hover:bg-[#850e15] transition-all transform hover:scale-105 hover:shadow-md"
                     >
                         Tư vấn miễn phí
                     </a>
@@ -259,7 +259,7 @@ const Header = () => {
                                             handleAnchorClick(e, link.href);
                                         }
                                     }}
-                                    className="text-[17px] font-semibold text-[#4B3A32] hover:text-[#7A1E1E] transition-colors"
+                                    className="text-[17px] font-semibold text-[#4B3A32] hover:text-[#ab121c] transition-colors"
                                 >
                                     {link.name}
                                 </a>

@@ -73,7 +73,7 @@ const Orders = () => {
 
     // Stats calculation
     const stats = [
-        { label: 'Tổng đơn hàng', value: orders.length, icon: ShoppingBag, color: '#680006', bg: '#fee2e2' },
+        { label: 'Tổng đơn hàng', value: orders.length, icon: ShoppingBag, color: '#ab121c', bg: '#fee2e2' },
         { label: 'Đang xử lý', value: orders.filter(o => o.status === 'PENDING').length, icon: Clock, color: '#a16207', bg: '#fef9c3' },
         { label: 'Đã xác nhận', value: orders.filter(o => o.status === 'CONFIRMED').length, icon: CheckCheck, color: '#1e40af', bg: '#dbeafe' },
         { label: 'Doanh thu', value: new Intl.NumberFormat('vi-VN').format(orders.reduce((acc, o) => acc + (o.status !== 'CANCELLED' ? Number(o.totalAmount) : 0), 0)) + 'đ', icon: TrendingUp, color: '#166534', bg: '#dcfce7' },
@@ -125,7 +125,7 @@ const Orders = () => {
                     <div className="flex-1 min-w-[300px] relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input
-                            className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-[#680006] focus:ring-4 focus:ring-[#680006]/5 outline-none transition-all"
+                            className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-[#ab121c] focus:ring-4 focus:ring-[#ab121c]/5 outline-none transition-all"
                             placeholder="Tìm kiếm mã đơn, tên khách hàng..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -144,7 +144,7 @@ const Orders = () => {
                 <div className={styles.tableWrapper}>
                     {isLoading ? (
                         <div className="p-20 flex flex-col items-center justify-center gap-4">
-                            <Loader2 size={32} className="animate-spin text-[#680006]" />
+                            <Loader2 size={32} className="animate-spin text-[#ab121c]" />
                             <p className="text-gray-400 font-medium italic">Đang đồng bộ dữ liệu...</p>
                         </div>
                     ) : (
@@ -200,14 +200,14 @@ const Orders = () => {
                                             <div className="flex items-center justify-end gap-2">
                                                 {order.status === 'PENDING' && (
                                                     <button
-                                                        className="h-8 px-4 bg-[#680006] text-white rounded-lg text-xs font-bold hover:bg-[#4d0004] transition-all flex items-center shadow-sm"
+                                                        className="h-8 px-4 bg-[#ab121c] text-white rounded-lg text-xs font-bold hover:bg-[#850e15] transition-all flex items-center shadow-sm"
                                                         onClick={() => handleConfirm(order.id)}
                                                     >
                                                         <CircleCheck size={14} className="mr-1.5" /> Xác nhận
                                                     </button>
                                                 )}
                                                 <button
-                                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-[#680006] hover:border-[#680006] transition-all bg-white"
+                                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-[#ab121c] hover:border-[#ab121c] transition-all bg-white"
                                                     onClick={() => navigate(`/admin/orders/${order.id}`)}
                                                     title="Chi tiết đơn hàng"
                                                 >

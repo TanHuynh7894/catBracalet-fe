@@ -112,7 +112,7 @@ const RoleManagement = () => {
 
     const getRoleIcon = (name) => {
         const lowerName = name.toLowerCase();
-        if (lowerName.includes('admin')) return { icon: <ShieldCheck size={18} />, color: '#7A1E1E', bg: '#FDF2F2' };
+        if (lowerName.includes('admin')) return { icon: <ShieldCheck size={18} />, color: '#ab121c', bg: '#FDF2F2' };
         if (lowerName.includes('staff')) return { icon: <Shield size={18} />, color: '#1E429F', bg: '#E1EFFE' };
         if (lowerName.includes('customer')) return { icon: <UserCheck size={18} />, color: '#057A55', bg: '#DEF7EC' };
         return { icon: <Shield size={18} />, color: '#6B7280', bg: '#F3F4F6' };

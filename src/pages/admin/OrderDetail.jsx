@@ -127,7 +127,7 @@ const AdminOrderDetail = () => {
 
     if (isLoading) return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-            <Loader2 size={40} className="animate-spin text-[#680006]" />
+            <Loader2 size={40} className="animate-spin text-[#ab121c]" />
             <p className="text-gray-500 font-medium italic">Đang tải chi tiết đơn hàng...</p>
         </div>
     );
@@ -136,7 +136,7 @@ const AdminOrderDetail = () => {
         <div className="text-center p-20">
             <AlertTriangle size={48} className="mx-auto text-gray-300 mb-4" />
             <p className="text-gray-500">Không tìm thấy đơn hàng này.</p>
-            <button onClick={() => navigate('/admin/orders')} className="mt-4 text-[#680006] font-bold">Quay lại danh sách</button>
+            <button onClick={() => navigate('/admin/orders')} className="mt-4 text-[#ab121c] font-bold">Quay lại danh sách</button>
         </div>
     );
 
@@ -352,7 +352,7 @@ const AdminOrderDetail = () => {
                                 <div className={styles.trackingCard}>
                                     <div className={styles.trackingHeader}>
                                         <span className="text-sm font-bold text-gray-700">Trạng thái Goship</span>
-                                        <span className="text-sm font-bold text-[#680006]">{trackingInfo?.status || 'Đang cập nhật'}</span>
+                                        <span className="text-sm font-bold text-[#ab121c]">{trackingInfo?.status || 'Đang cập nhật'}</span>
                                     </div>
                                     <div className={styles.trackingInfo}>
                                         <div className={styles.trackingRow}>

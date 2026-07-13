@@ -235,7 +235,7 @@ const SuccessfulPayment = () => {
                 {/* ── Actions ──────────────────────────────────────────────── */}
                 <div className={styles.actions}>
                     {finalOrderId && (
-                        <Link to={`/order-detail/${finalOrderId}`} className={styles.primaryBtn} style={{ background: '#7A1E1E' }}>
+                        <Link to={`/order-detail/${finalOrderId}`} className={styles.primaryBtn} style={{ background: '#ab121c' }}>
                             <Package size={20} />
                             <span>Xem chi tiết đơn hàng</span>
                         </Link>

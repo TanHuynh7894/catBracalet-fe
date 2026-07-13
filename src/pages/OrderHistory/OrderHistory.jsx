@@ -217,7 +217,7 @@ const OrderHistory = () => {
                                             )}
                                             <NavLink
                                                 to={`/order-detail/${order.id}`}
-                                                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-[#8c1515] transition-all group font-body text-xs uppercase tracking-widest font-bold shadow-sm"
+                                                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-[#c51924] transition-all group font-body text-xs uppercase tracking-widest font-bold shadow-sm"
                                             >
                                                 <span>Chi tiết đơn</span>
                                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -241,7 +241,7 @@ const OrderHistory = () => {
                             <h3 className="font-headline text-xl text-on-surface">Bạn chưa có đơn hàng nào</h3>
                             <p className="text-outline font-body text-sm">Hãy khám phá bộ sưu tập trang sức mới nhất của chúng tôi!</p>
                         </div>
-                        <NavLink to="/collection" className="mt-4 px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#8c1515] transition-all">
+                        <NavLink to="/collection" className="mt-4 px-10 py-4 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-[#c51924] transition-all">
                             Tiếp tục mua sắm
                         </NavLink>
                     </div>

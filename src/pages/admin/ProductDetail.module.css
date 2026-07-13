@@ -49,11 +49,11 @@
 }
 
 .input {
-    @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#680006] focus:ring-1 focus:ring-[#680006] outline-none transition-all;
+    @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#ab121c] focus:ring-1 focus:ring-[#ab121c] outline-none transition-all;
 }
 
 .textarea {
-    @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#680006] focus:ring-1 focus:ring-[#680006] outline-none transition-all min-h-[150px];
+    @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:border-[#ab121c] focus:ring-1 focus:ring-[#ab121c] outline-none transition-all min-h-[150px];
 }
 
 .btnGroup {
