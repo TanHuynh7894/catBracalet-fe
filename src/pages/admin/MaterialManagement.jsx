@@ -456,16 +456,12 @@ const MaterialManagement = () => {
                                     <Layers size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                                     <input
                                         type="text"
-                                        list="material-type-list"
                                         className={styles.formInput}
                                         style={{ paddingLeft: 36 }}
                                         placeholder="VD: Đá quý, Kim loại, Tự nhiên..."
                                         value={formData.materialType}
                                         onChange={e => setFormData({ ...formData, materialType: e.target.value })}
                                     />
-                                    <datalist id="material-type-list">
-                                        {MATERIAL_TYPES.map(t => <option key={t} value={t} />)}
-                                    </datalist>
                                 </div>
                                 {errors.materialType && <p className="text-xs text-red-500 mt-1">{errors.materialType}</p>}
                             </div>
