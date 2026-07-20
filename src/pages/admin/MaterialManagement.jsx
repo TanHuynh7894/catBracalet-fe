@@ -19,22 +19,22 @@ const EMPTY_FORM = { materialName: '', materialType: '', color: '' };
 
 // Preset colour swatches for quick picking
 const COLOR_PRESETS = [
-    { name: 'Red', hex: '#ef4444' },
-    { name: 'Orange', hex: '#f97316' },
-    { name: 'Yellow', hex: '#eab308' },
-    { name: 'Green', hex: '#22c55e' },
-    { name: 'Blue', hex: '#3b82f6' },
-    { name: 'Purple', hex: '#a855f7' },
-    { name: 'Pink', hex: '#ec4899' },
-    { name: 'Brown', hex: '#92400e' },
-    { name: 'White', hex: '#f3f4f6' },
-    { name: 'Black', hex: '#1f2937' },
-    { name: 'Silver', hex: '#9ca3af' },
-    { name: 'Gold', hex: '#d97706' },
+    { name: 'Đỏ', hex: '#ef4444' },
+    { name: 'Cam', hex: '#f97316' },
+    { name: 'Vàng', hex: '#eab308' },
+    { name: 'Xanh lá', hex: '#22c55e' },
+    { name: 'Xanh dương', hex: '#3b82f6' },
+    { name: 'Tím', hex: '#a855f7' },
+    { name: 'Hồng', hex: '#ec4899' },
+    { name: 'Nâu', hex: '#92400e' },
+    { name: 'Trắng', hex: '#f3f4f6' },
+    { name: 'Đen', hex: '#1f2937' },
+    { name: 'Bạc', hex: '#9ca3af' },
+    { name: 'Vàng kim', hex: '#d97706' },
 ];
 
 const MATERIAL_TYPES = [
-    'Gemstone', 'Metal', 'Natural', 'Synthetic', 'Wood', 'Ceramic', 'Glass', 'Other'
+    'Đá quý', 'Kim loại', 'Tự nhiên', 'Tổng hợp', 'Gỗ', 'Gốm sứ', 'Thủy tinh', 'Khác'
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -207,13 +207,13 @@ const MaterialManagement = () => {
 
     const TypeBadge = ({ type }) => {
         const colorMap = {
-            Gemstone: { bg: '#fdf4ff', text: '#a21caf' },
-            Metal: { bg: '#eff6ff', text: '#1d4ed8' },
-            Natural: { bg: '#f0fdf4', text: '#15803d' },
-            Synthetic: { bg: '#fff7ed', text: '#c2410c' },
-            Wood: { bg: '#fefce8', text: '#a16207' },
-            Ceramic: { bg: '#f0f9ff', text: '#0369a1' },
-            Glass: { bg: '#fafafa', text: '#374151' },
+            'Đá quý': { bg: '#fdf4ff', text: '#a21caf' },
+            'Kim loại': { bg: '#eff6ff', text: '#1d4ed8' },
+            'Tự nhiên': { bg: '#f0fdf4', text: '#15803d' },
+            'Tổng hợp': { bg: '#fff7ed', text: '#c2410c' },
+            'Gỗ': { bg: '#fefce8', text: '#a16207' },
+            'Gốm sứ': { bg: '#f0f9ff', text: '#0369a1' },
+            'Thủy tinh': { bg: '#fafafa', text: '#374151' },
         };
         const c = colorMap[type] || { bg: '#f3f4f6', text: '#6b7280' };
         return (
@@ -439,7 +439,7 @@ const MaterialManagement = () => {
                                         type="text"
                                         className={styles.formInput}
                                         style={{ paddingLeft: 36 }}
-                                        placeholder="VD: Ruby, Silver, Leather..."
+                                        placeholder="VD: Hồng ngọc, Bạc, Da..."
                                         value={formData.materialName}
                                         onChange={e => setFormData({ ...formData, materialName: e.target.value })}
                                     />
@@ -459,7 +459,7 @@ const MaterialManagement = () => {
                                         list="material-type-list"
                                         className={styles.formInput}
                                         style={{ paddingLeft: 36 }}
-                                        placeholder="VD: Gemstone, Metal, Natural..."
+                                        placeholder="VD: Đá quý, Kim loại, Tự nhiên..."
                                         value={formData.materialType}
                                         onChange={e => setFormData({ ...formData, materialType: e.target.value })}
                                     />
@@ -481,7 +481,7 @@ const MaterialManagement = () => {
                                         type="text"
                                         className={styles.formInput}
                                         style={{ paddingLeft: 36 }}
-                                        placeholder="VD: Red, Brown, Silver..."
+                                        placeholder="VD: Đỏ, Nâu, Bạc..."
                                         value={formData.color}
                                         onChange={e => setFormData({ ...formData, color: e.target.value })}
                                     />
@@ -588,6 +588,12 @@ const MaterialManagement = () => {
 
 // ─── Tiny colour dot helper ───────────────────────────────────────────────────
 const COLOR_MAP = {
+    // tiếng việt
+    'đỏ': '#ef4444', 'cam': '#f97316', 'vàng': '#eab308',
+    'xanh lá': '#22c55e', 'xanh dương': '#3b82f6', 'tím': '#a855f7',
+    'hồng': '#ec4899', 'nâu': '#92400e', 'trắng': '#e5e7eb',
+    'đen': '#1f2937', 'bạc': '#9ca3af', 'vàng kim': '#d97706',
+    // tiếng anh (fallback cho dữ liệu cũ)
     red: '#ef4444', orange: '#f97316', yellow: '#eab308',
     green: '#22c55e', blue: '#3b82f6', purple: '#a855f7',
     pink: '#ec4899', brown: '#92400e', white: '#e5e7eb',
