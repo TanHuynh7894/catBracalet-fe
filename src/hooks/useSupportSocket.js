@@ -3,13 +3,6 @@ import { io } from 'socket.io-client';
 
 const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || 'https://c9t.tanhuynh.me';
 
-/**
- * Hook Socket.IO cho support chat.
- * Gửi token qua nhiều cách để đảm bảo server nhận được:
- *  - socket.handshake.auth.token
- *  - socket.handshake.headers.authorization  (chỉ hoạt động với polling)
- *  - socket.handshake.query.token
- */
 export default function useSupportSocket({
     ticketId,
     onNewMessage,
@@ -21,7 +14,7 @@ export default function useSupportSocket({
     const joinedTicketRef = useRef(null);
     const pendingJoinRef = useRef(null);
 
-    // Callback refs – tránh stale closure
+
     const cbNewMessage = useRef(onNewMessage);
     const cbChatHistory = useRef(onChatHistory);
     const cbNewNotification = useRef(onNewNotification);
@@ -29,7 +22,7 @@ export default function useSupportSocket({
     useEffect(() => { cbChatHistory.current = onChatHistory; }, [onChatHistory]);
     useEffect(() => { cbNewNotification.current = onNewNotification; }, [onNewNotification]);
 
-    // ── Tạo socket MỘT LẦN ──────────────────────────────────────────
+
     useEffect(() => {
         if (!enabled) return;
         if (socketRef.current) return;
@@ -42,12 +35,12 @@ export default function useSupportSocket({
 
         console.log('[Socket] Gửi Authorization Header với token:', token.substring(0, 15) + '...');
 
-        // Nếu BE yêu cầu lấy từ Header, TRÌNH DUYỆT chỉ cho phép gửi qua 'polling'
+
         const socket = io(SOCKET_URL, {
             extraHeaders: {
                 Authorization: `Bearer ${token}`
             },
-            transports: ['polling'], // BẮT BUỘC dùng polling để gửi được Header
+            transports: ['polling'], 
             reconnection: true,
             reconnectionAttempts: 10,
             forceNew: true
@@ -98,10 +91,10 @@ export default function useSupportSocket({
             joinedTicketRef.current = null;
             pendingJoinRef.current = null;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, [enabled]);
 
-    // ── Auto-join khi ticketId thay đổi ────────────────────────────
+
     useEffect(() => {
         if (!ticketId) return;
         joinedTicketRef.current = ticketId;
@@ -115,7 +108,7 @@ export default function useSupportSocket({
         }
     }, [ticketId]);
 
-    // ── joinTicket thủ công ─────────────────────────────────────────
+
     const joinTicket = useCallback((tid) => {
         joinedTicketRef.current = tid;
         if (socketRef.current?.connected) {
@@ -127,7 +120,7 @@ export default function useSupportSocket({
         }
     }, []);
 
-    // ── sendMessage ─────────────────────────────────────────────────
+
     const sendMessage = useCallback((tid, message) => {
         const socket = socketRef.current;
         if (!socket) {
@@ -136,7 +129,6 @@ export default function useSupportSocket({
         }
         if (!socket.connected) {
             console.error('[Socket] Not connected. disconnected =', socket.disconnected);
-            // Thử reconnect
             socket.connect();
             return false;
         }

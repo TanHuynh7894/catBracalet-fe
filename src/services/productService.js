@@ -1,7 +1,6 @@
 import api from './api';
 
 /**
- * Lấy danh sách tất cả sản phẩm
  * @returns {Promise<Array>}
  */
 export const getProducts = async () => {
@@ -14,8 +13,7 @@ export const getProducts = async () => {
 };
 
 /**
- * Láy danh sách sản phẩm có filter
- * @param {Object} params { color, stoneColor, stoneType, size, minPrice, maxPrice }
+ * @param {Object} params 
  */
 export const filterProducts = async (params) => {
     try {
@@ -27,7 +25,6 @@ export const filterProducts = async (params) => {
 };
 
 /**
- * Tìm kiếm sản phẩm theo tên
  * @param {string} name 
  */
 export const searchProductsByName = async (name) => {
@@ -40,7 +37,6 @@ export const searchProductsByName = async (name) => {
 };
 
 /**
- * Lấy chi tiết một sản phẩm theo ID
  * @param {string} id 
  * @returns {Promise<Object>}
  */
@@ -54,7 +50,6 @@ export const getProductById = async (id) => {
 };
 
 /**
- * Tạo sản phẩm mới (multipart/form-data)
  * @param {FormData} formData 
  */
 export const createProduct = async (formData) => {
@@ -73,7 +68,6 @@ export const createProduct = async (formData) => {
 
 
 /**
- * Cập nhật sản phẩm (multipart/form-data)
  * @param {string} id 
  * @param {FormData} formData 
  */
@@ -91,7 +85,6 @@ export const updateProduct = async (id, formData) => {
 };
 
 /**
- * Xóa mềm sản phẩm (Patch)
  * @param {string} id 
  */
 export const softDeleteProduct = async (id) => {
@@ -104,7 +97,6 @@ export const softDeleteProduct = async (id) => {
 };
 
 /**
- * Xóa vĩnh viễn sản phẩm (Delete)
  * @param {string} id 
  */
 export const forceDeleteProduct = async (id) => {
@@ -116,10 +108,9 @@ export const forceDeleteProduct = async (id) => {
     }
 };
 
-// --- PRODUCT VARIANTS API ---
+
 
 /**
- * Lấy danh sách biến thể có filter
  * @param {Object} params 
  */
 export const filterProductVariants = async (params) => {
@@ -132,7 +123,6 @@ export const filterProductVariants = async (params) => {
 };
 
 /**
- * Lấy chi tiết biến thể theo ID
  * @param {string} variantId
  */
 export const getProductVariantById = async (variantId) => {
@@ -144,9 +134,7 @@ export const getProductVariantById = async (variantId) => {
     }
 };
 
-/**
- * Lấy tất cả biến thể
- */
+
 export const getAllProductVariants = async () => {
     try {
         const response = await api.get('/product-variants');
@@ -157,8 +145,7 @@ export const getAllProductVariants = async () => {
 };
 
 /**
- * Tạo biến thể mới
- * @param {Object} data { productId, sku, size, color, stockQuantity, extraPrice }
+ * @param {Object} data 
  */
 export const createProductVariant = async (data) => {
     try {
@@ -170,7 +157,6 @@ export const createProductVariant = async (data) => {
 };
 
 /**
- * Cập nhật biến thể
  * @param {string} id 
  * @param {Object} data 
  */
@@ -184,7 +170,6 @@ export const updateProductVariant = async (id, data) => {
 };
 
 /**
- * Xóa mềm biến thể
  * @param {string} id 
  */
 export const softDeleteProductVariant = async (id) => {
@@ -197,7 +182,6 @@ export const softDeleteProductVariant = async (id) => {
 };
 
 /**
- * Xóa vĩnh viễn biến thể
  * @param {string} id 
  */
 export const forceDeleteProductVariant = async (id) => {
@@ -209,11 +193,10 @@ export const forceDeleteProductVariant = async (id) => {
     }
 };
 
-// --- PRODUCT VARIANT MAPPINGS API ---
+
 
 /**
- * Tạo mapping giữa sản phẩm và biến thể
- * @param {Object} data { productId, variantId }
+ * @param {Object} data 
  */
 export const createProductVariantMapping = async (data) => {
     try {
@@ -224,9 +207,7 @@ export const createProductVariantMapping = async (data) => {
     }
 };
 
-/**
- * Xóa mềm mapping
- */
+
 export const softDeleteProductVariantMapping = async (productId, variantId) => {
     try {
         const response = await api.patch(`/product-variant-mappings/${productId}/${variantId}/soft-delete`);
@@ -236,9 +217,8 @@ export const softDeleteProductVariantMapping = async (productId, variantId) => {
     }
 };
 
-/**
- * Xóa vĩnh viễn mapping
- */
+
+
 export const forceDeleteProductVariantMapping = async (productId, variantId) => {
     try {
         const response = await api.delete(`/product-variant-mappings/${productId}/${variantId}/force`);
@@ -248,10 +228,9 @@ export const forceDeleteProductVariantMapping = async (productId, variantId) => 
     }
 };
 
-// --- PRODUCT IMAGES API ---
+
 
 /**
- * Thêm ảnh cho sản phẩm
  * @param {string} productId 
  * @param {File} file 
  */
@@ -274,7 +253,6 @@ export const addProductImage = async (productId, file) => {
 };
 
 /**
- * Xóa mềm ảnh sản phẩm (chuyển trạng thái sang INACTIVE)
  * @param {string} imageId 
  */
 export const softDeleteProductImage = async (imageId) => {
@@ -287,7 +265,6 @@ export const softDeleteProductImage = async (imageId) => {
 };
 
 /**
- * Xóa vĩnh viễn ảnh sản phẩm (Force Delete)
  * @param {string} imageId 
  */
 export const deleteProductImage = async (imageId) => {
@@ -299,7 +276,7 @@ export const deleteProductImage = async (imageId) => {
     }
 };
 /**
- * Lấy danh sách ảnh của một sản phẩm
+
  * @param {string} productId 
  */
 export const getProductImagesByProductId = async (productId) => {

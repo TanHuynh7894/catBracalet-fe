@@ -1,8 +1,6 @@
 import api from './api';
 
-/**
- * Get all consultation registrations
- */
+
 export const getAllConsultations = async () => {
     try {
         const response = await api.get('/consultation-registrations');
@@ -12,9 +10,7 @@ export const getAllConsultations = async () => {
     }
 };
 
-/**
- * Get consultation registration by ID
- */
+
 export const getConsultationById = async (id) => {
     try {
         const response = await api.get(`/consultation-registrations/${id}`);
@@ -24,9 +20,7 @@ export const getConsultationById = async (id) => {
     }
 };
 
-/**
- * Create new consultation registration
- */
+
 export const createConsultation = async (consultationData) => {
     try {
         const response = await api.post('/consultation-registrations', consultationData);
@@ -36,9 +30,7 @@ export const createConsultation = async (consultationData) => {
     }
 };
 
-/**
- * Delete consultation registration
- */
+
 export const deleteConsultation = async (id) => {
     try {
         const response = await api.delete(`/consultation-registrations/${id}`);

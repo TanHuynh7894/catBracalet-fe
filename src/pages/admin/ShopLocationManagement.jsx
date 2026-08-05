@@ -6,9 +6,9 @@ import {
 } from 'lucide-react';
 import { shopLocationService } from '../../services/shopLocationService';
 import { useToast } from '../../context/ToastContext';
-import styles from './MaterialManagement.module.css'; // reuse shared admin styles
+import styles from './MaterialManagement.module.css'; 
 
-// ─── Empty form ────────────────────────────────────────────────────────────────
+
 const EMPTY_FORM = {
     shopName: '',
     phoneNumber: '',
@@ -20,7 +20,7 @@ const EMPTY_FORM = {
     isActive: true,
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 const ShopLocationManagement = () => {
     const { showToast } = useToast();
 
@@ -28,26 +28,26 @@ const ShopLocationManagement = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Modal states
+
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
+    const [modalMode, setModalMode] = useState('add'); 
     const [selected, setSelected] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // Confirm dialog (toggle active)
+
     const [showConfirm, setShowConfirm] = useState(false);
 
-    // Form
+   
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
-    // Cascading selects
+    
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
     const [cascadeLoading, setCascadeLoading] = useState({ province: false, district: false, ward: false });
 
-    // ─── Fetch list ────────────────────────────────────────────────────────────
+
     const fetchLocations = useCallback(async (initial = false) => {
         if (initial) setLoading(true);
         try {
@@ -62,14 +62,14 @@ const ShopLocationManagement = () => {
 
     useEffect(() => { fetchLocations(true); }, [fetchLocations]);
 
-    // ─── Cascade: provinces once ───────────────────────────────────────────────
+
     useEffect(() => {
         shopLocationService.getProvinces()
             .then(data => setProvinces(Array.isArray(data) ? data : []))
             .catch(() => { });
     }, []);
 
-    // ─── Cascade: districts when province changes ──────────────────────────────
+ 
     useEffect(() => {
         if (!formData.province) { setDistricts([]); setWards([]); return; }
         setCascadeLoading(p => ({ ...p, district: true }));
@@ -81,7 +81,7 @@ const ShopLocationManagement = () => {
         setWards([]);
     }, [formData.province]);
 
-    // ─── Cascade: wards when district changes ─────────────────────────────────
+
     useEffect(() => {
         if (!formData.district) { setWards([]); return; }
         setCascadeLoading(p => ({ ...p, ward: true }));
@@ -92,7 +92,7 @@ const ShopLocationManagement = () => {
         setFormData(f => ({ ...f, ward: '' }));
     }, [formData.district]);
 
-    // ─── Modal helpers ─────────────────────────────────────────────────────────
+
     const openAdd = () => {
         setModalMode('add');
         setSelected(null);
@@ -125,7 +125,7 @@ const ShopLocationManagement = () => {
         setShowConfirm(true);
     };
 
-    // ─── Validation ────────────────────────────────────────────────────────────
+
     const validate = () => {
         const e = {};
         if (!formData.shopName.trim()) e.shopName = 'Tên cửa hàng không được để trống';
@@ -136,7 +136,7 @@ const ShopLocationManagement = () => {
         return e;
     };
 
-    // ─── Submit ────────────────────────────────────────────────────────────────
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const errs = validate();
@@ -171,16 +171,16 @@ const ShopLocationManagement = () => {
         }
     };
 
-    // ─── Confirm action ────────────────────────────────────────────────────────
+
     const handleConfirm = async () => {
         setIsProcessing(true);
         try {
             if (selected.isActive) {
-                // Tắt: dùng DELETE → isActive = false
+               
                 await shopLocationService.deleteShopLocation(selected.id);
                 showToast('Đã vô hiệu hoá cửa hàng', 'success');
             } else {
-                // Bật: dùng PATCH /{id}/active → isActive = true
+               
                 await shopLocationService.toggleActive(selected.id);
                 showToast('Đã kích hoạt cửa hàng', 'success');
             }
@@ -193,7 +193,7 @@ const ShopLocationManagement = () => {
         }
     };
 
-    // ─── Derived ───────────────────────────────────────────────────────────────
+ 
     const filtered = locations.filter(loc =>
         loc.shopName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         loc.shopAddress?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -205,7 +205,7 @@ const ShopLocationManagement = () => {
         inactive: locations.filter(l => !l.isActive).length,
     };
 
-    // ─── Render ────────────────────────────────────────────────────────────────
+  
     if (loading) return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
             <Loader2 size={40} style={{ animation: 'spin 1s linear infinite', color: '#ab121c', marginBottom: 16 }} />
@@ -216,7 +216,7 @@ const ShopLocationManagement = () => {
     return (
         <div className={styles.dashboard}>
 
-            {/* ── Header ────────────────────────────────────────────────────── */}
+            {}
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.title}>Quản lý Cửa hàng</h1>
@@ -229,7 +229,7 @@ const ShopLocationManagement = () => {
                 </button>
             </div>
 
-            {/* ── Stats ─────────────────────────────────────────────────────── */}
+            {}
             <div className={styles.statsGrid}>
                 {[
                     { label: 'Tổng cửa hàng', value: stats.total, icon: <Store size={20} />, color: '#ab121c', bg: '#FDF2F2' },
@@ -247,9 +247,9 @@ const ShopLocationManagement = () => {
                 ))}
             </div>
 
-            {/* ── Table card ────────────────────────────────────────────────── */}
+            {}
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-                {/* Toolbar */}
+                {}
                 <div className={styles.toolbar}>
                     <div className={styles.searchBox}>
                         <Search size={16} style={{ color: '#9ca3af' }} />
@@ -265,7 +265,7 @@ const ShopLocationManagement = () => {
                     </span>
                 </div>
 
-                {/* Table */}
+                {}
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                         <thead>
@@ -288,10 +288,10 @@ const ShopLocationManagement = () => {
                                     onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                                     onMouseLeave={e => e.currentTarget.style.background = ''}
                                 >
-                                    {/* Index */}
+                                    {}
                                     <td style={{ padding: '16px', color: '#9ca3af', fontSize: 12, fontWeight: 700 }}>{idx + 1}</td>
 
-                                    {/* Name */}
+                                    {}
                                     <td style={{ padding: 16 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                             <div style={{ padding: 10, borderRadius: 10, background: '#FDF2F2', color: '#ab121c', flexShrink: 0 }}>
@@ -304,7 +304,7 @@ const ShopLocationManagement = () => {
                                         </div>
                                     </td>
 
-                                    {/* Address */}
+                                    {}
                                     <td style={{ padding: 16, maxWidth: 240 }}>
                                         <div style={{ fontSize: 12, color: '#374151', lineHeight: 1.5 }}>
                                             {loc.shopAddress || loc.detailAddress || '—'}
@@ -316,7 +316,7 @@ const ShopLocationManagement = () => {
                                         )}
                                     </td>
 
-                                    {/* Contact */}
+                                    {}
                                     <td style={{ padding: 16 }}>
                                         {loc.phoneNumber && loc.phoneNumber !== 'N/A' && (
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#374151', marginBottom: 4 }}>
@@ -334,7 +334,7 @@ const ShopLocationManagement = () => {
                                             )}
                                     </td>
 
-                                    {/* Status */}
+                                    {}
                                     <td style={{ padding: 16 }}>
                                         {loc.isActive ? (
                                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: '#DEF7EC', color: '#057A55' }}>
@@ -348,7 +348,7 @@ const ShopLocationManagement = () => {
                                         )}
                                     </td>
 
-                                    {/* Actions */}
+                                    {}
                                     <td style={{ padding: 16 }}>
                                         <div style={{ display: 'flex', gap: 4 }}>
                                             <button onClick={() => openEdit(loc)} title="Chỉnh sửa"
@@ -373,13 +373,11 @@ const ShopLocationManagement = () => {
                 </div>
             </div>
 
-            {/* ══════════════════════════════════════════════════════════════════
-                Modal Add / Edit
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} style={{ width: 580 }} onClick={e => e.stopPropagation()}>
-                        {/* Header */}
+                        {}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 28px', borderBottom: '1px solid #f3f4f6' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                 <div style={{ padding: 10, borderRadius: 10, background: '#FDF2F2' }}>
@@ -400,10 +398,10 @@ const ShopLocationManagement = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
+                        {}
                         <form onSubmit={handleSubmit} style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 18, maxHeight: '70vh', overflowY: 'auto' }}>
 
-                            {/* Shop Name */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Tên cửa hàng <span style={{ color: '#ef4444' }}>*</span></label>
                                 <input className={styles.formInput}
@@ -413,7 +411,7 @@ const ShopLocationManagement = () => {
                                 {errors.shopName && <p style={{ color: '#ef4444', fontSize: 11, marginTop: 4 }}>{errors.shopName}</p>}
                             </div>
 
-                            {/* Province */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Tỉnh / Thành phố <span style={{ color: '#ef4444' }}>*</span></label>
                                 <select className={styles.formInput}
@@ -426,7 +424,7 @@ const ShopLocationManagement = () => {
                                 {errors.province && <p style={{ color: '#ef4444', fontSize: 11, marginTop: 4 }}>{errors.province}</p>}
                             </div>
 
-                            {/* District */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Quận / Huyện <span style={{ color: '#ef4444' }}>*</span></label>
                                 <select className={styles.formInput}
@@ -442,7 +440,7 @@ const ShopLocationManagement = () => {
                                 {errors.district && <p style={{ color: '#ef4444', fontSize: 11, marginTop: 4 }}>{errors.district}</p>}
                             </div>
 
-                            {/* Ward */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Phường / Xã <span style={{ color: '#ef4444' }}>*</span></label>
                                 <select className={styles.formInput}
@@ -458,7 +456,7 @@ const ShopLocationManagement = () => {
                                 {errors.ward && <p style={{ color: '#ef4444', fontSize: 11, marginTop: 4 }}>{errors.ward}</p>}
                             </div>
 
-                            {/* Detail Address */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Địa chỉ chi tiết <span style={{ color: '#ef4444' }}>*</span></label>
                                 <input className={styles.formInput}
@@ -468,7 +466,7 @@ const ShopLocationManagement = () => {
                                 {errors.detailAddress && <p style={{ color: '#ef4444', fontSize: 11, marginTop: 4 }}>{errors.detailAddress}</p>}
                             </div>
 
-                            {/* Phone */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Số điện thoại</label>
                                 <input className={styles.formInput}
@@ -477,7 +475,7 @@ const ShopLocationManagement = () => {
                                     onChange={e => setFormData({ ...formData, phoneNumber: e.target.value })} />
                             </div>
 
-                            {/* Working Hours */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Giờ làm việc</label>
                                 <input className={styles.formInput}
@@ -486,7 +484,7 @@ const ShopLocationManagement = () => {
                                     onChange={e => setFormData({ ...formData, workingHours: e.target.value })} />
                             </div>
 
-                            {/* Is Active */}
+                            {}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 12, background: '#f9fafb', border: '1px solid #e5e7eb' }}>
                                 <button type="button"
                                     onClick={() => setFormData({ ...formData, isActive: !formData.isActive })}
@@ -499,7 +497,7 @@ const ShopLocationManagement = () => {
                                 </div>
                             </div>
 
-                            {/* Actions */}
+                            {}
                             <div style={{ display: 'flex', gap: 12, paddingTop: 4 }}>
                                 <button type="button" onClick={() => setShowModal(false)}
                                     style={{ flex: 1, padding: '12px 0', borderRadius: 10, border: '1px solid #e5e7eb', background: '#fff', fontSize: 13, fontWeight: 700, color: '#6b7280', cursor: 'pointer' }}>
@@ -516,9 +514,7 @@ const ShopLocationManagement = () => {
                 </div>
             )}
 
-            {/* ══════════════════════════════════════════════════════════════════
-                Confirm Dialog
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowConfirm(false)}>
                     <div className={styles.modalContent}

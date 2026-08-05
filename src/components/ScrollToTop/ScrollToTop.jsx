@@ -7,7 +7,7 @@ const ScrollToTop = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('accessToken'));
 
     useEffect(() => {
-        // Toggle visibility based on scroll position
+
         const toggleVisibility = () => {
             if (window.scrollY > 400) {
                 setIsVisible(true);
@@ -16,13 +16,13 @@ const ScrollToTop = () => {
             }
         };
 
-        // Listen for authentication changes to adjust positioning
+
         const checkAuth = () => {
             setIsLoggedIn(!!localStorage.getItem('accessToken'));
         };
 
         window.addEventListener('scroll', toggleVisibility);
-        // Custom event or simple intervals to check token changes if route changes
+
         window.addEventListener('storage', checkAuth);
         const interval = setInterval(checkAuth, 1000);
 

@@ -7,13 +7,13 @@ import styles from './Register.module.css';
 const Register = () => {
     const navigate = useNavigate();
 
-    // States
-    const [step, setStep] = useState(1); // 1: Register, 2: OTP, 3: Success
+
+    const [step, setStep] = useState(1); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Form States
+   
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -46,7 +46,7 @@ const Register = () => {
 
             console.log('Register success:', data.message);
             setSuccessMessage(data.message);
-            setStep(2); // Auto switch to OTP UI
+            setStep(2); 
         } catch (err) {
             console.error('Register error:', err);
             setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.');
@@ -67,7 +67,7 @@ const Register = () => {
             });
 
             console.log('OTP success:', data.message);
-            setStep(3); // Success step
+            setStep(3); 
         } catch (err) {
             console.error('OTP error:', err);
             setError(err.message || 'Mã OTP không chính xác hoặc đã hết hạn.');
@@ -105,7 +105,7 @@ const Register = () => {
             </AnimatePresence>
 
             <div className={styles.authTable}>
-                {/* Visual Brand Side */}
+                {}
                 <div className={styles.visualSide}>
                     <img
                         className={styles.visualImg}
@@ -122,7 +122,7 @@ const Register = () => {
                     </div>
                 </div>
 
-                {/* Form Side */}
+                {}
                 <div className={styles.formSide}>
                     <div className={styles.fadeIn}>
                         {step === 1 ? (

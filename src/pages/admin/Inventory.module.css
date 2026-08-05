@@ -24,7 +24,7 @@
     @apply bg-[#ab121c] text-white px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-[#850e15] transition-all shadow-sm;
 }
 
-/* Inventory Specifics */
+
 .summaryGrid {
     @apply grid grid-cols-1 md:grid-cols-4 gap-4 mb-2;
 }
@@ -65,7 +65,7 @@
     @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
 }
 
-/* Prices styling */
+
 .priceCost {
     @apply font-bold text-gray-700;
 }

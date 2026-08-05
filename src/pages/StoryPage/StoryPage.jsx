@@ -11,7 +11,7 @@ import heroBg5 from '../../assets/Ảnh UI/ảnh chi tiết/donghanh.png';
 import styles from './StoryPage.module.css';
 import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
-/* ───── animation preset ───── */
+
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -26,7 +26,7 @@ const fadeUpDelay = (delay = 0) => ({
     transition: { duration: 0.8, delay },
 });
 
-/* ───── section data ───── */
+
 const beliefCards = [
     {
         id: 1,
@@ -69,7 +69,7 @@ export default function StoryPage() {
     return (
         <div className={styles.page}>
 
-            {/* ── S2: HERO STORY ─────────────────────── */}
+            {}
             <section className={styles.heroSection}>
                 <div className={styles.heroBgContainer}>
                     <img
@@ -100,11 +100,11 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S3: CÁT RA ĐỜI ────────────────────── */}
+            {}
             <section className={styles.originSection}>
                 <div className={styles.container}>
                     <div className={styles.originGrid}>
-                        {/* LEFT: image */}
+                        {}
                         <motion.div
                             className={styles.originImgWrap}
                             initial={{ opacity: 0, x: -60 }}
@@ -118,7 +118,7 @@ export default function StoryPage() {
                                 className={styles.originImg}
                             />
                         </motion.div>
-                        {/* RIGHT: content */}
+                        {}
                         <motion.div className={styles.originContent} {...fadeUp}>
                             <span className={styles.sectionNumber}>01</span>
                             <h2 className={styles.sectionTitle}>CÁT RA ĐỜI NHƯ THẾ NÀO?</h2>
@@ -134,11 +134,11 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S4: BANNER ĐỎ ─────────────────────── */}
+            {}
             <section className={styles.redBannerSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.redBanner} {...fadeUp}>
-                        {/* Decorative floral */}
+                        {}
                         <span className={styles.floralLeft}>✦</span>
                         <span className={styles.floralRight}>✦</span>
 
@@ -162,7 +162,7 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S5: ĐIỀU CÁT TIN TƯỞNG ────────────── */}
+            {}
             <section className={styles.beliefSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.sectionHeader} {...fadeUp}>
@@ -190,11 +190,11 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S6: KHÔNG BÁN PHÉP MÀU ─────────────── */}
+            {}
             <section className={styles.truthSection}>
                 <div className={styles.container}>
                     <div className={styles.truthGrid}>
-                        {/* LEFT: content */}
+                        {}
                         <motion.div className={styles.truthContent} {...fadeUp}>
                             <span className={styles.sectionNumber}>04</span>
                             <h2 className={styles.truthTitle}>CHÚNG TÔI KHÔNG BÁN PHÉP MÀU.</h2>
@@ -211,7 +211,7 @@ export default function StoryPage() {
                                 ))}
                             </ul>
                         </motion.div>
-                        {/* RIGHT: image */}
+                        {}
                         <motion.div
                             className={styles.truthImgWrap}
                             initial={{ opacity: 0, x: 60 }}
@@ -229,7 +229,7 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S7: GIÁ TRỊ CỐT LÕI ──────────────── */}
+            {}
             <section className={styles.valuesSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.sectionHeader} {...fadeUp}>
@@ -254,11 +254,11 @@ export default function StoryPage() {
                 </div>
             </section>
 
-            {/* ── S8: CTA ĐỎ CUỐI TRANG ─────────────── */}
+            {}
             <section className={styles.ctaSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.ctaBanner} {...fadeUp}>
-                        {/* Decorative */}
+                        {}
                         <span className={styles.ctaFloral}>✦</span>
 
                         <div className={styles.ctaLeft}>

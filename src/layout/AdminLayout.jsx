@@ -7,7 +7,7 @@ const AdminLayout = ({ children }) => {
     const [showProfile, setShowProfile] = useState(false);
     const profileRef = useRef(null);
 
-    // Close dropdown when clicking outside
+ 
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -32,7 +32,7 @@ const AdminLayout = ({ children }) => {
             <AdminSidebar />
 
             <div className={styles.mainContent}>
-                {/* Admin Header */}
+                {}
                 <header className={styles.header}>
                     <div className={styles.searchBar}>
                         <Search size={18} className="text-gray-400" />
@@ -40,7 +40,7 @@ const AdminLayout = ({ children }) => {
                     </div>
 
                     <div className={styles.headerActions}>
-                        {/* User Profile with Dropdown */}
+                        {}
                         <div ref={profileRef} style={{ position: 'relative' }}>
                             <div
                                 className={styles.userProfile}
@@ -58,7 +58,7 @@ const AdminLayout = ({ children }) => {
                                 <ChevronDown size={14} style={{ color: '#9ca3af', transform: showProfile ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
                             </div>
 
-                            {/* Profile Dropdown */}
+                            {}
                             {showProfile && (
                                 <div style={{
                                     position: 'absolute',
@@ -74,7 +74,7 @@ const AdminLayout = ({ children }) => {
                                     animation: 'fadeIn 0.2s ease'
                                 }}>
 
-                                    {/* Logout */}
+                                    {}
                                     <div style={{ borderTop: '1px solid #f3f4f6' }}>
                                         <div
                                             onClick={handleLogout}
@@ -97,7 +97,7 @@ const AdminLayout = ({ children }) => {
                 </header>
 
 
-                {/* Page Content */}
+                {}
                 <main className={styles.pageBody}>
                     {children}
                 </main>

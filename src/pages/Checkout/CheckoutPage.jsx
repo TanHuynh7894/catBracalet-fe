@@ -16,7 +16,7 @@ import { useToast } from '../../context/ToastContext';
 import { useCart } from '../../context/CartContext';
 import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+
 
 
 const PAYMENT_METHODS = [
@@ -31,7 +31,7 @@ const fadeUp = {
     transition: { duration: 0.5 }
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
+
 const CheckoutPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -67,7 +67,7 @@ const CheckoutPage = () => {
 
 
 
-    // Voucher state
+
     const [voucherCode, setVoucherCode] = useState('');
     const [appliedVoucher, setAppliedVoucher] = useState(null);
     const [availableVouchers, setAvailableVouchers] = useState([]);
@@ -85,7 +85,7 @@ const CheckoutPage = () => {
             const user = JSON.parse(userStr);
             setCurrentUser(user);
 
-            // Auto-fill form with user info
+
             setForm(prev => ({
                 ...prev,
                 fullName: user.fullName || '',
@@ -107,7 +107,7 @@ const CheckoutPage = () => {
                 setAddresses(addressList);
 
 
-                // Find default address
+
                 const defaultAddr = addressList.find(a => a.isDefault) || addressList[0];
                 if (defaultAddr) {
                     setSelectedAddress(defaultAddr);
@@ -128,19 +128,18 @@ const CheckoutPage = () => {
         loadInitialData();
     }, [navigate, showToast]);
 
-    // Handle Shipping Fee Calculation when address changes or cart items change
+
     useEffect(() => {
         const fetchShippingFee = async () => {
-            // Xác định danh sách ID sản phẩm thực tế đang checkout
+
             const actualCartItemIds = selectedCartItemIds.length > 0
                 ? selectedCartItemIds
                 : cartItems.map(item => item.cartItemId);
 
-            // Chỉ gọi API nếu có địa chỉ được chọn
+
             if (selectedAddress?.id) {
                 setIsCalculatingShip(true);
                 try {
-                    // API mới yêu cầu addressId, userId và cartItemIds
                     const data = await calculateShippingFee(
                         selectedAddress.id,
                         currentUser?.id,
@@ -160,11 +159,11 @@ const CheckoutPage = () => {
         };
 
         fetchShippingFee();
-        // Sử dụng JSON.stringify cho array để tránh re-render lặp do tham chiếu array mới
+
     }, [selectedAddress?.id, currentUser?.id, JSON.stringify(selectedCartItemIds), cartItems.length]);
 
 
-    // Body scroll lock when modal is open
+
     useEffect(() => {
         if (showVoucherModal) {
             document.body.style.overflow = 'hidden';
@@ -233,7 +232,7 @@ const CheckoutPage = () => {
         }));
     };
 
-    // ── Voucher Logic ───────────────────────────────────────────────────────
+
     const handleApplyVoucher = async (codeToApply = voucherCode) => {
         if (!codeToApply.trim()) return;
         setIsApplyingVoucher(true);
@@ -278,7 +277,7 @@ const CheckoutPage = () => {
         handleApplyVoucher(v.code);
     };
 
-    // ── Image Helper ────────────────────────────────────────────────────────
+
     const getProductImage = (item) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
         let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
@@ -291,7 +290,7 @@ const CheckoutPage = () => {
         return `${baseUrl}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
     };
 
-    // ── Totals Calculation ──────────────────────────────────────────────────
+
     const subtotal = useMemo(() => {
         return cartItems.reduce((sum, item) => {
             const price = Number(item.variantDetails?.extraPrice ?? item.unitPrice ?? 0);
@@ -303,7 +302,7 @@ const CheckoutPage = () => {
         if (!appliedVoucher) return 0;
         const val = parseFloat(appliedVoucher.discountValue);
         if (appliedVoucher.discountType === 'PERCENT') {
-            // Apply percentage discount on both Subtotal and Shipping Fee as requested
+
             return ((subtotal + shippingFee) * val) / 100;
         }
         return val;
@@ -311,7 +310,7 @@ const CheckoutPage = () => {
 
     const total = Math.max(0, (subtotal + shippingFee) - discountAmount);
 
-    // ── Place Order Logic ───────────────────────────────────────────────────
+
     const handlePlaceOrder = async () => {
         if (!currentUser) return;
         if (!selectedAddress && (!form.province || !form.district || !form.ward || !form.address)) {
@@ -331,9 +330,9 @@ const CheckoutPage = () => {
             const response = await checkout(payload);
 
             if (response.payment?.checkoutUrl) {
-                // Save full response for the success page to display invoice data
+
                 sessionStorage.setItem('lastCheckout', JSON.stringify(response));
-                // Redirect to PayOS payment page
+
                 window.location.href = response.payment.checkoutUrl;
             } else {
                 showToast('Có lỗi xảy ra khi tạo thanh toán', 'error');
@@ -356,14 +355,14 @@ const CheckoutPage = () => {
                     <h1 className={styles.title}>THANH TOÁN</h1>
                 </header>
 
-                {/* ── PROMO/VOUCHER BAR (Now moved to sidebar) ────────────────── */}
+                {}
 
 
-                {/* ── MAIN LAYOUT ───────────────────────────────────────────── */}
+                {}
                 <div className={styles.mainGrid}>
-                    {/* LEFT: CUSTOMER INFO & ADDRESS */}
+                    {}
                     <div className={styles.leftCol}>
-                        {/* ── Customer Info ────────────────────────────────── */}
+                        {}
                         <motion.section {...fadeUp} className={styles.section}>
                             <h2 className={styles.sectionTitle}>THÔNG TIN KHÁCH HÀNG</h2>
                             <div className={styles.sectionDivider}><span className={styles.sectionOrn}>❧</span></div>
@@ -395,7 +394,7 @@ const CheckoutPage = () => {
                             </div>
                         </motion.section>
 
-                        {/* ── Delivery Address ─────────────────────────────── */}
+                        {}
                         <motion.section {...fadeUp} className={styles.section} style={{ marginTop: '20px' }}>
                             <div className={styles.sectionHeader}>
                                 <h2 className={styles.sectionTitle}>ĐỊA CHỈ NHẬN HÀNG</h2>
@@ -426,7 +425,7 @@ const CheckoutPage = () => {
                                     ))}
                                 </div>
                             ) : (
-                                /* Manual address form if no saved addresses */
+
                                 <div className={styles.formGrid}>
                                     <div className={`${styles.formField} ${styles.spanFull}`}>
                                         <div className={styles.tripleGrid}>
@@ -475,14 +474,14 @@ const CheckoutPage = () => {
                     </div>
 
 
-                    {/* RIGHT: ORDER SUMMARY */}
+                    {}
                     <div className={styles.rightCol}>
                         <div className={styles.stickySummary}>
                             <motion.div {...fadeUp} className={styles.summaryCard}>
                                 <h3 className={styles.summaryTitle}>THÔNG TIN ĐƠN HÀNG</h3>
                                 <div className={styles.summaryDivider}><span className={styles.summaryOrn}>❧</span></div>
 
-                                {/* Product List */}
+                                {}
                                 <div className={styles.productList}>
                                     {cartItems.map((item) => (
                                         <div key={item.cartItemId} className={styles.productItem}>
@@ -502,7 +501,7 @@ const CheckoutPage = () => {
                                     ))}
                                 </div>
 
-                                {/* Coupon Input Section (Integrated) */}
+                                {}
                                 <div className={styles.sidebarCoupon}>
                                     <div className={styles.couponHeader}>
                                         <span className={styles.couponLabel}>MÃ ƯU ĐÃI</span>
@@ -530,7 +529,7 @@ const CheckoutPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Totals */}
+                                {}
                                 <div className={styles.totalsSection}>
                                     <div className={styles.totalRow}>
                                         <span>Tạm tính</span>
@@ -562,7 +561,7 @@ const CheckoutPage = () => {
                                     <span className={styles.grandTotalVal}>{formatVND(total)}</span>
                                 </div>
 
-                                {/* Payment */}
+                                {}
                                 <div className={styles.paymentSection}>
                                     <p className={styles.paymentTitle}>PHƯƠNG THỨC THANH TOÁN</p>
                                     <div className={styles.paymentGrid}>
@@ -608,7 +607,7 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
-            {/* Voucher Modal */}
+            {}
             {showVoucherModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowVoucherModal(false)}>
                     <motion.div

@@ -1,4 +1,4 @@
-/* ── Design Tokens ─────────────────────────────────────────────── */
+
 :root {
     --primary: #ab121c;
     --primary-dark: #850e15;
@@ -35,7 +35,7 @@
     border: 1px solid var(--border);
 }
 
-/* ── Header ────────────────────────────────────────────────────── */
+
 .header {
     text-align: center;
     margin-bottom: 40px;
@@ -67,7 +67,7 @@
     line-height: 1.6;
 }
 
-/* ── Order Summary Card (Info Block) ───────────────────────────── */
+
 .orderSummary {
     background: #FFFAF5;
     border: 1px solid var(--gold-light);
@@ -164,7 +164,6 @@
     margin-bottom: 2px;
 }
 
-/* ── Items Section ────────────────────────────────────────────── */
 .itemsSection {
     margin-bottom: 32px;
 }
@@ -219,7 +218,7 @@
     color: var(--text);
 }
 
-/* ── Pricing Breakdown ────────────────────────────────────────── */
+
 .pricingSection {
     background: #fdfdfd;
     border-radius: 12px;
@@ -262,7 +261,7 @@
     color: var(--primary);
 }
 
-/* ── Info Box (Vouchers, Notices) ────────────────────────────── */
+
 .infoBox {
     display: flex;
     align-items: center;
@@ -282,7 +281,7 @@
     flex-shrink: 0;
 }
 
-/* ── Actions ───────────────────────────────────────────────────── */
+
 .actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -327,7 +326,7 @@
     border-color: var(--gold);
 }
 
-/* ── Misc ──────────────────────────────────────────────────────── */
+
 .loadingState {
     display: flex;
     flex-direction: column;
@@ -361,7 +360,7 @@
     text-decoration: none;
 }
 
-/* ── Responsive ────────────────────────────────────────────────── */
+
 @media (max-width: 640px) {
     .card {
         padding: 24px;

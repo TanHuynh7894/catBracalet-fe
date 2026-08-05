@@ -25,7 +25,7 @@ const UserManagement = () => {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('view'); // 'view', 'edit', 'add'
+    const [modalMode, setModalMode] = useState('view'); 
     const [selectedUser, setSelectedUser] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -396,7 +396,7 @@ const UserManagement = () => {
     );
 };
 
-// --- Sub components moved outside to prevent focus loss during re-renders ---
+
 
 const UserDetailModal = ({
     show, user, mode, formData, avatarPreview, handleFileChange, isProcessing,
@@ -405,7 +405,7 @@ const UserDetailModal = ({
     if (!show || !user) return null;
     const u = user;
 
-    // Filter out roles user already has
+  
     const unassignedRoles = availableRoles.filter(
         ar => !u.roles?.some(ur => ur.id === ar.id)
     );
@@ -508,7 +508,7 @@ const UserDetailModal = ({
                         </>
                     ) : (
                         <form onSubmit={handleUpdateUser} className="space-y-4">
-                            {/* Avatar Upload */}
+                            {}
                             <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                                 <div className="relative group">
                                     <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-200 flex items-center justify-center">

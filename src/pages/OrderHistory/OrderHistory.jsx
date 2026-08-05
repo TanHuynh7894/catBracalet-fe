@@ -41,7 +41,7 @@ const OrderHistory = () => {
                 }
                 const userData = JSON.parse(userDataStr);
                 const data = await getOrdersByUserId(userData.id);
-                // Handle nested array structure [ [orders] ] or [orders]
+                
                 let finalOrders = [];
                 if (Array.isArray(data)) {
                     if (Array.isArray(data[0])) {

@@ -84,7 +84,7 @@ const ShippingAddresses = () => {
                 isDefault: address.isDefault || false
             });
 
-            // Load districts and wards if they exist
+           
             if (address.provinceId) {
                 try {
                     const d = await getDistricts(address.provinceId);
@@ -202,7 +202,7 @@ const ShippingAddresses = () => {
             const userDataStr = localStorage.getItem('user');
             const userData = JSON.parse(userDataStr);
 
-            // Strip IDs before sending to backend as requested
+         
             const { provinceId, districtId, wardId, ...finalData } = formData;
 
             if (editingAddress) {

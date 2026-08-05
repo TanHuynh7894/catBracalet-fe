@@ -18,7 +18,7 @@ const AdminOrderDetail = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
 
-    // Shipment specific states
+
     const [packageInfo, setPackageInfo] = useState({
         weight: 500,
         width: 10,
@@ -37,7 +37,7 @@ const AdminOrderDetail = () => {
             const data = await orderService.getOrderById(id);
             setOrder(data);
 
-            // If order is already shipping or completed, track it
+           
             if (data.status === 'SHIPPING' || data.status === 'COMPLETED') {
                 fetchTracking();
             }
@@ -98,7 +98,7 @@ const AdminOrderDetail = () => {
             const payload = {
                 orderId: id,
                 rateId: selectedRateId,
-                payer: 1, // Default to shop pays
+                payer: 1, 
                 ...packageInfo,
                 note: "Hàng trang sức, vui lòng giao nhẹ tay."
             };
@@ -155,7 +155,7 @@ const AdminOrderDetail = () => {
 
     return (
         <div className={styles.container}>
-            {/* Header */}
+            {}
             <div className={styles.header}>
                 <div className="flex items-center gap-4">
                     <button onClick={() => navigate('/admin/orders')} className={styles.backBtn}>
@@ -184,9 +184,9 @@ const AdminOrderDetail = () => {
             </div>
 
             <div className={styles.grid}>
-                {/* Left Column - Product Details & Shipment */}
+                {}
                 <div className={styles.leftCol}>
-                    {/* Products Card */}
+                    {}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <ShoppingBag size={18} />
@@ -194,7 +194,7 @@ const AdminOrderDetail = () => {
                         </div>
                         <div className={styles.itemList}>
                             {order.items?.map((item, idx) => {
-                                // Real API: item.variant.productVariantMappings[0].product
+                                
                                 const mapping = item.variant?.productVariantMappings?.[0];
                                 const product = mapping?.product;
                                 const variantInfo = [item.variant?.color, item.variant?.size].filter(Boolean).join(' - ');
@@ -235,7 +235,7 @@ const AdminOrderDetail = () => {
                         </div>
                     </div>
 
-                    {/* Shipment Management Card (Added Flow) */}
+                    {}
                     {order.status === 'CONFIRMED' && (
                         <div className={styles.card}>
                             <div className={styles.cardHeader}>
@@ -341,7 +341,7 @@ const AdminOrderDetail = () => {
                         </div>
                     )}
 
-                    {/* Tracking Info Card (If Shipping) */}
+                    {}
                     {(order.status === 'SHIPPING' || order.status === 'DELIVERED' || trackingInfo) && (
                         <div className={styles.card}>
                             <div className={styles.cardHeader}>
@@ -373,7 +373,7 @@ const AdminOrderDetail = () => {
                         </div>
                     )}
 
-                    {/* Timeline Card */}
+                    {}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <Truck size={18} />
@@ -427,9 +427,9 @@ const AdminOrderDetail = () => {
                     </div>
                 </div>
 
-                {/* Right Column - Customer & Actions */}
+                {}
                 <div className={styles.rightCol}>
-                    {/* Status Update Card */}
+                    {}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <Info size={18} />
@@ -461,7 +461,7 @@ const AdminOrderDetail = () => {
                         </div>
                     </div>
 
-                    {/* Customer Info Card */}
+                    {}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <User size={18} />
@@ -488,7 +488,7 @@ const AdminOrderDetail = () => {
                         </div>
                     </div>
 
-                    {/* Shipping Address Card */}
+                    {}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
                             <MapPin size={18} />

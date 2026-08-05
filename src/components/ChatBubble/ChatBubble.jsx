@@ -19,7 +19,7 @@ const STATUS_LABEL = {
 
 const ChatBubble = () => {
     const [open, setOpen] = useState(false);
-    const [view, setView] = useState('list'); // 'list' | 'chat'
+    const [view, setView] = useState('list'); 
     const [tickets, setTickets] = useState([]);
     const [loadingTickets, setLoadingTickets] = useState(false);
     const [activeTicket, setActiveTicket] = useState(null);
@@ -33,12 +33,12 @@ const ChatBubble = () => {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
 
-    // Current user ID
+   
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     const myId = currentUser.id || currentUser._id;
     const isLoggedIn = !!localStorage.getItem('accessToken');
 
-    // Hàm lấy tên từ ID
+   
     const fetchUserName = useCallback(async (uid) => {
         if (!uid || userCache[uid]) return;
         try {
@@ -54,7 +54,7 @@ const ChatBubble = () => {
         }
     }, [userCache, myId]);
 
-    // ---- Socket.IO ----
+ 
     const { sendMessage, joinTicket } = useSupportSocket({
         ticketId: activeTicket?.id ?? null,
         enabled: isLoggedIn,
@@ -62,7 +62,7 @@ const ChatBubble = () => {
             const arr = Array.isArray(data) ? data : (data?.messages || []);
             setMessages(arr);
             setLoadingMsgs(false);
-            // Lấy tên tất cả người gửi
+
             arr.forEach(m => fetchUserName(m.sender_id));
         },
         onNewMessage: (msg) => {
@@ -78,19 +78,19 @@ const ChatBubble = () => {
         },
     });
 
-    // ---- Auto scroll ----
+
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // ---- Fetch my tickets khi mở ----
+
     const fetchTickets = useCallback(async () => {
         if (!isLoggedIn) return;
         setLoadingTickets(true);
         try {
             const data = await getMyTickets();
             setTickets(data || []);
-        } catch { /* silent */ } finally {
+        } catch { } finally {
             setLoadingTickets(false);
         }
     }, [isLoggedIn]);
@@ -102,7 +102,7 @@ const ChatBubble = () => {
         }
     }, [open, fetchTickets]);
 
-    // ---- Mở ticket ----
+
     const handleOpenTicket = async (ticket) => {
         setActiveTicket(ticket);
         setMessages([]);
@@ -157,7 +157,7 @@ const ChatBubble = () => {
         <div className={styles.wrapper}>
             {open && (
                 <div className={styles.window}>
-                    {/* Header */}
+                    {}
                     <div className={styles.header}>
                         <div className={styles.headerLeft}>
                             {view === 'chat' && (

@@ -31,7 +31,7 @@ const EMPTY_FORM = {
     status: 'ACTIVE',
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 const VoucherManagement = () => {
     const { showToast } = useToast();
 
@@ -40,18 +40,18 @@ const VoucherManagement = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('ALL');
 
-    // Modal states
+
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
+    const [modalMode, setModalMode] = useState('add');
     const [selectedVoucher, setSelectedVoucher] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    // Form
+   
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
-    // ─── Fetch ────────────────────────────────────────────────────────────────
+    
     const fetchVouchers = async (isInitial = false) => {
         if (isInitial) setLoading(true);
         try {
@@ -66,7 +66,7 @@ const VoucherManagement = () => {
 
     useEffect(() => { fetchVouchers(true); }, []);
 
-    // ─── Derived ──────────────────────────────────────────────────────────────
+    
     const filtered = useMemo(() => {
         return vouchers.filter(v => {
             const matchSearch =
@@ -84,7 +84,7 @@ const VoucherManagement = () => {
         percent: vouchers.filter(v => v.discountType === 'PERCENT').length,
     }), [vouchers]);
 
-    // ─── Modal helpers ────────────────────────────────────────────────────────
+    
     const openAdd = () => {
         setModalMode('add');
         setSelectedVoucher(null);
@@ -109,7 +109,7 @@ const VoucherManagement = () => {
         setShowModal(true);
     };
 
-    // ─── Validation ───────────────────────────────────────────────────────────
+    
     const validate = () => {
         const e = {};
         if (!formData.code.trim()) e.code = 'Bắt buộc';
@@ -129,7 +129,7 @@ const VoucherManagement = () => {
         return e;
     };
 
-    // ─── Submit ───────────────────────────────────────────────────────────────
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         const errs = validate();
@@ -163,7 +163,7 @@ const VoucherManagement = () => {
         }
     };
 
-    // ─── Delete ───────────────────────────────────────────────────────────────
+    
     const handleDelete = async () => {
         setIsProcessing(true);
         try {
@@ -178,7 +178,7 @@ const VoucherManagement = () => {
         }
     };
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
+    
     const isExpired = (endDate) => new Date(endDate) < new Date();
 
     const getStatusBadge = (v) => {
@@ -221,7 +221,7 @@ const VoucherManagement = () => {
         );
     };
 
-    // ─── Render ───────────────────────────────────────────────────────────────
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">
             <Loader2 size={40} className="animate-spin text-rose-800 mb-4" />
@@ -232,7 +232,7 @@ const VoucherManagement = () => {
     return (
         <div className={styles.dashboard}>
 
-            {/* ── Header ──────────────────────────────────────────────────── */}
+            {}
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.title}>Quản lý Voucher</h1>
@@ -243,7 +243,7 @@ const VoucherManagement = () => {
                 </button>
             </div>
 
-            {/* ── Stats Grid ──────────────────────────────────────────────── */}
+            {}
             <div className={styles.statsGrid}>
                 {[
                     { label: 'Tổng voucher', value: stats.total, icon: <Ticket size={20} />, color: '#ab121c', bg: '#FDF2F2' },
@@ -263,9 +263,9 @@ const VoucherManagement = () => {
                 ))}
             </div>
 
-            {/* ── Table ───────────────────────────────────────────────────── */}
+            {}
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-                {/* Toolbar */}
+                {}
                 <div className={styles.toolbar}>
                     <div className={styles.searchBox}>
                         <Search size={16} style={{ color: '#9ca3af' }} />
@@ -292,7 +292,7 @@ const VoucherManagement = () => {
                     </span>
                 </div>
 
-                {/* Table */}
+                {}
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                         <thead>
@@ -314,7 +314,7 @@ const VoucherManagement = () => {
                                 </tr>
                             ) : filtered.map(v => (
                                 <tr key={v.id} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
-                                    {/* Code */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-3">
                                             <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#ab121c' }}>
@@ -326,9 +326,9 @@ const VoucherManagement = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    {/* Discount */}
+                                    {}
                                     <td style={{ padding: '16px' }}>{getDiscountDisplay(v)}</td>
-                                    {/* Quantity */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-1.5">
                                             <Hash size={13} className="text-gray-300" />
@@ -336,7 +336,7 @@ const VoucherManagement = () => {
                                             <span className="text-gray-400 text-xs">lượt</span>
                                         </div>
                                     </td>
-                                    {/* Dates */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="text-xs space-y-0.5">
                                             <div className="flex items-center gap-1.5 text-gray-500">
@@ -349,9 +349,9 @@ const VoucherManagement = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    {/* Status */}
+                                    {}
                                     <td style={{ padding: '16px' }}>{getStatusBadge(v)}</td>
-                                    {/* Actions */}
+                                    {}
                                     <td style={{ padding: '16px', textAlign: 'center' }}>
                                         <div className="flex justify-center gap-1">
                                             <button
@@ -377,13 +377,11 @@ const VoucherManagement = () => {
                 </div>
             </div>
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Add / Edit Voucher
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} style={{ width: 580 }} onClick={e => e.stopPropagation()}>
-                        {/* Header */}
+                        {}
                         <div className="flex justify-between items-center px-7 py-5 border-b border-gray-100">
                             <div className="flex items-center gap-3">
                                 <div className="p-2.5 rounded-xl bg-rose-50">
@@ -403,9 +401,9 @@ const VoucherManagement = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
+                        {}
                         <form onSubmit={handleSubmit} className="px-7 py-6 space-y-5">
-                            {/* Code */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Mã Voucher <span className="text-red-500">*</span>
@@ -424,7 +422,7 @@ const VoucherManagement = () => {
                                 {errors.code && <p className="text-xs text-red-500 mt-1">{errors.code}</p>}
                             </div>
 
-                            {/* Discount Type + Value */}
+                            {}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className={styles.formLabel}>Loại giảm giá <span className="text-red-500">*</span></label>
@@ -461,7 +459,7 @@ const VoucherManagement = () => {
                                 </div>
                             </div>
 
-                            {/* Quantity */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Số lượng sử dụng <span className="text-red-500">*</span>
@@ -481,7 +479,7 @@ const VoucherManagement = () => {
                                 {errors.quantity && <p className="text-xs text-red-500 mt-1">{errors.quantity}</p>}
                             </div>
 
-                            {/* Date Range */}
+                            {}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className={styles.formLabel}>Ngày bắt đầu <span className="text-red-500">*</span></label>
@@ -505,7 +503,7 @@ const VoucherManagement = () => {
                                 </div>
                             </div>
 
-                            {/* Status */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>Trạng thái</label>
                                 <div className="flex items-center gap-4 mt-2">
@@ -530,7 +528,7 @@ const VoucherManagement = () => {
                                 </div>
                             </div>
 
-                            {/* Footer Buttons */}
+                            {}
                             <div className="flex gap-3 pt-2">
                                 <button
                                     type="button"
@@ -555,9 +553,7 @@ const VoucherManagement = () => {
                 </div>
             )}
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Delete Confirm
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div

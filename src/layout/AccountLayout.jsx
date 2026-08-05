@@ -46,7 +46,6 @@ const AccountLayout = ({ activeTab }) => {
             const data = new FormData();
             data.append('avatar', file);
 
-            // Update local preview immediately for UX
             const reader = new FileReader();
             reader.onloadend = () => {
                 setProfile(prev => ({ ...prev, avatar: reader.result }));
@@ -56,13 +55,12 @@ const AccountLayout = ({ activeTab }) => {
             const updated = await updateProfile(userData.id, data);
             setProfile(updated);
 
-            // Sync with localStorage
+
             localStorage.setItem('user', JSON.stringify({
                 ...userData,
                 avatar: updated.avatar
             }));
 
-            // Dispatch storage event to notify Header
             window.dispatchEvent(new Event('storage'));
         } catch (err) {
             console.error('Failed to update avatar:', err);
@@ -77,10 +75,10 @@ const AccountLayout = ({ activeTab }) => {
         { path: '/shipping-addresses', label: 'Địa chỉ giao hàng', icon: MapPin },
     ];
 
-    // Helper for VIP Name
+
     const getVipName = () => profile?.vipLevel?.levelName || 'Thành viên mới';
 
-    // Helper for progress bar
+
     const getProgress = () => {
         if (!profile?.vipLevel) return '0%';
         const names = ['Đồng', 'Bạc', 'Silver', 'Gold', 'Vàng', 'Kim Cương'];
@@ -92,7 +90,7 @@ const AccountLayout = ({ activeTab }) => {
     return (
         <div className="flex flex-col min-h-screen bg-background">
             <main className="pt-16 pb-20 max-w-[1400px] mx-auto px-4 md:px-10 w-full">
-                {/* User Header Section */}
+                {}
                 <Reveal className="mb-12">
                     <header className="flex flex-col md:flex-row items-center gap-6 mb-0">
                         <div className="relative group">
@@ -110,7 +108,7 @@ const AccountLayout = ({ activeTab }) => {
                                     <User size={64} />
                                 )}
 
-                                {/* Upload Overlay */}
+                                {}
                                 <label className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-[2px]">
                                     <Camera size={24} className="text-white mb-1" />
                                     <span className="text-[10px] text-white font-bold uppercase tracking-wider">Đổi ảnh</span>
@@ -118,7 +116,7 @@ const AccountLayout = ({ activeTab }) => {
                                 </label>
                             </motion.div>
 
-                            {/* Active Status Dot */}
+                            {}
                             {profile?.status === 'ACTIVE' && (
                                 <div className="absolute bottom-2 right-2 w-5 h-5 bg-emerald-500 border-4 border-background rounded-full z-20 shadow-lg" title="Đang hoạt động"></div>
                             )}
@@ -134,71 +132,18 @@ const AccountLayout = ({ activeTab }) => {
                                     ))}
                                 </div>
                             </div>
-                            {/* Hide VIP badge for now 
-                            <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary text-primary text-[10px] uppercase tracking-widest mb-4 font-semibold">
-                                {getVipName()}
-                            </span>
-                            */}
+                            {}
                             <p className="font-body text-body-md text-on-surface-variant italic">
                                 Thành viên từ {profile ? new Date(profile.createdAt).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' }) : '...'}
                             </p>
                         </div>
                     </header>
 
-                    {/* Hide Rewards section as requested 
-                    <section className="lg:col-span-8 relative bg-primary overflow-hidden rounded-[32px] p-6 md:p-10 text-white h-full flex flex-col justify-center shadow-lg">
-                        <div className="relative z-10 w-full space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h3 className="font-headline text-headline-md tracking-tight">Cát Rewards</h3>
-                                <div className="bg-white/5 backdrop-blur-md border border-white/10 p-2 px-6 rounded-2xl flex items-center gap-3 shadow-lg">
-                                    <ShieldCheck color="#D4AF37" size={20} />
-                                    <p className="text-sm uppercase tracking-widest font-bold">{getVipName()}</p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-end text-[10px] uppercase tracking-[0.2em] font-bold">
-                                    <span className={getVipName() === 'Đồng' ? 'text-yellow-400' : 'text-white/60'}>Đồng</span>
-                                    <span className={['Bạc', 'Silver'].includes(getVipName()) ? 'text-yellow-400' : 'text-white/60'}>Bạc</span>
-                                    <span className={['Vàng', 'Gold'].includes(getVipName()) ? 'text-yellow-400' : 'text-white/60'}>Vàng</span>
-                                    <span className={['Kim Cương', 'Diamond'].includes(getVipName()) ? 'text-yellow-400' : 'text-white/60'}>Kim Cương</span>
-                                </div>
-                                <div className="relative h-2 bg-white/5 rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: getProgress() }}
-                                        transition={{ duration: 1.5, ease: "easeOut" }}
-                                        className="absolute top-0 left-0 h-full bg-white/30 rounded-full"
-                                    ></motion.div>
-                                </div>
-                                <div className="flex justify-between items-center pt-2">
-                                    <p className="font-body text-[13px] text-white/70">
-                                        Tiến độ tích lũy: <span className="font-bold text-white">{profile?.totalSpending ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(profile.totalSpending) : '0₫'}</span>
-                                    </p>
-                                    <div className="text-right">
-                                        <p className="font-headline text-2xl font-bold tracking-tighter text-yellow-500">
-                                            {profile?.vipLevel?.discountPercent || 0}% <span className="text-[10px] text-white/50 uppercase tracking-widest font-normal">Discount</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="pt-4 border-t border-white/20">
-                                <p className="text-[11px] font-bold flex items-center gap-2">
-                                    <ShieldCheck size={14} className="text-yellow-400" />
-                                    ĐẶC QUYỀN {getVipName().toUpperCase()}:
-                                    <span className="font-medium opacity-90">{profile?.vipLevel?.benefits || 'Giảm giá cực sốc cho mọi đơn hàng'}</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/4 blur-[100px]"></div>
-                        <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-yellow-500/5 rounded-full blur-[60px]"></div>
-                    </section>
-                    */}
+                    {}
                 </Reveal>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
-                    {/* Sidebar Navigation */}
+                    {}
                     <aside className="lg:col-span-3">
                         <StaggerContainer className="flex flex-col space-y-1">
                             {navItems.map((item, idx) => (

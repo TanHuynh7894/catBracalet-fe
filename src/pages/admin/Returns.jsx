@@ -26,7 +26,7 @@ const Returns = () => {
                 </div>
             </div>
 
-            {/* Summary Cards Row - Arranged in 1 row (7 columns) */}
+            {}
             <div className="grid grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
                 <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gray-100 group-hover:bg-[#ab121c] transition-colors" />
@@ -42,7 +42,7 @@ const Returns = () => {
                 ))}
             </div>
 
-            {/* Main Table Content */}
+            {}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="flex border-b border-gray-100 bg-gray-50/50">
                     {['Tất cả', 'Đang hoàn trả'].map((tab, idx) => (
@@ -69,7 +69,7 @@ const Returns = () => {
                     </div>
                 </div>
 
-                {/* Sub-Filters */}
+                {}
                 <div className="p-3 bg-gray-50/30 flex gap-3">
                     <button className="px-4 py-1.5 bg-white border border-gray-200 rounded text-xs font-medium flex items-center gap-2">Xem tất cả <ChevronDown size={12} /></button>
                     <button className="px-4 py-1.5 bg-white border border-gray-200 rounded text-xs font-medium flex items-center gap-2">Ngày tạo <ChevronDown size={12} /></button>

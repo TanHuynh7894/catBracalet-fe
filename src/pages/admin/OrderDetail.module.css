@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════
-   Admin Order Detail - CSS Module
-   ═══════════════════════════════════════════════════════════════ */
+
 
 .container {
     background: #f8fafc;
@@ -8,7 +6,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-/* ── Header ──────────────────────────────────────────────────── */
+
 .header {
     display: flex;
     align-items: center;
@@ -95,7 +93,7 @@
     background: #f8fafc;
 }
 
-/* ── Layout Grid ─────────────────────────────────────────────── */
+
 .grid {
     display: grid;
     grid-template-columns: 1fr minmax(0, 340px);
@@ -110,7 +108,7 @@
     gap: 20px;
 }
 
-/* ── Cards ───────────────────────────────────────────────────── */
+
 .card {
     background: #fff;
     border-radius: 14px;
@@ -135,7 +133,7 @@
     margin: 0;
 }
 
-/* ── Product Items ───────────────────────────────────────────── */
+
 .itemList {
     display: flex;
     flex-direction: column;
@@ -209,7 +207,7 @@
     color: #1e293b;
 }
 
-/* ── Order Summary ───────────────────────────────────────────── */
+
 .summary {
     padding: 16px 20px;
     border-top: 1px solid #f1f5f9;
@@ -234,7 +232,7 @@
     margin-top: 4px;
 }
 
-/* ── Timeline ────────────────────────────────────────────────── */
+
 .timeline {
     padding: 20px;
     display: flex;
@@ -301,7 +299,7 @@
     margin: 0;
 }
 
-/* ── Status Management ───────────────────────────────────────── */
+
 .statusCurrent {
     padding: 12px 16px;
     border-radius: 8px;
@@ -349,7 +347,7 @@
     background: #fee2e2;
 }
 
-/* ── Customer Card ───────────────────────────────────────────── */
+
 .customerCard {
     padding: 20px;
 }
@@ -387,7 +385,7 @@
     flex-shrink: 0;
 }
 
-/* ── Shipment Management ─────────────────────────────────────── */
+
 .shipmentSection {
     padding: 20px;
     background: #fff;
@@ -528,7 +526,7 @@
     line-height: 1.5;
 }
 
-/* ── Responsive ──────────────────────────────────────────────── */
+
 @media (max-width: 1100px) {
     .grid {
         grid-template-columns: 1fr;

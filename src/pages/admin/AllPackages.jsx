@@ -27,7 +27,7 @@ const AllPackages = () => {
                 </div>
             </div>
 
-            {/* Summary Row */}
+            {}
             <div className="grid grid-cols-6 gap-3 mb-6">
                 <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center gap-2 relative overflow-hidden group">
                     <div className="absolute top-0 left-0 w-full h-1 bg-[#ab121c]" />
@@ -44,7 +44,7 @@ const AllPackages = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Search Bar Row */}
+                {}
                 <div className="p-3 bg-white border-b border-gray-100 flex items-center gap-3">
                     <button className="p-2 border border-gray-200 rounded hover:bg-gray-50 text-gray-400">
                         <Filter size={18} />
@@ -62,7 +62,7 @@ const AllPackages = () => {
                     <button className="px-6 py-2 bg-white text-gray-600 border border-gray-200 text-sm font-medium rounded flex items-center gap-2 hover:bg-gray-50">Sắp xếp <ChevronDown size={14} /></button>
                 </div>
 
-                {/* Filter Row */}
+                {}
                 <div className="p-3 bg-gray-50/30 flex flex-wrap gap-2 border-b border-gray-100">
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-bold tracking-tight text-gray-500 uppercase">Xem tất cả</button>
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-bold tracking-tight text-gray-500 flex items-center gap-2 uppercase">Trạng thái kiện hàng <ChevronDown size={12} /></button>
@@ -73,7 +73,7 @@ const AllPackages = () => {
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-bold tracking-tight text-gray-500 flex items-center gap-2 uppercase">Trạng thái bàn giao <ChevronDown size={12} /></button>
                 </div>
 
-                {/* Tabs */}
+                {}
                 <div className="flex border-b border-gray-100 bg-white">
                     {['Tất cả'].map((tab, idx) => (
                         <button key={idx} className={`px-6 py-3 text-[10px] font-bold uppercase tracking-wider ${idx === 0 ? 'border-b-2 border-[#0088ff] text-[#0088ff]' : 'text-gray-400 hover:text-gray-600'}`}>
@@ -82,7 +82,7 @@ const AllPackages = () => {
                     ))}
                 </div>
 
-                {/* Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50/30">
@@ -142,7 +142,7 @@ const AllPackages = () => {
                     </table>
                 </div>
 
-                {/* Footer */}
+                {}
                 <div className="p-4 flex justify-between items-center bg-white border-t border-gray-100 text-xs">
                     <div className="text-gray-500 italic">Từ 1 đến 4 trên tổng 4</div>
                     <div className="flex items-center gap-6">

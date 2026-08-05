@@ -1,8 +1,6 @@
 import api from './api';
 
-/**
- * Get all roles
- */
+
 export const getAllRoles = async () => {
     try {
         const response = await api.get('/role');
@@ -12,9 +10,7 @@ export const getAllRoles = async () => {
     }
 };
 
-/**
- * Get role by ID
- */
+
 export const getRoleById = async (roleId) => {
     try {
         const response = await api.get(`/role/${roleId}`);
@@ -24,9 +20,7 @@ export const getRoleById = async (roleId) => {
     }
 };
 
-/**
- * Create new role
- */
+
 export const createRole = async (roleData) => {
     try {
         const response = await api.post('/role', roleData);
@@ -36,9 +30,7 @@ export const createRole = async (roleData) => {
     }
 };
 
-/**
- * Update role
- */
+
 export const updateRole = async (roleId, roleData) => {
     try {
         const response = await api.patch(`/role/${roleId}`, roleData);
@@ -49,9 +41,8 @@ export const updateRole = async (roleId, roleData) => {
 };
 
 /**
- * Delete role (soft delete)
  * @param {string} roleId 
- * @param {string} status - New status after soft delete (e.g. 'INACTIVE')
+ * @param {string} status 
  */
 export const deleteRoleSoft = async (roleId, status = 'INACTIVE') => {
     try {
@@ -64,9 +55,7 @@ export const deleteRoleSoft = async (roleId, status = 'INACTIVE') => {
     }
 };
 
-/**
- * Hard Delete Role (Permanently remove from DB)
- */
+
 export const hardDeleteRole = async (roleId) => {
     try {
         const response = await api.delete(`/role/${roleId}/hard`);

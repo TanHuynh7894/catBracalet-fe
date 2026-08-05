@@ -34,7 +34,7 @@ const SuccessfulPayment = () => {
     const urlOrderId = searchParams.get('orderId') || searchParams.get('id');
     const urlOrderCode = searchParams.get('orderCode');
 
-    // Read cached checkout response from before PayOS redirect
+    
     const [cached] = useState(() => {
         try {
             return JSON.parse(sessionStorage.getItem('lastCheckout') || '{}');
@@ -45,7 +45,7 @@ const SuccessfulPayment = () => {
     const [loading, setLoading] = useState(true);
     const [fetchError, setFetchError] = useState(null);
 
-    // Resolve data: prefer live API data, fall back to cached
+  
     const finalOrderId = urlOrderId || cached?.payment?.orderId || cached?.order?.id;
     const finalOrderCode = urlOrderCode || cached?.payment?.orderCode;
     const pricing = cached?.pricing || cached?.order || null;
@@ -56,7 +56,7 @@ const SuccessfulPayment = () => {
                 if (cached?.order) {
                     setOrder(cached.order);
                 } else {
-                    // If we have orderCode but no ID, we can't fetch but might still have cached data
+                    
                     if (!cached?.order) setFetchError('Không tìm thấy thông tin đơn hàng.');
                 }
                 setLoading(false);
@@ -91,7 +91,7 @@ const SuccessfulPayment = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-                {/* ── Header ─────────────────────────────────────────────── */}
+                {}
                 <div className={styles.header}>
                     <motion.div
                         className={styles.iconWrapper}
@@ -119,7 +119,7 @@ const SuccessfulPayment = () => {
                     </div>
                 ) : (
                     <>
-                        {/* ── Invoice Block ───────────────────────────────── */}
+                        {}
                         <div className={styles.orderSummary}>
                             <div className={styles.infoGrid}>
                                 <div className={styles.infoItem}>
@@ -141,7 +141,7 @@ const SuccessfulPayment = () => {
                                     </span>
                                 </div>
 
-                                {/* Address */}
+                                {}
                                 {displayOrder?.address && (
                                     <div className={styles.addressBox}>
                                         <span className={styles.addressTitle}>
@@ -167,7 +167,7 @@ const SuccessfulPayment = () => {
                             </div>
                         </div>
 
-                        {/* ── Product Items ───────────────────────────────── */}
+                        {}
                         {(displayOrder?.items?.length > 0 || displayOrder?.orderItems?.length > 0) && (
                             <div className={styles.itemsSection}>
                                 <p className={styles.itemsTitle}>Chi tiết sản phẩm</p>
@@ -195,7 +195,7 @@ const SuccessfulPayment = () => {
                             </div>
                         )}
 
-                        {/* ── Pricing Breakdown ────────────────────────────── */}
+                        {}
                         <div className={styles.pricingSection}>
                             <div className={styles.pricingRow}>
                                 <span>Tạm tính</span>
@@ -219,7 +219,7 @@ const SuccessfulPayment = () => {
                             </div>
                         </div>
 
-                        {/* ── Voucher used ────────────────────────────────── */}
+                        {}
                         {displayOrder?.voucher && (
                             <div className={styles.infoBox} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
                                 <Tag size={18} style={{ color: '#16a34a', flexShrink: 0 }} />
@@ -232,7 +232,7 @@ const SuccessfulPayment = () => {
                 )}
 
 
-                {/* ── Actions ──────────────────────────────────────────────── */}
+                {}
                 <div className={styles.actions}>
                     {finalOrderId && (
                         <Link to={`/order-detail/${finalOrderId}`} className={styles.primaryBtn} style={{ background: '#ab121c' }}>

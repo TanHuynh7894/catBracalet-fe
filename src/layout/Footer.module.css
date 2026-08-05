@@ -1,8 +1,6 @@
 .footer {
     background: #faf8f6;
-    /* Ivory / Light Background as before */
     color: #5d2b2b;
-    /* Dark wine text */
     padding: 60px 0 40px;
     border-top: 1px solid rgba(93, 43, 43, 0.05);
 }
@@ -20,7 +18,7 @@
     margin-bottom: 40px;
 }
 
-/* Brand Section */
+
 .brandCol {
     display: flex;
     flex-direction: column;
@@ -29,7 +27,6 @@
 
 .footerLogo {
     height: 72px;
-    /* Balanced size */
     width: auto;
     object-fit: contain;
     display: block;
@@ -68,7 +65,7 @@
     transform: translateY(-2px);
 }
 
-/* Link Columns */
+
 .navTitle {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
@@ -100,7 +97,7 @@
     color: #5d2b2b;
 }
 
-/* Bottom Bar */
+
 .bottomBar {
     padding-top: 30px;
     border-top: 1px solid rgba(93, 43, 43, 0.05);

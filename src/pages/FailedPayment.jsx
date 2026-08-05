@@ -31,7 +31,7 @@ const FailedPayment = () => {
                     border: '1px solid rgba(0,0,0,0.04)',
                 }}
             >
-                {/* Icon */}
+                {}
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -48,7 +48,7 @@ const FailedPayment = () => {
                     Giao dịch của bạn không thể hoàn tất. Đừng lo — đơn hàng của bạn vẫn được lưu lại và bạn có thể thử thanh toán lại.
                 </p>
 
-                {/* Info Box */}
+                {}
                 {orderCode && (
                     <div style={{
                         background: '#fef9f0',
@@ -65,7 +65,7 @@ const FailedPayment = () => {
                     </div>
                 )}
 
-                {/* Possible reasons */}
+                {}
                 <div style={{
                     background: '#fef2f2',
                     borderRadius: '12px',
@@ -83,7 +83,7 @@ const FailedPayment = () => {
                     </ul>
                 </div>
 
-                {/* Actions */}
+                {}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <Link
                         to="/checkout"

@@ -12,11 +12,11 @@ import { addToCart } from '../../services/cartService';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 
-// ─── Fallback Image ────────────────────────────────────────────────────────────
+
 import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 import heroImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 
-// ─── Framer Motion variants ───────────────────────────────────────────────────
+
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -24,26 +24,26 @@ const fadeUp = {
     transition: { duration: 0.8 },
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
+
 const CustomBraceletPage = () => {
     const navigate = useNavigate();
     const { refreshCart } = useCart();
     const { showToast } = useToast();
 
-    // API Data State
+
     const [wires, setWires] = useState([]);
     const [stones, setStones] = useState([]);
     const [charms, setCharms] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Selected items
-    const [selectedWire, setSelectedWire] = useState(null); // { productId, variantId, name, price, image }
-    const [selectedStones, setSelectedStones] = useState([]); // Array of { productId, variantId, name, price, color, size, image }
-    const [selectedCharms, setSelectedCharms] = useState([]); // Array of { productId, variantId, name, price, color, quantity, image }
 
-    // Configuration Modal state
+    const [selectedWire, setSelectedWire] = useState(null); 
+    const [selectedStones, setSelectedStones] = useState([]); 
+    const [selectedCharms, setSelectedCharms] = useState([]); 
+
+
     const [configuringProduct, setConfiguringProduct] = useState(null);
-    const [configType, setConfigType] = useState(null); // 'stone', 'charm', 'wire'
+    const [configType, setConfigType] = useState(null); 
     const [allVariants, setAllVariants] = useState([]);
     const [currentOptions, setCurrentOptions] = useState({ color: '', size: '', quantity: 1, variantId: null });
     const [activeImg, setActiveImg] = useState(0);
@@ -65,7 +65,7 @@ const CustomBraceletPage = () => {
                 const variants = Array.isArray(variantData) ? variantData : [];
                 setAllVariants(variants);
 
-                // Phân loại dựa trên danh mục (Category)
+              
                 const wireCat = allCats.find(c => c.categoryName.toLowerCase().includes('dây'));
                 const charmCat = allCats.find(c => c.categoryName.toLowerCase().includes('charm'));
                 const stoneCat = allCats.find(c => c.categoryName.toLowerCase().includes('đá'));
@@ -86,11 +86,11 @@ const CustomBraceletPage = () => {
 
     const openConfigurator = async (product, type) => {
         try {
-            // Fetch full product details to get images
+            
             const fullProduct = await getProductById(product.id);
             let productVariants = fullProduct.product_variants || fullProduct.variants || [];
 
-            // If variants aren't in details, find from allVariants
+          
             if (productVariants.length === 0) {
                 productVariants = allVariants.filter(v =>
                     v.status === 'ACTIVE' &&
@@ -102,7 +102,7 @@ const CustomBraceletPage = () => {
 
             console.log(`[CustomDesign] Product ${fullProduct.productName} has ${productVariants.length} variants`);
 
-            // Prepare images
+            
             const images = (fullProduct.productImages || fullProduct.product_images || [])
                 .filter(img => img.status === 'ACTIVE')
                 .map(img => getFullImageUrl(img.imageUrl || img.url));
@@ -176,16 +176,16 @@ const CustomBraceletPage = () => {
         }
 
         try {
-            // Cập nhật nội dung thông báo theo yêu cầu
+            
             const loadingToast = showToast('Đang thêm vào giỏ hàng...', 'info');
 
-            // Gửi lần lượt để tránh xung đột DB, nhưng đợi tất cả xong mới báo thành công
+            
             for (const item of selectedItems) {
                 console.log("[CustomDesign] Adding item:", item.name, "Variant:", item.variantId);
                 await addToCart(item.variantId, item.quantity || 1);
             }
 
-            // Chỉ refresh giỏ hàng một lần duy nhất sau khi xong tất cả
+            
             await refreshCart();
 
             showToast('Đã thêm thành công tất cả nguyên liệu vào giỏ hàng!', 'success');
@@ -234,9 +234,7 @@ const CustomBraceletPage = () => {
 
     return (
         <div className={styles.page}>
-            {/* ═══════════════════════════════════════════════════════
-                1. HERO
-            ══════════════════════════════════════════════════════════ */}
+            {}
             <motion.section {...fadeUp} className={styles.hero}>
                 <div className={styles.heroWrap}>
                     <div className={styles.heroLeft}>
@@ -256,9 +254,7 @@ const CustomBraceletPage = () => {
                 </div>
             </motion.section>
 
-            {/* ═══════════════════════════════════════════════════
-                2. FEATURES BAR
-            ════════════════════════════════════════════════════ */}
+            {}
             <motion.section {...fadeUp} className={styles.features}>
                 <div className={styles.container}>
                     <div className={styles.featureBar}>
@@ -275,16 +271,14 @@ const CustomBraceletPage = () => {
                 </div>
             </motion.section>
 
-            {/* ═══════════════════════════════════════════════════
-                3. BUILDER (steps only, sidebar hidden as requested)
-            ════════════════════════════════════════════════════ */}
+            {}
             <section className={styles.builder}>
                 <div className={styles.builderWrap}>
 
-                    {/* BUILDER CONTENT - GRID OF STEPS */}
+                    {}
                     <div className={styles.builderContent} style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
 
-                        {/* Top bar */}
+                        {}
                         <div className={styles.contentTop}>
                             <div>
                                 <h2 className={styles.contentTitle}>Thiết kế vòng tay của riêng bạn</h2>
@@ -292,7 +286,7 @@ const CustomBraceletPage = () => {
                             </div>
                         </div>
 
-                        {/* ─── STEP 1: CHỌN DÂY ────────────── */}
+                        {}
                         <motion.div {...fadeUp} className={styles.step}>
                             <div className={styles.stepHead}>
                                 <span className={styles.stepNum}>1</span>
@@ -320,7 +314,7 @@ const CustomBraceletPage = () => {
                             </div>
                         </motion.div>
 
-                        {/* ─── STEP 2: CHỌN LOẠI ĐÁ ────────── */}
+                        {}
                         <motion.div {...fadeUp} className={styles.step}>
                             <div className={styles.stepHead}>
                                 <span className={styles.stepNum}>2</span>
@@ -349,7 +343,7 @@ const CustomBraceletPage = () => {
                             </div>
                         </motion.div>
 
-                        {/* ─── STEP 3: CHỌN CHARM ──────────── */}
+                        {}
                         <motion.div {...fadeUp} className={styles.step}>
                             <div className={styles.stepHead}>
                                 <span className={styles.stepNum}>3</span>
@@ -377,7 +371,7 @@ const CustomBraceletPage = () => {
                             </div>
                         </motion.div>
 
-                        {/* ─── SELECTED LIST ──────────────── */}
+                        {}
                         <motion.div {...fadeUp} className={styles.selectedSection}>
                             <h3 className={styles.selectedTitle}>Các phần đã chọn</h3>
                             <div className={styles.selectedGrid}>
@@ -414,7 +408,7 @@ const CustomBraceletPage = () => {
                             </div>
                         </motion.div>
 
-                        {/* ─── ACTION BUTTONS ──────────────── */}
+                        {}
                         <motion.div {...fadeUp} className={styles.actions}>
                             <div className={styles.totalInfo}>
                                 <span>Tổng cộng: {formatPrice((selectedWire?.price || 0) + selectedStones.reduce((a, b) => a + b.price, 0) + selectedCharms.reduce((a, b) => a + b.price * b.quantity, 0))}</span>
@@ -428,7 +422,7 @@ const CustomBraceletPage = () => {
                 </div>
             </section>
 
-            {/* ─── CONFIGURATION MODAL ─────────── */}
+            {}
             <AnimatePresence>
                 {configuringProduct && (
                     <div className={styles.modalOverlay} onClick={() => setConfiguringProduct(null)}>
@@ -488,7 +482,7 @@ const CustomBraceletPage = () => {
                                     </div>
 
                                     <div className={styles.optionsWrap}>
-                                        {/* Color Selection */}
+                                        {}
                                         {configType !== 'wire' && Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).length > 0 && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Màu sắc</p>
@@ -514,7 +508,7 @@ const CustomBraceletPage = () => {
                                             </div>
                                         )}
 
-                                        {/* Size Selection */}
+                                        {}
                                         {configType === 'stone' && Array.from(new Set(configuringProduct.variants.map(v => v.size).filter(Boolean))).length > 0 && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Kích thước</p>
@@ -539,7 +533,7 @@ const CustomBraceletPage = () => {
                                             </div>
                                         )}
 
-                                        {/* Fallback Variant Selection for Stone/Charm with no Color/Size */}
+                                        {}
                                         {configType !== 'wire' &&
                                             Array.from(new Set(configuringProduct.variants.map(v => v.color).filter(Boolean))).length === 0 &&
                                             Array.from(new Set(configuringProduct.variants.map(v => v.size).filter(Boolean))).length === 0 &&
@@ -564,7 +558,7 @@ const CustomBraceletPage = () => {
                                                 </div>
                                             )}
 
-                                        {/* Variant Selection for Wire */}
+                                        {}
                                         {configType === 'wire' && configuringProduct.variants.length > 0 && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Loại dây</p>
@@ -586,7 +580,7 @@ const CustomBraceletPage = () => {
                                             </div>
                                         )}
 
-                                        {/* Quantity Selection for Stone & Charm */}
+                                        {}
                                         {(configType === 'charm' || configType === 'stone') && (
                                             <div className={styles.optionGroup}>
                                                 <p className={styles.optionLabel}>Số lượng</p>
@@ -625,9 +619,7 @@ const CustomBraceletPage = () => {
                 )}
             </AnimatePresence>
 
-            {/* ═══════════════════════════════════════════════════
-                4. USP SECTION
-            ════════════════════════════════════════════════════ */}
+            {}
             <motion.section {...fadeUp} className={styles.usp}>
                 <div className={styles.container}>
                     <div className={styles.uspGrid}>

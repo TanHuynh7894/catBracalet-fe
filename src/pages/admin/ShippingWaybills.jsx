@@ -18,7 +18,7 @@ const ShippingWaybills = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Tabs */}
+                {}
                 <div className="flex border-b border-gray-100 bg-white">
                     {['Tất cả', 'Đang giao hàng', 'Chờ giao lại', 'Đang hoàn hàng'].map((tab, idx) => (
                         <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-tight ${idx === 0 ? 'border-b-2 border-[#1e293b] text-[#1e293b]' : 'text-gray-400 hover:text-gray-600'}`}>
@@ -27,7 +27,7 @@ const ShippingWaybills = () => {
                     ))}
                 </div>
 
-                {/* Filter Row */}
+                {}
                 <div className="p-3 bg-white border-b border-gray-100 flex items-center gap-3">
                     <button className="p-2 border border-gray-200 rounded hover:bg-gray-50 text-gray-400">
                         <Settings size={18} />
@@ -45,7 +45,7 @@ const ShippingWaybills = () => {
                     <button className="px-4 py-2 bg-gray-50 text-gray-300 text-sm font-medium rounded border border-gray-100">Lưu bộ lọc</button>
                 </div>
 
-                {/* Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50/50 uppercase">
@@ -94,7 +94,7 @@ const ShippingWaybills = () => {
                     </table>
                 </div>
 
-                {/* Footer Pagination placeholder */}
+                {}
                 <div className="p-4 flex justify-between items-center bg-white border-t border-gray-100 text-xs">
                     <div className="text-gray-500">Từ 1 đến 15 trên tổng 47</div>
                     <div className="flex gap-2">

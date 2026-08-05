@@ -6,7 +6,7 @@ import styles from './Register.module.css';
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
-    const [step, setStep] = useState(1); // 1: Request, 2: Reset, 3: Success
+    const [step, setStep] = useState(1); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [email, setEmail] = useState('');

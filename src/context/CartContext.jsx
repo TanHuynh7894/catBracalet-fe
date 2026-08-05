@@ -29,11 +29,10 @@ export const CartProvider = ({ children }) => {
             const data = await getCart();
             const items = data.items || [];
             setCartItems(items);
-            // Show number of unique items (lines), not total quantity sum
             setCartCount(items.length);
         } catch (error) {
             console.error('Error fetching cart for context:', error);
-            // If 401, clear cart
+
             if (error === 'Unauthorized' || (error.response && error.response.status === 401)) {
                 setCartCount(0);
                 setCartItems([]);
@@ -46,7 +45,7 @@ export const CartProvider = ({ children }) => {
     useEffect(() => {
         refreshCart();
 
-        // Listen for login/logout or other storage changes
+
         const handleStorageChange = (e) => {
             if (e.key === 'accessToken' || e.key === 'user') {
                 refreshCart();

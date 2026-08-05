@@ -29,7 +29,7 @@ const StockInventory = () => {
             </div>
 
             <div className={styles.inventoryTableContainer}>
-                {/* Tabs */}
+                {}
                 <div style={{ display: 'flex', borderBottom: '1px solid #f3f4f6', padding: '0 16px' }}>
                     {['Tất cả', 'Còn hàng', 'Hết hàng'].map((tab, idx) => (
                         <button key={idx} style={{
@@ -48,7 +48,7 @@ const StockInventory = () => {
                     ))}
                 </div>
 
-                {/* Search & Filters */}
+                {}
                 <div className={styles.toolbar}>
                     <div className={styles.searchWrapper}>
                         <Search size={16} className={styles.searchIcon} />
@@ -59,7 +59,7 @@ const StockInventory = () => {
                     <button className={styles.filterBtn}><Filter size={14} /> Bộ lọc khác</button>
                 </div>
 
-                {/* Table - overflow-x: scroll to always show horizontal scrollbar */}
+                {}
                 <div style={{ overflowX: 'scroll', width: '100%' }}>
                     <table style={{ width: '100%', minWidth: 2000, borderCollapse: 'collapse', textAlign: 'left', fontSize: 11, whiteSpace: 'nowrap' }}>
                         <thead>

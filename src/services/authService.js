@@ -2,7 +2,7 @@ import api from './api';
 
 /**
  * Login API
- * @param {Object} credentials - { email, password }
+ * @param {Object} credentials 
  * @returns {Promise}
  */
 export const login = async (credentials) => {
@@ -14,9 +14,7 @@ export const login = async (credentials) => {
     }
 };
 
-/**
- * Register API
- */
+
 export const register = async (userData) => {
     try {
         const response = await api.post('/user/register', userData);
@@ -26,9 +24,7 @@ export const register = async (userData) => {
     }
 };
 
-/**
- * Verify OTP API
- */
+
 export const verifyOtp = async (otpData) => {
     try {
         const response = await api.post('/user/verify-otp', otpData);
@@ -38,9 +34,7 @@ export const verifyOtp = async (otpData) => {
     }
 };
 
-/**
- * Refresh Token API
- */
+
 export const refreshToken = async (token) => {
     try {
         const response = await api.post('/user/refresh-token', { refreshToken: token });
@@ -50,9 +44,7 @@ export const refreshToken = async (token) => {
     }
 };
 
-/**
- * Request Password Reset API (Forgot Password)
- */
+
 export const requestPasswordReset = async (email) => {
     try {
         const response = await api.post('/user/request-password-reset', { email });
@@ -62,9 +54,7 @@ export const requestPasswordReset = async (email) => {
     }
 };
 
-/**
- * Reset Password API
- */
+
 export const resetPassword = async (resetData) => {
     try {
         const response = await api.post('/user/reset-password', resetData);
@@ -74,9 +64,7 @@ export const resetPassword = async (resetData) => {
     }
 };
 
-/**
- * Logout utility
- */
+
 export const logout = async () => {
     try {
         const rToken = localStorage.getItem('refreshToken');

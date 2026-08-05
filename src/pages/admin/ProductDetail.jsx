@@ -58,7 +58,7 @@ const AdminProductDetail = () => {
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
 
-    // Variant State
+
     const [productVariants, setProductVariants] = useState([]);
     const [showVariantModal, setShowVariantModal] = useState(false);
     const [editingVariant, setEditingVariant] = useState(null);
@@ -87,7 +87,7 @@ const AdminProductDetail = () => {
             setProduct(prodData);
             setProductGallery(images);
 
-            // Lấy tất cả variants và lọc theo sản phẩm này
+y
             const allVariants = await getAllProductVariants();
             const filteredVariants = Array.isArray(allVariants) ? allVariants.filter(v =>
                 (v.productVariantMappings || v.product_variant_mappings)?.some(m => m.productId === id || m.product_id === id)
@@ -97,7 +97,7 @@ const AdminProductDetail = () => {
             setCategories(cats);
             setMaterials(mats);
 
-            // Initialize form
+
             setFormData({
                 productName: prodData.productName || '',
                 basePrice: prodData.basePrice || '',
@@ -168,7 +168,7 @@ const AdminProductDetail = () => {
             if (formData.categoryId) data.append('categoryId', formData.categoryId);
             data.append('description', formData.description || '');
 
-            // Append multiple materialIds
+
             formData.materialIds.forEach(mid => {
                 data.append('materialIds[]', mid);
             });
@@ -179,7 +179,7 @@ const AdminProductDetail = () => {
 
             await updateProduct(id, data);
             showToast("Cập nhật sản phẩm thành công!", 'success');
-            fetchInitialData(); // Refresh data
+            fetchInitialData(); 
         } catch (error) {
             showToast(error.toString(), 'error');
         } finally {
@@ -212,14 +212,14 @@ const AdminProductDetail = () => {
                 const originalStatus = product.status;
                 const nextStatus = originalStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
 
-                // Optimistic Update: Cập nhật UI ngay lập tức
+              
                 setProduct(prev => ({ ...prev, status: nextStatus }));
 
                 try {
                     await softDeleteProduct(id);
                     showToast(`Đã ${actionText} sản phẩm thành công`, 'success');
                 } catch (error) {
-                    // Hoàn tác nếu lỗi
+
                     setProduct(prev => ({ ...prev, status: originalStatus }));
                     showToast(error.toString(), 'error');
                 }
@@ -271,7 +271,6 @@ const AdminProductDetail = () => {
         );
     };
 
-    // --- VARIANT HANDLERS ---
     const handleOpenVariantModal = (v = null) => {
         if (v) {
             setEditingVariant(v);
@@ -357,7 +356,7 @@ const AdminProductDetail = () => {
 
     return (
         <div className={styles.dashboard}>
-            {/* Header */}
+            {}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-4">
                     <button onClick={() => navigate('/admin/products')} className="p-2 hover:bg-gray-100 rounded-xl border border-gray-200 bg-white transition-all shadow-sm">
@@ -398,9 +397,9 @@ const AdminProductDetail = () => {
             </div>
 
             <div className="grid grid-cols-12 gap-8 pb-32">
-                {/* Main Content */}
+                {}
                 <div className="col-span-8 space-y-8">
-                    {/* General Info */}
+                    {}
                     <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                         <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-b border-gray-50 pb-4">Thông tin cơ bản</h2>
 
@@ -455,7 +454,7 @@ const AdminProductDetail = () => {
                         </div>
                     </div>
 
-                    {/* Product Gallery */}
+                    {}
                     <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                         <div className="flex justify-between items-center border-b border-gray-50 pb-4">
                             <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">Ảnh chi tiết (Gallery)</h2>
@@ -514,7 +513,7 @@ const AdminProductDetail = () => {
                         )}
                     </div>
 
-                    {/* Materials */}
+                    {}
                     <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
                         <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-b border-gray-50 pb-4 mb-6">Chất liệu sử dụng</h2>
                         <div className="flex flex-wrap gap-3">
@@ -534,7 +533,7 @@ const AdminProductDetail = () => {
                         </div>
                     </div>
 
-                    {/* Variant Management */}
+                    {}
                     <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                         <div className="flex justify-between items-center border-b border-gray-50 pb-4">
                             <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">Phân loại sản phẩm (Variants)</h2>
@@ -614,9 +613,9 @@ const AdminProductDetail = () => {
                     </div>
                 </div>
 
-                {/* Sidebar */}
+                {}
                 <div className="col-span-4 space-y-8">
-                    {/* Image / Media */}
+                    {}
                     <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
                         <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest border-b border-gray-50 pb-4">Ảnh đại diện</h2>
                         <div
@@ -647,7 +646,7 @@ const AdminProductDetail = () => {
                         <p className="text-[10px] text-gray-400 text-center italic">Định dạng hỗ trợ: JPG, PNG, WEBP. Dung lượng tối đa: 5MB.</p>
                     </div>
 
-                    {/* Quick Stats */}
+                    {}
                     <div className="bg-[#ab121c] p-8 rounded-2xl shadow-xl text-white">
                         <h3 className="text-xs font-bold uppercase tracking-[0.2em] opacity-70 mb-6">Thống kê nhanh</h3>
                         <div className="space-y-4">
@@ -666,7 +665,7 @@ const AdminProductDetail = () => {
                 </div>
             </div>
 
-            {/* Sticky Actions */}
+            {}
             <div className="fixed bottom-0 left-64 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 p-6 flex justify-end gap-4 px-12 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] z-[40]">
                 <button
                     onClick={() => navigate('/admin/products')}
@@ -683,7 +682,7 @@ const AdminProductDetail = () => {
                     Lưu thay đổi
                 </button>
             </div>
-            {/* Variant Modal */}
+            {}
             {showVariantModal && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">

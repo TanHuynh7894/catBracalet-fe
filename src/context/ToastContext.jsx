@@ -41,7 +41,7 @@ export const ToastProvider = ({ children }) => {
         <ToastContext.Provider value={{ showToast, showConfirm }}>
             {children}
 
-            {/* TOASTS CONTAINER */}
+            {}
             <div className="fixed top-6 right-6 z-[1000] flex flex-col gap-3 pointer-events-none">
                 <AnimatePresence>
                     {toasts.map(toast => (
@@ -94,7 +94,7 @@ export const ToastProvider = ({ children }) => {
                 </AnimatePresence>
             </div>
 
-            {/* CUSTOM CONFIRM MODAL */}
+            {}
             <AnimatePresence>
                 {confirmData && (
                     <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4">

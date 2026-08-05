@@ -86,7 +86,7 @@
     @apply flex items-center justify-center gap-3 border border-outline-variant py-3 hover:bg-surface-container-low transition-all duration-300 font-body text-xs hover:border-primary/30;
 }
 
-/* ── RESPONSIVE: MOBILE (max 767px) ─────────────────────── */
+
 @media (max-width: 767px) {
     .authContainer {
         padding: 16px !important;
@@ -103,7 +103,7 @@
         flex-direction: column !important;
     }
 
-    /* Ẩn hình ảnh bên trái trên mobile */
+    
     .visualSide {
         display: none !important;
     }
@@ -113,7 +113,7 @@
     }
 }
 
-/* ── RESPONSIVE: TABLET (768px – 1023px) ────────────────── */
+
 @media (min-width: 768px) and (max-width: 1023px) {
     .authContainer {
         padding: 24px !important;

@@ -1,9 +1,5 @@
 import api from './api';
 
-/**
- * Address Service
- * Handles all address-related API calls
- */
 
 export const getAddressesByUserId = async (userId) => {
     try {

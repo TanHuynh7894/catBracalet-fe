@@ -13,12 +13,12 @@ import { addToCart } from '../../services/cartService';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 
-// ─── Import Logo ────────────────────────────────────────────────────────────
+
 import heroBannerImg from '../../assets/Ảnh UI/ảnh chi tiết/anhbosuutap.png';
 import fallbackProductImg from '../../assets/Image - Cat/hình ảnh Sp/Vòng tay evil eye/all0.jpg';
 import logoImg from '../../assets/Image - Cat/Logo Cat/logoCat-PNG.png';
 
-// ─── Color Picker Data ───────────────────────────────────────────────────────
+
 const colorOptions = [
     { label: 'Đỏ', value: 'red', hex: '#C0392B' },
     { label: 'Đen', value: 'black', hex: '#1A1A1A' },
@@ -28,7 +28,7 @@ const colorOptions = [
     { label: 'Nâu', value: 'brown', hex: '#795548' },
 ];
 
-// ─── Features Data ─────────────────────────────────────────────────────────
+
 const features = [
     { icon: <Gem size={28} strokeWidth={1.5} />, title: 'Đá tự nhiên 100%', subtitle: 'Nguồn gốc kiểm định rõ ràng' },
     { icon: <Sparkles size={28} strokeWidth={1.5} />, title: 'Năng lượng thuần khiết', subtitle: 'Khai quang & thanh lọc' },
@@ -36,7 +36,7 @@ const features = [
     { icon: <ShieldCheck size={28} strokeWidth={1.5} />, title: 'Bảo hành năng lượng trọn đời', subtitle: 'Cam kết chất lượng trọn đời' },
 ];
 
-// ─── Stats ─────────────────────────────────────────────────────────────────
+
 const stats = [
     { value: '100%', label: 'Đá tự nhiên' },
     { value: '5.000+', label: 'Khách hàng tin tưởng' },
@@ -44,7 +44,7 @@ const stats = [
     { value: '1 đổi 1', label: 'Bảo hành' },
 ];
 
-// ─── Animation variant ───────────────────────────────────────────────
+
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -52,13 +52,13 @@ const fadeUp = {
     transition: { duration: 0.8 },
 };
 
-// ─── Main Component ────────────────────────────────────────────────────────
+
 const CollectionPage = () => {
     const navigate = useNavigate();
     const { refreshCart } = useCart();
     const { showToast } = useToast();
 
-    // Map tên màu sang mã HEX để hiển thị swatch
+   
     const colorMap = {
         'Đỏ': '#C0392B',
         'Đen': '#2C3E50',
@@ -71,19 +71,19 @@ const CollectionPage = () => {
         'Xanh lá': '#27AE60',
         'Trong suốt': 'transparent'
     };
-    // API State
+
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [materials, setMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Filter state
-    const [selectedCollection, setSelectedCollection] = useState(''); // Category ID (client)
-    const [selectedStones, setSelectedStones] = useState([]); // Material IDs -> stoneType
+
+    const [selectedCollection, setSelectedCollection] = useState(''); 
+    const [selectedStones, setSelectedStones] = useState([]); 
     const [priceRange, setPriceRange] = useState([0, 500000]);
-    const [selectedColor, setSelectedColor] = useState('');        // color
-    const [selectedStoneColor, setSelectedStoneColor] = useState(''); // stoneColor
-    const [selectedSize, setSelectedSize] = useState('');          // size
+    const [selectedColor, setSelectedColor] = useState('');       
+    const [selectedStoneColor, setSelectedStoneColor] = useState(''); 
+    const [selectedSize, setSelectedSize] = useState('');          
     const [sortBy, setSortBy] = useState('newest');
     const [sortOpen, setSortOpen] = useState(false);
     const [wishlist, setWishlist] = useState([]);
@@ -106,7 +106,7 @@ const CollectionPage = () => {
                 const activeProducts = allProducts.filter(p => p.status === 'ACTIVE');
                 setProducts(activeProducts);
                 const allCategories = Array.isArray(catData) ? catData : (catData?.categories || []);
-                // Chỉ giữ category có ít nhất 1 sản phẩm ACTIVE
+
                 const activeCategoryIds = new Set(activeProducts.map(p => p.categoryId));
                 setCategories(allCategories.filter(c => activeCategoryIds.has(c.id)));
                 setMaterials(Array.isArray(matData) ? matData : (matData?.materials || []));
@@ -119,7 +119,7 @@ const CollectionPage = () => {
         loadData();
     }, []);
 
-    // Toggle stone checkbox
+ 
     const handleStoneToggle = (materialId) => {
         setSelectedStones(prev =>
             prev.includes(materialId) ? prev.filter(s => s !== materialId) : [...prev, materialId]
@@ -127,13 +127,13 @@ const CollectionPage = () => {
         setCurrentPage(1);
     };
 
-    // Toggle BST (click lần 2 để bỏ chọn)
+
     const handleCollectionToggle = (id) => {
         setSelectedCollection(prev => prev === id ? '' : id);
         setCurrentPage(1);
     };
 
-    // Price range slider handler
+
     const handlePriceRangeChange = (index, value) => {
         setPriceRange(prev => {
             const next = [...prev];
@@ -145,7 +145,7 @@ const CollectionPage = () => {
         setCurrentPage(1);
     };
 
-    // Clear all filters
+
     const handleClearFilters = () => {
         setSelectedCollection('');
         setSelectedStones([]);
@@ -156,7 +156,7 @@ const CollectionPage = () => {
         setCurrentPage(1);
     };
 
-    // Toggle wishlist
+
     const handleWishlistToggle = (id) => {
         setWishlist(prev =>
             prev.includes(id) ? prev.filter(w => w !== id) : [...prev, id]
@@ -194,7 +194,7 @@ const CollectionPage = () => {
                     const searchData = await searchProductsByName(searchKeyword);
                     initialData = Array.isArray(searchData) ? searchData : (searchData?.products || []);
                 } else {
-                    // Map màu sang tiếng Anh cho API (dựa trên Swagger mẫu)
+                    
                     const vntoenColor = {
                         'Đỏ': 'Red', 'Đen': 'Black', 'Trắng': 'White', 'Xanh': 'Blue',
                         'Vàng': 'Yellow', 'Nâu': 'Brown', 'Tím': 'Purple', 'Hồng': 'Pink', 'Xanh lá': 'Green'
@@ -221,12 +221,12 @@ const CollectionPage = () => {
 
                 let results = initialData;
 
-                // Lọc theo danh mục (BST) - API ko hỗ trợ nên lọc client
+                
                 if (selectedCollection) {
                     results = results.filter(p => p.categoryId === selectedCollection);
                 }
 
-                // Nếu là search, lọc tiếp các tiêu chuẩn khác ở client
+              
                 if (searchKeyword) {
                     if (selectedStones.length > 0) {
                         results = results.filter(p =>
@@ -241,12 +241,12 @@ const CollectionPage = () => {
                     }
                 }
 
-                // Sắp xếp
+               
                 if (sortBy === 'priceAsc') results = [...results].sort((a, b) => Number(a.basePrice) - Number(b.basePrice));
                 else if (sortBy === 'priceDesc') results = [...results].sort((a, b) => Number(b.basePrice) - Number(a.basePrice));
 
                 console.log("[Filter] Result count before status filter:", results.length);
-                // Chỉ hiển thị sản phẩm ACTIVE cho khách hàng
+                
                 const activeResults = results.filter(p => p.status === 'ACTIVE');
 
                 setFilteredResults(Array.from(new Map(activeResults.map(p => [p.id, p])).values()));
@@ -289,7 +289,7 @@ const CollectionPage = () => {
             return;
         }
 
-        // Nếu sản phẩm có variantId (từ filter API)
+        
         if (product.variantId) {
             try {
                 await addToCart(product.variantId, 1);
@@ -301,7 +301,7 @@ const CollectionPage = () => {
             return;
         }
 
-        // Nếu không có variantId, điều hướng tới trang chi tiết để chọn
+      
         navigate(`/product-detail?id=${product.id}`);
     };
 
@@ -316,7 +316,7 @@ const CollectionPage = () => {
     return (
         <div className={styles.pageWrapper}>
 
-            {/* ── HERO BANNER ─────────────────────────────────────────────── */}
+            {}
             <motion.section {...fadeUp} className={styles.hero}>
                 <div className={styles.heroImageContainer}>
                     <img src={heroBannerImg} alt="Bộ sưu tập vòng Cát" className={styles.heroBgImage} />
@@ -362,11 +362,11 @@ const CollectionPage = () => {
                 </div>
             </motion.section>
 
-            {/* ── COLLECTION AREA ─────────────────────────────────────────── */}
+            {}
             <section className={styles.collectionArea}>
                 <div className={styles.collectionInner}>
 
-                    {/* Mobile Filter Toggle */}
+                    {}
                     <button
                         className={styles.mobileFilterBtn}
                         onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
@@ -375,7 +375,7 @@ const CollectionPage = () => {
                         Bộ lọc
                     </button>
 
-                    {/* ── SIDEBAR ──────────────────────────────────── */}
+                    {}
                     <aside
                         className={`${styles.sidebar} ${isMobileFilterOpen ? styles.sidebarOpen : ''}`}
                         data-lenis-prevent
@@ -394,7 +394,7 @@ const CollectionPage = () => {
                         </div>
                         <p className={styles.sidebarSubtitle}>Chọn bộ lọc sản phẩm để tìm kiếm phiên bản ưng ý nhất</p>
 
-                        {/* Collection Filter */}
+                        {}
                         <div className={styles.filterGroup}>
                             <h3 className={styles.filterGroupTitle}>Bộ sưu tập</h3>
                             <div className={styles.categoryList}>
@@ -411,7 +411,7 @@ const CollectionPage = () => {
                             </div>
                         </div>
 
-                        {/* Price Range Slider */}
+                        {}
                         <div className={styles.filterGroup}>
                             <h3 className={styles.filterGroupTitle}>Khoảng giá</h3>
                             <div className={styles.priceRangeWrapper}>
@@ -460,10 +460,10 @@ const CollectionPage = () => {
                         </button>
                     </aside>
 
-                    {/* ── PRODUCT AREA ─────────────────────────────── */}
+                    {}
                     <div className={styles.productArea}>
 
-                        {/* Search Bar */}
+                        {}
                         <div className={styles.searchBarWrapper}>
                             <div className={styles.searchInner}>
                                 <input
@@ -484,7 +484,7 @@ const CollectionPage = () => {
                             </div>
                         </div>
 
-                        {/* Product Header */}
+                        {}
                         <div className={styles.productHeader}>
                             <div className={styles.productHeaderLeft}>
                                 <h2 className={styles.productHeaderTitle}>Bộ sưu tập Cát</h2>
@@ -514,7 +514,7 @@ const CollectionPage = () => {
                             </div>
                         </div>
 
-                        {/* Product Grid */}
+                        {}
                         {filterLoading ? (
                             <div className="flex justify-center items-center py-24">
                                 <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2" style={{ borderColor: '#ab121c' }}></div>
@@ -575,7 +575,7 @@ const CollectionPage = () => {
                             </div>
                         )}
 
-                        {/* Pagination */}
+                        {}
                         {totalPages > 1 && (
                             <div className={styles.pagination}>
                                 <button

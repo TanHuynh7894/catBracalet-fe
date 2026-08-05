@@ -27,7 +27,6 @@ const Header = () => {
         };
 
         checkUser();
-        // Check user on storage change (for cross-tab or within tab updates)
         window.addEventListener('storage', checkUser);
         return () => window.removeEventListener('storage', checkUser);
     }, [location]);
@@ -48,19 +47,16 @@ const Header = () => {
         { name: 'Liên hệ', href: '/contact', type: 'route' },
     ];
 
-    // Thêm link Admin nếu user có quyền Admin
+
     const isAdmin = user && (
-        // 1. Kiểm tra role dạng chuỗi đơn
+
         (typeof user.role === 'string' && user.role.toLowerCase() === 'admin') ||
-        // 2. Kiểm tra roles dạng mảng (chuỗi hoặc object)
         (Array.isArray(user.roles) && user.roles.some(r => {
             const roleStr = typeof r === 'string' ? r : (r.roleName || r.name || r.description || '');
             return roleStr.toLowerCase().includes('admin');
         })) ||
-        // 3. Kiểm tra role đơn lẻ dạng object
         (user.role?.roleName?.toLowerCase() === 'admin') ||
         (user.role?.description?.toLowerCase().includes('admin')) ||
-        // 4. Cờ isAdmin trực tiếp nếu có
         user.isAdmin === true
     );
 
@@ -103,7 +99,7 @@ const Header = () => {
             className={`sticky top-0 left-0 w-full z-[999] transition-all duration-500 bg-[#FAF5EF]/95 backdrop-blur-md font-headline ${isScrolled ? 'py-2.5 shadow-lg border-b border-[#E8DED2]/40' : 'py-5'}`}
         >
             <div className="max-w-[1400px] mx-auto px-4 sm:px-5 md:px-16 flex items-center justify-between">
-                {/* ── LEFT: LOGO ─────────────────────────────────────────── */}
+                {}
                 <Link to="/" className="flex items-center shrink-0">
                     <img
                         src={logoImg}
@@ -112,7 +108,7 @@ const Header = () => {
                     />
                 </Link>
 
-                {/* ── CENTER: NAV MENU ───────────────────────────────────── */}
+                {}
                 <nav className="hidden xl:flex items-center gap-16">
                     {navLinks.map((link) => {
                         const active = isActive(link.href, link.type);
@@ -151,9 +147,9 @@ const Header = () => {
                     })}
                 </nav>
 
-                {/* ── RIGHT: ACTIONS ─────────────────────────────────────── */}
+                {}
                 <div className="flex items-center gap-6 md:gap-8">
-                    {/* User Profile Dropdown */}
+                    {}
                     <div
                         className="relative"
                         onMouseEnter={() => setIsUserMenuOpen(true)}
@@ -204,7 +200,7 @@ const Header = () => {
                         </AnimatePresence>
                     </div>
 
-                    {/* Cart Icon — Navigates to Cart Page */}
+                    {}
                     <button
                         className="relative text-[#4B3A32]/80 hover:text-[#ab121c] transition-colors"
                         onClick={() => navigate('/cart')}
@@ -218,7 +214,7 @@ const Header = () => {
                         )}
                     </button>
 
-                    {/* Consultation Button */}
+                    {}
                     <a
                         href="#consultation"
                         onClick={(e) => handleAnchorClick(e, '#consultation')}
@@ -227,7 +223,7 @@ const Header = () => {
                         Tư vấn miễn phí
                     </a>
 
-                    {/* Mobile Toggle */}
+                    {}
                     <button
                         className="xl:hidden text-[#4B3A32]"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -237,7 +233,7 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div

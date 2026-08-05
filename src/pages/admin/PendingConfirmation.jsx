@@ -28,7 +28,7 @@ const PendingConfirmation = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Search Bar Row */}
+                {}
                 <div className="p-3 bg-white border-b border-gray-100 flex items-center gap-3">
                     <button className="p-2 border border-gray-200 rounded hover:bg-gray-50 text-gray-400">
                         <Filter size={18} />
@@ -45,7 +45,7 @@ const PendingConfirmation = () => {
                     <button className="px-4 py-2 bg-gray-100 text-gray-400 text-sm font-medium rounded opacity-50 cursor-not-allowed">Lưu bộ lọc</button>
                 </div>
 
-                {/* Filter Buttons Row */}
+                {}
                 <div className="p-3 bg-gray-50/30 flex flex-wrap gap-2 border-b border-gray-100">
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-medium flex items-center gap-2 text-gray-600">Xem tất cả</button>
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-medium flex items-center gap-2 text-gray-600">Kênh bán hàng <ChevronDown size={12} /></button>
@@ -55,7 +55,7 @@ const PendingConfirmation = () => {
                     <button className="px-3 py-1.5 bg-white border border-gray-200 rounded text-xs font-medium flex items-center gap-2 text-gray-600">Nhân viên phụ trách <ChevronDown size={12} /></button>
                 </div>
 
-                {/* Tabs */}
+                {}
                 <div className="flex border-b border-gray-100 bg-white">
                     {['Tất cả', 'Chưa thanh toán', 'Đã thanh toán'].map((tab, idx) => (
                         <button key={idx} className={`px-6 py-3 text-xs font-bold ${idx === 0 ? 'border-b-2 border-[#1e293b] text-[#1e293b]' : 'text-gray-400 hover:text-gray-600'}`}>
@@ -64,7 +64,7 @@ const PendingConfirmation = () => {
                     ))}
                 </div>
 
-                {/* Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50/30">

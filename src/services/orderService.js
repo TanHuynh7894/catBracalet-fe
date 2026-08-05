@@ -1,10 +1,9 @@
 import api from './api';
 
-// ─── USER & ADMIN SHARED ──────────────────────────────────────
+
 
 /**
- * Create a new order and get checkout URL
- * @param {Object} data - { userId, addressId, voucherCode, cartItemIds }
+ * @param {Object} data 
  */
 export const checkout = async (data) => {
     try {
@@ -15,9 +14,7 @@ export const checkout = async (data) => {
     }
 };
 
-/**
- * Get details for a specific order
- */
+
 export const getOrderById = async (orderId) => {
     try {
         const response = await api.get(`/orders/${orderId}`);
@@ -28,7 +25,6 @@ export const getOrderById = async (orderId) => {
 };
 
 /**
- * Get all orders by a specific user ID
  * @param {string} userId
  */
 export const getOrdersByUserId = async (userId) => {
@@ -41,9 +37,7 @@ export const getOrdersByUserId = async (userId) => {
 };
 
 
-/**
- * Cancel an order (User can cancel PENDING orders)
- */
+
 export const cancelOrder = async (orderId) => {
     try {
         const response = await api.patch(`/orders/${orderId}/cancel`);
@@ -54,7 +48,6 @@ export const cancelOrder = async (orderId) => {
 };
 
 /**
- * Retry payment for an existing unpaid order
  * @param {string} orderId
  */
 export const retryPayment = async (orderId) => {
@@ -68,11 +61,7 @@ export const retryPayment = async (orderId) => {
 
 
 
-// ─── ADMIN / STAFF ONLY ──────────────────────────────────────
 
-/**
- * Get all orders in the system (Admin/Staff)
- */
 export const getAllOrders = async () => {
     try {
         const response = await api.get('/orders');
@@ -82,9 +71,7 @@ export const getAllOrders = async () => {
     }
 };
 
-/**
- * Filter orders by status
- */
+
 export const getOrdersByStatus = async (status) => {
     try {
         const response = await api.get(`/orders/status/${status}`);
@@ -95,9 +82,8 @@ export const getOrdersByStatus = async (status) => {
 };
 
 /**
- * Update order status (Confirm, Ship, etc.)
  * @param {string} orderId 
- * @param {string} status - e.g., "CONFIRMED", "DELIVERED"
+ * @param {string} status 
  */
 export const updateOrderStatus = async (orderId, status) => {
     try {
@@ -109,9 +95,8 @@ export const updateOrderStatus = async (orderId, status) => {
 };
 
 /**
- * Get orders by time range
- * @param {string} start - Date string
- * @param {string} end - Date string
+ * @param {string} start 
+ * @param {string} end
  */
 export const getOrdersByTime = async (start, end) => {
     try {
@@ -123,7 +108,6 @@ export const getOrdersByTime = async (start, end) => {
 };
 
 /**
- * Confirm order (after payment)
  * @param {string} orderId 
  */
 export const confirmOrder = async (orderId) => {
@@ -135,7 +119,7 @@ export const confirmOrder = async (orderId) => {
     }
 };
 
-// Use named export for consistency
+
 export const orderService = {
     checkout,
     getOrderById,

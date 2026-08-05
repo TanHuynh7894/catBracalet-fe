@@ -11,7 +11,6 @@ const MainLayout = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Global luxury loading delay for first entry
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 600);

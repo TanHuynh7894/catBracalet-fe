@@ -1,13 +1,4 @@
-/* ============================================================
-   CustomBraceletPage.module.css
-   Pixel-perfect rewrite — Cát Bracelet "Thiết kế riêng" page
-   Design palette: #ab121c | #FAF5EF | #4B3A32 | #D8B27D | #E8DED2
-   Fonts: Playfair Display (headings) + Inter (body)
-   ============================================================ */
 
-
-
-/* ── Design tokens ─────────────────────────────────────────── */
 :root {
     --c-primary: #ab121c;
     --c-primary-dk: #850e15;
@@ -26,7 +17,7 @@
     --r-pill: 100px;
 }
 
-/* ── Page root ─────────────────────────────────────────────── */
+
 .page {
     min-height: 100vh;
     background: var(--c-bg);
@@ -35,7 +26,7 @@
     overflow-x: hidden;
 }
 
-/* Shared container */
+
 .container {
     max-width: 1600px;
     width: 95%;
@@ -43,9 +34,7 @@
     padding: 0 30px;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   1. HERO
-══════════════════════════════════════════════════════════════ */
+
 .hero {
     background: var(--c-bg);
     overflow: hidden;
@@ -63,7 +52,7 @@
     min-height: 460px;
 }
 
-/* Left */
+
 .heroLeft {
     display: flex;
     flex-direction: column;
@@ -102,7 +91,7 @@
     font-weight: 400;
 }
 
-/* Right */
+
 .heroRight {
     border-radius: 20px;
     overflow: hidden;
@@ -130,9 +119,7 @@
     transform: scale(1.03);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   2. FEATURES BAR
-══════════════════════════════════════════════════════════════ */
+
 .features {
     padding: 0 0 36px;
     background: var(--c-bg);
@@ -161,7 +148,7 @@
     background: rgba(250, 245, 239, .65);
 }
 
-/* Divider */
+
 .featureItem:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -206,9 +193,7 @@
     line-height: 1.4;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   3. BUILDER
-══════════════════════════════════════════════════════════════ */
+
 .builder {
     padding: 36px 0 60px;
 }
@@ -219,10 +204,10 @@
     margin: 0 auto;
     padding: 0 30px;
     display: block;
-    /* Changed from grid to block since sidebar is hidden */
+    
 }
 
-/* Mobile filter toggle */
+
 .mobileFilterBtn {
     display: none;
     align-items: center;
@@ -246,7 +231,7 @@
     border-color: var(--c-primary);
 }
 
-/* Overlay */
+
 .overlay {
     display: none;
     position: fixed;
@@ -255,13 +240,13 @@
     z-index: 98;
 }
 
-/* ─── SIDEBAR ──────────────────────────────────────────────── */
+
 .sidebar {
     background: var(--c-white);
     border: 1px solid var(--c-border);
     border-radius: var(--r-card);
     padding: 18px 15px 20px;
-    /* Removed sticky and max-height so it expands fully */
+    
     width: 100%;
 }
 
@@ -297,7 +282,7 @@
     color: var(--c-primary);
 }
 
-/* Accordion */
+
 .sbGroup {
     border-bottom: 1px solid var(--c-border-soft);
 }
@@ -342,7 +327,7 @@
     padding-left: 1px;
 }
 
-/* Filter rows */
+
 .filterRow {
     display: flex;
     align-items: center;
@@ -359,7 +344,7 @@
     display: none;
 }
 
-/* Checkbox */
+
 .cbBox {
     width: 13px;
     height: 13px;
@@ -389,7 +374,7 @@
     transform: rotate(45deg);
 }
 
-/* Radio */
+
 .rbDot {
     width: 13px;
     height: 13px;
@@ -424,7 +409,7 @@
     transition: color .2s;
 }
 
-/* Price range */
+
 .priceRange {
     display: flex;
     align-items: center;
@@ -456,7 +441,7 @@
     border-color: var(--c-primary);
 }
 
-/* Clear button */
+
 .clearBtn {
     display: flex;
     align-items: center;
@@ -482,7 +467,7 @@
     background: rgba(171, 18, 28, .03);
 }
 
-/* ─── BUILDER CONTENT ─────────────────────────────────────── */
+
 .builderContent {
     display: flex;
     flex-direction: column;
@@ -490,7 +475,7 @@
     min-width: 0;
 }
 
-/* Content top bar */
+
 .contentTop {
     display: flex;
     align-items: flex-start;
@@ -516,7 +501,7 @@
     margin: 0;
 }
 
-/* Sort */
+
 .sortBox {
     display: flex;
     align-items: center;
@@ -606,7 +591,7 @@
     background: rgba(171, 18, 28, .04);
 }
 
-/* ─── STEPS ───────────────────────────────────────────────── */
+
 .step {
     background: var(--c-white);
     border: 1px solid var(--c-border-soft);
@@ -655,8 +640,7 @@
     line-height: 1.5;
 }
 
-/* ─── STEP 1: WIRE CARDS ──────────────────────────────────── */
-/* ─── Product Card Grid System ────────────────────────────── */
+
 .productCard {
     background: var(--c-white);
     border-radius: var(--r-card);
@@ -722,7 +706,7 @@
     margin: 0;
 }
 
-/* Grids */
+
 .wireGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -741,7 +725,7 @@
     gap: 16px;
 }
 
-/* ─── STEP 4: ACCESSORY CARDS ─────────────────────────────── */
+
 .accGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -789,7 +773,6 @@
     line-height: 1.3;
 }
 
-/* Qty selector */
 .qty {
     display: flex;
     align-items: center;
@@ -832,7 +815,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-/* ─── ACTION BUTTONS ──────────────────────────────────────── */
+
 .actions {
     display: flex;
     align-items: center;
@@ -900,9 +883,7 @@
     box-shadow: 0 10px 30px rgba(171, 18, 28, .38);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   4. USP SECTION
-══════════════════════════════════════════════════════════════ */
+
 .usp {
     background: var(--c-bg);
     padding: 20px 0 60px;
@@ -964,9 +945,6 @@
     line-height: 1.55;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — LAPTOP ( 1024 – 1439px )
-══════════════════════════════════════════════════════════════ */
 @media (max-width: 1439px) {
 
     .stoneGrid,
@@ -1000,12 +978,10 @@
     }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — TABLET ( 768 – 1023px )
-══════════════════════════════════════════════════════════════ */
+
 @media (max-width: 1023px) {
 
-    /* Container padding */
+    
     .container,
     .heroWrap {
         padding-left: 20px;
@@ -1017,7 +993,7 @@
         grid-template-columns: 1fr;
     }
 
-    /* Hero two-col → one col */
+
     .heroWrap {
         grid-template-columns: 1fr;
         gap: 28px;
@@ -1030,7 +1006,7 @@
         height: 300px;
     }
 
-    /* Features wrap */
+   
     .featureBar {
         flex-wrap: wrap;
     }
@@ -1043,7 +1019,7 @@
         display: none;
     }
 
-    /* Show mobile filter btn + drawer */
+    
     .mobileFilterBtn {
         display: flex;
     }
@@ -1076,7 +1052,7 @@
         display: flex;
     }
 
-    /* Step grids */
+ 
     .wireGrid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1090,14 +1066,14 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* content top */
+  
     .contentTop {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
 
-    /* USP */
+
     .uspGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
@@ -1107,7 +1083,7 @@
         padding: 28px 0;
     }
 
-    /* Buttons */
+
     .actions {
         flex-direction: column;
     }
@@ -1119,12 +1095,10 @@
     }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RESPONSIVE — MOBILE ( 0 – 767px )
-══════════════════════════════════════════════════════════════ */
+
 @media (max-width: 767px) {
 
-    /* Padding */
+ 
     .container,
     .heroWrap,
     .builderWrap {
@@ -1136,7 +1110,7 @@
         width: 100%;
     }
 
-    /* Hero */
+    
     .heroWrap {
         padding-top: 28px;
         padding-bottom: 28px;
@@ -1159,7 +1133,7 @@
         font-size: 13px;
     }
 
-    /* Features */
+   
     .features {
         padding-bottom: 20px;
     }
@@ -1178,7 +1152,7 @@
         display: none !important;
     }
 
-    /* Builder */
+    
     .builder {
         padding: 20px 0 40px;
     }
@@ -1188,7 +1162,7 @@
         left: -295px;
     }
 
-    /* Steps */
+ 
     .step {
         padding: 16px 14px;
     }
@@ -1201,7 +1175,7 @@
         font-size: 17px;
     }
 
-    /* Step grids */
+ 
     .wireGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
@@ -1233,7 +1207,7 @@
         gap: 12px;
     }
 
-    /* Tabs */
+
     .tabs {
         flex-wrap: wrap;
     }
@@ -1243,7 +1217,7 @@
         padding: 5px 13px;
     }
 
-    /* Selected section */
+
     .selectedSection {
         padding: 16px;
         margin: 24px 0 16px;
@@ -1269,7 +1243,7 @@
         white-space: normal;
     }
 
-    /* Action area */
+
     .actions {
         flex-direction: column;
         align-items: stretch;
@@ -1293,7 +1267,7 @@
         line-height: 1.4;
     }
 
-    /* USP */
+
     .uspGrid {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -1304,7 +1278,7 @@
     }
 }
 
-/* ─── SELECTED SECTION ────────────────────────────────── */
+
 .selectedSection {
     background: var(--c-bg);
     border: 2px dashed var(--c-border);
@@ -1400,7 +1374,7 @@
     background: #000;
 }
 
-/* ─── MODAL ────────────────────────────────────────────── */
+
 .modalOverlay {
     position: fixed;
     inset: 0;
@@ -1753,7 +1727,7 @@
     }
 }
 
-/* ─── RESPONSIVE — MOBILE (≤ 640px) ─────────────────────────── */
+
 @media (max-width: 640px) {
 
     .stoneGrid,

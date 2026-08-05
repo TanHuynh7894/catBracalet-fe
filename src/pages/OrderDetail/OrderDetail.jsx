@@ -74,13 +74,13 @@ const OrderDetail = () => {
 
     return (
         <section className="animate-fade-in">
-            {/* Breadcrumb / Back Button */}
+            {}
             <NavLink to="/order-history" className="inline-flex items-center text-primary mb-6 hover:opacity-70 transition-opacity group">
                 <ArrowLeft className="mr-2 transition-transform group-hover:-translate-x-1" size={20} />
                 <span className="font-body text-label-sm uppercase tracking-widest font-bold">Trở về lịch sử</span>
             </NavLink>
 
-            {/* Order Header */}
+            {}
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
                 <div>
                     <h1 className="font-headline text-headline-lg text-on-surface">Đơn hàng #{order.id.split('-')[0].toUpperCase()}</h1>
@@ -92,9 +92,9 @@ const OrderDetail = () => {
                 </div>
             </div>
 
-            {/* Information Grid */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                {/* Shipping Info */}
+                {}
                 <div className="p-8 bg-white border border-outline-variant/20 rounded-2xl shadow-sm">
                     <div className="flex items-center mb-6 space-x-2">
                         <MapPin className="text-primary" size={24} />
@@ -114,7 +114,7 @@ const OrderDetail = () => {
                     )}
                 </div>
 
-                {/* Payment & Customer Info */}
+                {}
                 <div className="p-8 bg-white border border-outline-variant/20 rounded-2xl shadow-sm">
                     <div className="flex items-center mb-6 space-x-2">
                         <CreditCard className="text-primary" size={24} />
@@ -159,7 +159,7 @@ const OrderDetail = () => {
                 </div>
             </div>
 
-            {/* Order Items Section */}
+            {}
             <div className="mb-8">
                 <h3 className="font-headline text-on-surface mb-6 flex items-center text-xl">
                     <Package className="mr-3 text-primary" size={24} />
@@ -209,7 +209,7 @@ const OrderDetail = () => {
                 </div>
             </div>
 
-            {/* Order Summary */}
+            {}
             <div className="flex justify-end pt-8">
                 <div className="w-full md:w-96 space-y-4 bg-white p-8 rounded-2xl border border-outline-variant/20 shadow-sm">
                     <div className="flex justify-between items-center text-on-surface-variant">

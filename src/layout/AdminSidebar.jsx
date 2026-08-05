@@ -45,12 +45,7 @@ const AdminSidebar = () => {
     };
 
     const menuItems = [
-        // {
-        //     id: 'dashboard',
-        //     title: 'Tổng quan',
-        //     icon: <LayoutDashboard size={18} />,
-        //     path: '/admin'
-        // },
+        
         {
             id: 'orders',
             title: 'Đơn hàng',

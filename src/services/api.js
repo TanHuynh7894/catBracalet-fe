@@ -7,7 +7,7 @@ const api = axios.create({
     },
 });
 
-// Add a request interceptor to include the token in headers
+
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('accessToken');
@@ -35,7 +35,7 @@ const processQueue = (error, token = null) => {
     failedQueue = [];
 };
 
-// Add a response interceptor to handle token expiration
+
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -63,14 +63,14 @@ api.interceptors.response.use(
             const rToken = localStorage.getItem('refreshToken');
             if (!rToken) {
                 isRefreshing = false;
-                // No refresh token, logout
+                
                 localStorage.clear();
                 window.location.href = '/login';
                 return Promise.reject(error);
             }
 
             try {
-                // IMPORTANT: Use original axios here or a separate instance to avoid interceptor loop
+                
                 const response = await axios.post(`${api.defaults.baseURL}/user/refresh-token`, {
                     refreshToken: rToken
                 });

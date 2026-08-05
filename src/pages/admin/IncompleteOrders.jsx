@@ -18,7 +18,7 @@ const IncompleteOrders = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Tabs */}
+                {}
                 <div className="flex border-b border-gray-100 bg-gray-50/50">
                     {['Tất cả', 'Đặt hàng', 'Đang giao dịch', 'Đã hoàn thành', 'Đã hủy'].map((tab, idx) => (
                         <button key={idx} className={`px-6 py-4 text-xs font-bold uppercase tracking-widest ${idx === 0 ? 'border-b-2 border-[#ab121c] text-[#ab121c]' : 'text-gray-400 hover:text-gray-600'}`}>
@@ -27,7 +27,7 @@ const IncompleteOrders = () => {
                     ))}
                 </div>
 
-                {/* Sapo Styled Filter Bar */}
+                {}
                 <div className="p-3 bg-white border-b border-gray-100 flex items-stretch">
                     <div className="flex-1 flex items-center bg-white border border-gray-200 rounded-l-lg divide-x divide-gray-200">
                         <div className="flex items-center gap-3 px-4 py-2 w-full">
@@ -51,7 +51,7 @@ const IncompleteOrders = () => {
                     </div>
                 </div>
 
-                {/* Table - Exact Match to Screenshot */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50/30">

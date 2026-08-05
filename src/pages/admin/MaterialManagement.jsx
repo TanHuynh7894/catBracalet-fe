@@ -17,7 +17,7 @@ import styles from './MaterialManagement.module.css';
 
 const EMPTY_FORM = { materialName: '', materialType: '', color: '' };
 
-// Preset colour swatches for quick picking
+
 const COLOR_PRESETS = [
     { name: 'Đỏ', hex: '#ef4444' },
     { name: 'Cam', hex: '#f97316' },
@@ -37,7 +37,7 @@ const MATERIAL_TYPES = [
     'Đá quý', 'Kim loại', 'Tự nhiên', 'Tổng hợp', 'Gỗ', 'Gốm sứ', 'Thủy tinh', 'Khác'
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 const MaterialManagement = () => {
     const { showToast } = useToast();
 
@@ -47,21 +47,19 @@ const MaterialManagement = () => {
     const [filterStatus, setFilterStatus] = useState('ALL');
     const [filterType, setFilterType] = useState('ALL');
 
-    // Modal states
+
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
+    const [modalMode, setModalMode] = useState('add'); 
     const [selectedMaterial, setSelectedMaterial] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // Delete confirm
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [deleteType, setDeleteType] = useState('soft'); // 'soft' | 'force'
 
-    // Form
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleteType, setDeleteType] = useState('soft'); 
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
-    // ─── Fetch ────────────────────────────────────────────────────────────────
+    
     const fetchMaterials = async (isInitial = false) => {
         if (isInitial) setLoading(true);
         try {
@@ -76,7 +74,7 @@ const MaterialManagement = () => {
 
     useEffect(() => { fetchMaterials(true); }, []);
 
-    // ─── Derived ──────────────────────────────────────────────────────────────
+
     const allTypes = useMemo(() => {
         const types = [...new Set(materials.map(m => m.materialType).filter(Boolean))];
         return types;
@@ -101,7 +99,7 @@ const MaterialManagement = () => {
         types: new Set(materials.map(m => m.materialType).filter(Boolean)).size,
     }), [materials]);
 
-    // ─── Modal helpers ────────────────────────────────────────────────────────
+
     const openAdd = () => {
         setModalMode('add');
         setSelectedMaterial(null);
@@ -128,7 +126,7 @@ const MaterialManagement = () => {
         setShowDeleteConfirm(true);
     };
 
-    // ─── Validation ───────────────────────────────────────────────────────────
+
     const validate = () => {
         const e = {};
         if (!formData.materialName.trim()) e.materialName = 'Tên chất liệu không được để trống';
@@ -137,7 +135,7 @@ const MaterialManagement = () => {
         return e;
     };
 
-    // ─── Submit ───────────────────────────────────────────────────────────────
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const errs = validate();
@@ -167,7 +165,7 @@ const MaterialManagement = () => {
         }
     };
 
-    // ─── Delete ───────────────────────────────────────────────────────────────
+
     const handleDelete = async () => {
         setIsProcessing(true);
         try {
@@ -188,7 +186,7 @@ const MaterialManagement = () => {
         }
     };
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
+
     const StatusBadge = ({ status }) => {
         if (status === 'ACTIVE') {
             return (
@@ -226,7 +224,7 @@ const MaterialManagement = () => {
         );
     };
 
-    // ─── Render ───────────────────────────────────────────────────────────────
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">
             <Loader2 size={40} className="animate-spin text-rose-800 mb-4" />
@@ -237,7 +235,7 @@ const MaterialManagement = () => {
     return (
         <div className={styles.dashboard}>
 
-            {/* ── Header ──────────────────────────────────────────────────── */}
+            {}
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.title}>Quản lý Chất liệu</h1>
@@ -248,7 +246,7 @@ const MaterialManagement = () => {
                 </button>
             </div>
 
-            {/* ── Stats Grid ──────────────────────────────────────────────── */}
+            {}
             <div className={styles.statsGrid}>
                 {[
                     { label: 'Tổng chất liệu', value: stats.total, icon: <Gem size={20} />, color: '#ab121c', bg: '#FDF2F2' },
@@ -268,9 +266,9 @@ const MaterialManagement = () => {
                 ))}
             </div>
 
-            {/* ── Table ───────────────────────────────────────────────────── */}
+            {}
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-                {/* Toolbar */}
+                {}
                 <div className={styles.toolbar}>
                     <div className={styles.searchBox}>
                         <Search size={16} style={{ color: '#9ca3af' }} />
@@ -308,7 +306,7 @@ const MaterialManagement = () => {
                     </span>
                 </div>
 
-                {/* Table */}
+                {}
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                         <thead>
@@ -330,11 +328,11 @@ const MaterialManagement = () => {
                                 </tr>
                             ) : filtered.map((m, idx) => (
                                 <tr key={m.id} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
-                                    {/* Index */}
+                                    {}
                                     <td style={{ padding: '16px', color: '#9ca3af', fontSize: 12, fontWeight: 700 }}>
                                         {idx + 1}
                                     </td>
-                                    {/* Name */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-3">
                                             <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#ab121c' }}>
@@ -346,23 +344,23 @@ const MaterialManagement = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    {/* Type */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <TypeBadge type={m.materialType} />
                                     </td>
-                                    {/* Color */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-2">
-                                            {/* Color dot — try to map common color names */}
+                                            {}
                                             <ColorDot colorName={m.color} />
                                             <span className="text-sm text-gray-700 font-medium">{m.color || '—'}</span>
                                         </div>
                                     </td>
-                                    {/* Status */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <StatusBadge status={m.status} />
                                     </td>
-                                    {/* Actions */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-1">
                                             <button
@@ -398,13 +396,11 @@ const MaterialManagement = () => {
                 </div>
             </div>
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Add / Edit Material
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} style={{ width: 540 }} onClick={e => e.stopPropagation()}>
-                        {/* Header */}
+                        {}
                         <div className="flex justify-between items-center px-7 py-5 border-b border-gray-100">
                             <div className="flex items-center gap-3">
                                 <div className="p-2.5 rounded-xl bg-rose-50">
@@ -426,9 +422,9 @@ const MaterialManagement = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
+                        {}
                         <form onSubmit={handleSubmit} className="px-7 py-6 space-y-5">
-                            {/* Material Name */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Tên chất liệu <span className="text-red-500">*</span>
@@ -447,7 +443,7 @@ const MaterialManagement = () => {
                                 {errors.materialName && <p className="text-xs text-red-500 mt-1">{errors.materialName}</p>}
                             </div>
 
-                            {/* Material Type */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Loại chất liệu <span className="text-red-500">*</span>
@@ -466,7 +462,7 @@ const MaterialManagement = () => {
                                 {errors.materialType && <p className="text-xs text-red-500 mt-1">{errors.materialType}</p>}
                             </div>
 
-                            {/* Color */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Màu sắc <span className="text-red-500">*</span>
@@ -483,7 +479,7 @@ const MaterialManagement = () => {
                                     />
                                 </div>
                                 {errors.color && <p className="text-xs text-red-500 mt-1">{errors.color}</p>}
-                                {/* Color presets */}
+                                {}
                                 <div className="flex flex-wrap gap-2 mt-3">
                                     {COLOR_PRESETS.map(cp => (
                                         <button
@@ -499,7 +495,7 @@ const MaterialManagement = () => {
                                 <p className="text-[10px] text-gray-400 mt-1.5">Click vào ô màu để chọn nhanh</p>
                             </div>
 
-                            {/* Footer Buttons */}
+                            {}
                             <div className="flex gap-3 pt-2">
                                 <button
                                     type="button"
@@ -524,9 +520,7 @@ const MaterialManagement = () => {
                 </div>
             )}
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Delete Confirm
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div
@@ -582,14 +576,14 @@ const MaterialManagement = () => {
     );
 };
 
-// ─── Tiny colour dot helper ───────────────────────────────────────────────────
+
 const COLOR_MAP = {
-    // tiếng việt
+    
     'đỏ': '#ef4444', 'cam': '#f97316', 'vàng': '#eab308',
     'xanh lá': '#22c55e', 'xanh dương': '#3b82f6', 'tím': '#a855f7',
     'hồng': '#ec4899', 'nâu': '#92400e', 'trắng': '#e5e7eb',
     'đen': '#1f2937', 'bạc': '#9ca3af', 'vàng kim': '#d97706',
-    // tiếng anh (fallback cho dữ liệu cũ)
+    
     red: '#ef4444', orange: '#f97316', yellow: '#eab308',
     green: '#22c55e', blue: '#3b82f6', purple: '#a855f7',
     pink: '#ec4899', brown: '#92400e', white: '#e5e7eb',

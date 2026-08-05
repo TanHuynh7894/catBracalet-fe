@@ -28,7 +28,7 @@ const SupportManagement = () => {
     const [filterStatus, setFilterStatus] = useState('all');
     const [unreadMap, setUnreadMap] = useState({});
 
-    // Cache thông tin user để hiển thị tên
+
     const [userCache, setUserCache] = useState({});
 
     const messagesEndRef = useRef(null);
@@ -38,7 +38,7 @@ const SupportManagement = () => {
     const currentUser = userString ? JSON.parse(userString) : {};
     const myId = currentUser.id || currentUser._id;
 
-    // Thu thập tất cả các giá trị có thể là ID của user hiện tại
+
     const possibleAdminIds = [
         currentUser.id,
         currentUser._id,
@@ -49,14 +49,14 @@ const SupportManagement = () => {
 
     const adminId = currentUser.id || currentUser._id || currentUser.userId || currentUser.user_id || currentUser.sub;
 
-    // ---- Fetch User Name Logic (có cache) ----
+
     const fetchUserName = useCallback(async (uid) => {
         if (!uid || userCache[uid]) return;
         try {
             const response = await getUserById(uid);
             const userData = response.data || response;
 
-            // Lấy fullName và avatar từ API bạn gửi
+
             const userInfo = {
                 name: userData.fullName || userData.full_name || userData.username || 'Khách hàng',
                 avatar: userData.avatar || null
@@ -69,7 +69,7 @@ const SupportManagement = () => {
         }
     }, [userCache]);
 
-    // Tự động fetch tên cho tất cả ticket trong danh sách
+
     useEffect(() => {
         if (tickets.length > 0) {
             tickets.forEach(t => {
@@ -78,20 +78,20 @@ const SupportManagement = () => {
         }
     }, [tickets, fetchUserName]);
 
-    // ---- Socket.IO ----
+
     const { sendMessage, joinTicket } = useSupportSocket({
         ticketId: activeTicket?.id || null,
         onChatHistory: (data) => {
             const arr = Array.isArray(data) ? data : (data?.messages || []);
             setMessages(arr);
             setLoadingMsgs(false);
-            // Lấy tên cho tất cả người gửi trong lịch sử
+            
             arr.forEach(m => fetchUserName(m.sender_id));
         },
         onNewMessage: (msg) => {
             if (msg.ticket_id === activeTicket?.id) {
                 setMessages(prev => {
-                    // Xoá optimistic trùng (cùng sender + nội dung gần nhau)
+                
                     const filtered = prev.filter(m =>
                         !(m.id?.startsWith('opt_') && m.message === msg.message && m.sender_id === msg.sender_id)
                     );
@@ -120,7 +120,7 @@ const SupportManagement = () => {
     useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
     const handleSelectTicket = async (ticket) => {
-        console.log('[DEBUG] Ticket selected:', JSON.stringify(ticket)); // xem field nào tồn tại
+        console.log('[DEBUG] Ticket selected:', JSON.stringify(ticket)); 
         setActiveTicket(ticket);
         setMessages([]);
         setLoadingMsgs(true);
@@ -131,7 +131,7 @@ const SupportManagement = () => {
             const data = await getTicketMessages(ticket.id);
             const arr = Array.isArray(data) ? data : (data?.messages || []);
             if (arr.length > 0) setMessages(arr);
-        } catch { /* wait socket */ }
+        } catch {  }
 
         setTimeout(() => setLoadingMsgs(false), 2000);
         setTimeout(() => inputRef.current?.focus(), 150);
@@ -141,7 +141,6 @@ const SupportManagement = () => {
         if (!inputText.trim() || !activeTicket) return;
         const trimmed = inputText.trim();
 
-        // Optimistic update – hiện tin ngay bên phải mà không chờ socket echo
         const optimisticMsg = {
             id: `opt_${Date.now()}`,
             ticket_id: activeTicket.id,
@@ -165,7 +164,7 @@ const SupportManagement = () => {
 
     return (
         <div className={styles.root}>
-            {/* Sidebar */}
+            {}
             <div className={styles.leftPanel}>
                 <div className={styles.leftHeader}>
                     <div>
@@ -238,7 +237,7 @@ const SupportManagement = () => {
                 </div>
             </div>
 
-            {/* Chat Area */}
+            {}
             <div className={styles.rightPanel}>
                 {!activeTicket ? (
                     <div className={styles.emptyChat}>
@@ -285,7 +284,7 @@ const SupportManagement = () => {
                                 <div className={styles.loadingMsgs}>Đang tải lịch sử...</div>
                             ) : (
                                 messages.map((msg, idx) => {
-                                    // Giống hệt ChatBubble: so sánh trực tiếp sender_id với myId
+                                    
                                     const isMe = msg.sender_id === myId || msg.id?.startsWith('opt_');
 
                                     const senderInfo = userCache[msg.sender_id] || { name: msg.sender_role === 'admin' ? 'Hỗ trợ' : 'Khách hàng' };

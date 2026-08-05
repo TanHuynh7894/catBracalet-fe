@@ -25,15 +25,15 @@ const CartPage = () => {
     const { refreshCart } = useCart();
     const { showToast, showConfirm } = useToast();
 
-    const [cartData, setCartData] = useState(null);   // full cart object from API
-    const [cartItems, setCartItems] = useState([]);   // items array
+    const [cartData, setCartData] = useState(null);  
+    const [cartItems, setCartItems] = useState([]);  
     const [loading, setLoading] = useState(true);
-    const [updatingId, setUpdatingId] = useState(null); // cartItemId đang được update
+    const [updatingId, setUpdatingId] = useState(null); 
     const [error, setError] = useState('');
 
     const [selectedIds, setSelectedIds] = useState([]);
 
-    // ── Fetch cart ──────────────────────────────────────────────────────────
+ 
     const fetchCart = useCallback(async () => {
         try {
             setLoading(true);
@@ -42,7 +42,7 @@ const CartPage = () => {
             setCartData(data);
             const items = data.items || [];
             setCartItems(items);
-            // Default all selected
+
             setSelectedIds(items.map(i => i.cartItemId));
             refreshCart();
         } catch (err) {
@@ -56,7 +56,7 @@ const CartPage = () => {
         fetchCart();
     }, [fetchCart]);
 
-    // ── Selection Logic ─────────────────────────────────────────────────────
+
     const toggleSelect = (id) => {
         setSelectedIds(prev =>
             prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
@@ -71,7 +71,7 @@ const CartPage = () => {
         }
     };
 
-    // ── Update quantity ─────────────────────────────────────────────────────
+
     const handleIncrease = async (item) => {
         const newQty = item.quantity + 1;
         setUpdatingId(item.cartItemId);
@@ -101,7 +101,7 @@ const CartPage = () => {
         }
     };
 
-    // ── Remove item ─────────────────────────────────────────────────────────
+
     const handleRemove = async (cartItemId) => {
         setUpdatingId(cartItemId);
         setCartItems(prev => prev.filter(i => i.cartItemId !== cartItemId));
@@ -137,7 +137,7 @@ const CartPage = () => {
         );
     };
 
-    // ── Derived totals ──────────────────────────────────────────────────────
+
     const subtotal = cartItems.reduce((sum, item) => {
         if (!selectedIds.includes(item.cartItemId)) return sum;
         const price = Number(item.variantDetails?.extraPrice ?? item.unitPrice ?? 0);
@@ -146,11 +146,11 @@ const CartPage = () => {
 
     const total = subtotal;
 
-    // ── Image Helper ────────────────────────────────────────────────────────
+ 
     const getProductImage = (item) => {
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
-        // Prioritize: 1. Variant image, 2. Product thumbnail, 3. First product image, 4. Fallback
+
         let thumb = item?.variantDetails?.imageUrl || item?.variantDetails?.image;
         if (!thumb) thumb = item?.product?.thumbnail || item?.thumbnail;
         if (!thumb && item?.product?.productImages?.length > 0) {
@@ -170,7 +170,7 @@ const CartPage = () => {
         navigate('/checkout', { state: { selectedCartItemIds: selectedIds } });
     };
 
-    // ─── Render: Loading ────────────────────────────────────────────────────
+
     if (loading) {
         return (
             <div className={styles.pageWrapper}>
@@ -182,7 +182,7 @@ const CartPage = () => {
         );
     }
 
-    // ─── Render: Error ──────────────────────────────────────────────────────
+
     if (error) {
         return (
             <div className={styles.pageWrapper}>

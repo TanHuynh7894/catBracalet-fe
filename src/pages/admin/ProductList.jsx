@@ -17,14 +17,13 @@ const ProductList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-    // Form state for creating product
     const [formData, setFormData] = useState({
         productName: '',
         basePrice: '',
         categoryId: '',
         description: '',
         materialIds: [],
-        type: 'P' // Required for Multer classification
+        type: 'P' 
     });
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -68,7 +67,7 @@ const ProductList = () => {
         } else {
             try {
                 const results = await searchProductsByName(query);
-                // The API might return an array of arrays or just an array based on the example
+
                 setProducts(Array.isArray(results) ? (Array.isArray(results[0]) ? results[0] : results) : []);
             } catch (error) {
                 console.error("Search error:", error);
@@ -109,7 +108,7 @@ const ProductList = () => {
             if (formData.categoryId) data.append('categoryId', formData.categoryId);
             if (formData.description) data.append('description', formData.description);
 
-            // Append multiple materialIds
+
             formData.materialIds.forEach(id => {
                 data.append('materialIds[]', id);
             });
@@ -155,7 +154,7 @@ const ProductList = () => {
                 const originalStatus = product.status;
                 const nextStatus = originalStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
 
-                // Optimistic Update: Cập nhật UI ngay lập tức
+             
                 setProducts(prev => prev.map(p =>
                     p.id == product.id ? { ...p, status: nextStatus } : p
                 ));
@@ -164,7 +163,7 @@ const ProductList = () => {
                     await softDeleteProduct(product.id);
                     showToast(`Đã ${actionText} sản phẩm thành công`, 'success');
                 } catch (error) {
-                    // Hoàn tác nếu lỗi
+                   
                     setProducts(prev => prev.map(p =>
                         p.id == product.id ? { ...p, status: originalStatus } : p
                     ));
@@ -205,7 +204,7 @@ const ProductList = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Search & Filters */}
+                {}
                 <div className="p-4 bg-white border-b border-gray-100 flex items-center gap-3">
                     <div className="flex-1 flex items-center bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 gap-3 transition-all focus-within:border-[#ab121c] focus-within:bg-white focus-within:shadow-sm">
                         <Search size={18} className="text-gray-400" />
@@ -219,7 +218,7 @@ const ProductList = () => {
                     </div>
                 </div>
 
-                {/* Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50">
@@ -319,7 +318,7 @@ const ProductList = () => {
                 </div>
             </div>
 
-            {/* Create Product Modal */}
+            {}
             {isCreateModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">

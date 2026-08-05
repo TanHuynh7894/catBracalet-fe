@@ -23,7 +23,7 @@
     padding: 0 30px;
 }
 
-/* ─── Header ────────────────────────────────────────────────────── */
+
 .header {
     text-align: center;
     margin-bottom: 60px;
@@ -81,7 +81,6 @@
     font-size: 20px;
 }
 
-/* ─── Layout ────────────────────────────────────────────────────── */
 .mainContent {
     display: grid;
     grid-template-columns: 1fr 380px;
@@ -89,7 +88,7 @@
     align-items: flex-start;
 }
 
-/* ─── Left Column: Items ────────────────────────────────────────── */
+
 .leftCol {
     display: flex;
     flex-direction: column;
@@ -295,7 +294,7 @@
     opacity: 0.5;
 }
 
-/* ─── Right Column: Summary ─────────────────────────────────────── */
+
 .rightCol {
     position: sticky;
     top: 100px;
@@ -410,7 +409,7 @@
     background: #faf8f6;
 }
 
-/* ─── Empty Cart ────────────────────────────────────────────────── */
+
 .emptyCartContainer {
     padding: 80px 40px;
     text-align: center;
@@ -452,7 +451,7 @@
     transform: translateY(-2px);
 }
 
-/* ─── Utilities ─────────────────────────────────────────────────── */
+
 .loadingState {
     display: flex;
     flex-direction: column;
@@ -614,7 +613,7 @@
 
     .itemSubtotal {
         display: none;
-        /* Hide subtotal to keep mobile row neat */
+        
     }
 
     .itemControls {

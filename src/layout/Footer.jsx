@@ -23,7 +23,7 @@ const Footer = () => {
         <footer className={styles.footer}>
             <div className={styles.container}>
                 <div className={styles.topGrid}>
-                    {/* Column 1: Brand */}
+                    {}
                     <div className={styles.brandCol}>
                         <img src={logoImg} alt="Cát Bracelet" className={styles.footerLogo} />
                         <p className={styles.brandDesc}>
@@ -37,7 +37,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Column 2: About */}
+                    {}
                     <div>
                         <h4 className={styles.navTitle}>Thương Hiệu</h4>
                         <ul className={styles.navList}>
@@ -48,7 +48,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Column 3: Policy */}
+                    {}
                     <div>
                         <h4 className={styles.navTitle}>Hỗ Trợ</h4>
                         <ul className={styles.navList}>
@@ -59,7 +59,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Column 4: Contact */}
+                    {}
                     <div>
                         <h4 className={styles.navTitle}>Liên Hệ</h4>
                         <ul className={styles.navList}>
@@ -79,10 +79,10 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Map Section */}
+                {}
                 <ShopMap />
 
-                {/* Bottom Bar */}
+                {}
                 <div className={styles.bottomBar}>
                     <p>© 2026 Cát Bracelet. Crafted for Luxury Spiritual Experience.</p>
                     <div className={styles.legalLinks}>

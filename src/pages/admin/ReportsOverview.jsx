@@ -91,7 +91,7 @@ const ReportsOverview = () => {
                 </button>
             </div>
 
-            {/* Alert Banner */}
+            {}
             <div style={{ background: '#fff9e6', border: '1px solid #ffecb3', padding: 16, borderRadius: 8, display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 24, position: 'relative' }}>
                 <AlertTriangle size={18} style={{ color: '#ff9800', marginTop: 2 }} />
                 <div style={{ flex: 1 }}>
@@ -101,7 +101,7 @@ const ReportsOverview = () => {
                 <button style={{ padding: 4, background: 'none', border: 'none', cursor: 'pointer' }}><X size={16} style={{ color: '#9ca3af' }} /></button>
             </div>
 
-            {/* Tabs */}
+            {}
             <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', marginBottom: 24, gap: 32, paddingLeft: 4 }}>
                 {['Tổng quan', 'Phân tích doanh thu', 'Phân tích khách hàng', 'Phân tích kinh doanh Sàn'].map((tab, idx) => (
                     <button key={idx} style={{
@@ -114,7 +114,7 @@ const ReportsOverview = () => {
                 <button style={{ paddingBottom: 16, background: 'none', border: 'none', cursor: 'pointer' }}><Plus size={18} style={{ color: '#d1d5db' }} /></button>
             </div>
 
-            {/* Date Filter Row */}
+            {}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 16px', fontSize: 12, fontWeight: 700, color: '#374151', cursor: 'pointer' }}>
                     30 ngày qua (27/04 - 26/05/2026) <ChevronDown size={14} style={{ color: '#9ca3af' }} />
@@ -128,7 +128,7 @@ const ReportsOverview = () => {
                 </button>
             </div>
 
-            {/* KPI Cards */}
+            {}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 24 }}>
                 {[
                     { label: 'Doanh thu thuần', value: '53,999,623đ', change: '227.52%' },
@@ -151,9 +151,9 @@ const ReportsOverview = () => {
                 ))}
             </div>
 
-            {/* Charts Row */}
+            {}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20, marginBottom: 24 }}>
-                {/* Revenue Chart */}
+                {}
                 <div style={{ background: '#fff', padding: 24, borderRadius: 12, border: '1px solid #f3f4f6', position: 'relative' }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', marginBottom: 4 }}>Doanh thu theo thời gian</div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 20 }}>
@@ -183,7 +183,7 @@ const ReportsOverview = () => {
                     </div>
                 </div>
 
-                {/* Average Order Value Chart */}
+                {}
                 <div style={{ background: '#fff', padding: 24, borderRadius: 12, border: '1px solid #f3f4f6', position: 'relative' }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', marginBottom: 4 }}>Giá trị đơn hàng trung bình</div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 20 }}>
@@ -214,9 +214,9 @@ const ReportsOverview = () => {
                 </div>
             </div>
 
-            {/* Bottom Row */}
+            {}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20, paddingBottom: 40 }}>
-                {/* Top Products */}
+                {}
                 <div style={{ background: '#fff', padding: 24, borderRadius: 12, border: '1px solid #f3f4f6', position: 'relative' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Top sản phẩm bán chạy</div>
@@ -240,7 +240,7 @@ const ReportsOverview = () => {
                     </div>
                 </div>
 
-                {/* Order Count Chart */}
+                {}
                 <div style={{ background: '#fff', padding: 24, borderRadius: 12, border: '1px solid #f3f4f6', position: 'relative' }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', marginBottom: 4 }}>Số lượng đơn hàng theo thời gian</div>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 20 }}>

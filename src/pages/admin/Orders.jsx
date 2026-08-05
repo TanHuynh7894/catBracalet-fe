@@ -18,7 +18,7 @@ const Orders = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Filter dates
+
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -71,7 +71,7 @@ const Orders = () => {
         o.user?.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Stats calculation
+
     const stats = [
         { label: 'Tổng đơn hàng', value: orders.length, icon: ShoppingBag, color: '#ab121c', bg: '#fee2e2' },
         { label: 'Đang xử lý', value: orders.filter(o => o.status === 'PENDING').length, icon: Clock, color: '#a16207', bg: '#fef9c3' },
@@ -87,7 +87,7 @@ const Orders = () => {
                 </div>
             </div>
 
-            {/* 1. Stats Grid */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {stats.map((s, idx) => (
                     <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 flex items-center gap-4 transition-all hover:shadow-lg hover:-translate-y-1">
@@ -119,7 +119,7 @@ const Orders = () => {
                         </span>
                     </h2>
                 </div>
-                {/* Filters Row */}
+                {}
 
                 <div className="p-4 bg-white border-b border-gray-100 flex flex-wrap items-center gap-4">
                     <div className="flex-1 min-w-[300px] relative">
@@ -140,7 +140,7 @@ const Orders = () => {
                     </div>
                 </div>
 
-                {/* 3. Orders Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     {isLoading ? (
                         <div className="p-20 flex flex-col items-center justify-center gap-4">

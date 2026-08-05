@@ -12,7 +12,7 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Form states
+
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -82,7 +82,7 @@ const Profile = () => {
 
             setProfile(updatedProfile);
 
-            // Update local storage to keep info in sync
+
             const currentUser = JSON.parse(userDataStr);
             localStorage.setItem('user', JSON.stringify({
                 ...currentUser,
@@ -90,12 +90,10 @@ const Profile = () => {
                 avatar: updatedProfile.avatar
             }));
 
-            // Dispatch storage event to notify Header/Layout
+
             window.dispatchEvent(new Event('storage'));
 
             setSuccessMessage('Cập nhật hồ sơ thành công!');
-
-            // Auto close message after 5s
             setTimeout(() => setSuccessMessage(''), 5000);
         } catch (err) {
             console.error('Update error:', err);
@@ -105,7 +103,7 @@ const Profile = () => {
             setUpdating(false);
         }
     };
-
+ 
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">

@@ -41,7 +41,7 @@
 }
 
 
-/* User Management Specifics */
+
 .statsGrid {
     @apply grid grid-cols-1 md:grid-cols-4 gap-4;
 }
@@ -70,7 +70,7 @@
     @apply text-2xl font-extrabold text-gray-800;
 }
 
-/* Tabs */
+
 .tabsContainer {
     @apply flex border-b border-gray-100 px-4;
 }
@@ -95,7 +95,7 @@
     @apply bg-gray-100 text-gray-400;
 }
 
-/* Search and Filters */
+
 .toolbar {
     @apply p-3 border-b border-gray-100 flex items-center gap-3 bg-white;
 }
@@ -112,12 +112,12 @@
     @apply px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm flex items-center gap-2 text-gray-600 hover:bg-gray-50;
 }
 
-/* Bulk Actions */
+
 .bulkActions {
     @apply px-5 py-2.5 bg-[#eff6ff] border-b border-[#dbeafe] flex items-center gap-4 text-sm;
 }
 
-/* Modal */
+
 .modalOverlay {
     @apply fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[1000];
     animation: fadeIn 0.2s ease;

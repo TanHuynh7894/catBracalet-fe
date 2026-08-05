@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { login } from '../services/authService';
-import styles from './Register.module.css'; // Reusing common auth styles
+import styles from './Register.module.css'; 
 
 const Login = () => {
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        if (error) setError(''); // Clear error when user types
+        if (error) setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -49,7 +49,7 @@ const Login = () => {
                 password: formData.password
             });
 
-            // Save tokens and user info
+            
             localStorage.setItem('accessToken', data.accessToken);
             localStorage.setItem('refreshToken', data.refreshToken);
             localStorage.setItem('user', JSON.stringify(data.user));
@@ -58,7 +58,7 @@ const Login = () => {
 
             setShowSuccess(true);
 
-            // Wait a bit then navigate
+            
             setTimeout(() => {
                 const roles = data.user.roles || [];
                 const roleNames = roles.map(r => r.name.toUpperCase());
@@ -111,7 +111,7 @@ const Login = () => {
             </AnimatePresence>
 
             <div className={styles.authTable}>
-                {/* Left Side: Artisanal Imagery */}
+                {}
                 <section className={styles.visualSide}>
                     <div className="absolute inset-0 z-0">
                         <img
@@ -136,7 +136,7 @@ const Login = () => {
                     </div>
                 </section>
 
-                {/* Right Side: Login Form */}
+                {}
                 <section className={styles.formSide}>
                     <div className={styles.fadeIn}>
                         <div className="mb-10 text-center md:text-left">

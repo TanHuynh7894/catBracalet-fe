@@ -26,7 +26,7 @@ const PriceList = () => {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                {/* Tabs */}
+                {}
                 <div className="flex border-b border-gray-100 px-4 bg-white overflow-x-auto whitespace-nowrap">
                     {['Tất cả', 'Theo chi nhánh', 'Theo nhóm khách hàng', 'Theo kênh bán hàng'].map((tab, idx) => (
                         <button key={idx} className={`px-6 py-4 text-xs font-bold tracking-tight uppercase ${idx === 0 ? 'border-b-2 border-[#0088ff] text-[#0088ff]' : 'text-gray-400 hover:text-gray-600'}`}>
@@ -35,7 +35,7 @@ const PriceList = () => {
                     ))}
                 </div>
 
-                {/* Filters */}
+                {}
                 <div className="p-3 bg-white border-b border-gray-100 flex items-center gap-3">
                     <div className="flex-1 flex items-center bg-white border border-gray-200 rounded px-4 py-2 gap-3 transition-all focus-within:border-[#0088ff]">
                         <Search size={16} className="text-gray-400" />
@@ -46,7 +46,7 @@ const PriceList = () => {
                     <button className="px-4 py-2 bg-gray-50 text-gray-300 text-sm font-medium rounded border border-gray-100">Lưu bộ lọc</button>
                 </div>
 
-                {/* Table */}
+                {}
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className="bg-gray-50/30">

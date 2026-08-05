@@ -1,8 +1,4 @@
-/* ============================================================
-   CollectionPage.module.css
-   Pixel-perfect clone of Cát Bracelet Collection Page
-   Design tokens: --primary: #ab121c | --bg: #FAF5EF | --text: #4B3A32
-   ============================================================ */
+
 
 
 
@@ -17,7 +13,7 @@
     --p-border-light: #F0E8DC;
 }
 
-/* ── PAGE WRAPPER ─────────────────────────────────────────────── */
+
 .pageWrapper {
     min-height: 100vh;
     background-color: var(--p-bg);
@@ -25,12 +21,11 @@
     color: var(--p-text);
 }
 
-/* ── HERO BANNER ──────────────────────────────────────────────── */
+
 .hero {
     position: relative;
     width: 100%;
     height: 520px;
-    /* Tăng độ cao để ảnh trông thoáng đạt hơn */
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -69,7 +64,6 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 120px;
-    /* Tăng padding để đẩy chữ vào trong hơn */
 }
 
 .heroText {
@@ -101,7 +95,7 @@
     max-width: 380px;
 }
 
-/* ── FEATURES SECTION (SEPARATE) ─────────────────────────────── */
+
 .featuresSection {
     width: 100%;
     background-color: #FAF5EF;
@@ -177,12 +171,12 @@
     line-height: 1.4;
 }
 
-/* ── COLLECTION AREA ──────────────────────────────────────────── */
+
 .collectionArea {
     max-width: 1400px;
     margin: 0 auto;
     padding: 64px 64px;
-    /* Giảm padding top vì ko còn bị che */
+    
 }
 
 .collectionInner {
@@ -192,7 +186,7 @@
     align-items: start;
 }
 
-/* Mobile filter toggle button */
+
 .mobileFilterBtn {
     display: none;
     align-items: center;
@@ -215,7 +209,7 @@
     border-color: var(--p-primary);
 }
 
-/* ── SIDEBAR ──────────────────────────────────────────────────── */
+
 .sidebar {
     background: #FFFFFF;
     border: 1px solid var(--p-border);
@@ -284,7 +278,7 @@
     line-height: 1.4;
 }
 
-/* ── FILTER GROUPS ────────────────────────────────────────────── */
+
 .filterGroup {
     border-top: 1px solid var(--p-border-light);
     padding: 10px 0;
@@ -303,9 +297,9 @@
     letter-spacing: 0.01em;
 }
 
-/* ── NEW SIDEBAR COMPONENTS ────────────────────────────── */
 
-/* Category/Collection List */
+
+
 .categoryList {
     display: flex;
     flex-direction: column;
@@ -365,7 +359,7 @@
     background: var(--p-primary);
 }
 
-/* Material Grid */
+
 .materialGrid {
     display: flex;
     flex-wrap: wrap;
@@ -394,7 +388,7 @@
     border-color: var(--p-primary);
 }
 
-/* Swatch Grid (Colors) */
+
 .swatchGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -444,7 +438,7 @@
     font-weight: 700;
 }
 
-/* Size Grid */
+
 .sizeGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -474,7 +468,7 @@
     border-color: #4B3A32;
 }
 
-/* Price Range Slider */
+
 .priceRangeWrapper {
     padding: 4px 0 8px;
 }
@@ -565,7 +559,7 @@
     padding: 0 2px;
 }
 
-/* Clear filter button */
+
 .clearFilterBtn {
     display: flex;
     align-items: center;
@@ -598,7 +592,7 @@
     box-shadow: 0 5px 15px rgba(171, 18, 28, 0.08);
 }
 
-/* ── SEARCH BAR ──────────────────────────────────────────────── */
+
 .searchBarWrapper {
     width: 100%;
     margin-bottom: 24px;
@@ -649,14 +643,14 @@
     background: rgba(171, 18, 28, 0.05);
 }
 
-/* ── PRODUCT AREA ─────────────────────────────────────────────── */
+
 .productArea {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-/* ── PRODUCT HEADER ───────────────────────────────────────────── */
+
 .productHeader {
     display: flex;
     align-items: center;
@@ -685,7 +679,7 @@
     margin: 0;
 }
 
-/* Sort Dropdown */
+
 .sortWrapper {
     position: relative;
 }
@@ -769,7 +763,7 @@
     background: rgba(171, 18, 28, 0.04);
 }
 
-/* ── NO RESULTS ──────────────────────────────────────────────── */
+
 .noResults {
     display: flex;
     flex-direction: column;
@@ -803,14 +797,14 @@
     max-width: 400px;
 }
 
-/* ── PRODUCT GRID ─────────────────────────────────────────────── */
+
 .productGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
-/* ── PRODUCT CARD ─────────────────────────────────────────────── */
+
 .productCard {
     background: var(--p-card);
     border: 1px solid var(--p-border-light);
@@ -876,7 +870,7 @@
     border-color: rgba(171, 18, 28, 0.3);
 }
 
-/* Card Body */
+
 .cardBody {
     padding: 14px 16px 16px;
     display: flex;
@@ -998,7 +992,6 @@
     background: var(--p-primary-dark);
 }
 
-/* ── PAGINATION ───────────────────────────────────────────────── */
 .pagination {
     display: flex;
     align-items: center;
@@ -1046,7 +1039,7 @@
     color: #FFFFFF !important;
 }
 
-/* ── BRAND STORY ──────────────────────────────────────────────── */
+
 .brandStory {
     background: #FFF8F3;
     border-top: 1px solid var(--p-border-light);
@@ -1133,9 +1126,9 @@
     font-weight: 500;
 }
 
-/* ── RESPONSIVE ───────────────────────────────────────────────── */
 
-/* Tablet: 1024px */
+
+
 @media (max-width: 1024px) {
     .heroInner {
         gap: 32px;
@@ -1159,7 +1152,7 @@
     }
 }
 
-/* Tablet Small: 768px */
+
 @media (max-width: 768px) {
     .hero {
         height: 280px;
@@ -1235,7 +1228,7 @@
         display: flex;
     }
 
-    /* Sidebar overlay on mobile */
+
     .sidebar {
         position: fixed;
         top: 0;
@@ -1253,7 +1246,7 @@
         padding: 0;
     }
 
-    /* Header cố định ở trên cùng sidebar */
+
     .sidebarHeader {
         position: sticky;
         top: 0;
@@ -1265,7 +1258,7 @@
         flex-shrink: 0;
     }
 
-    /* Nội dung cuộn riêng bên dưới header */
+
     .sidebarSubtitle,
     .filterGroup,
     .clearFilterBtn {
@@ -1296,7 +1289,7 @@
     }
 }
 
-/* Mobile: 480px */
+
 @media (max-width: 480px) {
     .hero {
         height: 240px;

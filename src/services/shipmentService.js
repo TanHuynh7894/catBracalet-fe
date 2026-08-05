@@ -1,7 +1,6 @@
 import api from './api';
 
 /**
- * Lấy danh sách Tỉnh/Thành phố
  * @returns {Promise<Array>}
  */
 export const getProvinces = async () => {
@@ -15,7 +14,6 @@ export const getProvinces = async () => {
 
 
 /**
- * Lấy danh sách Quận/Huyện theo Tỉnh/Thành phố
  * @param {string} provinceId 
  * @returns {Promise<Array>}
  */
@@ -30,7 +28,6 @@ export const getDistricts = async (provinceId) => {
 
 
 /**
- * Lấy danh sách Phường/Xã theo Quận/Huyện
  * @param {string} districtId 
  * @returns {Promise<Array>}
  */
@@ -44,10 +41,9 @@ export const getWards = async (districtId) => {
 };
 
 /**
- * Tính phí vận chuyển dựa trên địa chỉ, người dùng và danh sách sản phẩm
- * @param {string} addressId - ID địa chỉ giao hàng
- * @param {string} userId - ID người dùng
- * @param {Array} cartItemIds - Danh sách ID các item trong giỏ hàng
+ * @param {string} addressId 
+ * @param {string} userId 
+ * @param {Array} cartItemIds 
  * @returns {Promise<Object>}
  */
 export const calculateShippingFee = async (addressId, userId = null, cartItemIds = []) => {
@@ -73,9 +69,8 @@ export const calculateShippingFee = async (addressId, userId = null, cartItemIds
 
 
 /**
- * Lấy danh sách báo giá vận chuyển cho một đơn hàng (Goship)
  * @param {string} orderId 
- * @param {Object} packageInfo { weight, width, height, length, cod }
+ * @param {Object} packageInfo 
  */
 export const getShippingRates = async (orderId, packageInfo) => {
     try {
@@ -87,7 +82,6 @@ export const getShippingRates = async (orderId, packageInfo) => {
 };
 
 /**
- * Tạo vận đơn trên Goship
  * @param {Object} shipmentData 
  */
 export const createShipment = async (shipmentData) => {
@@ -100,7 +94,6 @@ export const createShipment = async (shipmentData) => {
 };
 
 /**
- * Theo dõi hành trình vận đơn
  * @param {string} orderId 
  */
 export const trackShipment = async (orderId) => {
@@ -112,7 +105,7 @@ export const trackShipment = async (orderId) => {
     }
 };
 
-// No default export to avoid Vite resolution issues
+
 export const shipmentService = {
     getProvinces,
     getDistricts,

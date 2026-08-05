@@ -57,7 +57,7 @@
     @apply text-white bg-white/5 font-medium;
 }
 
-/* Footer Section */
+
 .footerNav {
     @apply p-3 border-t border-white/5 flex flex-col gap-1 mt-auto;
 }
@@ -70,7 +70,7 @@
     @apply text-red-400 hover:text-red-300 hover:bg-red-500/10;
 }
 
-/* Logout Confirmation Modal */
+
 .modalOverlay {
     position: fixed;
     inset: 0;

@@ -14,7 +14,7 @@
     animation: fadeIn 0.4s ease-out forwards;
 }
 
-/* Modal Overlay */
+
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -22,21 +22,18 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
-    /* Darker backdrop */
     backdrop-filter: blur(12px);
-    /* Stronger blur */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100000;
-    /* Extremely high z-index */
+   
     padding: 24px;
 }
 
-/* Modal Content */
+
 .modalContent {
     background: #ffffff !important;
-    /* Forces solid white background */
     width: 100%;
     max-width: 650px;
     border-radius: 28px;
@@ -79,7 +76,7 @@
     color: #000;
 }
 
-/* Form Styles */
+
 .formGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -122,7 +119,6 @@
 .select:focus {
     outline: none;
     border-color: #8c7151;
-    /* Custom brand color */
     background: #ffffff;
     box-shadow: 0 0 0 4px rgba(140, 113, 81, 0.1);
 }
@@ -144,7 +140,7 @@
     cursor: pointer;
 }
 
-/* Actions */
+
 .formActions {
     display: flex;
     justify-content: flex-end;
@@ -179,7 +175,6 @@
 
 .submitBtn {
     background: #1a1a1a;
-    /* Premium dark mode button */
     border: 2px solid #1a1a1a;
     color: #ffffff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);

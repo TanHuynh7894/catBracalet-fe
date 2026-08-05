@@ -13,13 +13,13 @@ const RoleManagement = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add', 'edit'
+    const [modalMode, setModalMode] = useState('add');
     const [selectedRole, setSelectedRole] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [deleteType, setDeleteType] = useState('soft'); // 'soft' or 'hard'
+    const [deleteType, setDeleteType] = useState('soft'); 
 
-    // Form state
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -241,7 +241,7 @@ const RoleManagement = () => {
                 </div>
             </div>
 
-            {/* Modal */}
+            {}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -290,7 +290,7 @@ const RoleManagement = () => {
                 </div>
             )}
 
-            {/* Delete Confirm */}
+            {}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div className={styles.modalContent} style={{ width: 480, textAlign: 'center', padding: '56px 48px' }} onClick={e => e.stopPropagation()}>

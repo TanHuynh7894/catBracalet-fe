@@ -15,7 +15,7 @@ import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
 import { useNavigate } from 'react-router-dom';
 
-// ─── Animation preset ─────────────────────────────────────────────────────────
+
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -30,7 +30,6 @@ const fadeUpDelay = (d = 0) => ({
     transition: { duration: 0.8, delay: d },
 });
 
-// ─── Component ────────────────────────────────────────────────────────────────
 export default function ProductDetail() {
     const { refreshCart } = useCart();
     const { showToast } = useToast();
@@ -59,7 +58,7 @@ export default function ProductDetail() {
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [adding, setAdding] = useState(false);
 
-    // Dynamic attributes calculation
+
     const allColors = React.useMemo(() => [...new Set(productVariants.map(v => v.color))].filter(Boolean), [productVariants]);
     const allSizes = React.useMemo(() => [...new Set(productVariants.map(v => v.size))].filter(Boolean), [productVariants]);
 
@@ -69,14 +68,14 @@ export default function ProductDetail() {
 
         if (type === 'color') {
             newColor = value;
-            // If current size is incompatible with new color, pick first available size for this color
+
             if (!productVariants.some(v => v.color === value && v.size === selectedSize)) {
                 const firstValid = productVariants.find(v => v.color === value);
                 newSize = firstValid?.size || '';
             }
         } else {
             newSize = value;
-            // If current color is incompatible with new size, pick first available color for this size
+
             if (!productVariants.some(v => v.size === value && v.color === selectedColor)) {
                 const firstValid = productVariants.find(v => v.size === value);
                 newColor = firstValid?.color || '';
@@ -110,7 +109,7 @@ export default function ProductDetail() {
                 setCategories(catData || []);
                 setMaterials(matData || []);
 
-                // Tìm tất cả các variant thuộc về product này
+
                 const variantsForProduct = variantsList.filter(v =>
                     v.status === 'ACTIVE' &&
                     (v.productVariantMappings || v.product_variant_mappings)?.some(m =>
@@ -136,7 +135,7 @@ export default function ProductDetail() {
                     } catch (e) { }
                 }
 
-                // Filter active related products within the same category if possible
+
                 const sameCategory = productsList.filter(p =>
                     p.id !== productId &&
                     p.status === 'ACTIVE' &&
@@ -184,7 +183,7 @@ export default function ProductDetail() {
                 .map(img => getFullImageUrl(img.imageUrl || img.url))
             : [getFullImageUrl(product?.thumbnail)].filter(Boolean);
 
-    // Bỏ qua các ảnh trùng lặp nếu có
+
     const uniqueImages = [...new Set(images)];
 
     const prevImg = () => setActiveImg((p) => (p === 0 ? uniqueImages.length - 1 : p - 1));
@@ -267,7 +266,7 @@ export default function ProductDetail() {
     return (
         <div className={styles.page}>
 
-            {/* ── BREADCRUMB ─────────────────────────────────────────────────── */}
+            {}
             <motion.div className={styles.breadcrumbWrap} {...fadeUp}>
                 <div className={styles.container}>
                     <nav className={styles.breadcrumb}>
@@ -282,12 +281,12 @@ export default function ProductDetail() {
                 </div>
             </motion.div>
 
-            {/* ── PRODUCT DETAIL ─────────────────────────────────────────────── */}
+            {}
             <section className={styles.productSection}>
                 <div className={styles.container}>
                     <div className={styles.productGrid}>
 
-                        {/* ─ LEFT: GALLERY ─────────────────────────────────────────── */}
+                        {}
                         <motion.div className={styles.gallery} {...fadeUp}>
                             <div className={styles.mainImgWrap}>
                                 <img
@@ -324,14 +323,14 @@ export default function ProductDetail() {
                             </div>
                         </motion.div>
 
-                        {/* ─ RIGHT: PRODUCT INFO ───────────────────────────────────── */}
+                        {}
                         <motion.div className={styles.productInfo} {...fadeUpDelay(0.15)}>
-                            {/* Name */}
+                            {}
                             <h1 className={styles.productName}>
                                 {product.productName}
                             </h1>
 
-                            {/* Rating */}
+                            {}
                             <div className={styles.ratingRow}>
                                 <div className={styles.stars}>
                                     {[...Array(5)].map((_, i) => (
@@ -342,18 +341,18 @@ export default function ProductDetail() {
                                 <span className={styles.ratingCount}>(Đánh giá mới)</span>
                             </div>
 
-                            {/* Price */}
+                            {}
                             <p className={styles.price}>
                                 {(Number(variant ? (variant.extraPrice ?? 0) : product.basePrice)).toLocaleString('vi-VN')}
                                 <span>đ</span>
                             </p>
 
-                            {/* Description */}
+                            {}
                             <p className={styles.productDesc}>
                                 {product.description}
                             </p>
 
-                            {/* Quick Info Card */}
+                            {}
                             <div className={styles.quickInfoCard}>
                                 <div className={styles.quickInfoRow}>
                                     <span className={styles.quickInfoIcon}>💎</span>
@@ -374,7 +373,7 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {/* Color Selector */}
+                            {}
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn màu sắc</p>
                                 <div className={styles.sizeButtons}>
@@ -398,7 +397,7 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {/* Size Selector */}
+                            {}
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn size vòng</p>
                                 <div className={styles.sizeButtons}>
@@ -422,7 +421,7 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {/* Quantity */}
+                            {}
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Số lượng</p>
                                 <div className={styles.quantityRow}>
@@ -442,7 +441,7 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {/* Action Buttons */}
+                            {}
                             <div className={styles.actionButtons}>
                                 <button
                                     className={styles.btnAddCart}
@@ -458,7 +457,7 @@ export default function ProductDetail() {
                 </div>
             </section>
 
-            {/* ── USP SECTION ────────────────────────────────────────────────── */}
+            {}
             <motion.section className={styles.uspSection} {...fadeUp}>
                 <div className={styles.container}>
                     <div className={styles.uspGrid}>
@@ -473,7 +472,7 @@ export default function ProductDetail() {
                 </div>
             </motion.section>
 
-            {/* ── TAB SECTION ────────────────────────────────────────────────── */}
+            {}
             <motion.section className={styles.tabSection} {...fadeUp}>
                 <div className={styles.container}>
                     <div className={styles.tabHeader}>
@@ -561,7 +560,7 @@ export default function ProductDetail() {
                 </div>
             </motion.section>
 
-            {/* ── RELATED PRODUCTS ───────────────────────────────────────────── */}
+            {}
             <motion.section className={styles.relatedSection} {...fadeUp}>
                 <div className={styles.container}>
                     <div className={styles.relatedHeader}>
@@ -599,7 +598,7 @@ export default function ProductDetail() {
                 </div>
             </motion.section>
 
-            {/* ── BRAND BENEFIT BANNER ───────────────────────────────────────── */}
+            {}
             <motion.section className={styles.brandBanner} {...fadeUp}>
                 <div className={styles.container}>
                     <h3 className={styles.brandBannerTitle}>Trao yêu thương, gửi năng lượng tích cực</h3>

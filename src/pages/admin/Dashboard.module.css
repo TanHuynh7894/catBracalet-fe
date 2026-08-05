@@ -24,7 +24,7 @@
     @apply bg-[#ab121c] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#850e15] transition-colors;
 }
 
-/* Stats Cards */
+
 .statsGrid {
     @apply grid grid-cols-1 md:grid-cols-4 gap-6;
 }
@@ -61,7 +61,7 @@
     @apply text-xl font-bold text-gray-800;
 }
 
-/* Main Content Blocks */
+
 .mainGrid {
     @apply grid grid-cols-1 md:grid-cols-12 gap-8;
 }
@@ -86,7 +86,7 @@
     @apply text-sm text-[#ab121c] hover:underline font-medium;
 }
 
-/* Table Styles */
+
 .tableWrapper {
     @apply overflow-x-auto;
 }
@@ -119,7 +119,7 @@
     @apply bg-orange-100 text-orange-700;
 }
 
-/* Status Items */
+
 .statusGrid {
     @apply flex flex-col gap-4;
 }

@@ -13,7 +13,7 @@ import { createConsultation } from '../../services/consultationService';
 import { useToast } from '../../context/ToastContext';
 import styles from './HomePage.module.css';
 
-// ─── LOCAL ASSETS ────────────────────────────────────────────────────────────
+
 import videoBg from '../../assets/0614.mp4';
 import modelPath from '../../assets/model3D.glb';
 import problemImg from '../../assets/Ảnh UI/ảnh chi tiết/Home ne.png';
@@ -26,7 +26,7 @@ import sloganImg from '../../assets/Ảnh UI/ảnh chi tiết/slogan.png';
 import ctaBgImg from '../../assets/Ảnh UI/ảnh chi tiết/sansang.png';
 import consultImg from '../../assets/Ảnh UI/ảnh chi tiết/hop.png';
 
-// ─── STATIC DATA ─────────────────────────────────────────────────────────────
+
 const FEATURES = [
     { icon: <Gem size={28} strokeWidth={1.5} />, title: 'Đá tự nhiên chọn lọc', desc: '100% đá tự nhiên cao cấp, nguồn gốc rõ ràng' },
     { icon: <Palette size={28} strokeWidth={1.5} />, title: 'Thiết kế cá nhân hóa', desc: 'Tư vấn phối hợp mệnh & mục tiêu của bạn' },
@@ -81,7 +81,6 @@ const TESTIMONIALS = [
     },
 ];
 
-// ─── ANIMATION PRESET ────────────────────────────────────────────────────────
 const fadeUp = {
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -96,7 +95,7 @@ const fadeUpDelay = (d = 0) => ({
     transition: { duration: 0.6, delay: d, ease: 'easeOut' },
 });
 
-// ─── COMPONENT ───────────────────────────────────────────────────────────────
+
 const HomePage = () => {
     const navigate = useNavigate();
     const { showToast } = useToast();
@@ -139,12 +138,12 @@ const HomePage = () => {
     return (
         <div className={styles.page}>
 
-            {/* ══ HERO ══════════════════════════════════════════════════════ */}
+            {}
             <section className={styles.heroSection}>
                 <div className={styles.container}>
                     <div className={styles.heroGrid}>
 
-                        {/* LEFT: Text content */}
+                        {}
                         <motion.div
                             className={styles.heroLeft}
                             initial={{ opacity: 0, x: -50 }}
@@ -198,7 +197,7 @@ const HomePage = () => {
                             </div>
                         </motion.div>
 
-                        {/* RIGHT: Pure Video showcase */}
+                        {}
                         <motion.div
                             className={styles.heroRight}
                             initial={{ opacity: 0, x: 50 }}
@@ -222,7 +221,7 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ 3D MODEL SECTION (Redesigned) ═════════════════════════════════ */}
+            {}
             <section className={styles.modelSection}>
                 <div className={styles.container}>
                     <div className={styles.modelGrid}>
@@ -294,7 +293,7 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ FEATURES ══════════════════════════════════════════════════ */}
+            {}
             <section className={styles.featuresSection}>
                 <div className={styles.container}>
                     <div className={styles.featuresGrid}>
@@ -309,14 +308,14 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ PROBLEM SOLVING ═══════════════════════════════════════════ */}
+            {}
             <section className={styles.problemSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.problemCardOverlay} {...fadeUp}>
-                        {/* Background Image */}
+                        {}
                         <img src={problemImg} alt="Background" className={styles.problemBgImg} />
 
-                        {/* Content Overlay */}
+                        {}
                         <div className={styles.problemOverlayContent}>
                             <div className={styles.problemTextContainer}>
                                 <h2 className={styles.problemTitle}>
@@ -345,12 +344,12 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ ABOUT CÁT ══════════════════════════════════════════════ */}
+            {}
             <section className={styles.aboutSection}>
                 <div className={styles.container}>
                     <div className={styles.aboutGrid}>
 
-                        {/* LEFT: Text */}
+                        {}
                         <motion.div className={styles.aboutLeft} {...fadeUp}>
                             <h2 className={styles.aboutTitle}>
                                 Cát là gì?
@@ -360,7 +359,7 @@ const HomePage = () => {
                             </p>
                         </motion.div>
 
-                        {/* RIGHT: Image + Quote card */}
+                        {}
                         <motion.div
                             className={styles.aboutRight}
                             initial={{ opacity: 0, x: 50 }}
@@ -370,7 +369,7 @@ const HomePage = () => {
                         >
                             <div className={styles.aboutImgCard}>
                                 <img src={aboutBgImg} alt="Vòng tay Cát" className={styles.aboutImg} />
-                                {/* Quote card floating inside */}
+                                {}
                                 <div className={styles.aboutQuoteCard}>
                                     <div className={styles.quoteIconLeft}>“</div>
                                     <div className={styles.quoteContent}>
@@ -387,7 +386,7 @@ const HomePage = () => {
                             </div>
                         </motion.div>
 
-                        {/* BOTTOM / LEFT-BOTTOM: Values items row */}
+                        {}
                         <motion.div className={styles.aboutValuesRow} {...fadeUp}>
                             {VALUES.map((v, i) => (
                                 <motion.div key={i} className={styles.aboutValueItem} {...fadeUpDelay(i * 0.08)}>
@@ -404,7 +403,7 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ HOW IT WORKS ══════════════════════════════════════════════ */}
+            {}
             <section className={styles.stepsSection}>
                 <div className={styles.container}>
                     <motion.h2 className={styles.stepsTitle} {...fadeUp}>
@@ -434,14 +433,14 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ ENERGY BANNER ══════════════════════════════════════════════ */}
+            {}
             <section className={styles.bannerSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.bannerOverlayContent} {...fadeUp}>
-                        {/* Background Image */}
+                        {}
                         <img src={sloganImg} alt="Red Velvet Energy" className={styles.bannerBgImg} />
 
-                        {/* Content Overlay */}
+                        {}
                         <div className={styles.bannerOverlayContent}>
                             <div className={styles.bannerTextContainer}>
                                 <h2 className={styles.bannerTagline}>be you, be energy <span className={styles.taglineStar}>✧</span></h2>
@@ -457,12 +456,10 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ FEATURED COLLECTIONS (Hidden as requested) ══════════════ */}
-            {/* <section className={styles.collectionsSection}>
-                ...
-            </section> */}
+            {}
+            {}
 
-            {/* ══ TESTIMONIALS ══════════════════════════════════════════════ */}
+            {}
             <section className={styles.testimonialsSection}>
                 <div className={styles.container}>
                     <motion.h2 className={styles.sectionTitle} {...fadeUp}>
@@ -489,14 +486,14 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ CTA BANNER ════════════════════════════════════════════════ */}
+            {}
             <section className={styles.ctaSection}>
                 <div className={styles.container}>
                     <motion.div className={styles.ctaBannerOverlay} {...fadeUp}>
-                        {/* Background Image */}
+                        {}
                         <img src={ctaBgImg} alt="Sẵn sàng" className={styles.ctaBgImg} />
 
-                        {/* Content Overlay */}
+                        {}
                         <div className={styles.ctaOverlayContent}>
                             <h2 className={styles.ctaTextTitle}>
                                 Sẵn sàng thu hút năng lượng tích cực?
@@ -509,16 +506,16 @@ const HomePage = () => {
                 </div>
             </section>
 
-            {/* ══ CONSULTATION FORM ═════════════════════════════════════════ */}
+            {}
             <section className={styles.consultSection} id="consultation">
                 <div className={styles.container}>
                     <motion.div className={styles.consultCard} {...fadeUp}>
-                        {/* Left image */}
+                        {}
                         <div className={styles.consultImgWrap}>
                             <img src={consultImg} alt="Tư vấn" className={styles.consultImg} />
                         </div>
 
-                        {/* Right form */}
+                        {}
                         <div className={styles.consultFormWrap}>
                             <h2 className={styles.consultTitle}>Tư vấn miễn phí – Chọn vòng hợp mệnh</h2>
                             <p className={styles.consultSubtitle}>Điền thông tin để được chuyên gia tại Cát Bracelet tư vấn chi tiết.</p>

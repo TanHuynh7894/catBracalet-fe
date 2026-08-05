@@ -22,7 +22,7 @@ const ShippingOverview = () => {
                 </button>
             </div>
 
-            {/* Filters Row */}
+            {}
             <div className="flex gap-2 mb-6">
                 <button className="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded text-sm text-gray-600 hover:bg-gray-50">
                     <Calendar size={14} /> 7 ngày qua (20/05 - 26/05/2026) <ChevronDown size={14} />
@@ -35,7 +35,7 @@ const ShippingOverview = () => {
                 </button>
             </div>
 
-            {/* Shipping Stats Grid */}
+            {}
             <div className="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-xl overflow-hidden mb-6">
                 {shippingStats.map((stat, idx) => (
                     <div key={idx} className="bg-white p-4 flex flex-col gap-1 relative group cursor-pointer hover:bg-gray-50 transition-colors">
@@ -52,7 +52,7 @@ const ShippingOverview = () => {
                 ))}
             </div>
 
-            {/* Charts Row 1 */}
+            {}
             <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-8">
@@ -87,7 +87,7 @@ const ShippingOverview = () => {
                 </div>
             </div>
 
-            {/* Charts Row 2 */}
+            {}
             <div className="grid grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                     <div className="flex items-center gap-2 mb-8">
@@ -110,7 +110,7 @@ const ShippingOverview = () => {
                         <Info size={14} className="text-gray-300" />
                     </div>
                     <div className="relative w-40 h-40">
-                        {/* CSS Circle chart placeholder */}
+                        {}
                         <div className="absolute inset-0 rounded-full border-[12px] border-[#5ce6a1]" />
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
                             <span className="text-xl font-bold text-gray-800">5 đơn</span>

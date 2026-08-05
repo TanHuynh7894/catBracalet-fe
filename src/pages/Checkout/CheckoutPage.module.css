@@ -1,9 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════════
-   CheckoutPage.module.css
-   Luxury Jewelry Brand — Cát Bracelet
-   ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Design Tokens ─────────────────────────────────────────────── */
 :root {
     --primary: #ab121c;
     --primary-dark: #850e15;
@@ -18,7 +13,7 @@
     --shadow-md: 0 8px 32px rgba(75, 58, 50, 0.12);
 }
 
-/* ── Page Wrapper ──────────────────────────────────────────────── */
+
 .pageWrapper {
     min-height: 100vh;
     background: var(--background);
@@ -33,7 +28,7 @@
     margin: 0 auto;
 }
 
-/* ── Sidebar Coupon ────────────────────────────────────────────── */
+
 .sidebarCoupon {
     background: #fdfaf6;
     border: 1px solid var(--border);
@@ -124,7 +119,7 @@
     cursor: not-allowed;
 }
 
-/* ── Main Grid ─────────────────────────────────────────────────── */
+
 .mainGrid {
     display: grid;
     grid-template-columns: 1fr 420px;
@@ -132,14 +127,14 @@
     align-items: start;
 }
 
-/* ── Left Column ───────────────────────────────────────────────── */
+
 .leftCol {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-/* ── Section Card ──────────────────────────────────────────────── */
+
 .section {
     background: var(--card);
     border-radius: 20px;
@@ -177,7 +172,7 @@
     color: var(--gold);
 }
 
-/* ── Form Grid ─────────────────────────────────────────────────── */
+
 .formGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -251,7 +246,7 @@
     box-shadow: 0 0 0 3px rgba(216, 178, 125, 0.1);
 }
 
-/* ── Right Column Summary ────────────────────────────────────────── */
+
 .rightCol {
     position: sticky;
     top: 24px;
@@ -294,7 +289,7 @@
     color: var(--gold);
 }
 
-/* ── Product List ──────────────────────────────────────────────── */
+
 .productList {
     display: flex;
     flex-direction: column;
@@ -367,7 +362,7 @@
     color: var(--text);
 }
 
-/* ── Totals Section ────────────────────────────────────────────── */
+
 .totalsSection {
     border-top: 1px solid var(--border);
     padding: 20px 0;
@@ -420,7 +415,7 @@
     color: var(--primary);
 }
 
-/* ── Payment Section ───────────────────────────────────────────── */
+
 .paymentSection {
     margin-bottom: 24px;
 }
@@ -484,7 +479,7 @@
     box-shadow: inset 0 0 0 4px #fff;
 }
 
-/* ── Buttons ───────────────────────────────────────────────────── */
+
 .btnPlaceOrder {
     width: 100%;
     height: 56px;
@@ -512,7 +507,7 @@
     box-shadow: 0 12px 32px rgba(171, 18, 28, 0.3);
 }
 
-/* ── Trust Badges ──────────────────────────────────────────────── */
+
 .trustGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -533,7 +528,7 @@
     color: var(--gold);
 }
 
-/* ── Voucher Modal ─────────────────────────────────────────────── */
+
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -591,15 +586,13 @@
 .modalBody {
     padding: 16px 24px 24px;
     max-height: 50vh;
-    /* Use viewport height for better responsiveness */
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
-    /* For Firefox */
     scrollbar-color: var(--gold) transparent;
 }
 
-/* Custom scrollbar for Webkit */
+
 .modalBody::-webkit-scrollbar {
     width: 6px;
 }
@@ -665,7 +658,7 @@
     padding: 40px 0;
 }
 
-/* ── Responsive ────────────────────────────────────────────────── */
+
 @media (max-width: 1024px) {
     .mainGrid {
         grid-template-columns: 1fr;
@@ -676,7 +669,7 @@
     }
 }
 
-/* ── Checkout Header ──────────────────────────────────────────── */
+
 .checkoutHeader {
     display: flex;
     align-items: center;
@@ -715,7 +708,7 @@
     border-color: var(--gold);
 }
 
-/* ── Section Header ───────────────────────────────────────────── */
+
 .sectionHeader {
     display: flex;
     align-items: center;
@@ -741,7 +734,7 @@
     color: var(--primary);
 }
 
-/* ── Address List ─────────────────────────────────────────────── */
+
 .addressList {
     display: flex;
     flex-direction: column;

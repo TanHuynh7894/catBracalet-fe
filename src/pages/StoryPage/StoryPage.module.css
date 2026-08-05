@@ -1,13 +1,4 @@
-/* ============================================================
-   StoryPage.module.css
-   Cát Bracelet – Story Page
-   Tones: #ab121c | #FAF7F2 | #4B3A32 | #D8B27D | #E8DED2
-   Fonts: Playfair Display (heading) + Inter (body)
-   ============================================================ */
 
-
-
-/* ── TOKENS ───────────────────────────────────────────────── */
 .page {
     --primary: #ab121c;
     --primary-dark: #850e15;
@@ -23,7 +14,7 @@
     overflow-x: hidden;
 }
 
-/* ── SHARED CONTAINER ─────────────────────────────────────── */
+
 .container {
     max-width: 1600px;
     width: 95%;
@@ -31,7 +22,7 @@
     padding: 0 30px;
 }
 
-/* ── SHARED SECTION LABELS ────────────────────────────────── */
+
 .sectionNumber {
     display: block;
     font-family: 'Roboto', sans-serif;
@@ -95,9 +86,7 @@
     margin-bottom: 0;
 }
 
-/* ============================================================
-   S2: HERO STORY
-   ============================================================ */
+
 .heroSection {
     position: relative;
     width: 100%;
@@ -123,7 +112,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center right;
-    /* Focus more on the product on the right */
+
     image-rendering: -webkit-optimize-contrast;
     filter: contrast(1.05) brightness(1.02);
 }
@@ -172,9 +161,6 @@
     text-align: justify;
 }
 
-/* ============================================================
-   S3: ORIGIN – CÁT RA ĐỜI NHƯ THẾ NÀO
-   ============================================================ */
 .originSection {
     padding: 60px 0;
     background-color: var(--bg);
@@ -202,7 +188,7 @@
     height: 100%;
     object-fit: cover;
     object-position: right 25% center;
-    /* Shifting to capture the person who is likely on the right */
+    
     display: block;
 }
 
@@ -213,9 +199,7 @@
     max-width: 580px;
 }
 
-/* ============================================================
-   S4: RED BANNER – Ý NGHĨA TÊN GỌI
-   ============================================================ */
+
 .redBannerSection {
     padding: 30px 0;
     background-color: var(--bg);
@@ -304,9 +288,7 @@
     margin: 0;
 }
 
-/* ============================================================
-   S5: BELIEFS – ĐIỀU CÁT TIN TƯỞNG
-   ============================================================ */
+
 .beliefSection {
     padding: 50px 0;
     background-color: var(--bg);
@@ -382,9 +364,7 @@
     padding: 0 20px 28px;
 }
 
-/* ============================================================
-   S6: TRUTH – KHÔNG BÁN PHÉP MÀU
-   ============================================================ */
+
 .truthSection {
     padding: 50px 0;
     background: linear-gradient(180deg, var(--bg) 0%, #f2ebe2 100%);
@@ -463,9 +443,7 @@
     transform: scale(1.04);
 }
 
-/* ============================================================
-   S7: VALUES – GIÁ TRỊ CỐT LÕI
-   ============================================================ */
+
 .valuesSection {
     padding: 50px 0;
     background-color: var(--bg);
@@ -519,9 +497,7 @@
     margin: 0;
 }
 
-/* ============================================================
-   S8: CTA RED BANNER
-   ============================================================ */
+
 .ctaSection {
     padding: 30px 0 60px;
     background-color: var(--bg);
@@ -628,9 +604,7 @@
     transform: scale(1.03);
 }
 
-/* ============================================================
-   RESPONSIVE – TABLET (768px – 1023px)
-   ============================================================ */
+
 @media (max-width: 1023px) {
     .container {
         padding: 0 20px;
@@ -656,7 +630,7 @@
         font-size: 48px;
     }
 
-    /* Origin */
+  
     .originGrid {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -667,20 +641,20 @@
         max-height: 400px;
     }
 
-    /* Red banner */
+
     .redBanner {
         grid-template-columns: 1fr;
         gap: 32px;
         padding: 40px 36px;
     }
 
-    /* Beliefs */
+
     .beliefGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
-    /* Truth */
+  
     .truthGrid {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -690,13 +664,13 @@
         aspect-ratio: 16 / 9;
     }
 
-    /* Values */
+   
     .valuesGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
-    /* CTA */
+
     .ctaBanner {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -709,15 +683,13 @@
     }
 }
 
-/* ============================================================
-   RESPONSIVE – MOBILE (0px – 767px)
-   ============================================================ */
+
 @media (max-width: 767px) {
     .container {
         padding: 0 16px;
     }
 
-    /* Hero */
+    
     .heroSection {
         height: 50vh;
         min-height: 400px;
@@ -731,7 +703,7 @@
         font-size: 14px;
     }
 
-    /* Sections spacing */
+    
     .originSection,
     .beliefSection,
     .truthSection,
@@ -739,7 +711,7 @@
         padding: 56px 0;
     }
 
-    /* Origin */
+ 
     .originGrid {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -759,7 +731,7 @@
         margin-bottom: 28px;
     }
 
-    /* Red banner */
+
     .redBannerSection {
         padding: 32px 0;
     }
@@ -783,13 +755,13 @@
         font-size: 56px;
     }
 
-    /* Beliefs */
+ 
     .beliefGrid {
         grid-template-columns: 1fr;
         gap: 18px;
     }
 
-    /* Truth */
+
     .truthGrid {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -804,7 +776,7 @@
         border-radius: 16px;
     }
 
-    /* Values */
+  
     .valuesGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
@@ -814,7 +786,7 @@
         padding: 24px 16px;
     }
 
-    /* CTA */
+   
     .ctaSection {
         padding: 32px 0 56px;
     }
@@ -842,9 +814,7 @@
     }
 }
 
-/* ============================================================
-   RESPONSIVE – LAPTOP (1024px – 1439px)
-   ============================================================ */
+
 @media (min-width: 1024px) and (max-width: 1439px) {
     .heroTitle {
         font-size: 52px;

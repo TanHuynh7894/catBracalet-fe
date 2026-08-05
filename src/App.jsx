@@ -9,7 +9,7 @@ import { ToastProvider } from './context/ToastContext';
 import ScrollToTop from './components/utils/ScrollToTop';
 import './index.css';
 
-// Lazy loading components
+
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
 const Orders = lazy(() => import('./pages/admin/Orders'));
 const AdminOrderDetail = lazy(() => import('./pages/admin/OrderDetail'));
@@ -53,7 +53,7 @@ const CheckoutPage = lazy(() => import('./pages/Checkout/CheckoutPage'));
 const FailedPayment = lazy(() => import('./pages/FailedPayment'));
 const ContactPage = lazy(() => import('./pages/Contact/ContactPage'));
 
-// A simple loading placeholder for Suspense
+
 const PageLoading = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
     <div className="w-8 h-8 border-4 border-wine border-t-transparent rounded-full animate-spin"></div>
@@ -80,7 +80,7 @@ function App() {
           <LayoutWrapper>
             <Suspense fallback={<PageLoading />}>
               <Routes>
-                {/* ... routes ... */}
+                {}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
@@ -88,7 +88,7 @@ function App() {
                 <Route path="/successfulpayment" element={<SuccessfulPayment />} />
                 <Route path="/failedpayment" element={<FailedPayment />} />
 
-                {/* Account Sub-Routes Sharing a Layout */}
+                {}
                 <Route element={<AccountLayout />}>
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/change-password" element={<ChangePassword />} />
@@ -106,24 +106,24 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
 
-                {/* Admin Routes */}
+                {}
                 <Route path="/admin" element={<Orders />} />
                 <Route path="/admin/orders" element={<Orders />} />
                 <Route path="/admin/orders/:id" element={<AdminOrderDetail />} />
                 <Route path="/admin/orders/returns" element={<Returns />} />
                 <Route path="/admin/orders/incomplete" element={<IncompleteOrders />} />
 
-                {/* Order Processing Routes */}
+                {}
                 <Route path="/admin/processing/pending" element={<PendingConfirmation />} />
                 <Route path="/admin/processing/handling" element={<PendingConfirmation />} />
                 <Route path="/admin/processing/packing" element={<PackingPack />} />
                 <Route path="/admin/processing/all" element={<AllPackages />} />
 
-                {/* Shipping Routes */}
+                {}
                 <Route path="/admin/shipping/overview" element={<ShippingOverview />} />
                 <Route path="/admin/shipping/waybills" element={<ShippingWaybills />} />
 
-                {/* Product Routes */}
+                {}
                 <Route path="/admin/products" element={<ProductList />} />
                 <Route path="/admin/products/categories" element={<ProductCategories />} />
                 <Route path="/admin/products/materials" element={<MaterialManagement />} />

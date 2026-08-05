@@ -31,7 +31,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Stats Cards */}
+            {}
             <div className={styles.statsGrid}>
                 {stats.map((stat, idx) => (
                     <div key={idx} className={styles.statCard}>
@@ -49,7 +49,7 @@ const Dashboard = () => {
             </div>
 
             <div className={styles.mainGrid}>
-                {/* Recent Orders Section */}
+                {}
                 <div className={styles.contentBox}>
                     <div className={styles.boxHeader}>
                         <h2 className={styles.boxTitle}>Đơn hàng gần đây</h2>
@@ -89,7 +89,7 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Status Summary Section */}
+                {}
                 <div className={styles.statusBox}>
                     <div className={styles.boxHeader}>
                         <h2 className={styles.boxTitle}>Tình trạng vận hành</h2>

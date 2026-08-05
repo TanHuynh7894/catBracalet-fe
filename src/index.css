@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ── CUSTOM FONTS ──────────────────────────────────────────────── */
+
 @font-face {
   font-family: 'DFVNAbygaer';
   src: url('./assets/font_chu/DFVNAbygaer - font header/DFVNAbygaer/OpenType-PS/DFVN Abygaer.otf') format('opentype');
@@ -29,14 +29,14 @@
 @theme {
   --color-primary-container: #c51924;
   --color-primary: #ab121c;
-  /* Deep Red / Wine Red */
+  
   --color-secondary: #735c00;
-  /* Champagne Gold */
+
   --color-secondary-fixed: #ffe088;
   --color-secondary-container: #fed65b;
   --color-tertiary: #30302c;
   --color-background: #fbf9f8;
-  /* Soft Ivory/Cream */
+  
   --color-surface: #fbf9f8;
   --color-surface-container-high: #eae8e7;
   --color-surface-container-low: #f5f3f3;
@@ -54,7 +54,7 @@
   --color-secondary-fixed-dim: #e9c349;
   --color-error: #ba1a1a;
 
-  /* Luxury Accents */
+ 
   --color-wine: #ab121c;
   --color-burgundy: #4a0004;
   --color-champagne: #d4af37;
@@ -150,7 +150,7 @@
   }
 }
 
-/* Custom Scrollbar */
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -168,7 +168,7 @@
   background: var(--color-outline);
 }
 
-/* Smooth Scroll - Managed by Lenis library */
+
 .custom-cursor-active,
 .custom-cursor-active * {
   cursor: none !important;

@@ -193,7 +193,7 @@ const ConsultationManagement = () => {
                 </div>
             </div>
 
-            {/* View Detail Modal */}
+            {}
             {selectedConsultation && !showDeleteModal && (
                 <div className={styles.modalOverlay} onClick={() => setSelectedConsultation(null)}>
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
@@ -250,7 +250,7 @@ const ConsultationManagement = () => {
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
+            {}
             {showDeleteModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteModal(false)}>
                     <div className={`${styles.modalContent} !w-[400px]`} onClick={e => e.stopPropagation()}>

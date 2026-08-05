@@ -16,7 +16,7 @@ import styles from './ProductCategories.module.css';
 
 const EMPTY_FORM = { categoryName: '', description: '' };
 
-// ─────────────────────────────────────────────────────────────────────────────
+
 const ProductCategories = () => {
     const { showToast } = useToast();
 
@@ -25,21 +25,21 @@ const ProductCategories = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('ALL');
 
-    // Modal states
+
     const [showModal, setShowModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add' | 'edit'
+    const [modalMode, setModalMode] = useState('add'); 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // Delete confirm
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [deleteType, setDeleteType] = useState('soft'); // 'soft' | 'force'
 
-    // Form
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [deleteType, setDeleteType] = useState('soft'); 
+
+
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
-    // ─── Fetch ────────────────────────────────────────────────────────────────
+
     const fetchCategories = async (isInitial = false) => {
         if (isInitial) setLoading(true);
         try {
@@ -54,7 +54,7 @@ const ProductCategories = () => {
 
     useEffect(() => { fetchCategories(true); }, []);
 
-    // ─── Derived ──────────────────────────────────────────────────────────────
+
     const filtered = useMemo(() => {
         return categories.filter(c => {
             const matchSearch = c.categoryName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,7 +70,7 @@ const ProductCategories = () => {
         inactive: categories.filter(c => c.status === 'INACTIVE').length,
     }), [categories]);
 
-    // ─── Modal helpers ────────────────────────────────────────────────────────
+
     const openAdd = () => {
         setModalMode('add');
         setSelectedCategory(null);
@@ -93,14 +93,14 @@ const ProductCategories = () => {
         setShowDeleteConfirm(true);
     };
 
-    // ─── Validation ───────────────────────────────────────────────────────────
+
     const validate = () => {
         const e = {};
         if (!formData.categoryName.trim()) e.categoryName = 'Tên danh mục không được để trống';
         return e;
     };
 
-    // ─── Submit ───────────────────────────────────────────────────────────────
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const errs = validate();
@@ -129,7 +129,7 @@ const ProductCategories = () => {
         }
     };
 
-    // ─── Delete ───────────────────────────────────────────────────────────────
+
     const handleDelete = async () => {
         setIsProcessing(true);
         try {
@@ -150,7 +150,7 @@ const ProductCategories = () => {
         }
     };
 
-    // ─── Status badge ─────────────────────────────────────────────────────────
+
     const StatusBadge = ({ status }) => {
         if (status === 'ACTIVE') {
             return (
@@ -167,7 +167,7 @@ const ProductCategories = () => {
         );
     };
 
-    // ─── Render ───────────────────────────────────────────────────────────────
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[400px]">
             <Loader2 size={40} className="animate-spin text-rose-800 mb-4" />
@@ -178,7 +178,7 @@ const ProductCategories = () => {
     return (
         <div className={styles.dashboard}>
 
-            {/* ── Header ──────────────────────────────────────────────────── */}
+            {}
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.title}>Quản lý Danh mục</h1>
@@ -189,7 +189,7 @@ const ProductCategories = () => {
                 </button>
             </div>
 
-            {/* ── Stats Grid ──────────────────────────────────────────────── */}
+            {}
             <div className={styles.statsGrid}>
                 {[
                     { label: 'Tổng danh mục', value: stats.total, icon: <Layers size={20} />, color: '#ab121c', bg: '#FDF2F2' },
@@ -208,9 +208,9 @@ const ProductCategories = () => {
                 ))}
             </div>
 
-            {/* ── Table ───────────────────────────────────────────────────── */}
+            {}
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-                {/* Toolbar */}
+                {}
                 <div className={styles.toolbar}>
                     <div className={styles.searchBox}>
                         <Search size={16} style={{ color: '#9ca3af' }} />
@@ -237,7 +237,7 @@ const ProductCategories = () => {
                     </span>
                 </div>
 
-                {/* Table */}
+                {}
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
                         <thead>
@@ -259,11 +259,11 @@ const ProductCategories = () => {
                                 </tr>
                             ) : filtered.map((c, idx) => (
                                 <tr key={c.id} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50">
-                                    {/* Index */}
+                                    {}
                                     <td style={{ padding: '16px', color: '#9ca3af', fontSize: 12, fontWeight: 700 }}>
                                         {idx + 1}
                                     </td>
-                                    {/* Name */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-3">
                                             <div className="p-2.5 rounded-xl flex-shrink-0" style={{ background: '#FDF2F2', color: '#ab121c' }}>
@@ -275,17 +275,17 @@ const ProductCategories = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    {/* Description */}
+                                    {}
                                     <td style={{ padding: '16px', maxWidth: 280 }}>
                                         <span className="text-gray-500 text-xs leading-relaxed line-clamp-2">
                                             {c.description || <span className="italic text-gray-300">—</span>}
                                         </span>
                                     </td>
-                                    {/* Status */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <StatusBadge status={c.status} />
                                     </td>
-                                    {/* Actions */}
+                                    {}
                                     <td style={{ padding: '16px' }}>
                                         <div className="flex items-center gap-1">
                                             <button
@@ -321,13 +321,11 @@ const ProductCategories = () => {
                 </div>
             </div>
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Add / Edit Category
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
                     <div className={styles.modalContent} style={{ width: 520 }} onClick={e => e.stopPropagation()}>
-                        {/* Header */}
+                        {}
                         <div className="flex justify-between items-center px-7 py-5 border-b border-gray-100">
                             <div className="flex items-center gap-3">
                                 <div className="p-2.5 rounded-xl bg-rose-50">
@@ -349,9 +347,9 @@ const ProductCategories = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
+                        {}
                         <form onSubmit={handleSubmit} className="px-7 py-6 space-y-5">
-                            {/* Category Name */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Tên danh mục <span className="text-red-500">*</span>
@@ -370,7 +368,7 @@ const ProductCategories = () => {
                                 {errors.categoryName && <p className="text-xs text-red-500 mt-1">{errors.categoryName}</p>}
                             </div>
 
-                            {/* Description */}
+                            {}
                             <div>
                                 <label className={styles.formLabel}>
                                     Mô tả
@@ -388,7 +386,7 @@ const ProductCategories = () => {
                                 </div>
                             </div>
 
-                            {/* Footer Buttons */}
+                            {}
                             <div className="flex gap-3 pt-2">
                                 <button
                                     type="button"
@@ -413,9 +411,7 @@ const ProductCategories = () => {
                 </div>
             )}
 
-            {/* ═══════════════════════════════════════════════════════════════
-                Modal: Delete Confirm
-            ══════════════════════════════════════════════════════════════════ */}
+            {}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
                     <div

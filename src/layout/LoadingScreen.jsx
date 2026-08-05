@@ -20,7 +20,7 @@ const LoadingScreen = () => {
                     <span className="text-xs tracking-[0.5em] text-wine/40 uppercase">Bracelet</span>
                 </motion.div>
 
-                {/* Progress bar */}
+                {}
                 <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-wine/10 overflow-hidden">
                     <motion.div
                         initial={{ x: "-100%" }}

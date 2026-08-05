@@ -52,7 +52,7 @@ const ShopMap = () => {
                 <h3 className={styles.sectionTitle}>Cửa Hàng</h3>
             </div>
 
-            {/* Tab Switcher – only shown when multiple shops */}
+            {}
             {shops.length > 1 && (
                 <div className={styles.shopTabs}>
                     {shops.map((s, i) => (
@@ -69,7 +69,7 @@ const ShopMap = () => {
             )}
 
             <div className={styles.mapWrapper}>
-                {/* Google Maps Embed */}
+                {}
                 <div className={styles.iframeContainer}>
                     <iframe
                         key={shop.id}
@@ -84,7 +84,7 @@ const ShopMap = () => {
                     />
                 </div>
 
-                {/* Info Card overlay */}
+                {}
                 <div className={styles.infoCard}>
                     <h4 className={styles.shopName}>{shopName}</h4>
 
