@@ -198,7 +198,9 @@ const AdminOrderDetail = () => {
                                 const mapping = item.variant?.productVariantMappings?.[0];
                                 const product = mapping?.product;
                                 const variantInfo = [item.variant?.color, item.variant?.size].filter(Boolean).join(' - ');
-                                const imgSrc = product?.thumbnail || 'https://placehold.co/60x60/f1f5f9/94a3b8?text=SP';
+                                const imgSrc = product?.thumbnail
+                                    ? `${import.meta.env.VITE_API_BASE_URL}${product.thumbnail.startsWith('/') ? product.thumbnail.slice(1) : product.thumbnail}`
+                                    : 'https://placehold.co/60x60/f1f5f9/94a3b8?text=SP';
                                 const unitPrice = Number(item.unitPrice ?? 0);
                                 return (
                                     <div key={idx} className={styles.item}>
