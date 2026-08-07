@@ -87,7 +87,6 @@ const AdminProductDetail = () => {
             setProduct(prodData);
             setProductGallery(images);
 
-y
             const allVariants = await getAllProductVariants();
             const filteredVariants = Array.isArray(allVariants) ? allVariants.filter(v =>
                 (v.productVariantMappings || v.product_variant_mappings)?.some(m => m.productId === id || m.product_id === id)
@@ -108,7 +107,7 @@ y
             });
             setPreviewUrl(prodData.thumbnail);
         } catch (error) {
-            showToast("Không thể lấy thông tin sản phẩm");
+            showToast("Không thể lấy thông tin sản phẩm", 'error');
             navigate('/admin/products');
         } finally {
             setLoading(false);
@@ -155,7 +154,7 @@ y
 
     const handleUpdate = async () => {
         if (!formData.productName || !formData.basePrice) {
-            showToast("Vui lòng điền đầy đủ thông tin bắt buộc");
+            showToast("Vui lòng điền đầy đủ thông tin bắt buộc", 'warning');
             return;
         }
 

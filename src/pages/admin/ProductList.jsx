@@ -40,7 +40,7 @@ const ProductList = () => {
             const data = await getProducts();
             setProducts(Array.isArray(data) ? data : []);
         } catch (error) {
-            showToast(error.toString());
+            showToast(error.toString(), 'error');
         } finally {
             setLoading(false);
         }
@@ -95,7 +95,7 @@ const ProductList = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.productName || !formData.basePrice) {
-            showToast("Vui lòng điền đầy đủ thông tin bắt buộc");
+            showToast("Vui lòng điền đầy đủ thông tin bắt buộc", 'warning');
             return;
         }
 
@@ -118,12 +118,12 @@ const ProductList = () => {
             }
 
             await createProduct(data);
-            showToast("Tạo sản phẩm thành công!");
+            showToast("Tạo sản phẩm thành công!", 'success');
             setIsCreateModalOpen(false);
             resetForm();
             fetchData();
         } catch (error) {
-            showToast(error.toString());
+            showToast(error.toString(), 'error');
         } finally {
             setIsSubmitting(false);
         }
