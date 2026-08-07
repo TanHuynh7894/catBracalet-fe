@@ -194,7 +194,7 @@ const OrderDetail = () => {
                                 <div key={idx} className="p-6 border-b border-outline-variant/10 flex flex-col md:flex-row items-center gap-6 hover:bg-surface-container-low/30 transition-colors last:border-0">
                                     <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-variant border border-outline-variant/10 flex items-center justify-center">
                                         {product?.thumbnail ? (
-                                            <img src={`${import.meta.env.VITE_API_BASE_URL}${product.thumbnail.startsWith('/') ? product.thumbnail.slice(1) : product.thumbnail}`} alt={product.productName} className="w-full h-full object-cover" />
+                                            <img src={`https://c9t.tanhuynh.me/${product.thumbnail.startsWith('/') ? product.thumbnail.slice(1) : product.thumbnail}`} alt={product.productName} className="w-full h-full object-cover" />
                                         ) : (
                                             <Package size={32} className="text-outline" />
                                         )}
