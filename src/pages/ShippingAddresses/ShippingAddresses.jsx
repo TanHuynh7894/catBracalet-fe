@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Phone, Edit2, Trash2, MapPin, X, Plus, Check, ChevronDown } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getAddressesByUserId, createAddress, updateAddress, deleteAddress, setDefaultAddress } from '../../services/addressService';
 import { getProvinces, getDistricts, getWards } from '../../services/shipmentService';
 import { useToast } from '../../context/ToastContext';
@@ -9,6 +10,10 @@ import styles from './ShippingAddresses.module.css';
 
 const ShippingAddresses = () => {
     const { showToast, showConfirm } = useToast();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const redirectAfter = location.state?.redirectAfter;
+    const redirectCartItemIds = location.state?.selectedCartItemIds;
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -217,9 +222,13 @@ const ShippingAddresses = () => {
                 });
             }
 
-            showToast(editingAddress ? 'Cập nhật địa chỉ thành công' : 'Thêm địa chỉ mới thành công');
+            showToast(editingAddress ? 'Cập nhật địa chỉ thành công' : 'Thêm địa chỉ mới thành công', 'success');
             await fetchAddresses();
             handleCloseModal();
+
+            if (!editingAddress && redirectAfter) {
+                navigate(redirectAfter, { state: { selectedCartItemIds: redirectCartItemIds } });
+            }
         } catch (err) {
             showToast(typeof err === 'string' ? err : (err?.message || 'Đã xảy ra lỗi khi lưu địa chỉ.'), 'error');
         } finally {

@@ -106,7 +106,11 @@ const CheckoutPage = () => {
                 const addressList = Array.isArray(addrData) ? addrData : (addrData?.data || []);
                 setAddresses(addressList);
 
-
+                if (addressList.length === 0) {
+                    showToast('Bạn chưa có địa chỉ giao hàng. Vui lòng thêm địa chỉ trước khi đặt hàng.', 'warning');
+                    navigate('/shipping-addresses', { state: { redirectAfter: '/checkout', selectedCartItemIds } });
+                    return;
+                }
 
                 const defaultAddr = addressList.find(a => a.isDefault) || addressList[0];
                 if (defaultAddr) {
@@ -355,14 +359,14 @@ const CheckoutPage = () => {
                     <h1 className={styles.title}>THANH TOÁN</h1>
                 </header>
 
-                {}
+                { }
 
 
-                {}
+                { }
                 <div className={styles.mainGrid}>
-                    {}
+                    { }
                     <div className={styles.leftCol}>
-                        {}
+                        { }
                         <motion.section {...fadeUp} className={styles.section}>
                             <h2 className={styles.sectionTitle}>THÔNG TIN KHÁCH HÀNG</h2>
                             <div className={styles.sectionDivider}><span className={styles.sectionOrn}>❧</span></div>
@@ -394,7 +398,7 @@ const CheckoutPage = () => {
                             </div>
                         </motion.section>
 
-                        {}
+                        { }
                         <motion.section {...fadeUp} className={styles.section} style={{ marginTop: '20px' }}>
                             <div className={styles.sectionHeader}>
                                 <h2 className={styles.sectionTitle}>ĐỊA CHỈ NHẬN HÀNG</h2>
@@ -474,14 +478,14 @@ const CheckoutPage = () => {
                     </div>
 
 
-                    {}
+                    { }
                     <div className={styles.rightCol}>
                         <div className={styles.stickySummary}>
                             <motion.div {...fadeUp} className={styles.summaryCard}>
                                 <h3 className={styles.summaryTitle}>THÔNG TIN ĐƠN HÀNG</h3>
                                 <div className={styles.summaryDivider}><span className={styles.summaryOrn}>❧</span></div>
 
-                                {}
+                                { }
                                 <div className={styles.productList}>
                                     {cartItems.map((item) => (
                                         <div key={item.cartItemId} className={styles.productItem}>
@@ -501,7 +505,7 @@ const CheckoutPage = () => {
                                     ))}
                                 </div>
 
-                                {}
+                                { }
                                 <div className={styles.sidebarCoupon}>
                                     <div className={styles.couponHeader}>
                                         <span className={styles.couponLabel}>MÃ ƯU ĐÃI</span>
@@ -529,7 +533,7 @@ const CheckoutPage = () => {
                                     </div>
                                 </div>
 
-                                {}
+                                { }
                                 <div className={styles.totalsSection}>
                                     <div className={styles.totalRow}>
                                         <span>Tạm tính</span>
@@ -561,7 +565,7 @@ const CheckoutPage = () => {
                                     <span className={styles.grandTotalVal}>{formatVND(total)}</span>
                                 </div>
 
-                                {}
+                                { }
                                 <div className={styles.paymentSection}>
                                     <p className={styles.paymentTitle}>PHƯƠNG THỨC THANH TOÁN</p>
                                     <div className={styles.paymentGrid}>
@@ -607,7 +611,7 @@ const CheckoutPage = () => {
                 </div>
             </div>
 
-            {}
+            { }
             {showVoucherModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowVoucherModal(false)}>
                     <motion.div

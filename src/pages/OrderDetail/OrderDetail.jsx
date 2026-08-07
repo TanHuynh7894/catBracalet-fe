@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, CreditCard, Package, X, AlertCircle } from 'lucide-react';
-import { getOrderById } from '../../services/orderService';
+import { ArrowLeft, MapPin, CreditCard, Package, X, AlertCircle, Loader2 } from 'lucide-react';
+import { getOrderById, cancelOrder } from '../../services/orderService';
+import { useToast } from '../../context/ToastContext';
 import styles from './OrderDetail.module.css';
 
 const OrderDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { showToast, showConfirm } = useToast();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isCancelling, setIsCancelling] = useState(false);
 
     useEffect(() => {
         const fetchOrderDetail = async () => {
@@ -54,6 +57,24 @@ const OrderDetail = () => {
             case 'DELIVERED': return 4;
             default: return 0;
         }
+    };
+
+    const handleCancelOrder = () => {
+        showConfirm(
+            'Bạn có chắc chắn muốn hủy đơn hàng này? Hành động này không thể hoàn tác.',
+            async () => {
+                setIsCancelling(true);
+                try {
+                    await cancelOrder(id);
+                    showToast('Hủy đơn hàng thành công', 'success');
+                    setOrder(prev => ({ ...prev, status: 'CANCELLED' }));
+                } catch (err) {
+                    showToast(typeof err === 'string' ? err : 'Không thể hủy đơn hàng. Vui lòng thử lại.', 'error');
+                } finally {
+                    setIsCancelling(false);
+                }
+            }
+        );
     };
 
     if (loading) return (
@@ -245,9 +266,16 @@ const OrderDetail = () => {
                     </div>
 
                     {order.status === 'PENDING' && (
-                        <button className="w-full mt-8 py-4 px-6 border-2 border-primary text-primary font-body text-label-sm font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group uppercase tracking-widest">
-                            <X size={18} className="group-hover:rotate-90 transition-transform" />
-                            Yêu cầu hủy đơn
+                        <button
+                            onClick={handleCancelOrder}
+                            disabled={isCancelling}
+                            className="w-full mt-8 py-4 px-6 border-2 border-primary text-primary font-body text-label-sm font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isCancelling
+                                ? <Loader2 size={18} className="animate-spin" />
+                                : <X size={18} className="group-hover:rotate-90 transition-transform" />
+                            }
+                            {isCancelling ? 'Đang xử lý...' : 'Yêu cầu hủy đơn'}
                         </button>
                     )}
                 </div>
