@@ -373,53 +373,47 @@ export default function ProductDetail() {
                                 </div>
                             </div>
 
-                            {}
+                            {allColors.length > 0 && (
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn màu sắc</p>
                                 <div className={styles.sizeButtons}>
-                                    {allColors.length > 0 ? (
-                                        allColors.map((c) => {
-                                            const isAvailable = !selectedSize || productVariants.some(v => v.color === c && v.size === selectedSize);
-                                            return (
-                                                <button
-                                                    key={c}
-                                                    className={`${styles.sizeBtn} ${selectedColor === c ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
-                                                    onClick={() => handleAttributeSelect('color', c)}
-                                                    title={!isAvailable ? 'Không sẵn có cho size này' : ''}
-                                                >
-                                                    {c}
-                                                </button>
-                                            );
-                                        })
-                                    ) : (
-                                        <span className={styles.noInfoText}>Đang cập nhật...</span>
-                                    )}
+                                    {allColors.map((c) => {
+                                        const isAvailable = !selectedSize || productVariants.some(v => v.color === c && v.size === selectedSize);
+                                        return (
+                                            <button
+                                                key={c}
+                                                className={`${styles.sizeBtn} ${selectedColor === c ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
+                                                onClick={() => handleAttributeSelect('color', c)}
+                                                title={!isAvailable ? 'Không sẵn có cho size này' : ''}
+                                            >
+                                                {c}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
+                            )}
 
-                            {}
+                            {allSizes.length > 0 && (
                             <div className={styles.selectorSection}>
                                 <p className={styles.selectorLabel}>Chọn size vòng</p>
                                 <div className={styles.sizeButtons}>
-                                    {allSizes.length > 0 ? (
-                                        allSizes.map((s) => {
-                                            const isAvailable = !selectedColor || productVariants.some(v => v.size === s && v.color === selectedColor);
-                                            return (
-                                                <button
-                                                    key={s}
-                                                    className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
-                                                    onClick={() => handleAttributeSelect('size', s)}
-                                                    title={!isAvailable ? 'Không sẵn có cho màu này' : ''}
-                                                >
-                                                    {s}
-                                                </button>
-                                            );
-                                        })
-                                    ) : (
-                                        <span className={styles.noInfoText}>Đang cập nhật...</span>
-                                    )}
+                                    {allSizes.map((s) => {
+                                        const isAvailable = !selectedColor || productVariants.some(v => v.size === s && v.color === selectedColor);
+                                        return (
+                                            <button
+                                                key={s}
+                                                className={`${styles.sizeBtn} ${selectedSize === s ? styles.sizeBtnActive : ''} ${!isAvailable ? styles.sizeBtnDisabled : ''}`}
+                                                onClick={() => handleAttributeSelect('size', s)}
+                                                title={!isAvailable ? 'Không sẵn có cho màu này' : ''}
+                                            >
+                                                {s}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
+                            )}
 
                             {}
                             <div className={styles.selectorSection}>
