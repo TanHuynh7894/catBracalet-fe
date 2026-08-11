@@ -43,7 +43,7 @@ const Header = () => {
         { name: 'Trang chủ', href: '/', type: 'route' },
         { name: 'Về Cát', href: '/story', type: 'route' },
         { name: 'Bộ sưu tập', href: '/collection', type: 'route' },
-        { name: 'Thiết kế riêng', href: '/custom', type: 'route' },
+        { name: 'Thiết kế riêng', href: '/custom', type: 'route', hidden: true },
         { name: 'Liên hệ', href: '/contact', type: 'route' },
     ];
 
@@ -110,7 +110,7 @@ const Header = () => {
 
                 {}
                 <nav className="hidden xl:flex items-center gap-16">
-                    {navLinks.map((link) => {
+                    {navLinks.filter(link => !link.hidden).map((link) => {
                         const active = isActive(link.href, link.type);
                         return link.type === 'route' ? (
                             <Link
@@ -243,7 +243,7 @@ const Header = () => {
                         className="absolute top-full left-0 w-full bg-[#FAF5EF] shadow-xl overflow-hidden border-t border-[#4B3A32]/5 xl:hidden"
                     >
                         <div className="py-8 px-6 flex flex-col gap-5">
-                            {navLinks.map((link) => (
+                            {navLinks.filter(link => !link.hidden).map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
